@@ -19,6 +19,7 @@ abstract class cls_db
     $this->driver = $_ENV['DRIVER_DB'];
     $this->charset = $_ENV['CHARSET_DB'];
     $this->dbname = $_ENV['DB_NAME'];
+    $this->conexion();
   }
 
   protected function conexion()
