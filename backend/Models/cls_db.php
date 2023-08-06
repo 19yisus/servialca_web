@@ -21,7 +21,7 @@ abstract class cls_db
     $this->dbname = $_ENV['DB_NAME'];
   }
 
-  public function conexion()
+  protected function conexion()
   {
     $this->db = new PDO("$this->driver:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
   }
