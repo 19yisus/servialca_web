@@ -13,7 +13,7 @@ abstract class cls_Auth extends cls_db
   protected function sing_in()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
-    // var_dump("SELECT * FROM usuario WHERE usuario_usuario = '$this->usuario' AND usuario_clave = '$this->clave' ");
+
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     if (!empty($resultado)) {
@@ -24,7 +24,7 @@ abstract class cls_Auth extends cls_db
         ],
         'code' => 400
       ];
-      
+
       if (!password_verify($this->clave, $resultado['usuario_clave'])) return [
         'data' => [
           'res' => "Su clave es invalida"
@@ -110,7 +110,7 @@ abstract class cls_Auth extends cls_db
           'code' => 400
         ];
       }
-      
+
 
       $clave = password_hash($this->clave, PASSWORD_BCRYPT, ['cost' => 12]);
       $sql = $this->db->prepare("INSERT INTO 
@@ -216,22 +216,11 @@ abstract class cls_Auth extends cls_db
     }
   }
 
-  private function GetDuplicados()
-  {
-    $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
-      usuario_usuario = ? AND
-      usuario_id != ?");
-
-    if ($sql->execute([$this->usuario, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
-    return $resultado;
-  }
-
   protected function Delete()
   {
     try {
       $sql = $this->db->prepare("UPDATE usuario SET usuario_estatus = ? WHERE usuario_id = ?");
-      if($sql->execute([$this->estatus, $this->id])){
+      if ($sql->execute([$this->estatus, $this->id])) {
         return [
           'data' => [
             'res' => "Usuario desactivado"
@@ -256,6 +245,17 @@ abstract class cls_Auth extends cls_db
       INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_id = ?");
 
     if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
+    return $resultado;
+  }
+  
+  private function GetDuplicados()
+  {
+    $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
+      usuario_usuario = ? AND
+      usuario_id != ?");
+
+    if ($sql->execute([$this->usuario, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     else $resultado = [];
     return $resultado;
   }
