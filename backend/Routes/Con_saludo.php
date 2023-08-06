@@ -2,6 +2,8 @@
   class Con_saludo{
 
     public function saludo(){
-      echo "Estoy saludando";
+      $pass = $_POST['password'];
+      $newPass = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
+      Response($newPass, 200);
     }
   }
