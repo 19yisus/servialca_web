@@ -1,10 +1,14 @@
 <?php
-  require_once("./Models/cls_proveedor.php");
+  require_once("./Models/cls_Auth.php");
 
-  class Con_proveedor extends cls_proveedor{
+  class Con_Auth extends cls_Auth{
     public function __construct()
     {
       parent::__construct();
+    }
+
+    public function login(){
+      var_dump($_POST);
     }
 
     public function registrar(){

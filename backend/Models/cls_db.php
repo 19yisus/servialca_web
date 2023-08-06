@@ -1,7 +1,7 @@
 <?php
 
-require('../vendor/autoload.php');
-$dotenv = Dotenv\Dotenv::createImmutable('../');
+require('./vendor/autoload.php');
+$dotenv = Dotenv\Dotenv::createImmutable('./');
 $dotenv->load();
 
 abstract class cls_db

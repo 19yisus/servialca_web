@@ -1,4 +1,5 @@
 <?php
+require_once("./libs/jwt.php");
 
 class Api
 {
@@ -8,7 +9,7 @@ class Api
 
   public function __construct()
   {
-    session_start();
+    // session_start();
     // $this->ObjMessage = new c_messages();
     $this->GetController($this->GetRoute());
   }
@@ -29,12 +30,26 @@ class Api
   {
     $this->metodo_peticion = (isset($peticion[1]) ? $peticion[1] : $peticion[0]);
     $file_controller_file = "./Routes/Con_" . $peticion[0] . ".php";
-
+    
     if (file_exists($file_controller_file)) {
+
+      if($peticion[0] != 'Auth'){
+        if(isset($_POST['token']) || isset($_GET['token'])){
+          $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+          $resultValido = validateToken($token);
+          if(!$resultValido){
+            // token no valido
+            var_dump("Token no valido");
+            return false;
+          }
+        }
+      }
+
       require_once($file_controller_file);
 
       $cls_name = "Con_" . $peticion[0];
       $cls = new $cls_name();
+      
       $cls->{$this->metodo_peticion}();
     }
   }
