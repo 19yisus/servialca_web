@@ -39,4 +39,5 @@ function validateToken($token)
 function decodificarToken($token){
   $token_decode = JWT::decode($token, new Key($_ENV['SECRET'], 'HS256'));
   $array = (array) $token_decode;
+  return $array;
 }
