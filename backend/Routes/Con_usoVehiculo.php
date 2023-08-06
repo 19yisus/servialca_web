@@ -1,7 +1,7 @@
 <?php
-require_once("./Models/cls_sucursal.php");
+require_once("./Models/cls_usoVehiculo.php");
 
-class Con_sucursal extends cls_sucursal
+class Con_usoVehiculo extends cls_usoVehiculo
 {
     public function __construct()
     {
@@ -42,4 +42,4 @@ class Con_sucursal extends cls_sucursal
     }
 }
 
-$a = new Con_sucursal();
+$a = new Con_usoVehiculo();
