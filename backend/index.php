@@ -1,6 +1,12 @@
 <?php
 require_once("./libs/jwt.php");
 
+function Response($data, $code){
+  echo json_encode($data, false);
+  http_response_code($code);
+  return false;
+}
+
 class Api
 {
 
@@ -38,11 +44,17 @@ class Api
           $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
           $resultValido = validateToken($token);
           if(!$resultValido){
-            // token no valido
-            var_dump("Token no valido");
-            return false;
+            // El token no es valido
+            Response([
+              'res' => "El token no es valido",
+            ], 403);
           }
         }
+        // Response([
+        //   'res' => "El token no es obligatorio",
+        // ]);
+        // http_response_code(403);
+        // El usuario no ha mandado un token para la petición
       }
 
       require_once($file_controller_file);

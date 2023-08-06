@@ -6,7 +6,7 @@ $dotenv->load();
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-function createToken($id, $email)
+function createToken($id, $permisos)
 {
   $time = time();
 
@@ -15,7 +15,7 @@ function createToken($id, $email)
     "exp" => $time + (60 * 60 * 24), //token expira en 1 dia
     "data" => [
       "id" => $id,
-      "email" => $email
+      "permisos" => $permisos
     ]
   );
 
