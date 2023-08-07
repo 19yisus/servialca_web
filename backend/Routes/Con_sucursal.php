@@ -1,7 +1,7 @@
 <?php
 require_once("./Models/cls_sucursal.php");
 
-class Con_proveedor extends cls_sucursal
+class Con_sucursal extends cls_sucursal
 {
 	public function __construct()
 	{
@@ -41,3 +41,5 @@ class Con_proveedor extends cls_sucursal
 		Response($resultado, 200);
 	}
 }
+
+$a = new Con_sucursal();
