@@ -42,4 +42,3 @@ class Con_transporte extends cls_transporte
     }
 }
 
-$a = new Con_transporte();

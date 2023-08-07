@@ -42,4 +42,3 @@ class Con_usoVehiculo extends cls_usoVehiculo
     }
 }
 
-$a = new Con_usoVehiculo();

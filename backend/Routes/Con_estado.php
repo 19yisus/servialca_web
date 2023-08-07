@@ -11,4 +11,3 @@ class Con_estado extends cls_estado
     }
 }
 
-$a = new Con_estado();

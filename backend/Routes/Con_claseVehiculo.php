@@ -41,5 +41,3 @@ class Con_claseVehiculo extends cls_claseVehiculo
         Response($resultado, 200);
     }
 }
-
-$a = new Con_claseVehiculo();

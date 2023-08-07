@@ -11,4 +11,3 @@ class Con_color extends cls_color
     }
 }
 
-$a = new Con_color();

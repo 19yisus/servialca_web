@@ -42,4 +42,3 @@ class Con_roles extends cls_roles
     }
 }
 
-$a = new Con_roles();
