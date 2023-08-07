@@ -1,7 +1,7 @@
 <?php
-require_once("./Models/cls_usoVehiculo.php");
+require_once("./Models/cls_marca.php");
 
-class Con_usoVehiculo extends cls_usoVehiculo
+class Con_marca extends cls_marca
 {
 	public function __construct()
 	{
@@ -41,7 +41,3 @@ class Con_usoVehiculo extends cls_usoVehiculo
 		Response($resultado, 200);
 	}
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 70525dad285d7ff7a2cb25f9b9aff632356bc29d
