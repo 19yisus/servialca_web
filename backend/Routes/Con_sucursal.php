@@ -41,5 +41,3 @@ class Con_sucursal extends cls_sucursal
 		Response($resultado, 200);
 	}
 }
-
-$a = new Con_sucursal();
