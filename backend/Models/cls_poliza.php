@@ -97,6 +97,92 @@ abstract class cls_poliza extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+
+	protected function Save()
+	{
+		try {
+			$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$transacction = $this->db->beginTransaction();
+
+			$sql = $transacction->prepare("INSERT INTO coberturas(
+				cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal,
+				cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) 
+				VALUES(?,?,?,?,?,?,?,?,?,?)");
+
+			$result = $sql->execute([
+				$this->dañoCosas,
+				$this->dañoPersonas,
+				$this->fianza,
+				$this->asistencia,
+				$this->apov,
+				$this->muerte,
+				$this->invalidez,
+				$this->medico,
+				$this->grua,
+				$this->monto
+			]);
+
+			if ($result->rowCount() == 0) {
+				$transacction->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
+			$this->cobertura = $transacction->lastInsertId();
+			$result = $transacction->query("SELECT * FROM poliza WHERE cliente_id = $this->cliente AND vehiculo_id = $this->vehiculo");
+
+			if ($result->rowCount() > 0) {
+				$transacction->rollback();
+				return [
+					'data' => [
+						'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
+					],
+					'code' => 400
+				];
+			}
+
+			$sql = $transacction->prepare("INSERT INTO poliza( cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento,
+				tipoContrato_id, estado_id, usuario_id, sucursal_id, cobertura_id, poliza_renovacion, debitoCredito ) 
+				VALUES(?,?,?,?,?,?,?,?,?,?,0,?)");
+
+			$result = $sql->execute([
+				$this->cliente,
+				$this->idTitular,
+				$this->vehiculo,
+				$this->fechaInicio,
+				$this->fechaVencimiento,
+				$this->tipoContrato,
+				$this->estado,
+				$this->usuario,
+				$this->sucursal,
+				$this->cobertura,
+				$this->debitoCredito
+			]);
+
+			$this->id = $transacction->lastInsertId();
+
+			if ($result->rowCount() > 0) {
+				$transacction->commit();
+				return [
+					'data' => [
+						'res' => "Registro exitoso"
+					],
+					'code' => 200
+				];
+			}
+		} catch (PDOException $e) {
+			return [
+				"data" => [
+					'res' => "Error de consulta: " . $e->getMessage()
+				],
+				"code" => 400
+			];
+		}
+	}
 	protected function RegistraCobertura()
 	{
 		$sql = $this->db->prepare("INSERT INTO coberturas(
