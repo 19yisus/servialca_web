@@ -4,7 +4,7 @@ require_once("cls_db.php");
 
 abstract class cls_poliza extends cls_db
 {
-	private $id, $sucursal, $usuario,
+	protected $id, $sucursal, $usuario,
 		// Contratante 
 		$nombre, $apellido, $cedula, $fechaNacimiento, $telefono, $correo, $direccion,
 		// Titular 
@@ -14,14 +14,14 @@ abstract class cls_poliza extends cls_db
 		// Vehiculo extra
 		$color, $modelo, $marca, $uso, $clase, $tipo,
 		// Contrato
-		$fechaInicio, $fechaVenciento, $tipoContrato,
+		$fechaInicio, $fechaVencimiento, $tipoContrato,
 		$tipoTransporte, $estado,
 		$dañoCosas, $dañoPersonas, $fianza, $asistencia, $apov,
 		$muerte, $invalidez, $medico, $grua,
 		// Pago
 		$metodoPago, $referencia, $cantidadDolar, $monto,
 		// ID
-		$vehiculo, $cliente, $precioDolar, $debitoCredito, $idTitular;
+		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular;
 
 
 
@@ -83,6 +83,98 @@ abstract class cls_poliza extends cls_db
 		if ($sql->execute()) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;
+	}
+
+	protected function GetOne($id)
+	{
+
+		$sql = $this->db->prepare("SELECT poliza.*, cliente.*, sucursal.*, usuario.*, vehiculo.* FROM poliza 
+            INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+            INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
+            INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
+            INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id WHERE poliza_id = ?");
+		if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		else $resultado = [];
+		return $resultado;
+	}
+	protected function RegistraCobertura()
+	{
+		$sql = $this->db->prepare("INSERT INTO coberturas(
+             cobertura_danoCosas,
+            cobertura_danoPersonas,
+            cobertura_fianzaCuanti,
+            cobertura_asistenciaLegal,
+            cobertura_apov,
+            cobertura_muerte,
+            cobertura_invalidez,
+            cobertura_gastosMedicos,
+            cobertura_grua,
+            totalPagar 
+            )VALUES(?,?,?,?,?,?,?,?,?,?)");
+		if ($sql->execute([
+			$this->dañoCosas,
+			$this->dañoPersonas,
+			$this->fianza,
+			$this->asistencia,
+			$this->apov,
+			$this->muerte,
+			$this->invalidez,
+			$this->medico,
+			$this->grua,
+			$this->monto
+		])) return $this->cobertura = $this->db->lastInsertId();
+		else return false;
+	}
+
+	protected function RegistrarPoliza()
+	{
+		$sql = $this->db->prepare("SELECT * FROM poliza WHERE cliente_id = ? AND vehiculo_id = ?");
+		if ($sql->execute([$this->cliente, $this->vehiculo])) {
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			if (count($resultado) < 1) {
+				$sql = $this->db->prepare("INSERT INTO poliza(
+                cliente_id,
+                titular_id,
+                vehiculo_id,
+                poliza_fechaInicio,
+                poliza_fechaVencimiento,
+                tipoContrato_id,
+                estado_id,
+                usuario_id,
+                sucursal_id,
+                cobertura_id,
+                poliza_renovacion,
+                debitoCredito
+            )VALUES(?,?,?,?,?,?,?,?,?,?,0,?)");
+				if ($sql->execute([
+					$this->cliente,
+					$this->idTitular,
+					$this->vehiculo,
+					$this->fechaInicio,
+					$this->fechaVencimiento,
+					$this->tipoContrato,
+					$this->estado,
+					$this->usuario,
+					$this->sucursal,
+					$this->cobertura,
+					$this->debitoCredito
+				]));
+				$this->id = $this->db->lastInsertId();
+				if ($sql->rowCount() > 0) return [
+					'data' => [
+						'res' => "Registro exitoso"
+					],
+					'code' => 200
+				];
+
+				return [
+					'data' => [
+						'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
+					],
+					'code' => 400
+				];
+			}
+		}
 	}
 
 	protected function debitoCredito($tipoIngreso, $motivo)
