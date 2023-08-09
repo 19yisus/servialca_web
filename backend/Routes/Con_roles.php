@@ -41,7 +41,3 @@ class Con_roles extends cls_roles
     Response($resultado, 200);
   }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 70525dad285d7ff7a2cb25f9b9aff632356bc29d

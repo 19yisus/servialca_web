@@ -11,11 +11,3 @@ class Con_color extends cls_color
     }
 }
 
-
-	public function ConsultarTodos()
-	{
-		$resultado = $this->GetAll();
-		Response($resultado, 200);
-	}
-}
-
