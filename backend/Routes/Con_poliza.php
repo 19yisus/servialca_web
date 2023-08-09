@@ -39,8 +39,8 @@ class Con_poliza extends cls_poliza
         $this->fechaVencimiento = isset($_POST["fechaVencimiento"]) ? $_POST["fechaVencimiento"] : null;
         $this->tipoContrato = isset($_POST["tipoContrato"]) ? $_POST["tipoContrato"] : null;
         $this->estado = isset($_POST["Estado"]) ? $_POST["Estado"] : null;
-        $this->dañoCosas = isset($_POST["dañoCosas"]) ? $_POST["dañoCosas"] : null;
-        $this->dañoPersonas = isset($_POST["dañoPersonas"]) ? $_POST["dañoPersonas"] : null;
+        $this->danoCosas = isset($_POST["danoCosas"]) ? $_POST["danoCosas"] : null;
+        $this->danoPersonas = isset($_POST["danoPersonas"]) ? $_POST["danoPersonas"] : null;
         $this->fianza = isset($_POST["Fianza"]) ? $_POST["Fianza"] : null;
         $this->apov = isset($_POST["Apov"]) ? $_POST["Apov"] : null;
         $this->muerte = isset($_POST["Muerte"]) ? $_POST["Muerte"] : null;
@@ -56,16 +56,18 @@ class Con_poliza extends cls_poliza
 
     public function registrar()
     {
-        $this->SearchByColor($_POST["Color"]);
-        $this->SearchByMarca($_POST["Marca"]);
-        $this->SearchByModelo($_POST["Modelo"]);
-        $this->SearchByTitular($_POST["cedulaTitular"]);
-        $this->SearchByCliente($_POST["Cedula"]);
-        $this->SearchByVehiculo($_POST["Placa"]);
-        $this->precioDolar($_POST["precioDolar"]);
-        $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-        $this->RegistraCobertura();
-        $resultado = $this->RegistrarPoliza();
+        // $this->SearchByColor($_POST["Color"]);
+        // $this->SearchByMarca($_POST["Marca"]);
+        // $this->SearchByModelo($_POST["Modelo"]);
+        // $this->SearchByTitular($_POST["cedulaTitular"]);
+        // $this->SearchByCliente($_POST["Cedula"]);
+        // $this->SearchByVehiculo($_POST["Placa"]);
+        // $this->precioDolar($_POST["precioDolar"]);
+        // $this->debitoCredito($_POST["tipoIngreso"], $_POST["Motivo"]);
+        // $this->RegistraCobertura();
+        // $resultado = $this->RegistrarPoliza();
+
+        $resultado = $this->Save($_POST["precioDolar"],$_POST["tipoIngreso"], $_POST["Motivo"]);
         Response($resultado['data'], $resultado['code']);
     }
 
