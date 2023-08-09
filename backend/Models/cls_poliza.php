@@ -24,6 +24,29 @@ abstract class cls_poliza extends cls_db
         $vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular;
 
 
+    protected function renovar()
+    {
+        if (empty($this->fechaInicio)) {
+            $this->fechaInicio = date("Y-m-d");
+        }
+        if (empty($this->fechaVencimiento)) {
+            $fechaInicioObj = new DateTime($this->fechaInicio);
+            $fechaInicioObj->modify('+1 year');
+            $this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
+        }
+        $sql = $this->db->prepare("UPDATE poliza SET
+        poliza_fechaInicio = ?,
+        poliza_fechaVencimiento = ?,
+        poliza_renovacion = poliza_renovacion+1,
+        debitoCredito =?
+        WHERE poliza_if = ?");
+        if ($sql->execute([
+            $this->fechaInicio,
+            $this->fechaVencimiento,
+            $this->debitoCredito,
+            $this->id
+        ]));
+    }
 
     protected function Vencer($id)
     {

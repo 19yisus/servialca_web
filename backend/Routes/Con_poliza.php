@@ -69,6 +69,13 @@ class Con_poliza extends cls_poliza
         Response($resultado['data'], $resultado['code']);
     }
 
+    public function renovar()
+    {
+        $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
+        $resultado = $this->renovar();
+        Response($resultado['data'], $resultado['code']);
+    }
+
     public function ConsultarUno()
     {
         $resultado = $this->GetOne($_GET['ID']);
