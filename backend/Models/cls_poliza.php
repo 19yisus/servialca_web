@@ -174,6 +174,14 @@ abstract class cls_poliza extends cls_db
 					'code' => 200
 				];
 			}
+			
+			$transacction->rollback();
+			return [
+				'data' => [
+					'res' => "Registro fallida"
+				],
+				'code' => 400
+			];
 		} catch (PDOException $e) {
 			return [
 				"data" => [
