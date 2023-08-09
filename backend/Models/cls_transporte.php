@@ -1,5 +1,6 @@
 <?php
-require_once("cls_db.php");
+
+if(!class_exists('cls_db')) require_once("cls_db.php");
 
 abstract class cls_transporte extends cls_db
 {

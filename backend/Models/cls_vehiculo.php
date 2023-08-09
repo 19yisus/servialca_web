@@ -3,17 +3,17 @@
 require_once("cls_db.php");
 abstract class cls_vehiculo extends cls_db
 {
-    protected $placa;
+	protected $placa;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    protected function GetOne($placa)
-    {
-        $sql = $this->db->prepare("SELECT vehiculo.*, color.*, modelo.*, marca.*, usovehiculo.*, tipovehiculo.*
+	protected function GetOne($placa)
+	{
+		$sql = $this->db->prepare("SELECT vehiculo.*, color.*, modelo.*, marca.*, usovehiculo.*, tipovehiculo.*
             FROM vehiculo
             INNER JOIN color ON color.color_id = vehiculo.color_id
             INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
@@ -23,12 +23,12 @@ abstract class cls_vehiculo extends cls_db
             INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
             WHERE vehiculo_placa = ?");
 
-        if ($sql->execute([$placa])) {
-            $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $resultado = [];
-        }
+		if ($sql->execute([$placa])) {
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		} else {
+			$resultado = [];
+		}
 
-        return $resultado;
-    }
+		return $resultado;
+	}
 }

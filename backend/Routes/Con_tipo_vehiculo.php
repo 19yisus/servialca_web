@@ -1,13 +1,14 @@
 <?php
-require_once("./Models/cls_marca.php");
+require_once("./Models/cls_tipo_vehiculo.php");
 
-class Con_marca extends cls_marca
+class Con_tipo_vehiculo extends cls_tipo_vehiculo
 {
 	public function __construct()
 	{
 		parent::__construct();
 		$this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
-		$this->nombre = isset($_POST["Nombre"]) ? $_POST["Nombre"] : null;
+		$this->nombre = isset($_POST["tipoVehiculo_nombre"]) ? $_POST["tipoVehiculo_nombre"] : null;
+    $this->precio = isset($_POST["tipoVehiculo_precio"]) ? $_POST["tipoVehiculo_precio"] : null;
 		$this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
 	}
 
