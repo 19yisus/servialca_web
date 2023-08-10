@@ -66,8 +66,20 @@ class Con_poliza extends cls_poliza
         // $this->debitoCredito($_POST["tipoIngreso"], $_POST["Motivo"]);
         // $this->RegistraCobertura();
         // $resultado = $this->RegistrarPoliza();
+        $resultado = $this->Save($_POST["precioDolar"], $_POST["tipoIngreso"], $_POST["Motivo"]);
+        Response($resultado['data'], $resultado['code']);
+    }
 
-        $resultado = $this->Save($_POST["precioDolar"],$_POST["tipoIngreso"], $_POST["Motivo"]);
+    public function editar()
+    {
+        $resultado = $this->Save($_POST["idCliente"], $_POST["idTitular"], $_POST["idVehiculo"]);
+        Response($resultado['data'], $resultado['code']);
+    }
+
+    public function renovar()
+    {
+        $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
+        $resultado = $this->renovar();
         Response($resultado['data'], $resultado['code']);
     }
 
