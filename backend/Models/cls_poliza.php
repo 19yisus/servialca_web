@@ -24,29 +24,29 @@ abstract class cls_poliza extends cls_db
 		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular;
 
 
-    protected function renovar()
-    {
-        if (empty($this->fechaInicio)) {
-            $this->fechaInicio = date("Y-m-d");
-        }
-        if (empty($this->fechaVencimiento)) {
-            $fechaInicioObj = new DateTime($this->fechaInicio);
-            $fechaInicioObj->modify('+1 year');
-            $this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
-        }
-        $sql = $this->db->prepare("UPDATE poliza SET
+	protected function renovar()
+	{
+		if (empty($this->fechaInicio)) {
+			$this->fechaInicio = date("Y-m-d");
+		}
+		if (empty($this->fechaVencimiento)) {
+			$fechaInicioObj = new DateTime($this->fechaInicio);
+			$fechaInicioObj->modify('+1 year');
+			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
+		}
+		$sql = $this->db->prepare("UPDATE poliza SET
         poliza_fechaInicio = ?,
         poliza_fechaVencimiento = ?,
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
         WHERE poliza_if = ?");
-        if ($sql->execute([
-            $this->fechaInicio,
-            $this->fechaVencimiento,
-            $this->debitoCredito,
-            $this->id
-        ]));
-    }
+		if ($sql->execute([
+			$this->fechaInicio,
+			$this->fechaVencimiento,
+			$this->debitoCredito,
+			$this->id
+		]));
+	}
 
 	protected function Vencer($id)
 	{
@@ -92,7 +92,6 @@ abstract class cls_poliza extends cls_db
 			// INICIACMOS LA TRANSACCIÓN, TODO LO QUE SE EJECUTE APARTIR DE AHORA, ES PARTE DE LA TRANSACCIÓN
 			// TODO CON EL OBJETO $THIS->DB;
 			$this->db->beginTransaction();
-
 			$result = $this->SearchByColor();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -481,7 +480,7 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->idTitular;
 	}
-	
+
 	protected function GetAll($id)
 	{
 		if ($id == 57) {
@@ -515,5 +514,139 @@ abstract class cls_poliza extends cls_db
 		if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;
+	}
+
+	protected function Edit($idCliente, $idTitular, $idVehiculo)
+	{
+		try {
+			$this->db->beginTransaction();
+			$result = $this->editarCliente($idCliente);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->editarTitular($idTitular);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->editarVehiculo($idVehiculo);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			if ($result) {
+				$this->db->commit();
+				return [
+					'data' => [
+						'res' => "Registro exitoso"
+					],
+					'code' => 200
+				];
+			}
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Registro fallida"
+				],
+				'code' => 400
+			];
+		} catch (PDOException $e) {
+			return [
+				"data" => [
+					'res' => "Error de consulta: " . $e->getMessage()
+				],
+				"code" => 400
+			];
+		}
+	}
+
+	// Editar
+	protected function editarVehiculo($id)
+	{
+		$sql = $this->db->prepare("UPDATE vehiculo SET
+		vehiculo_placa = ?,
+		vehiculo_puesto = ?,
+		vehiculo_año = ?,
+		vehiculo_serialMotor = ?,
+		vehiculo_serialCarroceria = ?,
+		vehiculo_peso = ?,
+		vehiculo_capTon =?,
+		color_id = ?,
+		modelo_id = ?,
+		marca_id = ?,
+		uso_id = ?,
+		clase_id = ?,
+		tipo_id = ?
+		WHERE vehiculo_id = ?");
+		if ($sql->execute([
+			$this->placa,
+			$this->puesto,
+			$this->ano,
+			$this->serialMotor,
+			$this->serialCarroceria,
+			$this->peso,
+			$this->capacidad,
+			$this->color,
+			$this->modelo,
+			$this->marca,
+			$this->uso,
+			$this->clase,
+			$this->tipo,
+			$id
+		]));
+	}
+
+	protected function editarTitular($id)
+	{
+		$sql = $this->db->prepare("UPDATE titular SET
+		titular_cedula = ?,
+		titular_nombre = ?,
+		titular_apellido = ?
+		WHERE titular_id = ?");
+		if ($sql->execute([
+			$this->cedulaTitular,
+			$this->nombreTitular,
+			$this->apellidoTitular,
+			$id
+		]));
+	}
+
+	protected function editarCliente($id)
+	{
+		$sql = $this->db->prepare("UPDATE cliente SET
+        cliente_cedula = ?,
+        cliente_nombre = ?,
+        cliente_apellido =?,
+        cliente_fechaNacimiento = ?,
+        cliente_telefono =?,
+        cliente_correo =?,
+        cliente_direccion = ?
+        WHERE cliente_id = ?");
+		if ($sql->execute([
+			$this->cedula,
+			$this->nombre,
+			$this->apellido,
+			$this->fechaNacimiento,
+			$this->telefono,
+			$this->correo,
+			$this->direccion,
+			$id
+		]));
 	}
 }
