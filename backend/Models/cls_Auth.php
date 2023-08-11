@@ -1,4 +1,5 @@
 <?php
+
 require_once("cls_db.php");
 
 abstract class cls_Auth extends cls_db

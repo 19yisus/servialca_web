@@ -18,7 +18,7 @@
 * Revisar lo de los saltos en el registro de poliza
 * Editar de permisos y de rol por parte del administrador a los usuarios
 * pie de pagina en los reportes 
-*No recuerdo que mas 
+* Revisar los parametros de fecha de las graficas y los reportes
 
 // Preguntar  
 * contrato de grua

@@ -21,7 +21,10 @@ abstract class cls_poliza extends cls_db
 		// Pago
 		$metodoPago, $referencia, $cantidadDolar, $monto,
 		// ID
-		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular;
+		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
+		// Medico
+		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
+
 
 
 	protected function renovar()
@@ -231,6 +234,120 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
+	protected function Edit($idCliente, $idTitular, $idVehiculo)
+	{
+		try {
+			$this->db->beginTransaction();
+			$result = $this->editarCliente($idCliente);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->editarTitular($idTitular);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->editarVehiculo($idVehiculo);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			if ($result) {
+				$this->db->commit();
+				return [
+					'data' => [
+						'res' => "Registro exitoso"
+					],
+					'code' => 200
+				];
+			}
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Registro fallida"
+				],
+				'code' => 400
+			];
+		} catch (PDOException $e) {
+			return [
+				"data" => [
+					'res' => "Error de consulta: " . $e->getMessage()
+				],
+				"code" => 400
+			];
+		}
+	}
+	protected function SaveMedico($dolar, $tipoIngreso, $motivo)
+	{
+		try {
+			$this->db->beginTransaction();
+
+			$result = $this->precioDolar($dolar);
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->debitoCredito($tipoIngreso, $motivo);
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->RegistrarCertificado();
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Registro fallida"
+				],
+				'code' => 400
+			];
+		} catch (PDOException $e) {
+			return [
+				"data" => [
+					'res' => "Error de consulta: " . $e->getMessage()
+				],
+				"code" => 400
+			];
+		}
+	}
+
 	protected function RegistraCobertura()
 	{
 
@@ -516,65 +633,7 @@ abstract class cls_poliza extends cls_db
 		return $resultado;
 	}
 
-	protected function Edit($idCliente, $idTitular, $idVehiculo)
-	{
-		try {
-			$this->db->beginTransaction();
-			$result = $this->editarCliente($idCliente);
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
-			$result = $this->editarTitular($idTitular);
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
-			$result = $this->editarVehiculo($idVehiculo);
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
-			if ($result) {
-				$this->db->commit();
-				return [
-					'data' => [
-						'res' => "Registro exitoso"
-					],
-					'code' => 200
-				];
-			}
-			$this->db->rollback();
-			return [
-				'data' => [
-					'res' => "Registro fallida"
-				],
-				'code' => 400
-			];
-		} catch (PDOException $e) {
-			return [
-				"data" => [
-					'res' => "Error de consulta: " . $e->getMessage()
-				],
-				"code" => 400
-			];
-		}
-	}
+
 
 	// Editar
 	protected function editarVehiculo($id)
@@ -654,5 +713,32 @@ abstract class cls_poliza extends cls_db
 		])){
 			return true;
 		}else return false;
+	}
+
+	protected function RegistrarCertificado()
+	{
+		$sql = $this->db->prepare("INSERT INTO medico (
+			cliente_id, 
+		medico_edad, 
+		medico_fechaInicio, 
+		medico_fechaVencimiento, 
+		medico_tipoSangre, 
+		medico_lente,
+		debitoCredito_id, 
+		usuario_id, 
+		sucursal_id)
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?,?)");
+		if ($sql->execute([
+			$this->cliente,
+			$this->edad,
+			$this->fechaInicioMedico,
+			$this->fechaVencimientoMedico,
+			$this->sangre,
+			$this->lente,
+			$this->debitoCredito,
+			$this->usuario,
+			$this->sucursal
+		]));
+		return $this->db->lastInsertId();
 	}
 }
