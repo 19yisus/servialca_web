@@ -56,16 +56,6 @@ class Con_poliza extends cls_poliza
 
     public function registrar()
     {
-        // $this->SearchByColor($_POST["Color"]);
-        // $this->SearchByMarca($_POST["Marca"]);
-        // $this->SearchByModelo($_POST["Modelo"]);
-        // $this->SearchByTitular($_POST["cedulaTitular"]);
-        // $this->SearchByCliente($_POST["Cedula"]);
-        // $this->SearchByVehiculo($_POST["Placa"]);
-        // $this->precioDolar($_POST["precioDolar"]);
-        // $this->debitoCredito($_POST["tipoIngreso"], $_POST["Motivo"]);
-        // $this->RegistraCobertura();
-        // $resultado = $this->RegistrarPoliza();
         $resultado = $this->Save($_POST["precioDolar"], $_POST["tipoIngreso"], $_POST["Motivo"]);
         Response($resultado['data'], $resultado['code']);
     }

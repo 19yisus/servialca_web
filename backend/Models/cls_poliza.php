@@ -609,7 +609,9 @@ abstract class cls_poliza extends cls_db
 			$this->clase,
 			$this->tipo,
 			$id
-		]));
+		])){
+			return true;
+		}else return false;
 	}
 
 	protected function editarTitular($id)
@@ -624,7 +626,9 @@ abstract class cls_poliza extends cls_db
 			$this->nombreTitular,
 			$this->apellidoTitular,
 			$id
-		]));
+		])){
+			return true;
+		}else return false;
 	}
 
 	protected function editarCliente($id)
@@ -647,6 +651,8 @@ abstract class cls_poliza extends cls_db
 			$this->correo,
 			$this->direccion,
 			$id
-		]));
+		])){
+			return true;
+		}else return false;
 	}
 }
