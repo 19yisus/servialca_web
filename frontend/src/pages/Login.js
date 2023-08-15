@@ -80,41 +80,31 @@ function Login(props) {
       });
   };
 
-  const sinIgn = () => {
+  const sinIgn = async () => {
     let endpoint = op.conexion + "/Auth/login";
     console.log(endpoint);
 
     var login = values.username;
     var passwd = values.password;
 
-    let body = {
-      Usuario: login,
-      Clave: passwd
-    }
-    console.log(body)
+    // let body = {
+    //   Usuario: login,
+    //   Clave: passwd
+    // }
 
-    fetch(endpoint, {
-      method: "POST", // or 'PUT'
-      body: JSON.stringify(body), // data can be `string` or {object}!
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.text())
-      .catch((error) => console.error("Error:", error))
-      .then((response) => console.log("Success:", response));
+    setLoading(false);
 
-    // fetch(endpoint, body, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "POST",
-    //   mode: 'cors',
-    // }).then( res => res.text())
-    // .then( result => {
-    //   console.log(result)
-    //   setActivate(false)
-    // }).catch(err => console.err(err))
+    let bodyF = new FormData()
+
+    bodyF.append("Usuario", login)
+    bodyF.append("Clave", passwd)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.text())
+      .then(result => console.log(result))
+      .catch(error => console.error(error))
 
 
 

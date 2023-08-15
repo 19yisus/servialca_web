@@ -1,14 +1,16 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 require_once("./libs/jwt.php");
 
 function Response($data, $code)
 {
-  header('Access-Control-Allow-Origin: *');
-  header("Access-Control-Allow-Headers: *");
-  header("Access-Control-Allow-Methods: *");
-  header("Allow: *");
-  echo json_encode($data, false);
+  // header('Access-Control-Allow-Origin: *');
+  // header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+  // header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  print(json_encode($data));
   http_response_code($code);
   return false;
 }
@@ -38,9 +40,17 @@ class Api
     return $url;
   }
 
+  private function CreateArrayFromPost($jsonString)
+  {
+    $jsonString = str_replace('\\"', '"', $jsonString);
+    $array = json_decode($jsonString, true);
+
+    return $array;
+  }
+
   private function GetController($peticion)
   {
-    $this->metodo_peticion = (isset($peticion[1]) ? $peticion[1] : $peticion[0]);
+    $metodo_peticion = (isset($peticion[1]) ? $peticion[1] : $peticion[0]);
     $file_controller_file = "./Routes/Con_" . $peticion[0] . ".php";
 
     if (file_exists($file_controller_file)) {
@@ -57,19 +67,12 @@ class Api
       //     }
       //   }
       // }
-
-      require_once($file_controller_file);
-
+      
+      $postData = file_get_contents("php://input");
+      $data = $this->CreateArrayFromPost($postData);
+      require_once($file_controller_file);      
       $cls_name = "Con_" . $peticion[0];
-      $cls = new $cls_name();
-
-      // $postData = file_get_contents("php://input");
-      // error_log("Data received: " . $postData);
-      Response("hoka", 200);
-      echo "hola";
-      var_dump($_POST);
-      return false;
-      // $cls->{$this->metodo_peticion}();
+      $cls = new $cls_name($_POST,$metodo_peticion);      
     }
   }
 }

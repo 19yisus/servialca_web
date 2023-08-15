@@ -2,7 +2,7 @@
 
 require_once("cls_db.php");
 
-abstract class cls_Auth extends cls_db
+class cls_Auth extends cls_db
 {
   protected $id, $usuario, $nombre, $apellido, $cedula, $telefono, $direccion, $correo, $clave, $rol, $sucursal, $estatus, $modulo;
 
