@@ -23,6 +23,9 @@ class Con_Auth extends cls_Auth
 
   public function login()
   {
+
+    Response("hola", 200);
+    return false;
     if (!isset($_POST['Usuario']) || !isset($_POST['Clave'])) Response([
       'res' => "El usuario y clave son obligatorios"
     ], 400);

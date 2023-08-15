@@ -1,7 +1,13 @@
 <?php
+
 require_once("./libs/jwt.php");
 
-function Response($data, $code){
+function Response($data, $code)
+{
+  header('Access-Control-Allow-Origin: *');
+  header("Access-Control-Allow-Headers: *");
+  header("Access-Control-Allow-Methods: *");
+  header("Allow: *");
   echo json_encode($data, false);
   http_response_code($code);
   return false;
@@ -36,35 +42,37 @@ class Api
   {
     $this->metodo_peticion = (isset($peticion[1]) ? $peticion[1] : $peticion[0]);
     $file_controller_file = "./Routes/Con_" . $peticion[0] . ".php";
-    
+
     if (file_exists($file_controller_file)) {
 
-      if($peticion[0] != 'Auth'){
-        if(isset($_POST['token']) || isset($_GET['token'])){
-          $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
-          $resultValido = validateToken($token);
-          if(!$resultValido){
-            // El token no es valido
-            Response([
-              'res' => "El token no es valido",
-            ], 403);
-          }
-        }
-        // Response([
-        //   'res' => "El token no es obligatorio",
-        // ]);
-        // http_response_code(403);
-        // El usuario no ha mandado un token para la petición
-      }
+      // if ($peticion[0] != 'Auth') {
+      //   if (isset($_POST['token']) || isset($_GET['token'])) {
+      //     $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+      //     $resultValido = validateToken($token);
+      //     if (!$resultValido) {
+      //       // El token no es valido
+      //       Response([
+      //         'res' => "El token no es valido",
+      //       ], 403);
+      //     }
+      //   }
+      // }
 
       require_once($file_controller_file);
 
       $cls_name = "Con_" . $peticion[0];
       $cls = new $cls_name();
-      
-      $cls->{$this->metodo_peticion}();
+
+      // $postData = file_get_contents("php://input");
+      // error_log("Data received: " . $postData);
+      Response("hoka", 200);
+      echo "hola";
+      var_dump($_POST);
+      return false;
+      // $cls->{$this->metodo_peticion}();
     }
   }
 }
+
 
 $api = new Api();
