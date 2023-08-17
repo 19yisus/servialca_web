@@ -24,6 +24,24 @@ class Con_Auth extends cls_Auth
       case 'login':
         $this->login();
         break;
+      case 'encriptarClaves':
+        $this->encriptarClaves();
+        break;
+      case 'registrar':
+        $this->registrar();
+        break;
+      case 'actualizar':
+        $this->actualizar();
+        break;
+      case 'eliminar':
+        $this->eliminar();
+        break;
+      case 'ConsultarUno':
+        $this->ConsultarUno();
+        break;
+      case 'ConsultarTodos':
+        $this->ConsultarTodos();
+        break;
       default:
         Response("Metodo no encontrado", 400);
     }
@@ -32,7 +50,6 @@ class Con_Auth extends cls_Auth
   public function login()
   {
     if (!isset($this->usuario) || !isset($this->clave)) {
-      var_dump($this->usuario, $this->clave);
       Response([
         'res' => "El usuario y clave son obligatorios"
       ], 400);
