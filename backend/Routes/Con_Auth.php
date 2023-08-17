@@ -42,6 +42,9 @@ class Con_Auth extends cls_Auth
       case 'ConsultarTodos':
         $this->ConsultarTodos();
         break;
+      case 'clave':
+        var_dump(password_hash("+11078879*", PASSWORD_BCRYPT, ['cost' => 12]));
+        break;
       default:
         Response("Metodo no encontrado", 400);
     }
@@ -72,11 +75,7 @@ class Con_Auth extends cls_Auth
       ], 200);
       return false;
     } else {
-      Response([
-        'data' => [
-          'res' => "Algo salío mal"
-        ],
-      ], 400);
+      Response($resultado['data'], $resultado['code']);
     }
   }
 
