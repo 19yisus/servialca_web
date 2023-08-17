@@ -14,6 +14,7 @@ class cls_Auth extends cls_db
   protected function sing_in()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
+    $PasswordUpdate = false;
 
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
@@ -25,21 +26,16 @@ class cls_Auth extends cls_db
         'code' => 400
       ];
 
-      // if (!password_verify($this->clave, $resultado['usuario_clave'])) return [
-      //   'data' => [
-      //     'res' => "Su clave es invalida"
-      //   ],
-      //   'code' => 400
-      // ];
-      if ($this->clave !== $resultado['usuario_clave']) {
+
+      if (!password_verify($this->clave, $resultado['usuario_clave']) || $this->clave != $resultado['usuario_clave']) {
+        $PasswordUpdate = true;
         return [
           'data' => [
-            'res' => "Su clave es inválida"
+            'res' => "Su clave es invalida"
           ],
           'code' => 400
         ];
       }
-
 
       $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
       $dato = $this->GetOne($resultado["usuario_id"]);
@@ -57,7 +53,8 @@ class cls_Auth extends cls_db
               'username' => $dato["usuario_nombre"] . " " . $dato["usuario_apellido"],
               'user_id' => $dato["usuario_id"],
               'permisos' => $lista,
-              'rol' => $dato["roles_id"]
+              'rol' => $dato["roles_id"],
+              'RequireUpdatePass' => $PasswordUpdate
             ],
             'sucursal' => [
               'id' => $dato["sucursal_id"],
