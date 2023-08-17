@@ -18,7 +18,6 @@ class cls_Auth extends cls_db
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     if (!empty($resultado)) {
-
       if ($resultado["usuario_estatus"] == 0) return [
         'data' => [
           'res' => "El usuario está desactivado"
@@ -26,12 +25,21 @@ class cls_Auth extends cls_db
         'code' => 400
       ];
 
-      if (!password_verify($this->clave, $resultado['usuario_clave'])) return [
-        'data' => [
-          'res' => "Su clave es invalida"
-        ],
-        'code' => 400
-      ];
+      // if (!password_verify($this->clave, $resultado['usuario_clave'])) return [
+      //   'data' => [
+      //     'res' => "Su clave es invalida"
+      //   ],
+      //   'code' => 400
+      // ];
+      if ($this->clave !== $resultado['usuario_clave']) {
+        return [
+          'data' => [
+            'res' => "Su clave es inválida"
+          ],
+          'code' => 400
+        ];
+      }
+
 
       $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
       $dato = $this->GetOne($resultado["usuario_id"]);
@@ -249,7 +257,7 @@ class cls_Auth extends cls_db
     else $resultado = [];
     return $resultado;
   }
-  
+
   private function GetDuplicados()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE 

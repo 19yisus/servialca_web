@@ -74,7 +74,7 @@ class Con_Auth extends cls_Auth
     } else {
       Response([
         'data' => [
-          'res' => "Algo salío mal"
+          'res' => $resultado['data']['res']
         ],
       ], 400);
     }
