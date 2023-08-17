@@ -19,13 +19,13 @@ class cls_Auth extends cls_db
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     if (!empty($resultado)) {
-
       if ($resultado["usuario_estatus"] == 0) return [
         'data' => [
           'res' => "El usuario está desactivado"
         ],
         'code' => 400
       ];
+
 
       if (!password_verify($this->clave, $resultado['usuario_clave']) || $this->clave != $resultado['usuario_clave']) {
         $PasswordUpdate = true;

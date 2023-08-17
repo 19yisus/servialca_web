@@ -75,7 +75,11 @@ class Con_Auth extends cls_Auth
       ], 200);
       return false;
     } else {
-      Response($resultado['data'], $resultado['code']);
+      Response([
+        'data' => [
+          'res' => $resultado['data']['res']
+        ],
+      ], 400);
     }
   }
 
