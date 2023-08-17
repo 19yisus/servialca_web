@@ -26,16 +26,19 @@ class cls_Auth extends cls_db
         'code' => 400
       ];
 
-
-      if (!password_verify($this->clave, $resultado['usuario_clave']) || $this->clave != $resultado['usuario_clave']) {
+      if ($this->clave != $resultado['usuario_clave']) {
+        if (!password_verify($this->clave, $resultado['usuario_clave'])) {
+          return [
+            'data' => [
+              'res' => "Su clave es invalida"
+            ],
+            'code' => 400
+          ];
+        }
+      }else{
         $PasswordUpdate = true;
-        return [
-          'data' => [
-            'res' => "Su clave es invalida"
-          ],
-          'code' => 400
-        ];
       }
+
 
       $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
       $dato = $this->GetOne($resultado["usuario_id"]);

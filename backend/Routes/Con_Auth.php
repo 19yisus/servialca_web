@@ -3,51 +3,51 @@ require_once("./Models/cls_Auth.php");
 
 class Con_Auth extends cls_Auth
 {
-  public function __construct($datos, $peticion)
+  public function __construct()
   {
     parent::__construct();
-    $this->id = isset($datos["ID"]) ? $datos["ID"] : null;
-    $this->usuario = isset($datos["Usuario"]) ? $datos["Usuario"] : null;
-    $this->nombre = isset($datos["Nombre"]) ? strtoupper($datos["Nombre"]) : null;
-    $this->apellido = isset($datos["Apellido"]) ? strtoupper($datos["Apellido"]) : null;
-    $this->cedula = isset($datos["Cedula"]) ? $datos["Cedula"] : null;
-    $this->telefono = isset($datos["Telefono"]) ? $datos["Telefono"] : null;
-    $this->direccion = isset($datos["Direccion"]) ? $datos["Direccion"] : null;
-    $this->correo = isset($datos["Correo"]) ? $datos["Correo"] : null;
-    $this->clave = isset($datos["Clave"]) ? $datos["Clave"] : null;
-    $this->rol = isset($datos["Rol"]) ? $datos["Rol"] : null;
-    $this->sucursal = isset($datos["Sucursal"]) ? $datos["Sucursal"] : null;
-    $this->estatus = isset($datos["Estatus"]) ? $datos["Estatus"] : null;
-    $this->modulo = isset($datos["Modulos"]) ? $datos["Modulos"] : [];
+    $this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
+    $this->usuario = isset($_POST["Usuario"]) ? $_POST["Usuario"] : null;
+    $this->nombre = isset($_POST["Nombre"]) ? strtoupper($_POST["Nombre"]) : null;
+    $this->apellido = isset($_POST["Apellido"]) ? strtoupper($_POST["Apellido"]) : null;
+    $this->cedula = isset($_POST["Cedula"]) ? $_POST["Cedula"] : null;
+    $this->telefono = isset($_POST["Telefono"]) ? $_POST["Telefono"] : null;
+    $this->direccion = isset($_POST["Direccion"]) ? $_POST["Direccion"] : null;
+    $this->correo = isset($_POST["Correo"]) ? $_POST["Correo"] : null;
+    $this->clave = isset($_POST["Clave"]) ? $_POST["Clave"] : null;
+    $this->rol = isset($_POST["Rol"]) ? $_POST["Rol"] : null;
+    $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
+    $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
+    $this->modulo = isset($_POST["Modulos"]) ? $_POST["Modulos"] : [];
 
-    switch ($peticion) {
-      case 'login':
-        $this->login();
-        break;
-      case 'encriptarClaves':
-        $this->encriptarClaves();
-        break;
-      case 'registrar':
-        $this->registrar();
-        break;
-      case 'actualizar':
-        $this->actualizar();
-        break;
-      case 'eliminar':
-        $this->eliminar();
-        break;
-      case 'ConsultarUno':
-        $this->ConsultarUno();
-        break;
-      case 'ConsultarTodos':
-        $this->ConsultarTodos();
-        break;
-      case 'clave':
-        var_dump(password_hash("+11078879*", PASSWORD_BCRYPT, ['cost' => 12]));
-        break;
-      default:
-        Response("Metodo no encontrado", 400);
-    }
+    // switch ($peticion) {
+    //   case 'login':
+    //     $this->login();
+    //     break;
+    //   case 'encriptarClaves':
+    //     $this->encriptarClaves();
+    //     break;
+    //   case 'registrar':
+    //     $this->registrar();
+    //     break;
+    //   case 'actualizar':
+    //     $this->actualizar();
+    //     break;
+    //   case 'eliminar':
+    //     $this->eliminar();
+    //     break;
+    //   case 'ConsultarUno':
+    //     $this->ConsultarUno();
+    //     break;
+    //   case 'ConsultarTodos':
+    //     $this->ConsultarTodos();
+    //     break;
+    //   case 'clave':
+    //     var_dump(password_hash("+11078879*", PASSWORD_BCRYPT, ['cost' => 12]));
+    //     break;
+    //   default:
+    //     Response("Metodo no encontrado", 400);
+    // }
   }
 
   public function login()

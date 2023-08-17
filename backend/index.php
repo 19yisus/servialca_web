@@ -72,7 +72,8 @@ class Api
       $data = $this->CreateArrayFromPost($postData);
       require_once($file_controller_file);      
       $cls_name = "Con_" . $peticion[0];
-      $cls = new $cls_name($_POST,$metodo_peticion);      
+      $cls = new $cls_name();      
+      $cls->$metodo_peticion();
     }
   }
 }
