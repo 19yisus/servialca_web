@@ -103,7 +103,10 @@ function Login(props) {
       method: "POST",
       body: bodyF
     }).then(res => res.text())
-      .then(result => window.location.href = '/inicio')
+      .then(result =>{
+        console.log(result)
+        // window.location.href = '/inicio'
+      })
       .catch(error => console.error(error))
 
 
