@@ -1,0 +1,27 @@
+* Casar tipo de vehiculo con tipo de contrato
+* A la hora de registrar un usuario si es rol asesor que salga a que sucursal pertenece y si es vendedor que salga a que asesor pertenece
+* la renovación que no pueda hacerse si el año de vencimiento no es igual al año actual
+* validar la referencia en tiempo real (Nose)
+* pregunta de seguridad de los usuarios
+* recuperacion de contraseña por preguntas de seg
+* recuperación de contraseña por correo 
+* cada asesor pueda modificar la lista de precios de su propia sucursal 
+* Contratos a creditos
+* Seguridad (que no deje escribir datos que no son)
+* buscador en select 
+* alerta de cierre de sección 
+* en la parte de gastos personales que salga el monto total de lo que se a echo en el mes 
+* poner id(de certificado o de rcv) en ingreso y egreso 
+* que las fecha de desde de las graficas no puedan ser menores que la del hasta 
+* alerta en los reporte de que no alla datos para que no mande a un reporte vacio 
+* Revisar la tabla de debito credito
+* Revisar lo de los saltos en el registro de poliza
+* Editar de permisos y de rol por parte del administrador a los usuarios
+* pie de pagina en los reportes 
+* Revisar los parametros de fecha de las graficas y los reportes
+
+// Preguntar  
+* contrato de grua
+* Factura
+* Documentos 
+* funeraria 

@@ -1,0 +1,72 @@
+[
+  {
+    "modulos":{
+      "poliza":{
+        "1": "poliza/registrar",
+        "2": "poliza/editar",
+        "3": "poliza/ConsultarUno",
+        "4": "poliza/ConsultarTodos",
+        "5": "poliza/registrarCertificado",
+        "6": "poliza/renovar"
+      },
+      "color":{
+        "1": "color/ConsultarTodos"
+      },
+      "estado":{
+        "1": "estado/ConsultarTodos"
+      },
+      "claseVehiculo":{
+        "1": "claseVehiculo/registrar",
+        "2": "claseVehiculo/actualizar",
+        "3": "claseVehiculo/eliminar",
+        "4": "claseVehiculo/ConsultarTodos",
+        "5": "claseVehiculo/ConsultarTodos"
+      },
+      "roles":{
+        "1": "roles/registrar",
+        "2": "roles/actualizar",
+        "3": "roles/eliminar",
+        "4": "roles/ConsultarTodos",
+        "5": "roles/ConsultarTodos"
+      },
+      "sucursal":{
+        "1": "sucursal/registrar",
+        "2": "sucursal/actualizar",
+        "3": "sucursal/eliminar",
+        "4": "sucursal/ConsultarTodos",
+        "5": "sucursal/ConsultarTodos"
+      },
+      "tipo_contrato":{
+        "1": "tipo_contrato/registrar",
+        "2": "tipo_contrato/actualizar",
+        "3": "tipo_contrato/eliminar",
+        "4": "tipo_contrato/ConsultarTodos",
+        "5": "tipo_contrato/ConsultarTodos"
+      },
+      "tipo_vehiculo":{
+        "1": "tipo_vehiculo/registrar",
+        "2": "tipo_vehiculo/actualizar",
+        "3": "tipo_vehiculo/eliminar",
+        "4": "tipo_vehiculo/ConsultarTodos",
+        "5": "tipo_vehiculo/ConsultarTodos"
+      },
+      "transporte":{
+        "1": "transporte/registrar",
+        "2": "transporte/actualizar",
+        "3": "transporte/eliminar",
+        "4": "transporte/ConsultarTodos",
+        "5": "transporte/ConsultarTodos"
+      },
+      "usoVehiculo":{
+        "1": "usoVehiculo/registrar",
+        "2": "usoVehiculo/actualizar",
+        "3": "usoVehiculo/eliminar",
+        "4": "usoVehiculo/ConsultarTodos",
+        "5": "usoVehiculo/ConsultarTodos"
+      },
+      "vehiculo":{
+        "1": "vehiculo/ConsultarTodos"
+      }
+    }
+  }
+]
