@@ -20,10 +20,11 @@ abstract class cls_grafica extends cls_db
         WHERE DATE(nota_fecha) BETWEEN ? AND ?");
         $sql->bindValue(1, $desde, PDO::PARAM_STR);
         $sql->bindValue(2, $hasta, PDO::PARAM_STR);
-        if ($sql->execute())
+        if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-        else
+        } else {
             $resultado = [];
+        }
         return $resultado;
     }
 
