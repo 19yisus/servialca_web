@@ -6,25 +6,25 @@ import axios from "axios";
 import { ModalHist } from '../components/componentesIglesia/reportes/modalHistLocal'
 
 function Sidebar(props) {
-  let token = localStorage.getItem("jwtToken");
+  //let token = localStorage.getItem("jwtToken");
   let op = require("../modulos/datos");
   /*   const idzona = JSON.parse(localStorage.getItem("idzona")); */
-  let nombreagente = JSON.parse(localStorage.getItem("nombreagente"));
-  const permiso = JSON.parse(localStorage.getItem("permiso"));
+  //let nombreagente = JSON.parse(localStorage.getItem("nombreagente"));
+ // const permiso = JSON.parse(localStorage.getItem("permiso"));
 
-  const accreglocal = JSON.parse(localStorage.getItem('accreglocal'));
-  const accmovilocal = JSON.parse(localStorage.getItem('accmovilocal'));
-  const accfinalocal = JSON.parse(localStorage.getItem('accfinalocal'));
-  const accpdflocal = JSON.parse(localStorage.getItem('accpdflocal'));
+  //const accreglocal = JSON.parse(localStorage.getItem('accreglocal'));
+ // const accmovilocal = JSON.parse(localStorage.getItem('accmovilocal'));
+ // const accfinalocal = JSON.parse(localStorage.getItem('accfinalocal'));
+ // const accpdflocal = JSON.parse(localStorage.getItem('accpdflocal'));
 
   const [histCuentasLocal, setHistCuentasLocal] = useState(false)
   const { user, logout } = useContext(AuthContext);
-  const [fechaSistema, setFechaSistema] = useState(
-    JSON.parse(localStorage.getItem("fechasistema"))
-  );
-  const [usuario, setUsuario] = useState(
-    JSON.parse(localStorage.getItem("login"))
-  );
+ // const [fechaSistema, setFechaSistema] = useState(
+  //  JSON.parse(localStorage.getItem("fechasistema"))
+ // );
+  //const [usuario, setUsuario] = useState(
+ //   JSON.parse(localStorage.getItem("login"))
+ // );
   const [tituloNav, setTituloNav] = useState("Panel de Control");
   const [verConfiguracion, setVerConfiguracion] = useState(false);
   const [mensaje, setMensaje] = useState({
@@ -110,7 +110,7 @@ function Sidebar(props) {
   */
 
 
-  const sidebar = user && (
+  const sidebar = (
     <div className="bg-light" id="sidebar-wrapper">
       <div className="sidebar-heading text-center  bluez-text fs-4 fw-bold text-uppercase border-bottom">
         <div
@@ -118,9 +118,9 @@ function Sidebar(props) {
           style={{ width: "100px", height: "100px", margin: "auto" }}
         ></div>
         <h5 className="m-0 second-text">
-          {moment(fechaSistema).format("DD-MM-YYYY")}
+          {/*moment(fechaSistema).format("DD-MM-YYYY")*/}
         </h5>
-        <h5 className="m-0 second-text">{nombreagente}</h5>
+        <h5 className="m-0 second-text">{}</h5>
       </div>
 
       <div className="list-group list-group-flush mx-3 mt-4 px-0">
@@ -155,47 +155,34 @@ function Sidebar(props) {
               data-bs-parent="#accordionExample"
             >
               <div className="accordion-body py-0 list-group px-0">
-                {permiso.trim() === "ZONAL" || permiso.trim() === "NACIONAL" ? (
+               
                   <a href="/registropastores" className="list-group-item list-group-item-action py-2 ripple">
                     {/*  <i className="fas fa-fw me-3 fa-cash-register" /> */}
                     <span>Pastores</span>
                   </a>
-                ) : (
-                  ""
-                )}
+               
 
-
-                {permiso.trim() === "ZONAL" || permiso.trim() === "NACIONAL" ? (
+              
                   <a href="/registroZona" className="list-group-item list-group-item-action py-2 ripple">
                     {/*  <i className="fas fa-fw me-3 fa-cash-register" /> */}
                     <span>Iglesia</span>
                   </a>
-                ) : (
-                  ""
-                )}
+               
 
-                {permiso.trim() === "LOCAL" ? (
-                  accreglocal.substring(0, 1) !== '0' ?
-                    <a href="/registrocreyentes" className="list-group-item list-group-item-action py-2 ripple" style={{ pointerEvents: accreglocal.substring(0, 1) === '0' ? 'none' : 'cursor', backgroundColor: accreglocal.substring(0, 1) === '0' ? '#8c8986' : '' }} >
+              
+                    <a href="/registrocreyentes" className="list-group-item list-group-item-action py-2 ripple"  >
 
                       <span>Creyentes</span>
-                    </a> : ''
-                ) : (
-                  ""
-                )}
-                {permiso.trim() === "LOCAL" ? (
-                  accmovilocal.substring(0, 1) !== '0' ?
+                    </a>
+               
                     <a
                       href="/usuarioslocales"
                       className="list-group-item list-group-item-action py-2 ripple "
-                      style={{ pointerEvents: accmovilocal.substring(0, 1) === '0' ? 'none' : 'cursor', backgroundColor: accmovilocal.substring(0, 1) === '0' ? '#8c8986' : '' }}
+                      
                     >
 
                       <span>Gestion de Usuarios</span>
-                    </a> : ''
-                ) : (
-                  ""
-                )}
+                    </a>
               </div>
             </div>
           </div>
@@ -221,28 +208,22 @@ function Sidebar(props) {
               data-bs-parent="#accordionExample"
             >
               <div className="accordion-body list-group  py-0 px-0">
-                {permiso.trim() === "ZONAL" || permiso.trim() === "NACIONAL" ? (
+              
                   <a href="/registropastores" className="list-group-item list-group-item-action py-2 ripple"  >
 
                     <span>Solicitud de Credencial</span>
                   </a>
-                ) : (
-                  ""
-                )}
+                )
 
-                {permiso.trim() === "LOCAL" ? (
-                  accmovilocal.substring(1, 2) !== '0' ?
+               
                     <a
                       href="/bitacora"
                       className="list-group-item list-group-item-action py-2 ripple "
-                      style={{ pointerEvents: accmovilocal.substring(1, 2) === '0' ? 'none' : 'cursor', backgroundColor: accmovilocal.substring(1, 2) === '0' ? '#8c8986' : '' }}
+                     
                     >
 
                       <span>Bitacora</span>
-                    </a> : ''
-                ) : (
-                  ""
-                )}
+                    </a> 
               </div>
             </div>
           </div>
@@ -268,74 +249,45 @@ function Sidebar(props) {
               data-bs-parent="#accordionExample"
             >
               <div className="accordion-body list-group py-0 px-0">
-                {permiso.trim() === "LOCAL" ? (
-                  accfinalocal.substring(0, 1) !== '0' ?
+              
                     <a
                       href="/notadebito"
                       className="list-group-item list-group-item-action py-2 ripple "
-                      style={{ pointerEvents: accfinalocal.substring(0, 1) === '0' ? 'none' : 'cursor', backgroundColor: accfinalocal.substring(0, 1) === '0' ? '#8c8986' : '' }}
+                     
                     >
 
                       <span>Notas de Debitos</span>
-                    </a> : ''
-                ) : (
-                  ""
-                )}
+                    </a>
 
-                {permiso.trim() === "LOCAL" ? (
-
-                  accfinalocal.substring(1, 2) !== '0' ?
+                
                     <a
                       href="/notacredito"
                       className="list-group-item list-group-item-action py-2 ripple "
-                      style={{ pointerEvents: accfinalocal.substring(1, 2) === '0' ? 'none' : 'cursor', backgroundColor: accfinalocal.substring(1, 2) === '0' ? '#8c8986' : '' }}
+                     
                     >
 
                       <span>Notas de Creditos</span>
-                    </a> : ''
-                ) : (
-                  ""
-                )}
-                {/*  {permiso.trim() === "LOCAL" ? (
-                  <a
-                    href="/#"
-                    className="list-group-item list-group-item-action py-2 ripple "
-                    style={{pointerEvents: accfinalocal.substring(2,3) === '0' ? 'none' : 'cursor', backgroundColor:accfinalocal.substring(2,3) === '0' ? '#8c8986' : ''}}
-                  >
-                    
-                    <span>Envio de Aportes</span>
-                  </a>
-                ) : (
-                  ""
-                )} */}
+                      </a>
 
-                {permiso.trim() === "LOCAL" || permiso.trim() === "NACIONAL" ? (
-                  accfinalocal.substring(3, 4) !== '0' ?
+              
                   <a
                     href="/bancos"
                     className="list-group-item list-group-item-action py-2 ripple "
-                    style={{ pointerEvents: accfinalocal.substring(3, 4) === '0' ? 'none' : 'cursor', backgroundColor: accfinalocal.substring(3, 4) === '0' ? '#8c8986' : '' }}
+                   
                   >
 
                     <span>Bancos</span>
-                  </a> : ''
-                ) : (
-                  ""
-                )}
+                  </a>
 
-                {permiso.trim() === "LOCAL" || permiso.trim() === "NACIONAL" ? (
-                  accfinalocal.substring(4, 5) !== '0' ?
+               
                   <a
                     href="/cuentasbancarias"
                     className="list-group-item list-group-item-action py-2 ripple "
-                    style={{ pointerEvents: accfinalocal.substring(4, 5) === '0' ? 'none' : 'cursor', backgroundColor: accfinalocal.substring(4, 5) === '0' ? '#8c8986' : '' }}
+                   
                   >
 
                     <span>Cuentas Bancarias</span>
-                  </a> : ''
-                ) : (
-                  ""
-                )}
+                  </a>
               </div>
             </div>
           </div>
@@ -361,7 +313,7 @@ function Sidebar(props) {
               data-bs-parent="#accordionExample"
             >
               <div className="accordion-body list-group  py-0 px-0">
-                {permiso.trim() === "ZONAL" || permiso.trim() === "NACIONAL" ? (
+               
                   <a
                     href="/pdfiglesias"
                     className="list-group-item list-group-item-action py-2 ripple"
@@ -371,39 +323,29 @@ function Sidebar(props) {
 
                     <span>Registro de Iglesias</span>
                   </a>
-                ) : (
-                  ""
-                )}
-                {permiso.trim() === "LOCAL" ? (
-                  accpdflocal.substring(0, 1) !== '0' ? 
+                )
+              
                   <a
                     href="/pdfcreyentes"
                     className="list-group-item list-group-item-action py-2 ripple"
                     target="_blank"
-                    style={{ pointerEvents: accpdflocal.substring(0, 1) === '0' ? 'none' : 'cursor', backgroundColor: accpdflocal.substring(0, 1) === '0' ? '#8c8986' : '' }}
+                    
 
                   >
 
                     <span>List. de Creyentes</span>
-                  </a> : ''
-                ) : (
-                  ""
-                )}
-                {permiso.trim() === "LOCAL" ? (
-                  accpdflocal.substring(1, 2) !== '0' ?
+                  </a> 
+                
                   <a
                     href="#"
                     onClick={() => { setHistCuentasLocal(true) }}
                     className="list-group-item list-group-item-action py-2 ripple"
-                    style={{ pointerEvents: accpdflocal.substring(1, 2) === '0' ? 'none' : 'cursor', backgroundColor: accpdflocal.substring(1, 2) === '0' ? '#8c8986' : '' }}
+                    
 
                   >
 
                     <span>Hist. de Cuentas</span>
-                  </a> : ''
-                ) : (
-                  ""
-                )}
+                  </a>
               </div>
             </div>
           </div>

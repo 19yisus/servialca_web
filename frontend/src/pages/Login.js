@@ -23,11 +23,11 @@ function Login(props) {
   const [mensaje, setMensaje] = useState({ mostrar: false, titulo: '', texto: '', icono: '' });
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "",
-    password: "",
+    username: "hola",
+    password: "hola",
   });
 
-  console.log(op.conexion)
+
 
   useEffect(() => {
     context.logout();
@@ -83,7 +83,7 @@ function Login(props) {
   const sinIgn = async () => {
     let endpoint = op.conexion + "/Auth/login";
     console.log(endpoint);
-
+    setActivate(true)
     var login = values.username;
     var passwd = values.password;
 
@@ -102,12 +102,29 @@ function Login(props) {
     await fetch(endpoint, {
       method: "POST",
       body: bodyF
-    }).then(res => res.text())
-      .then(result =>{
-        console.log(result)
+    }).then(res => res.json())
+      .then(response =>{
+     
+        
+        context.login(response.data.token)
+       
         // window.location.href = '/inicio'
+     
+       localStorage.setItem("rol", JSON.stringify(response.data.usuario[0].rol));
+       localStorage.setItem("user_id", JSON.stringify(response.data.usuario[0].user_id));
+       localStorage.setItem("username", JSON.stringify(response.data.usuario[0].username));
+       localStorage.setItem("permisos", JSON.stringify(response.data.usuario[0].permisos));
+       localStorage.setItem("idsucursal", JSON.stringify(response.data.usuario[1].id));
+       localStorage.setItem("sucursal", JSON.stringify(response.data.usuario[1].name));
+       setActivate(false)
+       window.location.href = "/inicio";
+
+
+
       })
-      .catch(error => console.error(error))
+      .catch(error =>  
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+        )
 
 
 
@@ -139,7 +156,7 @@ function Login(props) {
     //          "idusuario",
     //          JSON.stringify(response.data.idusuario)
     //        );
-    //        localStorage.setItem("login", JSON.stringify(response.data.login));
+    //       
     //        localStorage.setItem(
     //          "codigo",
     //          JSON.stringify(response.data.codigo)
@@ -166,6 +183,7 @@ function Login(props) {
   function loginUserCallback() {
     setLoading(true);
     sinIgn();
+    console.log('listo')
   }
 
   return (
