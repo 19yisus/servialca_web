@@ -134,7 +134,7 @@ abstract class cls_sucursal extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM sucursal");
+		$sql = $this->db->prepare("SELECT * FROM sucursal ORDER BY sucursal_id DESC");
 		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;
