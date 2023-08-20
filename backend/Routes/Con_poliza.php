@@ -89,4 +89,10 @@ class Con_poliza extends cls_poliza
         $resultado = $this->GetAll($_GET["ID"]);
         Response($resultado, 200);
     }
+
+    public function ConsultarVencer()
+    {
+        $resultado = $this->Vencer($_GET["ID"]);
+        Response($resultado, 200);
+    }
 }

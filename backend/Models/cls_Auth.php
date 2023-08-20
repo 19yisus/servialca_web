@@ -19,12 +19,13 @@ class cls_Auth extends cls_db
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     if (!empty($resultado)) {
-      if ($resultado["usuario_estatus"] == 0) return [
-        'data' => [
-          'res' => "El usuario está desactivado"
-        ],
-        'code' => 400
-      ];
+      if ($resultado["usuario_estatus"] == 0)
+        return [
+          'data' => [
+            'res' => "El usuario está desactivado"
+          ],
+          'code' => 400
+        ];
       if ($this->clave != $resultado['usuario_clave']) {
         return [
           'data' => [
@@ -104,7 +105,8 @@ class cls_Auth extends cls_db
       $clave = password_hash($item['usuario_clave'], PASSWORD_BCRYPT, ['cost' => 12]);
       $this->db->query("UPDATE usuario SET usuario_clave = '$clave' WHERE usuario_id = $id_usuario");
     }
-    if (isset($datos)) return $datos;
+    if (isset($datos))
+      return $datos;
   }
 
   protected function Save()
@@ -159,12 +161,13 @@ class cls_Auth extends cls_db
         $this->sucursal
       ]);
       $this->id = $this->db->lastInsertId();
-      if ($sql->rowCount() > 0) return [
-        'data' => [
-          'res' => "Registro exitoso"
-        ],
-        'code' => 200
-      ];
+      if ($sql->rowCount() > 0)
+        return [
+          'data' => [
+            'res' => "Registro exitoso"
+          ],
+          'code' => 200
+        ];
 
       return [
         'data' => [
@@ -202,15 +205,17 @@ class cls_Auth extends cls_db
       usuario_direccion = ?,
       usuario_correo = ?
       WHERE usuario_id = ?");
-      if ($sql->execute([
-        $this->usuario,
-        $this->nombre,
-        $this->apellido,
-        $this->telefono,
-        $this->direccion,
-        $this->correo,
-        $this->id
-      ])) {
+      if (
+        $sql->execute([
+          $this->usuario,
+          $this->nombre,
+          $this->apellido,
+          $this->telefono,
+          $this->direccion,
+          $this->correo,
+          $this->id
+        ])
+      ) {
         return [
           'data' => [
             'res' => "Actualización de datos exitosa"
@@ -263,8 +268,10 @@ class cls_Auth extends cls_db
       INNER JOIN roles ON roles.roles_id = usuario.roles_id
       INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_id = ?");
 
-    if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$id]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
@@ -274,8 +281,10 @@ class cls_Auth extends cls_db
       usuario_usuario = ? AND
       usuario_id != ?");
 
-    if ($sql->execute([$this->usuario, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$this->usuario, $this->id]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
@@ -283,8 +292,10 @@ class cls_Auth extends cls_db
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
 
-    if ($sql->execute([$username])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$username]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
@@ -292,8 +303,10 @@ class cls_Auth extends cls_db
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_cedula = ?");
 
-    if ($sql->execute([$cedula])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$cedula]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
@@ -301,11 +314,15 @@ class cls_Auth extends cls_db
   {
     $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
       INNER JOIN roles ON roles.roles_id = usuario.roles_id 
-      INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_id > 56");
+      INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_id > 56
+      ORDER BY usuario.usuario_id DESC");
 
-    if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute())
+      $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
 
     return $resultado;
   }
+
 }

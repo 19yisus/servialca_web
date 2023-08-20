@@ -183,7 +183,7 @@ abstract class cls_tipo_contrato extends cls_db
 
   protected function GetAll()
   {
-    $sql = $this->db->prepare("SELECT * FROM tipocontrato");
+    $sql = $this->db->prepare("SELECT * FROM tipocontrato ORDER BY contrato_id DESC");
     if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     else $resultado = [];
     return $resultado;

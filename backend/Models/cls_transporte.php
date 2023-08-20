@@ -135,7 +135,7 @@ abstract class cls_transporte extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM transporte");
+		$sql = $this->db->prepare("SELECT * FROM transporte ORDER BY transporte_id DESC");
 		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;
