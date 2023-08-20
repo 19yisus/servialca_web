@@ -1,30 +1,19 @@
 import React, { useEffect, useContext, useState } from "react";
-import { AuthContext } from "../context/auth";
 
-import useTableScroll from "../components/useTableScroll2";
 
-import { Mensaje } from "../components/mensajes";
+import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-import logo from '../imagenes/logo.png'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+
+
+
 import axios from "axios";
-import useTable from "../components/useTable";
+import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
 
-import { GestionarPreguntas } from "../components/componentesIglesia/configuracion/preguntasSeguridad";
 
-function Inicio2() {
-  var op = require("../modulos/datos");
+function TablaUsoVehiculo() {
+  var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
 
@@ -38,15 +27,10 @@ function Inicio2() {
 
   console.log(user_id)
   const headCells = [
-    { label: "N° Contrato", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Fecha Vencimiento", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "C.I/R.I.F.", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Benefeciario", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Telefono", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Placa", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Acesor", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Sucursal", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
- 
+    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Descripción", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Estatus", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+   
     { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
 
 
@@ -56,7 +40,6 @@ function Inicio2() {
 
 
 
-  const { user } = useContext(AuthContext);
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [cuentas, setCuentas] = useState();
@@ -131,7 +114,7 @@ function Inicio2() {
   
   
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/poliza/ConsultarTodos";
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
 console.log(endpoint)
     setActivate(true)
    
@@ -139,14 +122,12 @@ console.log(endpoint)
   
     //setLoading(false);
 
-    let bodyF = new FormData()
-
-    bodyF.append("ID", user_id)
+  
  
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
+     
     }).then(res => res.json())
       .then(response =>{
      
@@ -209,17 +190,11 @@ console.log(endpoint)
   }
   return (
     <div className="col-md-12 mx-auto p-2">
-      <GestionarPreguntas
-        show={mostrar}
-        llamado={2}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-      />
+    
 
 <div className="col-12 py-2">
            <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>RCV QUE ESTAN POR VENCER</h2>
+                <h2 className=' col-5 text-light'>Uso Vehiculo</h2>
 
               </div>
               
@@ -238,16 +213,12 @@ console.log(endpoint)
                   {
                     records && recordsAfterPagingAndSorting().map((item, index) => (
                       <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.poliza_fechaVencimiento}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_telefono}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.vehiculo_placa}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usuario_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.sucursal_nombre}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usoVehiculo_id}</TableCell> 
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usoVehiculo_nombre}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.usoVehiculo_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
+
                    
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
                           <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
                           <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
@@ -276,4 +247,4 @@ console.log(endpoint)
   );
 }
 
-export default Inicio2;
+export default TablaUsoVehiculo;

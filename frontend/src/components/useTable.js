@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
       },
     container: {
-        maxHeight: 440,
+       
       },
 }))
 
@@ -33,7 +33,7 @@ export default function useTable(records, headCells,filterFn) {
 
     const classes = useStyles();
 
-    const pages = [5, 10, 25, records.length]
+    const pages = [12, 30, 50, records.length]
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(pages[page])
     const [order, setOrder] = useState()
@@ -59,7 +59,7 @@ export default function useTable(records, headCells,filterFn) {
             <TableRow>
                 {
                     headCells.map(headCell => (
-                        <TableCell key={headCell.id} style={{fontFamily: headCell.fontFamily,textAlign: headCell.textAlign, fontWeight: headCell.fontWeight, backgroundColor: headCell.backgroundColor, color: headCell.color, fontSize: headCell.fontSize, padding: headCell.padding, margin: headCell.margin}}
+                        <TableCell key={headCell.id} style={{fontFamily: headCell.fontFamily,textAlign: headCell.textAlign, fontWeight: 'bold', backgroundColor: headCell.backgroundColor, color: headCell.color, fontSize: headCell.fontSize, padding: headCell.padding, margin: headCell.margin}}
                             sortDirection={orderBy === headCell.id ? order : false}>
                             {headCell.disableSorting ? headCell.label :
                                 /*  <TableSortLabel

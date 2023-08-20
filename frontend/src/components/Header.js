@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/auth";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import {GestionarPreguntas} from './componentesIglesia/configuracion/preguntasSeguridad'
-import { GestionarClave } from "./componentesIglesia/configuracion/cambiarClavePersonal";
 
 function Header(props) {
-  const { user, logout } = useContext(AuthContext);
+//  const { user, logout } = useContext(AuthContext);
   const [mostrar, setMostrar] = useState(false);
   const [mostrarClave, setMostrarClave] = useState(false);
 
 
-  const [fechaSistema, setFechaSistema] = useState(
-    JSON.parse(localStorage.getItem("fechasistema"))
-  );
+  //const [fechaSistema, setFechaSistema] = useState(
+  //  JSON.parse(localStorage.getItem("fechasistema"))
+ // );
 
-  const [usuario, setUsuario] = useState(
-    JSON.parse(localStorage.getItem("login"))
-  );
+ // const [usuario, setUsuario] = useState(
+  //  JSON.parse(localStorage.getItem("login"))
+  //);
 
   let el;
   function menuclick() {
@@ -27,7 +22,9 @@ function Header(props) {
     }
   }
 
-  const header = user && (
+
+
+  return (
     <nav
       className="col-md-12 navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
       style={{ height: "70px" }}
@@ -35,7 +32,7 @@ function Header(props) {
       <div className="mx-2 ">
         <a
           onClick={menuclick}
-          className="img-fluid logo-nav"
+          className="img-fluid logo-nav text-light"
           style={{ height: "50px", width: "180px" }}
           type="button"
         >
@@ -111,30 +108,14 @@ function Header(props) {
           <button class="btn bg-transparent fw-bold btn-sm shadow-0 ">
             <i className="fas fa-user me-2" />
 
-            {usuario}
+            {/*usuario*/}
           </button>
         </div>
       </div>
 
-      <GestionarPreguntas
-        show={mostrar}
-        llamado={1}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-      />
-
-      <GestionarClave 
-      show={mostrarClave}
-      llamado={1}
-        onHideCancela={() => {
-          setMostrarClave(false);
-        }}
-      />
+     
     </nav>
   );
-
-  return header;
 }
 
 export default Header;
