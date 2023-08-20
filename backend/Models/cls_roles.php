@@ -134,7 +134,7 @@ abstract class cls_roles extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM roles");
+		$sql = $this->db->prepare("SELECT * FROM roles ORDER BY roles_id DESC");
 		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;

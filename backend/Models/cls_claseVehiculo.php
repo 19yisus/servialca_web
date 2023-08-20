@@ -25,12 +25,13 @@ abstract class cls_claseVehiculo extends cls_db
 			$sql = $this->db->prepare("INSERT INTO clasevehiculo(claseVehiculo_nombre,claseVehiculo_estatus) VALUES(?,?)");
 			$sql->execute([$this->nombre, $this->estatus]);
 			$this->id = $this->db->lastInsertId();
-			if ($sql->rowCount() > 0) return [
-				"data" => [
-					"res" => "Registro exitoso"
-				],
-				"code" => 200
-			];
+			if ($sql->rowCount() > 0)
+				return [
+					"data" => [
+						"res" => "Registro exitoso"
+					],
+					"code" => 200
+				];
 			return [
 				"data" => [
 					"res" => "El registro ha fallado"
@@ -89,8 +90,10 @@ abstract class cls_claseVehiculo extends cls_db
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE 
         claseVehiculo_nombre =? AND claseVehiculo_id = ?");
-		if ($sql->execute([$this->nombre, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		if ($sql->execute([$this->nombre, $this->id]))
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 
@@ -119,24 +122,30 @@ abstract class cls_claseVehiculo extends cls_db
 	protected function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE claseVehiculo_id = ?");
-		if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		if ($sql->execute([$id]))
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 
 	protected function SearchByNombre($nombre)
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE claseVehiculo_nombre = ?");
-		if ($sql->execute([$this->nombre])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		if ($sql->execute([$this->nombre]))
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo");
-		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo ORDER BY claseVehiculo_id DESC");
+		if ($sql->execute())
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 }

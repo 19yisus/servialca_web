@@ -615,7 +615,7 @@ abstract class cls_poliza extends cls_db
             WHERE usuario.usuario_id = $id");
 		}
 
-		if ($sql->execute()) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;
 	}
