@@ -310,6 +310,8 @@ class cls_Auth extends cls_db
     return $resultado;
   }
 
+  
+
   protected function GetAll()
   {
     $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
