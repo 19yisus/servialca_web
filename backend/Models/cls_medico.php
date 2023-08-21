@@ -10,11 +10,15 @@ abstract class cls_medico extends cls_db
 
     protected function GetAll()
     {
-        $sql = $this->db->prepare("SELECT * FROM medico ORDER BY medico_id DESC");
-        if ($sql->execute())
+        $sql = $this->db->prepare("SELECT medico.*, cliente.*
+        FROM medico
+        INNER JOIN cliente ON cliente.cliente_id = medico.cliente_id");
+        if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-        else
+        } else {
             $resultado = [];
+        }
         return $resultado;
     }
 }
+?>
