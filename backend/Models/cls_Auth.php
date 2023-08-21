@@ -38,6 +38,7 @@ class cls_Auth extends cls_db
       }
 
 
+
       // if ($this->clave != $resultado['usuario_clave']) {
       //   if (!password_verify($this->clave, $resultado['usuario_clave'])) {
       //     return [
