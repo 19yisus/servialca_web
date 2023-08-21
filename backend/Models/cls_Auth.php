@@ -27,18 +27,17 @@ class cls_Auth extends cls_db
           'code' => 400
         ];
       if ($this->clave != $resultado['usuario_clave']) {
-        // if (!password_verify($this->clave, $resultado['usuario_clave'])) {
-        // }
-        
         return [
           'data' => [
-            'res' => "Su clave es invalida"
+            'res' => "Su clave es inválida"
           ],
           'code' => 400
         ];
       } else {
         $PasswordUpdate = true;
       }
+
+
 
       // if ($this->clave != $resultado['usuario_clave']) {
       //   if (!password_verify($this->clave, $resultado['usuario_clave'])) {
