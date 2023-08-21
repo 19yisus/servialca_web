@@ -38,16 +38,16 @@ function Inicio2() {
 
   console.log(user_id)
   const headCells = [
-    { label: "N° Contrato", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Fecha Vencimiento", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "C.I/R.I.F.", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Benefeciario", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Telefono", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Placa", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Acesor", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Sucursal", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
- 
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "N° Contrato", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Fecha Vencimiento", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "C.I/R.I.F.", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Benefeciario", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Telefono", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Placa", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Acesor", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Sucursal", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+
+    { label: "Opciones", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
 
 
 
@@ -101,7 +101,7 @@ function Inicio2() {
     },
   };
 
-  
+
   const labels = [
     "Lunes",
     "Martes",
@@ -128,40 +128,40 @@ function Inicio2() {
     recordsAfterPagingAndSorting,
     TblPagination
   } = useTable(records, headCells, filterFn);
-  
-  
+
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/poliza/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
     let bodyF = new FormData()
 
     bodyF.append("ID", user_id)
- 
+
 
     await fetch(endpoint, {
       method: "POST",
       body: bodyF
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setRecords(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
@@ -186,15 +186,15 @@ console.log(endpoint)
   }
 
 
-  
+
 
   console.log('estas en menu')
 
-  
+
 
   useEffect(() => {
     selecionarRegistros()
-   
+
   }, []);
 
   const regPre = () => {
@@ -202,8 +202,8 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
 
   }
@@ -217,49 +217,51 @@ console.log(endpoint)
         }}
       />
 
-<div className="col-12 py-2">
-           <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>RCV QUE ESTAN POR VENCER</h2>
+      <div className="col-12 py-2">
+        <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
+          <h2 className=' col-5 text-light'>RCV QUE ESTAN POR VENCER</h2>
 
-              </div>
-              
-            </div>
-            <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
-              <div className="row col-12 d-flex justify-content-between mb-2">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
-              </div>
-              <TblContainer>
-                <TblHead />
-                <TableBody >
-                  {
-                    records && recordsAfterPagingAndSorting().map((item, index) => (
-                      <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.poliza_fechaVencimiento}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_telefono}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.vehiculo_placa}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usuario_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.sucursal_nombre}</TableCell>
-                   
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
-            </div>
-      
+        </div>
+
+      </div>
+      <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+
+          {/* <div className='col-3 d-flex justify-content-end'>
+            <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
+          </div> */}
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody >
+            {
+              records && recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
+                    {formatDate(item.poliza_fechaVencimiento)}
+                  </TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_telefono}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.vehiculo_placa}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usuario_nombre}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.sucursal_nombre}</TableCell>
+
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
+                    <button onClick={gestionarBanco(4, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
+                    <button onClick={gestionarBanco(2, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={gestionarBanco(3, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-danger rounded-circle"> <i className="fa fa-sync"></i> </button>
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>
@@ -267,7 +269,7 @@ console.log(endpoint)
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+            "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }
@@ -277,3 +279,7 @@ console.log(endpoint)
 }
 
 export default Inicio2;
+const formatDate = (dateString) => {
+  // Usa moment.js para formatear la fecha
+  return moment(dateString).format("DD-MM-YYYY"); // Formato "día-mes-año"
+};

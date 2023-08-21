@@ -86,7 +86,7 @@ class Con_poliza extends cls_poliza
 
     public function ConsultarTodos()
     {
-        $resultado = $this->GetAll($_GET["ID"]);
+        $resultado = $this->GetAll(57);
         Response($resultado, 200);
     }
 
