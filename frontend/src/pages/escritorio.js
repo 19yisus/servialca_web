@@ -20,6 +20,9 @@ import TablaClaseVehiculo from "../components/DatosVehiculo/tablaClaseVehiculo";
 import TablaTransporte from "../components/DatosVehiculo/tablaTransporte";
 import TablaUsuarios from "../components/datosUsuario/tablaUsuarios";
 import TablaRoles from "../components/datosUsuario/tablaRoles";
+import TablaCertificado from "../components/medico/tablaCertificado";
+import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
+import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 
 
 function MenuImpuestoPP(props) {
@@ -153,100 +156,7 @@ setSidebarM('oculto')
   }
   return (
     <div>
-     {/* <div  className={wrapper} id='wrapper'>
-        <div class={overlay}></div>
-          
-            
-            <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
-              <ul class="nav sidebar-nav col">
-                <div class="sidebar-header row">
-                <div class="sidebar-brand mx-auto row">
-                  
-                  <a className="mx-auto" href="#">
-                    <img src={logo} style={{width:170}} />
-                  </a>
-                  </div>
-                  </div>
-
-                  <div className="col-md-12 mx-auto mt-5 text-center pt-3">
-
-                    <h4 className="fw-bold m-0">
-                   
-                    </h4>
-                    <h3 className="fw-bold py-0 m-0">
-                   
-                    </h3>
-                    <h3 className="fw-bold py-0 m-0">
-                    {moment().format("DD/MM/YYYY")}
-                    </h3>
-                    
-
-                  </div>
-                
-                  <div class="accordion accordion-flush col mt-5" id="accordionFlushExample">
-                      <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            Accordion Item #1
-                          </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                          <div class="accordion-body">
-                          <ul class="list-group mx-auto">
-                      <a class="list-group-item py-2 bg-transparent " type='button'>An item</a>
-                      <a class="list-group-item py-2 bg-transparent " type='button'>A second item</a>
-                      <a class="list-group-item py-2 bg-transparent " type='button'>A third item</a>
-                      <a class="list-group-item py-2 bg-transparent " type='button'>A fourth item</a>
-                      <a class="list-group-item py-2 bg-transparent " type='button'>And a fifth one</a>
-                    </ul>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Accordion Item #2
-                          </button>
-                        </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                        </div>
-                      </div>
-                      <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                            Accordion Item #3
-                          </button>
-                        </h2>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                        </div>
-                      </div>
-                    </div>
-                
-                </ul>
-                
-            </nav>
-            
-              <div id="page-content-wrapper">
-                  
-                  <div class="container">
-                  <button type="button" onClick={bloquear} class={hamburguesa} >
-                      <span class="hamb-top"></span>
-                <span class="hamb-middle"></span>
-              <span class="hamb-bottom"></span>
-                  </button>
-                      <div class="row col-md-12 mx-auto pyr2x-0">
-                      <div className="w-100 h-100" >
-                    <AuthRoute exact path="/inicio" component={Inicio2} />
-              
-                  </div>
-                      </div>
-                  </div>
-        </div>
-       
-
-      </div>*/}
+    
     <div className="d-flex bg-dark" id="wrapper" >
       <div id="page-content-wrapper">
     
@@ -412,18 +322,43 @@ setSidebarM('oculto')
                     </div>
                   </div>
                 </div>
-
+                <div className="accordion-item  px-0">
+                  <h2 className="accordion-header" id="heading4">
+                    <button
+                      className="accordion-button text-light"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapse4"
+                      aria-expanded="false"
+                      aria-controls="collapse4"
+                    >
+                      <i className="fas fa-fw me-3 fa-cash-register" />
+                      <span>Graficas</span>
+                    </button>
+                  </h2>
+                  <div
+                    id="collapse4"
+                    className="accordion-collapse collapse list-group-item-action"
+                    aria-labelledby="heading4"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div className="accordion-body py-0 list-group px-0">
+                    
+                        <a href="/graficasingegre" className="list-group-item list-group-item-action py-2 ripple">
+                          
+                          <span>Ingresos y Egresos</span>
+                        </a>
+                  
+                               
+                    
+                        
+                    </div>
+                  </div>
+                </div>
               </div>
 
             
-              <a
-                href="/"
-              
-                className=" list-group-item list-group-item-action py-2 ripple"
-              >
-                <i className="fas fa-power-off fa-fw me-3" />
-                <span>Salir</span>
-              </a>
+            
               <a
                 href="/certificadomedico"
               
@@ -431,6 +366,21 @@ setSidebarM('oculto')
               >
                  <i className="fas fa-fw me-3 fa-cash-register" />
                 <span>Certificado Medico</span>
+              </a>
+              <a
+                href="/cumpleañeros"
+              
+                className=" list-group-item list-group-item-action py-2 ripple"
+              >
+             <i className="fas fa-fw me-3 fa-cash-register" />
+                <span>Cumpleañeros</span>
+              </a>  <a
+                href="/"
+              
+                className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple"
+              >
+                <i className="fas fa-power-off fa-fw me-3" />
+                <span>Salir</span>
               </a>
             </div>
 
@@ -450,6 +400,10 @@ setSidebarM('oculto')
             <AuthRoute exact path="/transporte" component={TablaTransporte} />
             <AuthRoute exact path="/usarios" component={TablaUsuarios} />
             <AuthRoute exact path="/roles" component={TablaRoles} />
+            <AuthRoute exact path="/certificadomedico" component={TablaCertificado} />
+            <AuthRoute exact path="/cumpleañeros" component={TablaClumpeañeros} />
+            <AuthRoute exact path="/graficasingegre" component={GraficosIngresos} />
+
 
 
 

@@ -17,8 +17,10 @@ abstract class cls_medico extends cls_db
         INNER JOIN sucursal ON sucursal.sucursal_id = medico.sucursal_id ORDER BY medico_id DESC");
         if ($sql->execute())
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-        else
+        } else {
             $resultado = [];
+        }
         return $resultado;
     }
 }
+?>
