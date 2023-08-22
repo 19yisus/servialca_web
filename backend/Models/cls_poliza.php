@@ -5,25 +5,25 @@ require_once("cls_db.php");
 abstract class cls_poliza extends cls_db
 {
 	protected $id, $sucursal, $usuario,
-		// Contratante 
-		$nombre, $apellido, $cedula, $fechaNacimiento, $telefono, $correo, $direccion,
-		// Titular 
-		$nombreTitular, $apellidoTitular, $cedulaTitular,
-		// Vehiculo
-		$placa, $puesto, $ano, $serialMotor, $serialCarroceria, $peso, $capacidad,
-		// Vehiculo extra
-		$color, $modelo, $marca, $uso, $clase, $tipo,
-		// Contrato
-		$fechaInicio, $fechaVencimiento, $tipoContrato,
-		$tipoTransporte, $estado,
-		$danoCosas, $danoPersonas, $fianza, $asistencia, $apov,
-		$muerte, $invalidez, $medico, $grua,
-		// Pago
-		$metodoPago, $referencia, $cantidadDolar, $monto,
-		// ID
-		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
-		// Medico
-		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
+	// Contratante 
+	$nombre, $apellido, $cedula, $fechaNacimiento, $telefono, $correo, $direccion,
+	// Titular 
+	$nombreTitular, $apellidoTitular, $cedulaTitular,
+	// Vehiculo
+	$placa, $puesto, $ano, $serialMotor, $serialCarroceria, $peso, $capacidad,
+	// Vehiculo extra
+	$color, $modelo, $marca, $uso, $clase, $tipo,
+	// Contrato
+	$fechaInicio, $fechaVencimiento, $tipoContrato,
+	$tipoTransporte, $estado,
+	$danoCosas, $danoPersonas, $fianza, $asistencia, $apov,
+	$muerte, $invalidez, $medico, $grua,
+	// Pago
+	$metodoPago, $referencia, $cantidadDolar, $monto,
+	// ID
+	$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
+	// Medico
+	$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
 
 
 
@@ -43,12 +43,15 @@ abstract class cls_poliza extends cls_db
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
         WHERE poliza_if = ?");
-		if ($sql->execute([
-			$this->fechaInicio,
-			$this->fechaVencimiento,
-			$this->debitoCredito,
-			$this->id
-		]));
+		if (
+			$sql->execute([
+				$this->fechaInicio,
+				$this->fechaVencimiento,
+				$this->debitoCredito,
+				$this->id
+			])
+		)
+			;
 	}
 
 	protected function Vencer($id)
@@ -419,21 +422,24 @@ abstract class cls_poliza extends cls_db
             usuario_id,
             sucursal_id
         )VALUES(?,?,?,?,?,?,?,?,?,?)");
-		if ($sql->execute([
-			$tipoIngreso,
-			$motivo,
-			$fecha,
-			$hora,
-			$this->metodoPago,
-			$this->referencia,
-			$this->cantidadDolar,
-			$this->precioDolar,
-			$this->usuario,
-			$this->sucursal
-		])) {
-			$this->debitoCredito =  $this->db->lastInsertId();
+		if (
+			$sql->execute([
+				$tipoIngreso,
+				$motivo,
+				$fecha,
+				$hora,
+				$this->metodoPago,
+				$this->referencia,
+				$this->cantidadDolar,
+				$this->precioDolar,
+				$this->usuario,
+				$this->sucursal
+			])
+		) {
+			$this->debitoCredito = $this->db->lastInsertId();
 			return true;
-		} else return false;
+		} else
+			return false;
 	}
 
 	protected function precioDolar($precio)
@@ -444,13 +450,15 @@ abstract class cls_poliza extends cls_db
 		$sql = $this->db->prepare("SELECT * FROM preciodolar WHERE dolar_monto = ? AND dolar_fecha = ?");
 		if ($sql->execute([$precio, $fecha])) {
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (isset($resultado[0])) $this->precioDolar = $resultado["dolar_id"];
+			if (isset($resultado[0]))
+				$this->precioDolar = $resultado["dolar_id"];
 			else {
 				$sql = $this->db->prepare("INSERT INTO preciodolar(dolar_monto,dolar_hora,dolar_fecha) VALUES(?,?,?)");
 				$sql->execute([$precio, $hora, $fecha]);
 				$this->precioDolar = $this->db->lastInsertId();
 			}
-		} else return false;
+		} else
+			return false;
 		return true;
 	}
 
@@ -493,7 +501,8 @@ abstract class cls_poliza extends cls_db
 				]);
 				$this->vehiculo = $this->db->lastInsertId();
 			}
-		} else return false;
+		} else
+			return false;
 		return $this->vehiculo;
 	}
 
@@ -524,7 +533,8 @@ abstract class cls_poliza extends cls_db
 				]);
 				$this->cliente = $this->db->lastInsertId();
 			}
-		} else false;
+		} else
+			false;
 		return $this->cliente;
 	}
 
@@ -538,9 +548,10 @@ abstract class cls_poliza extends cls_db
 			} else {
 				$sql = $this->db->prepare("INSERT INTO modelo (modelo_nombre,modelo_estatus) VALUES(?,1)");
 				$sql->execute([$this->modelo]);
-				$this->modelo =  $this->db->lastInsertId();
+				$this->modelo = $this->db->lastInsertId();
 			}
-		} else false;
+		} else
+			false;
 		return true;
 	}
 
@@ -554,9 +565,10 @@ abstract class cls_poliza extends cls_db
 			} else {
 				$sql = $this->db->prepare("INSERT INTO marca (marca_nombre,marca_estatus) VALUES(?,1)");
 				$sql->execute([$this->marca]);
-				$this->marca =  $this->db->lastInsertId();
+				$this->marca = $this->db->lastInsertId();
 			}
-		} else false;
+		} else
+			false;
 		return true;
 	}
 
@@ -570,9 +582,10 @@ abstract class cls_poliza extends cls_db
 			} else {
 				$sql = $this->db->prepare("INSERT INTO color (color_nombre,color_estatus) VALUES(?,1)");
 				$sql->execute([$this->color]);
-				$this->color =  $this->db->lastInsertId();
+				$this->color = $this->db->lastInsertId();
 			}
-		} else false;
+		} else
+			false;
 		return true;
 	}
 
@@ -602,21 +615,25 @@ abstract class cls_poliza extends cls_db
 	{
 		if ($id == 57) {
 			$sql = $this->db->prepare("SELECT poliza.*, cliente.*, sucursal.*, usuario.*, vehiculo.* FROM poliza 
-            INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-            INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
-            INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
-            INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id");
+				INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+				INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
+				INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
+				INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+				ORDER BY poliza_id DESC"); 
 		} else {
 			$sql = $this->db->prepare("SELECT poliza.*, cliente.*, sucursal.*, usuario.*, vehiculo.* FROM poliza 
-            INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-            INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
-            INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
-            INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-            WHERE usuario.usuario_id = $id");
+				INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+				INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
+				INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
+				INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+				WHERE usuario.usuario_id = $id
+				ORDER BY poliza_id DESC");
 		}
 
-		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		if ($sql->execute())
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 
@@ -628,8 +645,10 @@ abstract class cls_poliza extends cls_db
             INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
             INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
             INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id WHERE poliza_id = ?");
-		if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
+		if ($sql->execute([$id]))
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		else
+			$resultado = [];
 		return $resultado;
 	}
 
@@ -653,24 +672,27 @@ abstract class cls_poliza extends cls_db
 		clase_id = ?,
 		tipo_id = ?
 		WHERE vehiculo_id = ?");
-		if ($sql->execute([
-			$this->placa,
-			$this->puesto,
-			$this->ano,
-			$this->serialMotor,
-			$this->serialCarroceria,
-			$this->peso,
-			$this->capacidad,
-			$this->color,
-			$this->modelo,
-			$this->marca,
-			$this->uso,
-			$this->clase,
-			$this->tipo,
-			$id
-		])){
+		if (
+			$sql->execute([
+				$this->placa,
+				$this->puesto,
+				$this->ano,
+				$this->serialMotor,
+				$this->serialCarroceria,
+				$this->peso,
+				$this->capacidad,
+				$this->color,
+				$this->modelo,
+				$this->marca,
+				$this->uso,
+				$this->clase,
+				$this->tipo,
+				$id
+			])
+		) {
 			return true;
-		}else return false;
+		} else
+			return false;
 	}
 
 	protected function editarTitular($id)
@@ -680,14 +702,17 @@ abstract class cls_poliza extends cls_db
 		titular_nombre = ?,
 		titular_apellido = ?
 		WHERE titular_id = ?");
-		if ($sql->execute([
-			$this->cedulaTitular,
-			$this->nombreTitular,
-			$this->apellidoTitular,
-			$id
-		])){
+		if (
+			$sql->execute([
+				$this->cedulaTitular,
+				$this->nombreTitular,
+				$this->apellidoTitular,
+				$id
+			])
+		) {
 			return true;
-		}else return false;
+		} else
+			return false;
 	}
 
 	protected function editarCliente($id)
@@ -701,18 +726,21 @@ abstract class cls_poliza extends cls_db
         cliente_correo =?,
         cliente_direccion = ?
         WHERE cliente_id = ?");
-		if ($sql->execute([
-			$this->cedula,
-			$this->nombre,
-			$this->apellido,
-			$this->fechaNacimiento,
-			$this->telefono,
-			$this->correo,
-			$this->direccion,
-			$id
-		])){
+		if (
+			$sql->execute([
+				$this->cedula,
+				$this->nombre,
+				$this->apellido,
+				$this->fechaNacimiento,
+				$this->telefono,
+				$this->correo,
+				$this->direccion,
+				$id
+			])
+		) {
 			return true;
-		}else return false;
+		} else
+			return false;
 	}
 
 	protected function RegistrarCertificado()
@@ -728,17 +756,20 @@ abstract class cls_poliza extends cls_db
 		usuario_id, 
 		sucursal_id)
 		VALUES(?, ?, ?, ?, ?, ?, ?, ?,?)");
-		if ($sql->execute([
-			$this->cliente,
-			$this->edad,
-			$this->fechaInicioMedico,
-			$this->fechaVencimientoMedico,
-			$this->sangre,
-			$this->lente,
-			$this->debitoCredito,
-			$this->usuario,
-			$this->sucursal
-		]));
+		if (
+			$sql->execute([
+				$this->cliente,
+				$this->edad,
+				$this->fechaInicioMedico,
+				$this->fechaVencimientoMedico,
+				$this->sangre,
+				$this->lente,
+				$this->debitoCredito,
+				$this->usuario,
+				$this->sucursal
+			])
+		)
+			;
 		return $this->db->lastInsertId();
 	}
 }
