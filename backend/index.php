@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors',1);
-error_reporting(E_ALL);
-
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -20,16 +17,15 @@ function Response($data, $code)
 
 class Api
 {
+
+  private $ruta_actual, $code_error, $code_done, $titleContent, $controlador, $metodo_peticion, $ObjMessage;
   public $url;
 
   public function __construct()
   {
-    try{
-      $this->GetController($this->GetRoute());
-    }catch(Exception $e){
-      error_log("Error servidor: ".$e->GetMessage());
-    }
-    
+    // session_start();
+    // $this->ObjMessage = new c_messages();
+    $this->GetController($this->GetRoute());
   }
 
   private function GetRoute()
@@ -39,6 +35,8 @@ class Api
     $url = explode('/', $url);
     $this->url = $url;
 
+    // if (sizeof($url) > 2 && $url[2] === "err") $this->code_error = $url[3];
+    // if (sizeof($url) > 2 && $url[2] === "msg") $this->code_done = $url[3];
     return $url;
   }
 
@@ -57,18 +55,18 @@ class Api
 
     if (file_exists($file_controller_file)) {
 
-      if ($peticion[0] != 'Auth') {
-        if (isset($_POST['token']) || isset($_GET['token'])) {
-          $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
-          $resultValido = validateToken($token);
-          if (!$resultValido) {
-            // El token no es valido
-            Response([
-              'res' => "El token no es valido",
-            ], 403);
-          }
-        }
-      }
+      // if ($peticion[0] != 'Auth') {
+      //   if (isset($_POST['token']) || isset($_GET['token'])) {
+      //     $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+      //     $resultValido = validateToken($token);
+      //     if (!$resultValido) {
+      //       // El token no es valido
+      //       Response([
+      //         'res' => "El token no es valido",
+      //       ], 403);
+      //     }
+      //   }
+      // }
       
       $postData = file_get_contents("php://input");
       $data = $this->CreateArrayFromPost($postData);
