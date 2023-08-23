@@ -52,6 +52,13 @@ class Con_poliza extends cls_poliza
         $this->referencia = isset($_POST["Referencia"]) ? $_POST["Referencia"] : null;
         $this->cantidadDolar = isset($_POST["cantidadDolar"]) ? $_POST["cantidadDolar"] : null;
         $this->monto = isset($_POST["Monto"]) ? $_POST["Monto"] : null;
+
+        //Medico
+        $this->edad = isset($_POST["Edad"]) ? $_POST["Edad"] : null;
+        $this->fechaInicioMedico = isset($_POST["fechaInicioMedico"]) ? $_POST["fechaInicioMedico"] : null;
+        $this->fechaVencimientoMedico = isset($_POST["fechaVencimientoMedico"]) ? $_POST["fechaInicioMedico"] : null;
+        $this->sangre = isset($_POST["tipoSangre"]) ? $_POST["tipoSangre"] : null;
+        $this->lente = isset($_POST["Lente"]) ? $_POST["Lente"] : null;
     }
 
     public function registrar()
