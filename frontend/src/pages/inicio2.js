@@ -22,6 +22,7 @@ import useTable from "../components/useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
 
 import { GestionarPreguntas } from "../components/componentesIglesia/configuracion/preguntasSeguridad";
+import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
 
 function Inicio2() {
   var op = require("../modulos/datos");
@@ -207,14 +208,22 @@ function Inicio2() {
     e.preventDefault();
 
   }
+  const gestionarRcv = (opcion) => (e) => {
+    e.preventDefault()
+
+    if(opcion === 1){
+      setMostrar(true)
+
+    }
+
+  } 
   return (
     <div className="col-md-12 mx-auto p-2">
-      <GestionarPreguntas
-        show={mostrar}
-        llamado={2}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
+
+      <ModalCertificadoMedico 
+       //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra
+       show={mostrar}
+       onHideCancela={()=>{setMostrar(false)}}
       />
 
       <div className="col-12 py-2">
@@ -228,9 +237,11 @@ function Inicio2() {
         <div className="row col-12 d-flex justify-content-between mb-2">
           <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
 
-          {/* <div className='col-3 d-flex justify-content-end'>
-            <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-          </div> */}
+        <div className='col-4 d-flex justify-content-end'>
+            <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(1)}><i class="fa fa-plus"></i> Certificado Medico</button>
+            <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(2)}><i class="fa fa-plus"></i> Crear RCV</button>
+
+  </div> 
         </div>
         <TblContainer>
           <TblHead />
