@@ -25,16 +25,7 @@ abstract class cls_cliente extends cls_db
         return $resultado;
     }
 
-    protected function GetAll()
-    {
-        $sql = $this->db->prepare("SELECT * FROM cliente");
-        if ($sql->execute()) {
-            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            $resultado = [];
-        }
-        return $resultado;
-    }
+   
 }
 
 

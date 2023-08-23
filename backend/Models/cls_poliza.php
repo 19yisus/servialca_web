@@ -619,7 +619,7 @@ abstract class cls_poliza extends cls_db
 				INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
 				INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
 				INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-				ORDER BY poliza_id DESC"); 
+				ORDER BY poliza_id DESC");
 		} else {
 			$sql = $this->db->prepare("SELECT poliza.*, cliente.*, sucursal.*, usuario.*, vehiculo.* FROM poliza 
 				INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
@@ -637,18 +637,30 @@ abstract class cls_poliza extends cls_db
 		return $resultado;
 	}
 
-	protected function GetOne($id)
+	public function GetOne($id)
 	{
-
-		$sql = $this->db->prepare("SELECT poliza.*, cliente.*, sucursal.*, usuario.*, vehiculo.* FROM poliza 
-            INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-            INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
-            INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
-            INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id WHERE poliza_id = ?");
-		if ($sql->execute([$id]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
+		$sql = $this->db->prepare("SELECT poliza.*,vehiculo.*, titular.*, cliente.*, marca.*, modelo.*, usovehiculo.*, color.*,tipovehiculo.*, usuario.*, clasevehiculo.*, 
+        tipocontrato.*, usovehiculo.*,coberturas.*,debitocredito.* 
+        FROM poliza 
+        INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+        INNER JOIN titular ON titular.titular_id = poliza.titular_id
+        INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+        INNER JOIN marca ON marca.marca_id = vehiculo.marca_id
+        INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
+        INNER JOIN usovehiculo ON usovehiculo.usoVehiculo_id = vehiculo.uso_id
+        INNER JOIN color ON color.color_id = vehiculo.color_id
+        INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
+        INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
+        INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
+        INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
+        INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
+        INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+        WHERE poliza_id = $id");
+		if ($sql->execute()) {
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		} else {
 			$resultado = [];
+		}
 		return $resultado;
 	}
 

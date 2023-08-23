@@ -20,5 +20,15 @@ abstract class cls_medico extends cls_db
         }
         return $resultado;
     }
+    public function Reporte($id)
+    {
+        $sql = $this->db->prepare("SELECT medico.*, cliente.*
+        FROM medico
+        INNER JOIN cliente ON cliente.cliente_id = medico.cliente_id
+        WHERE medico_id = ?");
+        $sql->execute([$id]);
+        $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+    }
 }
 ?>
