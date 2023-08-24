@@ -126,7 +126,7 @@ export const ModalCertificadoMedico = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/póliza/registrarCertificado";
+    let endpoint = op.conexion + "/poliza/registrarCertificado";
     console.log(endpoint)
     setActivate(true)
 
@@ -136,16 +136,16 @@ export const ModalCertificadoMedico = (props) => {
 
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", 0)
-    bodyF.append("Apellido", 0)
-    bodyF.append("Cedula", 0)
-    bodyF.append("fechaNacimiento", 0)
-    bodyF.append("Edad", 0)
-    bodyF.append("tipoSangre", 0)
-    bodyF.append("Lente", 0)
-    bodyF.append("metodoPago", 0)
-    bodyF.append("Referencia", 0)
-    bodyF.append("cantidadDolar", 0)
+    bodyF.append("Nombre", txtNombre.current.value)
+    bodyF.append("Apellido", txtApellido.current.value)
+    bodyF.append("Cedula", txtCedula.current.value)
+    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
+    bodyF.append("Edad", txtEdad.current.value)
+    bodyF.append("tipoSangre", txtTipoSangre.current.value)
+    bodyF.append("Lente", cmbLentes.current.value)
+    bodyF.append("metodoPago", cmbPago.current.value)
+    bodyF.append("Referencia", txtReferencia.current.value)
+    bodyF.append("cantidadDolar", txtDolar.current.value)
 
 
 
