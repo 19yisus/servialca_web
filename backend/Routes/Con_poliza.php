@@ -1,5 +1,6 @@
 <?php
 require_once("./Models/cls_poliza.php");
+
 class Con_poliza extends cls_poliza
 {
     public function __construct()
@@ -52,6 +53,10 @@ class Con_poliza extends cls_poliza
         $this->referencia = isset($_POST["Referencia"]) ? $_POST["Referencia"] : null;
         $this->cantidadDolar = isset($_POST["cantidadDolar"]) ? $_POST["cantidadDolar"] : null;
         $this->monto = isset($_POST["Monto"]) ? $_POST["Monto"] : null;
+        // 
+        $this->edad = isset($_POST["Edad"]) ? $_POST["Edad"] : null;
+        $this->sangre = isset($_POST["tipoSangre"]) ? $_POST["tipoSangre"] : null;
+        $this->lente = isset($_POST["Lente"]) ? $_POST["Lente"] : null;
     }
 
     public function registrar()
@@ -68,7 +73,7 @@ class Con_poliza extends cls_poliza
 
     public function registrarCertificado()
     {
-        $resultado = $this->Save($_POST["precioDolar"], $_POST["tipoIngreso"], $_POST["Motivo"]);
+        $resultado = $this->SaveMedico(3, 0, "Medico");
         Response($resultado['data'], $resultado['code']);
     }
     public function renovar()

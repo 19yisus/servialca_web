@@ -1,5 +1,4 @@
 <?php
-
 require_once("cls_db.php");
 
 abstract class cls_poliza extends cls_db
@@ -296,12 +295,16 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
+	protected $saveMedicoExecuted = false;
+
 	protected function SaveMedico($dolar, $tipoIngreso, $motivo)
 	{
 		try {
-			$this->db->beginTransaction();
+			if (!$this->db->inTransaction()) {
+				$this->db->beginTransaction();
+			}
 
-			$result = $this->precioDolar($dolar);
+			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
 				$this->db->rollback();
@@ -323,7 +326,7 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-			$result = $this->RegistrarCertificado();
+			$result = $this->precioDolar($dolar);
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
 				$this->db->rollback();
@@ -334,22 +337,36 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$result = $this->RegistrarCertificadoMedico();
+			$this->id = $this->db->lastInsertId();
+			if ($result) {
+				$this->db->commit();
+				$this->saveMedicoExecuted = true; // Marcar la función como ejecutada
+				return [
+					'data' => [
+						'res' => "Registro exitoso"
+					],
+					'code' => 200
+				];
+			}
 			$this->db->rollback();
 			return [
 				'data' => [
-					'res' => "Registro fallida"
+					'res' => "Registro fallido"
 				],
 				'code' => 400
 			];
 		} catch (PDOException $e) {
 			return [
-				"data" => [
+				'data' => [
 					'res' => "Error de consulta: " . $e->getMessage()
 				],
-				"code" => 400
+				'code' => 400
 			];
 		}
 	}
+
+
 
 	protected function RegistraCobertura()
 	{
@@ -430,10 +447,10 @@ abstract class cls_poliza extends cls_db
 				$hora,
 				$this->metodoPago,
 				$this->referencia,
-				$this->cantidadDolar,
+				$this->cantidadDolar = str_replace(',', '.', $this->cantidadDolar),
 				$this->precioDolar,
-				$this->usuario,
-				$this->sucursal
+				57,
+				1
 			])
 		) {
 			$this->debitoCredito = $this->db->lastInsertId();
@@ -755,33 +772,32 @@ abstract class cls_poliza extends cls_db
 			return false;
 	}
 
-	protected function RegistrarCertificado()
+	protected function RegistrarCertificadoMedico()
 	{
+		// Obtener la fecha actual
+		$fechaInicio = date('Y-m-d');
+		// Calcular la fecha final (fecha actual + 5 años)
+		$fechaFinal = date('Y-m-d', strtotime('+5 years'));
 		$sql = $this->db->prepare("INSERT INTO medico (
-			cliente_id, 
-		medico_edad, 
-		medico_fechaInicio, 
-		medico_fechaVencimiento, 
-		medico_tipoSangre, 
-		medico_lente,
-		debitoCredito_id, 
-		usuario_id, 
-		sucursal_id)
-		VALUES(?, ?, ?, ?, ?, ?, ?, ?,?)");
+		cliente_id,
+        medico_edad, 
+        medico_fechaInicio, 
+        medico_fechaVencimiento, 
+        medico_tipoSangre, 
+        medico_lente)
+        VALUES(?, ?, ?, ?, ?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
 				$this->edad,
-				$this->fechaInicioMedico,
-				$this->fechaVencimientoMedico,
+				$fechaInicio,
+				$fechaFinal,
 				$this->sangre,
 				$this->lente,
-				$this->debitoCredito,
-				$this->usuario,
-				$this->sucursal
 			])
-		)
-			;
-		return $this->db->lastInsertId();
+		) {
+			return $this->db->lastInsertId();
+		}
 	}
+
 }
