@@ -30,6 +30,7 @@ export const ModalCertificadoMedico = (props) => {
   const txtCedula = useRef();
   const cmbLentes = useRef();
   const cmbPago = useRef();
+  const cmbNacionalidad = useRef();
 
   const txtDatosPastor = useRef();
   const txtReferencia = useRef()
@@ -136,7 +137,7 @@ export const ModalCertificadoMedico = (props) => {
 
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", txtNombre.current.value)
+    bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
     bodyF.append("Apellido", txtApellido.current.value)
     bodyF.append("Cedula", txtCedula.current.value)
     bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
@@ -335,12 +336,20 @@ export const ModalCertificadoMedico = (props) => {
           }} />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-3">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
+             <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
+
+              <option value="V-">V-</option>
+              <option value="E-">E-</option>
+              <option value="J-">J-</option>
+              <option value="G-">G-</option>
+
+            </select>
             <input type="text" class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
             <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
           </div>
-          <div class=" col-md-"></div>
+          <div class=" col-md-7"></div>
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombres:</span>
             <input type="text" class="form-control" onChange={soloLetras} ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />

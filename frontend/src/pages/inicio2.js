@@ -23,6 +23,7 @@ import { TableBody, TableRow, TableCell } from '@material-ui/core';
 
 import { GestionarPreguntas } from "../components/componentesIglesia/configuracion/preguntasSeguridad";
 import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
+import { ModalRcv } from "../components/administracion/modalRcv";
 
 function Inicio2() {
   var op = require("../modulos/datos");
@@ -73,6 +74,8 @@ function Inicio2() {
   const [totalact, setTotalact] = useState(0.0);
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+  const [mostrar2, setMostrar2] = useState(false);
+
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
   const [records, setRecords] = useState([
@@ -214,6 +217,8 @@ function Inicio2() {
     if(opcion === 1){
       setMostrar(true)
 
+    } else {
+      setMostrar2(true)
     }
 
   } 
@@ -224,6 +229,11 @@ function Inicio2() {
        //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra
        show={mostrar}
        onHideCancela={()=>{setMostrar(false)}}
+      />
+
+      <ModalRcv 
+        show={mostrar2}
+        onHideCancela={()=>{setMostrar2(false)}}
       />
 
       <div className="col-12 py-2">
