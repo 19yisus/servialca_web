@@ -37,7 +37,7 @@ class cls_Auth extends cls_db
         // }
         return [
           'data' => [
-            'res' => "Su clave es inválida"
+            'res' => "Su clave es inválida ($this->clave === )".$resultado['usuario_clave']
           ],
           'code' => 400
         ];

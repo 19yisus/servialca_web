@@ -19,35 +19,6 @@ class Con_Auth extends cls_Auth
     $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
     $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
     $this->modulo = isset($_POST["Modulos"]) ? $_POST["Modulos"] : [];
-
-    // switch ($peticion) {
-    //   case 'login':
-    //     $this->login();
-    //     break;
-    //   case 'encriptarClaves':
-    //     $this->encriptarClaves();
-    //     break;
-    //   case 'registrar':
-    //     $this->registrar();
-    //     break;
-    //   case 'actualizar':
-    //     $this->actualizar();
-    //     break;
-    //   case 'eliminar':
-    //     $this->eliminar();
-    //     break;
-    //   case 'ConsultarUno':
-    //     $this->ConsultarUno();
-    //     break;
-    //   case 'ConsultarTodos':
-    //     $this->ConsultarTodos();
-    //     break;
-    //   case 'clave':
-    //     var_dump(password_hash("+11078879*", PASSWORD_BCRYPT, ['cost' => 12]));
-    //     break;
-    //   default:
-    //     Response("Metodo no encontrado", 400);
-    // }
   }
 
   public function login()

@@ -7,9 +7,9 @@ require_once("./libs/jwt.php");
 
 function Response($data, $code)
 {
-  // header('Access-Control-Allow-Origin: *');
-  // header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-  // header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  header('Access-Control-Allow-Origin: *');
+  header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+  header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
   print(json_encode($data));
   http_response_code($code);
   return false;
@@ -23,8 +23,6 @@ class Api
 
   public function __construct()
   {
-    // session_start();
-    // $this->ObjMessage = new c_messages();
     $this->GetController($this->GetRoute());
   }
 
@@ -34,18 +32,7 @@ class Api
     $url = rtrim($url, '/');
     $url = explode('/', $url);
     $this->url = $url;
-
-    // if (sizeof($url) > 2 && $url[2] === "err") $this->code_error = $url[3];
-    // if (sizeof($url) > 2 && $url[2] === "msg") $this->code_done = $url[3];
     return $url;
-  }
-
-  private function CreateArrayFromPost($jsonString)
-  {
-    $jsonString = str_replace('\\"', '"', $jsonString);
-    $array = json_decode($jsonString, true);
-
-    return $array;
   }
 
   private function GetController($peticion)
@@ -67,13 +54,21 @@ class Api
       //     }
       //   }
       // }
-      
-      $postData = file_get_contents("php://input");
-      $data = $this->CreateArrayFromPost($postData);
-      require_once($file_controller_file);      
+
+      require_once($file_controller_file);
       $cls_name = "Con_" . $peticion[0];
-      $cls = new $cls_name();      
-      $cls->$metodo_peticion();
+      if (class_exists($cls_name)) {
+        $cls = new $cls_name();
+        if (method_exists($cls, $metodo_peticion)) {
+          $cls->$metodo_peticion();
+        } else {
+          Response("No existe el metodo requerido", 400);
+        }
+      } else {
+        Response("No existe la clase requerida", 400);
+      }
+    } else {
+      Response("No existe el recurso requerido", 400);
     }
   }
 }
