@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { ModalTransporte } from "./modalLineaTransporte";
 
 
 function TablaTransporte() {
@@ -56,6 +57,7 @@ function TablaTransporte() {
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [operacion, setOperacion] = useState();
 
   const [records, setRecords] = useState([
     {
@@ -186,10 +188,18 @@ console.log(endpoint)
  
   const gestionarBanco = (op,id) => (e) => {
     e.preventDefault();
+    setOperacion(op)
+    setMostrar(true)
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+      <ModalTransporte
+      operacion={operacion}
+      show={mostrar}
+      onHideCancela={()=>{setMostrar(false)}}
+      />
     
 
 <div className="col-12 py-2">
@@ -219,7 +229,6 @@ console.log(endpoint)
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
                           <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
