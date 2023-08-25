@@ -11,6 +11,7 @@ import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
 import { formatMoneda } from "../../util/varios";
+import { ModalTipoContrato } from "./modalTipoContrato";
 
 function TablaTipoContratos() {
   var op = require("../../modulos/datos");
@@ -53,7 +54,7 @@ function TablaTipoContratos() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
+  const [operacion, setOperacion] = useState();
   const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
@@ -197,10 +198,20 @@ console.log(endpoint)
  
   const gestionarBanco = (op,id) => (e) => {
     e.preventDefault();
+    setOperacion(op)
+    setMostrar(true);
+
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+      <ModalTipoContrato
+      operacion={operacion}
+      show={mostrar}
+      onHideCancela={()=>{setMostrar(false)}}
+
+      />
     
 
 <div className="col-12 py-2">
@@ -251,7 +262,7 @@ console.log(endpoint)
 
 
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
+                        
                           <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>

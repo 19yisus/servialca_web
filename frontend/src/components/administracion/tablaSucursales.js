@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { ModalSucursal } from "./modalSucursal";
 
 
 function TablaSursales() {
@@ -53,7 +54,7 @@ function TablaSursales() {
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
   const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
@@ -186,10 +187,18 @@ console.log(endpoint)
  
   const gestionarBanco = (op,id) => (e) => {
     e.preventDefault();
+    setMostrar(true)
+    setOperacion(op)
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+      <ModalSucursal 
+      show={mostrar}
+      onHideCancela={()=>{setMostrar(false)}}
+      operacion={operacion}
+      />
     
 
 <div className="col-12 py-2">
@@ -219,9 +228,8 @@ console.log(endpoint)
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                          <button onClick={gestionarBanco(2, item.sucursal_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                          <button onClick={gestionarBanco(3, item.sucursal_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
                       </TableRow>
                     ))
