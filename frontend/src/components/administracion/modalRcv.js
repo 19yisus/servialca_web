@@ -22,6 +22,7 @@ export const ModalRcv = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
+  const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
 
 
   const txtEdad = useRef();
@@ -44,7 +45,6 @@ export const ModalRcv = (props) => {
   const txtCedulatTitular = useRef();
   const txtNombreTitular = useRef();
   const txtApellidoTitular= useRef();
-  const txtDatosPastor = useRef();
   const txtReferencia = useRef()
   const txtBs = useRef();
   const txtDolar = useRef();
@@ -65,6 +65,17 @@ export const ModalRcv = (props) => {
   const cmbFormaPago= useRef();
   const txtFechaNaci = useRef();
   const txtApellido = useRef();
+
+
+  const [tipoContrato, setTipoContrato] = useState()
+  const [estados,setEstados]= useState();
+  const [acesor,setAcesor] = useState();
+  const [sucursal,setSucursal] = useState();
+  const [transporte, setTransporte] = useState();
+  const [uso,setUso] = useState();
+  const [ clase, setClase] = useState();
+  const [tipo,setTipo] = useState();
+
 
 
 
@@ -203,7 +214,295 @@ export const ModalRcv = (props) => {
 
   };
 
+  const selecionarTipoContrato = async () => {
+    let endpoint = op.conexion + "/tipo_contrato/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
 
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('tipo contrato')
+setTipoContrato(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarEstado = async () => {
+    let endpoint = op.conexion + "/estado/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('esyado')
+
+        setEstados(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarAcesor = async () => {
+    let endpoint = op.conexion + "/Auth/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('acesor')
+setAcesor(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarSucursal = async () => {
+    let endpoint = op.conexion + "/sucursal/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('sucursal')
+setSucursal(response)
+        console.log(response)
+
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarTransporte = async () => {
+    let endpoint = op.conexion + "/transporte/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('transporte')
+setTransporte(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarUso = async () => {
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('uso')
+setUso(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarClase = async () => {
+    let endpoint = op.conexion + "/claseVehiculo/ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('clase')
+setClase(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarTipo = async () => {
+    let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("ID", user_id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log('tipo')
+setTipo(response)
+        console.log(response)
+       
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -322,6 +621,14 @@ export const ModalRcv = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
+        selecionarTipoContrato();
+        selecionarEstado();
+        selecionarAcesor();
+        selecionarSucursal();
+        selecionarTransporte();
+        selecionarUso();
+        selecionarClase();
+        selecionarTipo();
 
         if (props.operacion !== 1) {
           setValues(props.persona);
@@ -407,9 +714,9 @@ export const ModalRcv = (props) => {
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de contrato: </span>
                                             <select class="form-select" ref={cmbTipoContrato} aria-label="Default select example">
 
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            {tipoContrato && tipoContrato.map((item, index) => (
+                    <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
+                  ))}
                                               </select>
                                           </div>
                                     </div>
@@ -417,13 +724,13 @@ export const ModalRcv = (props) => {
                                     <div class="col-md-3">
                                         <div class="input-group input-group-sm mb-2">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Desde</span>
-                                            <input type="date" class="form-control" ref={txtDesde} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                            <input type="date" class="form-control" ref={txtDesde} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" defaultValue={moment(fechasistema).format('YYYY/MM/DD')} max={moment(fechasistema).format('YYYY/MM/DD')}  />
                                           </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="input-group input-group-sm mb-2">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Hasta</span>
-                                            <input type="date" class="form-control" ref={txtHasta} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                            <input type="date" class="form-control" ref={txtHasta} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" defaultValue={moment(fechasistema).format('YYYY/MM/DD')} max={moment(fechasistema).format('YYYY/MM/DD')}  />
                                           </div>
                                     </div>
                                    
@@ -432,7 +739,7 @@ export const ModalRcv = (props) => {
                                         <div class="col-md-3">
                                             <div class="input-group input-group-sm mb-2">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Cédula</span>
-                                                <input type="text" ref={txtCedula} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                                <input type="text" ref={txtCedula} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange}/>
                                               </div>
                                         </div>
                                         <div class="col-md-5"></div>
@@ -471,7 +778,7 @@ export const ModalRcv = (props) => {
 
 
                                                   </select>
-                                                <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                                <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
                                               </div>
                                         </div>
                                         <div class="col-md-4">
@@ -491,9 +798,9 @@ export const ModalRcv = (props) => {
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Estado: </span>
                                                 <select class="form-select" ref={cmbEstado} aria-label="Default select example">
     
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                {estados && estados.map((item, index) => (
+                    <option key={index} value={item.estado_id} > {item.estado_nombre} </option>
+                  ))}
                                                   </select>
                                               </div>
                                         </div>
@@ -502,9 +809,9 @@ export const ModalRcv = (props) => {
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Acesor: </span>
                                                 <select class="form-select" ref={cmbAcesor} aria-label="Default select example">
     
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                {acesor && acesor.map((item, index) => (
+                    <option key={index} value={item.usuario_id} > {item.usuario_nombre} </option>
+                  ))}
                                                   </select>
                                               </div>
                                         </div>
@@ -512,10 +819,9 @@ export const ModalRcv = (props) => {
                                             <div class="input-group input-group-sm mb-2 ">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Sucursal: </span>
                                                 <select class="form-select" ref={cmbSucursal} aria-label="Default select example">
-    
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                {sucursal && sucursal.map((item, index) => (
+                    <option key={index} value={item.sucursal_id} > {item.sucursal_nombre} </option>
+                  ))}
                                                   </select>
                                               </div>
                                         </div>
@@ -524,9 +830,9 @@ export const ModalRcv = (props) => {
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Linea de Transporte: </span>
                                                 <select class="form-select" ref={cmbLinea} aria-label="Default select example">
     
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                {transporte && transporte.map((item, index) => (
+                    <option key={index} value={item.transporte_id} > {item.transporte_nombre} </option>
+                  ))}
                                                   </select>
                                               </div>
                                         </div>
@@ -538,7 +844,7 @@ export const ModalRcv = (props) => {
                                         <div class="col-md-3">
                                             <div class="input-group input-group-sm mb-2">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Cédula</span>
-                                                <input type="text" ref={txtCedulatTitular} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                                <input type="text" ref={txtCedulatTitular} class="form-control" aria-label="Sizing example input" onChange={handleInputNumChange} aria-describedby="inputGroup-sizing-sm"/>
                                               </div>
                                         </div>
                                         <div class="col-md-9"></div>
@@ -579,7 +885,7 @@ export const ModalRcv = (props) => {
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Puesto</span>
-                                        <input type="text" ref={txtPuesto} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" ref={txtPuesto} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange}/>
                                       </div>
                                 </div>
                                 <div class="col-md-4">
@@ -587,10 +893,9 @@ export const ModalRcv = (props) => {
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Uso</span>
                                       
                                             <select class="form-select" ref={txtUso} aria-label="Default select example">
-
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            {uso && uso.map((item, index) => (
+                    <option key={index} value={item.usoVehiculo_id} > {item.usoVehiculo_nombre} </option>
+                  ))}
                                               </select>
                                       
                                       </div>
@@ -599,7 +904,7 @@ export const ModalRcv = (props) => {
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Año</span>
-                                        <input type="text" class="form-control" ref={txtAño} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" class="form-control" ref={txtAño} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
                                       </div>
                                 </div>
                                 
@@ -646,9 +951,9 @@ export const ModalRcv = (props) => {
                                       
                                             <select class="form-select" ref={cmbTipo} aria-label="Default select example">
 
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            {tipo && tipo.map((item, index) => (
+                    <option key={index} value={item.tipoVehiculo_id} > {item.tipoVehiculo_nombre} </option>
+                  ))}
                                               </select>
                                       
                                       </div>
@@ -671,14 +976,14 @@ export const ModalRcv = (props) => {
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Peso</span>
-                                        <input type="text" class="form-control" ref={txtPeso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" class="form-control" ref={txtPeso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                                       </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Cap. Ton.</span>
-                                        <input type="text" class="form-control" ref={txtCapTon} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" class="form-control" ref={txtCapTon} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                                       </div>
                                 </div>
                                 
@@ -696,10 +1001,11 @@ export const ModalRcv = (props) => {
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago </span>
                                       
                                             <select class="form-select" ref={cmbFormaPago} aria-label="Default select example">
+                                            <option value="0">Pago Movil</option>
+              <option value="1">Efectivo</option>
+              <option value="2">Transferencia</option>
+              <option value="3">Punto</option>
 
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
                                               </select>
                                       
                                       </div>
@@ -713,13 +1019,13 @@ export const ModalRcv = (props) => {
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en $</span>
-                                        <input type="text" class="form-control" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" class="form-control" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                                       </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group input-group-sm mb-2">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en bs</span>
-                                        <input type="text" class="form-control" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+                                        <input type="text" class="form-control" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                                       </div>
                                 </div>
                                 

@@ -109,6 +109,8 @@ function Login(props) {
         context.login(response.data.token)
        
         // window.location.href = '/inicio'
+        const fecha = new Date();
+        localStorage.setItem("fechasistema", JSON.stringify(fecha));
      
        localStorage.setItem("rol", JSON.stringify(response.data.usuario[0].rol));
        localStorage.setItem("user_id", JSON.stringify(response.data.usuario[0].user_id));
