@@ -35,31 +35,35 @@ class Api
     return $url;
   }
 
+  private function AuthToken($peticion)
+  {
+    if ($peticion[0] != 'Auth') {
+      if (isset($_POST['token']) || isset($_GET['token'])) {
+        $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+        $resultValido = validateToken($token);
+        if (!$resultValido) {
+          // El token no es valido
+          Response([
+            'res' => "El token no es valido",
+          ], 403);
+          return false;
+        }
+      }
+    }
+  }
+
   private function GetController($peticion)
   {
     $metodo_peticion = (isset($peticion[1]) ? $peticion[1] : $peticion[0]);
     $file_controller_file = "./Routes/Con_" . $peticion[0] . ".php";
 
     if (file_exists($file_controller_file)) {
-
-      // if ($peticion[0] != 'Auth') {
-      //   if (isset($_POST['token']) || isset($_GET['token'])) {
-      //     $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
-      //     $resultValido = validateToken($token);
-      //     if (!$resultValido) {
-      //       // El token no es valido
-      //       Response([
-      //         'res' => "El token no es valido",
-      //       ], 403);
-      //     }
-      //   }
-      // }
-
       require_once($file_controller_file);
       $cls_name = "Con_" . $peticion[0];
       if (class_exists($cls_name)) {
         $cls = new $cls_name();
         if (method_exists($cls, $metodo_peticion)) {
+          // $this->AuthToken($peticion);
           $cls->$metodo_peticion();
         } else {
           Response("No existe el metodo requerido", 400);
