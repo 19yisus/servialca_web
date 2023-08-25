@@ -114,7 +114,7 @@ function TablaClaseVehiculo() {
   
   
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/claseVehiculo /ConsultarTodos";
+    let endpoint = op.conexion + "/claseVehiculo/ConsultarTodos";
 console.log(endpoint)
     setActivate(true)
    

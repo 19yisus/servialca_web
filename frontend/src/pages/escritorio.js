@@ -23,6 +23,7 @@ import TablaRoles from "../components/datosUsuario/tablaRoles";
 import TablaCertificado from "../components/medico/tablaCertificado";
 import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
+import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
 
 
 function MenuImpuestoPP(props) {
@@ -373,6 +374,10 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/certificadomedico" component={TablaCertificado} />
               <AuthRoute exact path="/cumpleañeros" component={TablaClumpeañeros} />
               <AuthRoute exact path="/graficasingegre" component={GraficosIngresos} />
+              <AuthRoute exact path="/tipovehiculo" component={TablaTipoVehiculo} />
+
+
+              
             </div>
           </div>
         </div>

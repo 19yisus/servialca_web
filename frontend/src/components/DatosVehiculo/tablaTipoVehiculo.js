@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { ModalTipoVehiculo } from "./modalTipoVehiculo";
 
 
 function TablaTipoVehiculo() {
@@ -47,7 +48,7 @@ function TablaTipoVehiculo() {
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
   const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
+  const [operacion, setOperacion] = useState(0.0);
   const [totaltipo, setTotaltipo] = useState(0.0);
   const [presupuesto, setPresupuesto] = useState(0.0);
   const [totalrc, setTotalrc] = useState(0.0);
@@ -186,10 +187,19 @@ console.log(endpoint)
  
   const gestionarBanco = (op,id) => (e) => {
     e.preventDefault();
+    setOperacion(op);
+    setMostrar(true)
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+
+      <ModalTipoVehiculo
+      operacion={operacion}
+      show={mostrar}
+      onHideCancela={()=>{setMostrar(false)}}
+      />
     
 
 <div className="col-12 py-2">
@@ -219,7 +229,6 @@ console.log(endpoint)
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
                           <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
