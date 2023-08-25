@@ -315,17 +315,6 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-			$result = $this->debitoCredito($tipoIngreso, $motivo);
-			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
 			$result = $this->precioDolar($dolar);
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -337,6 +326,18 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$result = $this->debitoCredito($tipoIngreso, $motivo);
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
 			$result = $this->RegistrarCertificadoMedico();
 			$this->id = $this->db->lastInsertId();
 			if ($result) {
@@ -454,9 +455,9 @@ abstract class cls_poliza extends cls_db
 			])
 		) {
 			$this->debitoCredito = $this->db->lastInsertId();
-			return true;
-		} else
-			return false;
+
+		}
+		return $this->debitoCredito;
 	}
 
 	protected function precioDolar($precio)
@@ -474,9 +475,8 @@ abstract class cls_poliza extends cls_db
 				$sql->execute([$precio, $hora, $fecha]);
 				$this->precioDolar = $this->db->lastInsertId();
 			}
-		} else
-			return false;
-		return true;
+		}
+		return $this->precioDolar;
 	}
 
 	protected function SearchByVehiculo()
@@ -784,8 +784,9 @@ abstract class cls_poliza extends cls_db
         medico_fechaInicio, 
         medico_fechaVencimiento, 
         medico_tipoSangre, 
-        medico_lente)
-        VALUES(?, ?, ?, ?, ?,?)");
+        medico_lente,
+		debitoCredito_id )
+        VALUES(?, ?, ?, ?,?, ?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
@@ -794,6 +795,7 @@ abstract class cls_poliza extends cls_db
 				$fechaFinal,
 				$this->sangre,
 				$this->lente,
+				$this->debitoCredito
 			])
 		) {
 			return $this->db->lastInsertId();
