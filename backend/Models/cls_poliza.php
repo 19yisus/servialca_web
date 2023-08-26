@@ -21,6 +21,7 @@ abstract class cls_poliza extends cls_db
 	$metodoPago, $referencia, $cantidadDolar, $monto,
 	// ID
 	$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
+	$idColor, $idModelo, $idMarca,
 	// Medico
 	$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
 
@@ -132,19 +133,6 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-
-			$result = $this->SearchByTitular();
-			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
-
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -156,6 +144,18 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$result = $this->SearchByTitular();
+			// // SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
 			$result = $this->SearchByVehiculo();
 
 			$result = $this->precioDolar($dolar);
@@ -194,18 +194,18 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 
-			$this->cobertura = $this->db->lastInsertId();
-			$result = $this->db->query("SELECT * FROM poliza WHERE cliente_id = $this->cliente AND vehiculo_id = $this->vehiculo");
-			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
-			if ($result->rowCount() > 0) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
-					],
-					'code' => 400
-				];
-			}
+			// $this->cobertura = $this->db->lastInsertId();
+			// $result = $this->db->query("SELECT * FROM poliza WHERE cliente_id = $this->cliente AND vehiculo_id = $this->vehiculo");
+			// // SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			// if ($result->rowCount() > 0) {
+			// 	$this->db->rollback();
+			// 	return [
+			// 		'data' => [
+			// 			'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
+			// 		],
+			// 		'code' => 400
+			// 	];
+			// }
 
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
@@ -376,21 +376,23 @@ abstract class cls_poliza extends cls_db
 			cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal,
 			cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) 
 			VALUES(?,?,?,?,?,?,?,?,?,?)");
-
-		$result = $sql->execute([
-			$this->danoCosas,
-			$this->danoPersonas,
-			$this->fianza,
-			$this->asistencia,
-			$this->apov,
-			$this->muerte,
-			$this->invalidez,
-			$this->medico,
-			$this->grua,
-			$this->monto
-		]);
-
-		return $result;
+		if (
+			$sql->execute([
+				$this->danoCosas,
+				$this->danoPersonas,
+				$this->fianza,
+				$this->asistencia,
+				$this->apov,
+				$this->muerte,
+				$this->invalidez,
+				$this->medico,
+				$this->grua,
+				$this->monto
+			])
+		) {
+			$this->cobertura = $this->db->lastInsertId();
+		}
+		return $this->cobertura;
 	}
 
 	protected function RegistrarPoliza()
@@ -399,11 +401,9 @@ abstract class cls_poliza extends cls_db
 		if ($sql->execute([$this->cliente, $this->vehiculo])) {
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 			if (!isset($resultado[0])) {
-
-				$sql = $this->db->prepare("INSERT INTO poliza( cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento,
-				tipoContrato_id, estado_id, usuario_id, sucursal_id, cobertura_id, poliza_renovacion, debitoCredito ) 
-				VALUES(?,?,?,?,?,?,?,?,?,?,0,?)");
-
+				$sql = $this->db->prepare("INSERT INTO poliza(cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento,
+				tipoContrato_id, estado_id,cobertura_id,poliza_renovacion,debitoCredito ) 
+				VALUES(?,?,?,?,?,?,?,?,0,?)");
 				$result = $sql->execute([
 					$this->cliente,
 					$this->idTitular,
@@ -412,8 +412,6 @@ abstract class cls_poliza extends cls_db
 					$this->fechaVencimiento,
 					$this->tipoContrato,
 					$this->estado,
-					$this->usuario,
-					$this->sucursal,
 					$this->cobertura,
 					$this->debitoCredito
 				]);
@@ -483,14 +481,15 @@ abstract class cls_poliza extends cls_db
 	{
 		$sql = $this->db->prepare("SELECT * FROM vehiculo WHERE vehiculo_placa = ?");
 		if ($sql->execute([$this->placa])) {
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 				$this->vehiculo = $resultado["vehiculo_id"];
 			} else {
 				$sql = $this->db->prepare("INSERT INTO vehiculo(
                     vehiculo_placa,
                     vehiculo_puesto,
-                    vehiculo_ano,
+                    vehiculo_año,
                     vehiculo_serialMotor,
                     vehiculo_serialCarroceria,
                     vehiculo_peso,
@@ -507,11 +506,11 @@ abstract class cls_poliza extends cls_db
 					$this->ano,
 					$this->serialMotor,
 					$this->serialCarroceria,
-					$this->peso,
-					$this->capacidad,
-					$this->color,
-					$this->modelo,
-					$this->marca,
+					$this->peso = str_replace(',', '.', $this->peso),
+					$this->capacidad = str_replace(',', '.', $this->capacidad),
+					$this->idColor,
+					$this->idModelo,
+					$this->idMarca,
 					$this->uso,
 					$this->clase,
 					$this->tipo
@@ -526,95 +525,104 @@ abstract class cls_poliza extends cls_db
 	protected function SearchByCliente()
 	{
 		$sql = $this->db->prepare("SELECT * FROM cliente WHERE cliente_cedula = ?");
-		if ($sql->execute([$this->cedula])) {
+		$sql->execute([$this->cedula]);
+		$rowCount = $sql->rowCount();
+		if ($rowCount > 0) {
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
-				$this->cliente = $resultado["cliente_id"];
-			} else {
-				$sql = $this->db->prepare("INSERT INTO cliente(
-                    cliente_nombre, 
-                    cliente_apellido, 
-                    cliente_cedula, 
-                    cliente_fechaNacimiento, 
-                    cliente_telefono, 
-                    cliente_correo, 
-                    cliente_direccion)VALUES(?,?,?,?,?,?,?)");
-				$sql->execute([
-					$this->nombre,
-					$this->apellido,
-					$this->cedula,
-					$this->fechaNacimiento,
-					$this->telefono,
-					$this->correo,
-					$this->direccion
-				]);
-				$this->cliente = $this->db->lastInsertId();
-			}
-		} else
-			false;
+			$this->cliente = $resultado["cliente_id"];
+		} else {
+			$sql = $this->db->prepare("INSERT INTO cliente(
+            cliente_nombre, 
+            cliente_apellido, 
+            cliente_cedula, 
+            cliente_fechaNacimiento, 
+            cliente_telefono, 
+            cliente_correo, 
+            cliente_direccion) VALUES (?,?,?,?,?,?,?)");
+
+			$sql->execute([
+				$this->nombre,
+				$this->apellido,
+				$this->cedula,
+				$this->fechaNacimiento,
+				$this->telefono,
+				$this->correo,
+				$this->direccion
+			]);
+
+			$this->cliente = $this->db->lastInsertId();
+		}
+
 		return $this->cliente;
 	}
+
+
 
 	protected function SearchByModelo()
 	{
 		$sql = $this->db->prepare("SELECT * FROM modelo WHERE modelo_nombre = ?");
 		if ($sql->execute([$this->modelo])) {
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
-				$this->modelo = $resultado["modelo_id"];
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				$this->idModelo = $resultado["modelo_id"];
 			} else {
 				$sql = $this->db->prepare("INSERT INTO modelo (modelo_nombre,modelo_estatus) VALUES(?,1)");
 				$sql->execute([$this->modelo]);
-				$this->modelo = $this->db->lastInsertId();
+				$this->idModelo = $this->db->lastInsertId();
 			}
 		} else
 			false;
-		return true;
+		return $this->idModelo;
 	}
 
 	protected function SearchByMarca()
 	{
 		$sql = $this->db->prepare("SELECT * FROM marca WHERE marca_nombre = ?");
 		if ($sql->execute([$this->marca])) {
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
-				$this->marca = $resultado["marca_id"];
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				$this->idMarca = $resultado["marca_id"];
 			} else {
 				$sql = $this->db->prepare("INSERT INTO marca (marca_nombre,marca_estatus) VALUES(?,1)");
 				$sql->execute([$this->marca]);
-				$this->marca = $this->db->lastInsertId();
+				$this->idMarca = $this->db->lastInsertId();
 			}
 		} else
 			false;
-		return true;
+		return $this->idMarca;
 	}
 
 	protected function SearchByColor()
 	{
 		$sql = $this->db->prepare("SELECT * FROM color WHERE color_nombre = ?");
 		if ($sql->execute([$this->color])) {
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
-				$this->color = $resultado["color_id"];
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				$this->idColor = $resultado["color_id"];
 			} else {
 				$sql = $this->db->prepare("INSERT INTO color (color_nombre,color_estatus) VALUES(?,1)");
 				$sql->execute([$this->color]);
-				$this->color = $this->db->lastInsertId();
+				$this->idColor = $this->db->lastInsertId();
 			}
+
 		} else
 			false;
-		return true;
+		return $this->idColor;
 	}
 
 	protected function SearchByTitular()
 	{
 		$sql = $this->db->prepare("SELECT * FROM titular WHERE titular_cedula = ?");
 		if ($sql->execute([$this->cedulaTitular])) {
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			if (count($resultado) > 0) {
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 				$this->idTitular = $resultado["titular_id"];
 			} else {
-				$sql = $this->db->prepare("INSERT INTO titular(titular_cedula,titular_nombre,titular_apellido) VALUES(?,?,?)");
+				$sql = $this->db->prepare("INSERT INTO titular(titular_cedula,titular_nombre,titular_apellido,titular_estatus) VALUES(?,?,?,1)");
 				$sql->execute([
 					$this->cedulaTitular,
 					$this->nombreTitular,

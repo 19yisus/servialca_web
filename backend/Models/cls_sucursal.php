@@ -22,8 +22,8 @@ abstract class cls_sucursal extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO sucursal(sucursal_nombre,sucursal_estatus) VALUES(?,?)");
-			$sql->execute([$this->nombre, $this->estatus]);
+			$sql = $this->db->prepare("INSERT INTO sucursal(sucursal_nombre,sucursal_estatus) VALUES(?,1)");
+			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0) return [
 				"data" => [

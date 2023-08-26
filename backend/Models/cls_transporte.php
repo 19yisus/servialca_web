@@ -23,8 +23,8 @@ abstract class cls_transporte extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO transporte(transporte_nombre,transporte_estatus) VALUES(?,?)");
-			$sql->execute([$this->nombre, $this->estatus]);
+			$sql = $this->db->prepare("INSERT INTO transporte(transporte_nombre,transporte_estatus) VALUES(?,1)");
+			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0) return [
 				"data" => [

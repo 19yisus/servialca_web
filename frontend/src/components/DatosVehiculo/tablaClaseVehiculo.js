@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { ModalTransporte } from "./modalClaseVehiculo";
 
 
 function TablaClaseVehiculo() {
@@ -27,11 +28,11 @@ function TablaClaseVehiculo() {
 
   console.log(user_id)
   const headCells = [
-    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Descripción", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Estatus", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-   
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Codigo", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Descripción", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Estatus", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+
+    { label: "Opciones", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
 
 
 
@@ -56,7 +57,7 @@ function TablaClaseVehiculo() {
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-
+  const [operacion, setOperacion] = useState();
   const [records, setRecords] = useState([
     {
       idproducto: "",
@@ -84,7 +85,7 @@ function TablaClaseVehiculo() {
     },
   };
 
-  
+
   const labels = [
     "Lunes",
     "Martes",
@@ -111,38 +112,38 @@ function TablaClaseVehiculo() {
     recordsAfterPagingAndSorting,
     TblPagination
   } = useTable(records, headCells, filterFn);
-  
-  
+
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/claseVehiculo/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
-  
- 
+
+
 
     await fetch(endpoint, {
       method: "POST",
-     
+
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setRecords(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
@@ -167,15 +168,15 @@ console.log(endpoint)
   }
 
 
-  
+
 
   console.log('estas en menu')
 
-  
+
 
   useEffect(() => {
     selecionarRegistros()
-   
+
   }, []);
 
   const regPre = () => {
@@ -183,54 +184,61 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
+    setOperacion(op)
+    setMostrar(true)
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
-    
 
-<div className="col-12 py-2">
-           <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>Clases Vehiculo</h2>
+      <ModalTransporte
+        operacion={operacion}
+        show={mostrar}
+        onHideCancela={() => { setMostrar(false) }}
+      />
 
-              </div>
-              
-            </div>
-            <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
-              <div className="row col-12 d-flex justify-content-between mb-2">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
-              </div>
-              <TblContainer>
-                <TblHead />
-                <TableBody >
-                  {
-                    records && recordsAfterPagingAndSorting().map((item, index) => (
-                      <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.claseVehiculo_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.claseVehiculo_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.claseVehiculo_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
 
-                   
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
-            </div>
-      
+      <div className="col-12 py-2">
+        <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
+          <h2 className=' col-5 text-light'>Clase de vehiculo</h2>
+
+        </div>
+
+      </div>
+      <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+
+          <div className='col-3 d-flex justify-content-end'>
+            <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
+          </div>
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody >
+            {
+              records && recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_nombre}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
+
+
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: 130 }}>
+                    <button onClick={gestionarBanco(2, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={gestionarBanco(3, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>
@@ -238,7 +246,7 @@ console.log(endpoint)
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+            "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }

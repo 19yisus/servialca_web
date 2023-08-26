@@ -1,6 +1,7 @@
 <?php
 
-if (!class_exists('cls_db')) require_once("cls_db.php");
+if (!class_exists('cls_db'))
+  require_once("cls_db.php");
 
 abstract class cls_tipo_contrato extends cls_db
 {
@@ -16,14 +17,20 @@ abstract class cls_tipo_contrato extends cls_db
     try {
       $result = $this->SearchByNombre($this->nombre);
       if (isset($result[0])) {
-      	return [
-      		"data" => [
-      			"res" => "Este contrato ($this->nombre) ya existe"
-      		],
-      		"code" => 400
-      	];
+        return [
+          "data" => [
+            "res" => "Este contrato ($this->nombre) ya existe"
+          ],
+          "code" => 400
+        ];
       }
-      $sql = $this->db->prepare("INSERT INTO tipocontrato(        (
+      foreach ($this as $key => $value) {
+        if (is_string($value)) {
+          $this->$key = str_replace(',', '.', $value);
+        }
+      }
+
+      $sql = $this->db->prepare("INSERT INTO tipocontrato(        
         contrato_nombre,
         dañoCosas,
         dañoPersonas,
@@ -35,7 +42,7 @@ abstract class cls_tipo_contrato extends cls_db
         gastosMedicos,
         grua,
         contrato_estatus
-        )  VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+        )  VALUES(?,?,?,?,?,?,?,?,?,?,1)");
       $sql->execute([
         $this->nombre,
         $this->dano_cosas,
@@ -46,18 +53,18 @@ abstract class cls_tipo_contrato extends cls_db
         $this->muerte,
         $this->invalidez,
         $this->gst_metico,
-        $this->grua,
-        $this->estatus
+        $this->grua
       ]);
 
 
       $this->id = $this->db->lastInsertId();
-      if ($sql->rowCount() > 0) return [
-        "data" => [
-          "res" => "Registro exitoso"
-        ],
-        "code" => 200
-      ];
+      if ($sql->rowCount() > 0)
+        return [
+          "data" => [
+            "res" => "Registro exitoso"
+          ],
+          "code" => 200
+        ];
       return [
         "data" => [
           "res" => "El registro ha fallado"
@@ -79,12 +86,12 @@ abstract class cls_tipo_contrato extends cls_db
     try {
       $res = $this->GetDuplicados();
       if (isset($res[0])) {
-      	return [
-      		"data" => [
-      			"res" => "Estas duplicando los datos de otro contrato"
-      		],
-      		"code" => 400
-      	];
+        return [
+          "data" => [
+            "res" => "Estas duplicando los datos de otro contrato"
+          ],
+          "code" => 400
+        ];
       }
       $sql = $this->db->prepare("UPDATE tipocontrato SET
           contrato_nombre = ?,
@@ -98,19 +105,21 @@ abstract class cls_tipo_contrato extends cls_db
           gastosMedicos =?,
           grua= ? 
         WHERE contrato_id = ?");
-      if ($sql->execute([
-        $this->nombre,
-        $this->dano_cosas,
-        $this->dano_personas,
-        $this->fianza_cuanti,
-        $this->asistencia_legal,
-        $this->apov,
-        $this->muerte,
-        $this->invalidez,
-        $this->gst_metico,
-        $this->grua,
-        $this->id
-      ])) {
+      if (
+        $sql->execute([
+          $this->nombre,
+          $this->dano_cosas,
+          $this->dano_personas,
+          $this->fianza_cuanti,
+          $this->asistencia_legal,
+          $this->apov,
+          $this->muerte,
+          $this->invalidez,
+          $this->gst_metico,
+          $this->grua,
+          $this->id
+        ])
+      ) {
         return [
           "data" => [
             "res" => "Actualización de datos exitosa"
@@ -138,8 +147,10 @@ abstract class cls_tipo_contrato extends cls_db
   {
     $sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE 
         contrato_nombre =? AND contrato_id != ?");
-    if ($sql->execute([$this->nombre, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$this->nombre, $this->id]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
@@ -168,24 +179,30 @@ abstract class cls_tipo_contrato extends cls_db
   protected function GetOne($id)
   {
     $sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_id = ?");
-    if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$id]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
   protected function SearchByNombre($nombre)
   {
     $sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_nombre = ?");
-    if ($sql->execute([$this->nombre])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute([$this->nombre]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 
   protected function GetAll()
   {
     $sql = $this->db->prepare("SELECT * FROM tipocontrato ORDER BY contrato_id DESC");
-    if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-    else $resultado = [];
+    if ($sql->execute())
+      $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
     return $resultado;
   }
 }

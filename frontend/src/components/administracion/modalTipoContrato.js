@@ -137,7 +137,7 @@ export const ModalTipoContrato = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/tipo_contrato/registrar";
     console.log(endpoint)
     setActivate(true)
 
@@ -147,16 +147,16 @@ export const ModalTipoContrato = (props) => {
 
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
-    bodyF.append("Apellido", txtDescripcion.current.value)
-    bodyF.append("Cedula", txtCedula.current.value)
-    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    bodyF.append("Edad", txtEdad.current.value)
-    bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    bodyF.append("Lente", cmbLentes.current.value)
-    bodyF.append("metodoPago", cmbPago.current.value)
-    bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", txtDolar.current.value)
+    bodyF.append("Nombre_contrato", txtDescripcion.current.value)
+    bodyF.append("dano_cosas", txtDanoaCosa.current.value)
+    bodyF.append("dano_personas", txtDanoPer.current.value)
+    bodyF.append("fianza_cuanti", txtFinanzaCuan.current.value)
+    bodyF.append("asistencia_legal", txtAsistenciaLegal.current.value)
+    bodyF.append("apov", txtApov.current.value)
+    bodyF.append("muerte", txtMuerte.current.value)
+    bodyF.append("invalidez", txtInvalidez.current.value)
+    bodyF.append("gasto_metico", txtGastosMed.current.value)
+    bodyF.append("grua", txtGrua.current.value)
 
 
 
@@ -346,48 +346,48 @@ export const ModalTipoContrato = (props) => {
           }} />
 
         <div className="col-md-12 row mx-auto">
-          
-         
+
+
           <div class="input-group input-group-sm mb-3 col-md-7">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre Del Contrato:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div className="col-md-5"></div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Daño A Cosa:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtDanoaCosa} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtDanoaCosa} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Daño Personas:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtDanoPer} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtDanoPer} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Fianza Cuantitativa:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtFinanzaCuan} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtFinanzaCuan} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Asistencia Legal:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtAsistenciaLegal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtAsistenciaLegal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Apov:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtApov} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtApov} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Muerte:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtMuerte} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtMuerte} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Invalidez:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtInvalidez} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtInvalidez} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Gastos Medicos:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtGastosMed} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtGastosMed} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Grua Y Estacionamiento:</span>
-            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text"class="form-control text-right" onChange={handleInputMontoChange} ref={txtGrua} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input disabled={operacion === 1 ? false : operacion === 2 ? false : true} type="text" class="form-control text-right" onChange={handleInputMontoChange} ref={txtGrua} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
 
 
