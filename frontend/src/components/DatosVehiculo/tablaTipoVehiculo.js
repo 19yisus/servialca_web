@@ -29,7 +29,8 @@ function TablaTipoVehiculo() {
   console.log(user_id)
   const headCells = [
     { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Descripción", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Nombre", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Precio", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
     { label: "Estatus", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
    
     { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
@@ -225,6 +226,7 @@ console.log(endpoint)
                       <TableRow key={index} style={{ padding: "0" }}>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_id}</TableCell> 
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_nombre}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_precio}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.tipoVehiculo_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
 
                    

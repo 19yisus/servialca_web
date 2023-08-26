@@ -25,30 +25,30 @@ export const ModalRcv = (props) => {
   const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
 
 
-  const txtEdad = useRef();
-  const txtNombre = useRef();
-  const txtTipoSangre = useRef();
-  const txtCedula = useRef();
-  const cmbLentes = useRef();
-  const cmbPago = useRef();
-  const cmbNacionalidad = useRef();
+  //Contrato
+  const cmbTipoContrato = useRef();
   const txtDesde = useRef();
   const txtHasta = useRef();
-  const cmbTelefono = useRef();
-  const txtTelefono = useRef();
-  const txtCorreo = useRef();
-  const txtDirec = useRef();
   const cmbEstado = useRef();
   const cmbAcesor = useRef();
   const cmbSucursal = useRef();
   const cmbLinea = useRef();
+  //Contratante
+  const cmbNacionalidad = useRef();
+  const txtCedula = useRef();
+  const txtNombre = useRef();
+  const txtApellido = useRef();
+  const txtFechaNaci = useRef();
+  const cmbTelefono = useRef();
+  const txtTelefono = useRef();
+  const txtCorreo = useRef();
+  const txtDirec = useRef();
+  //Titular
+  const cmbNacionalidadTitular = useRef();
   const txtCedulatTitular = useRef();
   const txtNombreTitular = useRef();
   const txtApellidoTitular = useRef();
-  const txtReferencia = useRef()
-  const txtBs = useRef();
-  const txtDolar = useRef();
-  const cmbTipoContrato = useRef();
+  //Vehiculo
   const txtPlaca = useRef();
   const txtPuesto = useRef();
   const txtUso = useRef();
@@ -62,10 +62,12 @@ export const ModalRcv = (props) => {
   const txtMarca = useRef();
   const txtPeso = useRef();
   const txtCapTon = useRef();
-  const cmbFormaPago = useRef();
-  const txtFechaNaci = useRef();
-  const txtApellido = useRef();
 
+  //Pago
+  const cmbFormaPago = useRef();
+  const txtReferencia = useRef()
+  const txtBs = useRef();
+  const txtDolar = useRef();
 
   const [tipoContrato, setTipoContrato] = useState()
   const [estados, setEstados] = useState();
@@ -164,7 +166,7 @@ export const ModalRcv = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/poliza/registrar";
     console.log(endpoint)
     setActivate(true)
 
@@ -173,19 +175,57 @@ export const ModalRcv = (props) => {
     //setLoading(false);
 
     let bodyF = new FormData()
+    //Contrato
+    bodyF.append("fechaInicio", txtDesde.current.value)
+    bodyF.append("fechaVencimiento", txtHasta.current.value)
+    bodyF.append("tipoContrato", cmbTipoContrato.current.value)
+    bodyF.append("Estado", cmbEstado.current.value)
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value + txtNombre.current.value)
+    //Contratante
+    bodyF.append("Cedula", cmbNacionalidad.current.value + txtCedula.current.value)
+    bodyF.append("Nombre", txtNombre.current.value)
     bodyF.append("Apellido", txtApellido.current.value)
-    bodyF.append("Cedula", txtCedula.current.value)
     bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    bodyF.append("Edad", txtEdad.current.value)
-    bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    bodyF.append("Lente", cmbLentes.current.value)
-    bodyF.append("metodoPago", cmbPago.current.value)
+    bodyF.append("Telefono", cmbTelefono.current.value + txtTelefono.current.value)
+    bodyF.append("Correo", txtCorreo.current.value)
+    bodyF.append("Direccion", txtDirec.current.value)
+    //titular
+    bodyF.append("cedulaTitular", cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value)
+    bodyF.append("nombreTitular", txtNombreTitular.current.value)
+    bodyF.append("apellidoTitular", txtApellidoTitular.current.value)
+
+    //Vehiculo
+    bodyF.append("Placa", txtPlaca.current.value)
+    bodyF.append("Puesto", txtPuesto.current.value)
+    bodyF.append("Ano", txtAño.current.value)
+    bodyF.append("serialMotor", txtSerMotor.current.value)
+    bodyF.append("serialCarroceria", txtSerCarroceria.current.value)
+    bodyF.append("Color", txtColor.current.value)
+    bodyF.append("Uso", txtUso.current.value)
+    bodyF.append("Clase", cmbClase.current.value)
+    bodyF.append("Tipo", cmbTipo.current.value)
+    bodyF.append("Modelo", txtModelo.current.value)
+    bodyF.append("Marca", txtMarca.current.value)
+    bodyF.append("Peso", txtPeso.current.value)
+    bodyF.append("Capacidad", txtCapTon.current.value)
+
+    //Cobertura
+    var monto = txtDolar.current.value.replace(',', '.');
+    bodyF.append("danoCosas", monto * 0.40)
+    bodyF.append("danoPersonas", monto * 0.20)
+    bodyF.append("fianza", monto * 0.10)
+    bodyF.append("asistencia", monto * 0.10)
+    bodyF.append("apov", monto * 1)
+    bodyF.append("muerte", monto * 0.10)
+    bodyF.append("invalidez", monto * 0)
+    bodyF.append("medico", monto * 0)
+    bodyF.append("grua", monto * 0.10)
+    bodyF.append("monto", monto)
+
+    //Pago
+    bodyF.append("metodoPago", cmbFormaPago.current.value)
     bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", txtDolar.current.value)
-
-
+    bodyF.append("cantidadDolar", monto)
 
     await fetch(endpoint, {
       method: "POST",
@@ -776,11 +816,11 @@ export const ModalRcv = (props) => {
                     <span class="input-group-text" id="inputGroup-sizing-sm">Telefono</span>
                     <select class="form-select col-md-1" ref={cmbTelefono} aria-label="Default select example">
 
-                      <option value="0414">0414</option>
-                      <option value="0424">0424</option>
-                      <option value="0416">0416</option>
-                      <option value="0426">0426</option>
-                      <option value="0412">0412</option>
+                      <option value="0414-">0414</option>
+                      <option value="0424-">0424</option>
+                      <option value="0416-">0416</option>
+                      <option value="0426-">0426</option>
+                      <option value="0412-">0412</option>
 
 
 
@@ -848,11 +888,18 @@ export const ModalRcv = (props) => {
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
                 <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Titular</legend>
-                <div class="col-md-3">
-                  <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Cédula</span>
-                    <input type="text" ref={txtCedulatTitular} class="form-control" aria-label="Sizing example input" onChange={handleInputNumChange} aria-describedby="inputGroup-sizing-sm" />
-                  </div>
+                <div class="input-group input-group-sm mb-3 col-md-5">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
+                  <select class="form-select" ref={cmbNacionalidadTitular} aria-label="Default select example">
+
+                    <option value="V-">V-</option>
+                    <option value="E-">E-</option>
+                    <option value="J-">J-</option>
+                    <option value="G-">G-</option>
+
+                  </select>
+                  <input type="text" class="form-control" ref={txtCedulatTitular} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
                 </div>
                 <div class="col-md-9"></div>
 
@@ -927,7 +974,7 @@ export const ModalRcv = (props) => {
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Clase</span>
 
-                  <select class="form-select" ref={txtUso} aria-label="Default select example">
+                  <select class="form-select" ref={cmbClase} aria-label="Default select example">
                     {clase && clase.map((item, index) => (
                       <option key={index} value={item.clase_id} > {item.clase_nombre} </option>
                     ))}

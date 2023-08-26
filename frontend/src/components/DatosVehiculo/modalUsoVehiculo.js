@@ -127,7 +127,7 @@ export const ModalUsoVehiculo = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/usoVehiculo/registrar";
     console.log(endpoint)
     setActivate(true)
 
@@ -137,16 +137,8 @@ export const ModalUsoVehiculo = (props) => {
 
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
-    bodyF.append("Apellido", txtDescripcion.current.value)
-    bodyF.append("Cedula", txtCedula.current.value)
-    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    bodyF.append("Edad", txtEdad.current.value)
-    bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    bodyF.append("Lente", cmbLentes.current.value)
-    bodyF.append("metodoPago", cmbPago.current.value)
-    bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", txtDolar.current.value)
+    bodyF.append("Nombre", txtDescripcion.current.value)
+
 
 
 
@@ -336,13 +328,13 @@ export const ModalUsoVehiculo = (props) => {
           }} />
 
         <div className="col-md-12 row mx-auto">
-          
-         
+
+
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Descripción:</span>
-            <textarea type="textarea" disabled={operacion === 1 ? false : operacion === 2 ? false : true} style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" disabled={operacion === 1 ? false : operacion === 2 ? false : true} style={{ height: 40 }} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
-          
+
 
 
         </div>

@@ -22,8 +22,8 @@ abstract class cls_roles extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO roles(roles_nombre,roles_estatus) VALUES(?,?)");
-			$sql->execute([$this->nombre, $this->estatus]);
+			$sql = $this->db->prepare("INSERT INTO roles(roles_nombre,roles_estatus) VALUES(?,1)");
+			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0) return [
 				"data" => [

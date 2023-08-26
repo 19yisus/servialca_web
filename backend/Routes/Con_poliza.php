@@ -18,12 +18,12 @@ class Con_poliza extends cls_poliza
         $this->correo = isset($_POST["Correo"]) ? $_POST["Correo"] : null;
         $this->direccion = isset($_POST["Direccion"]) ? $_POST["Direccion"] : null;
         // Titular
+        $this->cedulaTitular = isset($_POST["cedulaTitular"]) ? $_POST["cedulaTitular"] : null;
         $this->nombreTitular = isset($_POST["nombreTitular"]) ? $_POST["nombreTitular"] : null;
         $this->apellidoTitular = isset($_POST["apellidoTitular"]) ? $_POST["apellidoTitular"] : null;
-        $this->cedulaTitular = isset($_POST["cedulaTitular"]) ? $_POST["cedulaTitular"] : null;
         // Vehiculo
         $this->placa = isset($_POST["Placa"]) ? $_POST["Placa"] : null;
-        $this->puesto = isset($_POST["Puesto"]) ? $_POST["Puestp"] : null;
+        $this->puesto = isset($_POST["Puesto"]) ? $_POST["Puesto"] : null;
         $this->ano = isset($_POST["Ano"]) ? $_POST["Ano"] : null;
         $this->serialMotor = isset($_POST["serialMotor"]) ? $_POST["serialMotor"] : null;
         $this->serialCarroceria = isset($_POST["serialCarroceria"]) ? $_POST["serialCarroceria"] : null;
@@ -48,12 +48,23 @@ class Con_poliza extends cls_poliza
         $this->invalidez = isset($_POST["Invalidez"]) ? $_POST["Invalidez"] : null;
         $this->medico = isset($_POST["Medico"]) ? $_POST["Medico"] : null;
         $this->grua = isset($_POST["Grua"]) ? $_POST["Grua"] : null;
+        //Cobertura
+        $this->danoCosas = isset($_POST["danoCosas"]) ? $_POST["danoCosas"] : null;
+        $this->danoPersonas = isset($_POST["danoPersonas"]) ? $_POST["danoPersonas"] : null;
+        $this->fianza = isset($_POST["fianza"]) ? $_POST["fianza"] : null;
+        $this->asistencia = isset($_POST["asistencia"]) ? $_POST["asistencia"] : null;
+        $this->apov = isset($_POST["apov"]) ? $_POST["apov"] : null;
+        $this->muerte = isset($_POST["muerte"]) ? $_POST["muerte"] : null;
+        $this->invalidez = isset($_POST["invalidez"]) ? $_POST["invalidez"] : null;
+        $this->medico = isset($_POST["medico"]) ? $_POST["medico"] : null;
+        $this->grua = isset($_POST["grua"]) ? $_POST["grua"] : null;
+        $this->monto = isset($_POST["monto"]) ? $_POST["monto"] : null;
         // Pago
         $this->metodoPago = isset($_POST["metodoPago"]) ? $_POST["metodoPago"] : null;
         $this->referencia = isset($_POST["Referencia"]) ? $_POST["Referencia"] : null;
         $this->cantidadDolar = isset($_POST["cantidadDolar"]) ? $_POST["cantidadDolar"] : null;
         $this->monto = isset($_POST["Monto"]) ? $_POST["Monto"] : null;
-        // 
+        // medico
         $this->edad = isset($_POST["Edad"]) ? $_POST["Edad"] : null;
         $this->sangre = isset($_POST["tipoSangre"]) ? $_POST["tipoSangre"] : null;
         $this->lente = isset($_POST["Lente"]) ? $_POST["Lente"] : null;
@@ -61,7 +72,7 @@ class Con_poliza extends cls_poliza
 
     public function registrar()
     {
-        $resultado = $this->Save($_POST["precioDolar"], $_POST["tipoIngreso"], $_POST["Motivo"]);
+        $resultado = $this->Save(10.00, 0, "RCV");
         Response($resultado['data'], $resultado['code']);
     }
 

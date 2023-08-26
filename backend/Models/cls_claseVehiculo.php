@@ -22,8 +22,8 @@ abstract class cls_claseVehiculo extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO clasevehiculo(claseVehiculo_nombre,claseVehiculo_estatus) VALUES(?,?)");
-			$sql->execute([$this->nombre, $this->estatus]);
+			$sql = $this->db->prepare("INSERT INTO clasevehiculo(clase_nombre,clase_estatus) VALUES(?,1)");
+			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0)
 				return [
@@ -131,7 +131,7 @@ abstract class cls_claseVehiculo extends cls_db
 
 	protected function SearchByNombre($nombre)
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE claseVehiculo_nombre = ?");
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE clase_nombre = ?");
 		if ($sql->execute([$this->nombre]))
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		else
