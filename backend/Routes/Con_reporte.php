@@ -16,4 +16,8 @@ class Con_reporte
     public function reporteCarnet(){
         include("Con_reporteCarnet.php");
     }
+
+    public function reporteIngresoEgreso(){
+        include("Con_reporte_Ingreso_egreso.php");
+    }
 }
