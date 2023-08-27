@@ -218,7 +218,8 @@ abstract class cls_poliza extends cls_db
 				$this->db->commit();
 				return [
 					'data' => [
-						'res' => "Registro exitoso"
+						'res' => "Registro exitoso",
+						'id' => $this->id // Agregar el ID en la respuesta
 					],
 					'code' => 200
 				];
