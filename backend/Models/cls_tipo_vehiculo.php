@@ -32,16 +32,16 @@ abstract class cls_tipo_vehiculo extends cls_db
 
       $sql = $this->db->prepare("INSERT INTO tipovehiculo(        
         tipoVehiculo_nombre,
-        tipoVehiculo_precio,
         tipoVehiculo_estatus
-        )  VALUES(?,?,1)");
-      $sql->execute([
-        $this->nombre,
-        $this->precio
-      ]);
-
-
-      $this->id = $this->db->lastInsertId();
+        )  VALUES(?,1)");
+      if (
+        $sql->execute([
+          $this->nombre
+        ])
+      ) {
+        $this->id = $this->db->lastInsertId();
+      }
+      $this->Precios($this->id);
       if ($sql->rowCount() > 0)
         return [
           "data" => [
@@ -172,5 +172,23 @@ abstract class cls_tipo_vehiculo extends cls_db
     else
       $resultado = [];
     return $resultado;
+  }
+
+  protected function Precios($id)
+  {
+    foreach ($this as $key => $value) {
+      if (is_string($value)) {
+        $this->$key = str_replace(',', '.', $value);
+      }
+    }
+    $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, precio_monto)VALUES(?,?,?)");
+    if (
+      $sql->execute([
+        $id,
+        1,
+        $this->precio
+      ])
+    )
+      ;
   }
 }
