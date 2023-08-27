@@ -41,13 +41,13 @@ export const ModalUsuarios = (props) => {
 
   const txtFechaNaci = useRef();
   const txtDireccion = useRef();
-const cmbTelefono = useRef();
-const txtTelefono = useRef();
-const txtCorreo = useRef();
-const txtRol = useRef();
-const txtSucursal = useRef();
+  const cmbTelefono = useRef();
+  const txtTelefono = useRef();
+  const txtCorreo = useRef();
+  const txtRol = useRef();
+  const txtSucursal = useRef();
 
-const check = useRef()
+  const check = useRef()
   const check1 = useRef();
   const check2 = useRef();
   const check3 = useRef();
@@ -59,8 +59,8 @@ const check = useRef()
   const check9 = useRef();
 
 
-const[sucursales, setSucursales] = useState();
-const [roles, setRoles] = useState();
+  const [sucursales, setSucursales] = useState();
+  const [roles, setRoles] = useState();
 
 
 
@@ -313,7 +313,7 @@ const [roles, setRoles] = useState();
   };
 
   const selecionarUsuario = async (id) => {
-    let endpoint = op.conexion + "/Auth/ConsultarUno?ID="+id;
+    let endpoint = op.conexion + "/Auth/ConsultarUno?ID=" + id;
     console.log(endpoint)
     setActivate(true)
 
@@ -324,7 +324,7 @@ const [roles, setRoles] = useState();
     console.log(id)
     let bodyF = new FormData()
 
-     bodyF.append("ID", id)
+    bodyF.append("ID", id)
 
 
     await fetch(endpoint, {
@@ -335,17 +335,17 @@ const [roles, setRoles] = useState();
 
 
         setActivate(false)
-       
 
 
-      
+
+
         console.log(response)
         txtUsuario.current.value = response.usuario_usuario;
         txtNombre.current.value = response.usuario_nombre;
         txtApellido.current.value = response.usuario_apellido;
-        cmbNacionalidad.current.value = response.usuario_cedula.substring(0,2);
+        cmbNacionalidad.current.value = response.usuario_cedula.substring(0, 2);
         txtCedula.current.value = response.usuario_cedula.substring(2, response.usuario_cedula.length)
-        cmbTelefono.current.value = response.usuario_telefono.substring(0,5)
+        cmbTelefono.current.value = response.usuario_telefono.substring(0, 5)
         txtTelefono.current.value = response.usuario_cedula.substring(5, response.usuario_telefono.length)
         txtDireccion.current.value = response.usuario_direccion
         txtCorreo.current.value = response.usuario_correo
@@ -363,69 +363,69 @@ const [roles, setRoles] = useState();
 
   const selecionarSucursales = async () => {
     let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
-  
- 
+
+
 
     await fetch(endpoint, {
       method: "POST",
-     
+
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setSucursales(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setSucursales(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
   const selecionarRoles = async () => {
     let endpoint = op.conexion + "/roles/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
     let bodyF = new FormData()
 
     //bodyF.append("ID", user_id)
- 
+
 
     await fetch(endpoint, {
       method: "POST",
       body: bodyF
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRoles(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setRoles(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
@@ -444,7 +444,7 @@ console.log(endpoint)
         selecionarRoles()
         setOperacion(props.operacion);
         setActivate(false)
-       
+
 
         if (props.operacion !== 1) {
           console.log(props.id, operacion)
@@ -485,141 +485,141 @@ console.log(endpoint)
           }} />
 
         <div className="col-md-12 row mx-auto">
-          
-         
+
+
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Usuario:</span>
-            <input type="text"  class="form-control" ref={txtUsuario} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" class="form-control" ref={txtUsuario} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-6"></div>
 
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
-            <input type="text"  class="form-control" ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" class="form-control" ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Apellido:</span>
-            <input type="text"  class="form-control" ref={txtApellido} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" class="form-control" ref={txtApellido} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
             <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
 
-                    <option value="V-">V-</option>
-                    <option value="E-">E-</option>
-                    <option value="J-">J-</option>
-                    <option value="G-">G-</option>
+              <option value="V-">V-</option>
+              <option value="E-">E-</option>
+              <option value="J-">J-</option>
+              <option value="G-">G-</option>
 
-                  </select>
-            <input type="text"  class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            </select>
+            <input type="text" class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Telefono:</span>
             <select class="form-select col-md-2" ref={cmbTelefono} aria-label="Default select example">
 
-                      <option value="0414-">0414-</option>
-                      <option value="0424-">0424-</option>
-                      <option value="0416-">0416-</option>
-                      <option value="0426-">0426-</option>
-                      <option value="0412-">0412-</option>
+              <option value="0414-">0414-</option>
+              <option value="0424-">0424-</option>
+              <option value="0416-">0416-</option>
+              <option value="0426-">0426-</option>
+              <option value="0412-">0412-</option>
 
 
 
-                    </select>
-            <input type="text"  class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            </select>
+            <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Dirección:</span>
-            <input type="text"  class="form-control" ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" class="form-control" ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Correo:</span>
-            <input type="text"  class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Rol:</span>
-           
+
             <select class="form-select" ref={txtRol} aria-label="Default select example">
 
-{roles && roles.map((item, index) => (
-            <option key={index} value={item.roles_id} > {item.roles_nombre} </option>
-          ))}
-           </select>
+              {roles && roles.map((item, index) => (
+                <option key={index} value={item.roles_id} > {item.roles_nombre} </option>
+              ))}
+            </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Sucursal:</span>
-    
+
             <select class="form-select" ref={txtSucursal} aria-label="Default select example">
 
-            {sucursales && sucursales.map((item, index) => (
-                        <option key={index} value={item.sucursal_id} > {item.sucursal_nombre} </option>
-                      ))}
-                       </select>
-         
+              {sucursales && sucursales.map((item, index) => (
+                <option key={index} value={item.sucursal_id} > {item.sucursal_nombre} </option>
+              ))}
+            </select>
+
           </div>
           <div class="row mx-auto col-md-12">
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input " ref={check} type="checkbox" value='Contratos realizados' id="flexCheckDefault"/>
+              <input class="form-check-input " ref={check} type="checkbox" value='Contratos realizados' id="flexCheckDefault" />
               <label class="form-check-label">
-              Contratos Realizados
+                Contratos Realizados
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check1} type="checkbox"value='Lista de asesores' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check1} type="checkbox" value='Lista de asesores' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Lista De Asesores
+                Lista De Asesores
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check2} type="checkbox"  value='Lista de sucursales' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check2} type="checkbox" value='Lista de sucursales' id="flexCheckDefault" />
               <label class="form-check-label">
-              Lista De Sucursales
+                Lista De Sucursales
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check3} type="checkbox" value='Tipo de contratos' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check3} type="checkbox" value='Tipo de contratos' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Tipo De Contratos
+                Tipo De Contratos
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check4} type="checkbox"value='Uso de vehiculo' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check4} type="checkbox" value='Uso de vehiculo' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Uso De Vehiculo
+                Uso De Vehiculo
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check5} type="checkbox" value='Clase de vehiculo' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check5} type="checkbox" value='Clase de vehiculo' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Clase De Vehiculo
+                Clase De Vehiculo
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check6} type="checkbox" value='Tipo de Vehiculo' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check6} type="checkbox" value='Tipo de Vehiculo' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Tipo De Vehiculo
+                Tipo De Vehiculo
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check7} type="checkbox" value='Linea de transporte' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check7} type="checkbox" value='Linea de transporte' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Linea De Transporte
+                Linea De Transporte
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check8} type="checkbox"value='Usuarios' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check8} type="checkbox" value='Usuarios' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Usuarios
+                Usuarios
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
-              <input class="form-check-input" ref={check9} type="checkbox"value='Roles' id="flexCheckDefault"/>
+              <input class="form-check-input" ref={check9} type="checkbox" value='Roles' id="flexCheckDefault" />
               <label class="form-check-label" >
-              Roles
+                Roles
               </label>
             </div>
           </div>
-          
+
 
 
         </div>

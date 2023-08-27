@@ -4,7 +4,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-
+import { ModalTransporte } from "./modalRoles";
 
 
 import axios from "axios";
@@ -27,13 +27,13 @@ function TablaRoles() {
 
   console.log(user_id)
   const headCells = [
-    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Nombre", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Estatus", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-  
+    { label: "Codigo", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Nombre", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Estatus", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
 
- 
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+
+
+    { label: "Opciones", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
 
 
 
@@ -86,7 +86,7 @@ function TablaRoles() {
     },
   };
 
-  
+
   const labels = [
     "Lunes",
     "Martes",
@@ -113,40 +113,40 @@ function TablaRoles() {
     recordsAfterPagingAndSorting,
     TblPagination
   } = useTable(records, headCells, filterFn);
-  
-  
+
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/roles/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
     let bodyF = new FormData()
 
     bodyF.append("ID", user_id)
- 
+
 
     await fetch(endpoint, {
       method: "POST",
       body: bodyF
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setRecords(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
@@ -171,15 +171,15 @@ console.log(endpoint)
   }
 
 
-  
+
 
   console.log('estas en menu')
 
-  
+
 
   useEffect(() => {
     selecionarRegistros()
-   
+
   }, []);
 
   const regPre = () => {
@@ -187,18 +187,24 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+      <ModalTransporte
+      operacion={operacion}
+      show={mostrar}
+      onHideCancela={()=>{setMostrar(false)}}
+      />
     
 
 <div className="col-12 py-2">
            <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>Listado Roles</h2>
+                <h2 className=' col-5 text-light'>Lineas de Transporte</h2>
 
               </div>
               
@@ -217,13 +223,12 @@ console.log(endpoint)
                   {
                     records && recordsAfterPagingAndSorting().map((item, index) => (
                       <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.roles_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.roles_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.roles_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
-                       
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_id}</TableCell> 
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_nombre}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
+
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
                           <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
