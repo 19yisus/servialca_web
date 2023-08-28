@@ -210,9 +210,7 @@ console.log(endpoint)
               <div className="row col-12 d-flex justify-content-between mb-2">
                 <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
          
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
+                
               </div>
               <TblContainer>
                 <TblHead />
@@ -220,7 +218,7 @@ console.log(endpoint)
                   {
                     records && recordsAfterPagingAndSorting().map((item, index) => (
                       <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_id}</TableCell> 
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_id}</TableCell> 
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre+' '+item.cliente_apellido}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_edad}</TableCell>

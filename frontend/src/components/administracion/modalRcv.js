@@ -977,7 +977,7 @@ export const ModalRcv = (props) => {
 
                   <select class="form-select" ref={cmbClase} aria-label="Default select example">
                     {clase && clase.map((item, index) => (
-                      <option key={index} value={item.clase_id} > {item.clase_nombre} </option>
+                      <option key={index} value={item.claseVehiculo_id} > {item.clase_nombre} </option>
                     ))}
                   </select>
 

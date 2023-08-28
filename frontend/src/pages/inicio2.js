@@ -25,7 +25,6 @@ import { GestionarPreguntas } from "../components/componentesIglesia/configuraci
 import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
 import { ModalRcv } from "../components/administracion/modalRcv";
 import { ModalImprimir } from "../components/administracion/modalImprimir";
-
 function Inicio2() {
   var op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");

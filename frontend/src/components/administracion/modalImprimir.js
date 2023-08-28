@@ -313,11 +313,11 @@ export const ModalImprimir = (props) => {
     e.preventDefault();
 
     if(tipo === 1 ){
-      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente},"RCV","fullscreen=no,toolbar=no,resizable=no,scrollbars=yes,width=850,height=700"`)
+      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`)
     } if(tipo === 2 ){
-      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente},"RCVWEB","fullscreen=no,toolbar=no,resizable=no,scrollbars=yes,width=850,height=700"`)
+      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`)
     } if(tipo === 3 ){
-      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente},"CARNET","fullscreen=no,toolbar=no,resizable=no,scrollbars=yes,width=850,height=700"`)
+      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`)
     }
   }
 
