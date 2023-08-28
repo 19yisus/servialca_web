@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
 
-include("./QR/qrlib.php");
+require("./QR/qrlib.php");
 require_once("cls_db.php");
 
 abstract class cls_poliza extends cls_db
@@ -684,7 +684,11 @@ abstract class cls_poliza extends cls_db
         INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
         INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
         INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
+<<<<<<< HEAD
+       /// INNER JOIN clasevehiculo ON clase_id = vehiculo.clase_id
+=======
         INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
+>>>>>>> 979a7491e09cb82f9028e3e8bd52f199eb4b2be9
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
         WHERE poliza_id = $id");
@@ -858,37 +862,6 @@ abstract class cls_poliza extends cls_db
 		$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
 
 		return $contrato;
-	}
-
-	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechafinal){
-
-		$sql = "SELECT * FROM poliza 
-			INNER JOIN debitocredito ON poliza.debitoCredito = debitocredito.nota_id
-			INNER JOIN coberturas ON poliza.cobertura_id = coberturas.cobertura_id
-			INNER JOIN sucursal ON poliza.sucursal_id = sucursal.sucursal_id
-			INNER JOIN usuario ON poliza.usuario_id = usuario.usuario_id 
-			INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
-			INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-			WHERE poliza_fechaInicio BETWEEN $fechaInicio AND $fechafinal ";
-
-		if($notaIE != "3"){
-			$sql .= "AND debitocredito.nota_IngresoEgreso = $notaIE ";
-		}else{
-			$sql .= "AND debitocredito.nota_IngresoEgreso != '' ";
-		}
-
-		if($idSu != ""){
-			$sql .= "AND sucursal.sucursal_id = $idSu ";
-		}
-
-		if($idU != ""){
-			$sql .= "AND usuario.usuario_id = $idU ";
-		}
-
-		$result = $this->db->query($sql);
-
-		if($result->RowCount() > 0)return $result->fetchAll(PDO::FETCH_ASSOC);
-		else return [];
 	}
 
 }

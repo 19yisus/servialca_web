@@ -4,7 +4,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-import { ModalTransporte } from "./modalRoles";
+import { ModalRoles, ModalTransporte } from "./modalRoles";
 
 
 import axios from "axios";
@@ -44,7 +44,7 @@ function TablaRoles() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
+  const [operacion , setOperacion ] = useState();
   const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
@@ -158,7 +158,7 @@ function TablaRoles() {
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
+            if ((x.roles_id !== null ? String(x.roles_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -190,12 +190,14 @@ function TablaRoles() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
+    setMostrar(true)
+    setOperacion(op)
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
 
-      <ModalTransporte
+      <ModalRoles
       operacion={operacion}
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
@@ -223,14 +225,14 @@ function TablaRoles() {
                   {
                     records && recordsAfterPagingAndSorting().map((item, index) => (
                       <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.roles_id}</TableCell> 
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.roles_nombre}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.roles_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                          <button onClick={gestionarBanco(2, item.roles_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                          <button onClick={gestionarBanco(3, item.roles_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
                       </TableRow>
                     ))

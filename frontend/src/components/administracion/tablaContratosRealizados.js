@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { ModalImprimir } from "./modalImprimir";
 
 
 function TablaContratosRealizados() {
@@ -42,7 +43,7 @@ function TablaContratosRealizados() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
+  const [idCliente, setIdCliente] = useState();
   const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
@@ -55,6 +56,8 @@ function TablaContratosRealizados() {
   const [totalact, setTotalact] = useState(0.0);
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+  const [mostrar2, setMostrar2] = useState(false);
+
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
   const [records, setRecords] = useState([
@@ -156,7 +159,7 @@ function TablaContratosRealizados() {
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
+            if ((x.poliza_id !== null ? String(x.poliza_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -188,10 +191,21 @@ function TablaContratosRealizados() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
+    setIdCliente(id)
+    if(op===4){
+      setMostrar2(true)
+    }
 
   }
   return (
     <div className="col-md-12 mx-auto p-2">
+
+      <ModalImprimir
+      show={mostrar2}
+      onHideCancela={()=>{setMostrar2(false)}}
+      idCliente={idCliente}
+
+      />
 
 
       <div className="col-12 py-2">
@@ -215,7 +229,7 @@ function TablaContratosRealizados() {
             {
               records && recordsAfterPagingAndSorting().map((item, index) => (
                 <TableRow key={index} style={{ padding: "0" }}>
-                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.poliza_id}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
                     {formatDate(item.poliza_fechaVencimiento)}
                   </TableCell>
@@ -226,10 +240,10 @@ function TablaContratosRealizados() {
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usuario_nombre}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.sucursal_nombre}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", display: 'flex', justifyContent: '', alignItems: 'center', width: 120 }}>
-                    <button onClick={gestionarBanco(4, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-info rounded-circle"><i className="fas fa-eye"></i> </button>
-                    <button onClick={gestionarBanco(2, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                    <button onClick={gestionarBanco(3, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-sync"></i> </button>
-                    <button onClick={gestionarBanco(5, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-primary rounded-circle"><i className="fa fa-print"></i> </button>
+                    <button onClick={gestionarBanco(4, item.poliza_id)} className="btn btn-sm mx-1 btn-info rounded-circle"><i className="fas fa-print"></i> </button>
+                    <button onClick={gestionarBanco(2, item.poliza_id)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={gestionarBanco(3, item.poliza_id)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-sync"></i> </button>
+                    <button onClick={gestionarBanco(5, item.poliza_id)} className="btn btn-sm mx-1 btn-primary rounded-circle"><i className="fa fa-print"></i> </button>
                   </TableCell>
 
                 </TableRow>

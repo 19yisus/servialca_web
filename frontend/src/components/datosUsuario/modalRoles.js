@@ -17,7 +17,7 @@ import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
 
-export const ModalTransporte = (props) => {
+export const ModalRoles = (props) => {
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
@@ -297,7 +297,7 @@ export const ModalTransporte = (props) => {
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          {operacion === 1 ? 'Registrar Línea De Transporte' : operacion === 2 ? 'Editar Línea De Transporte' : 'Eliminar Línea De Transporte'}
+          {operacion === 1 ? 'Registrar Rol' : operacion === 2 ? 'Editar Rol' : 'Eliminar Rol'}
         </Modal.Title>
         <button
           ref={btnCancela}

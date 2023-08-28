@@ -661,13 +661,14 @@ export const ModalRcv = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
+        selecionarClase();
+
         selecionarTipoContrato();
         selecionarEstado();
         selecionarAcesor();
         selecionarSucursal();
         selecionarTransporte();
         selecionarUso();
-        selecionarClase();
         selecionarTipo();
 
         if (props.operacion !== 1) {
