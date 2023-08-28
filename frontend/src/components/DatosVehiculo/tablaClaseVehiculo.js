@@ -222,7 +222,7 @@ function TablaClaseVehiculo() {
             {
               records && recordsAfterPagingAndSorting().map((item, index) => (
                 <TableRow key={index} style={{ padding: "0" }}>
-                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.claseVehiculo_id}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_nombre}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
 
