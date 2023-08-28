@@ -1,0 +1,48 @@
+<?php
+require_once("./Models/cls_chat.php");
+
+class Con_chat extends cls_chat
+{
+  public function __construct()
+  {
+    parent::__construct();
+
+    // tabla conversacion
+    // protected $id_con, $fecha_hora_con, $user_1_id, $user_2_id, $estatus_con;
+    // // tabla sms_conversacion
+    // protected $sms_id, $conversacion_id, $remitente, $fecha_hora_sms, $content_sms;
+
+    $this->id_con = isset($_POST['id_con']) ? $_POST['id_con']: "";
+    $this->user_1_id = isset($_POST['user_1_id']) ? $_POST['user_1_id'] : "";
+    $this->user_2_id = isset($_POST['user_2_id']) ? $_POST['user_2_id']: "";
+    
+    $this->conversacion_id = isset($_POST['conversacion_id']) ? $_POST['conversacion_id']: "";
+    $this->sms_id = isset($_POST['sms_id']) ? $_POST['sms_id']: "";
+    $this->remitente = isset($_POST['remitente']) ? $_POST['remitente']: "";
+    $this->content_sms = isset($_POST['content_sms']) ? $_POST['content_sms']: "";
+  }
+
+  public function crearConversacion()
+  {
+    $resultado = $this->iniciarConversacion();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function enviarMensaje()
+  {
+    $resultado = $this->enviarSMS();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function ListarMisConversaciones()
+  {
+    $resultado = $this->listarConversaciones();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function DetalleConversacion()
+  {
+    $resultado = $this->VerConversacion();
+    Response($resultado['data'], $resultado['code']);
+  }
+}
