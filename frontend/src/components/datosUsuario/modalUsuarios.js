@@ -154,7 +154,7 @@ export const ModalUsuarios = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/Auth/registrar";
     console.log(endpoint)
     setActivate(true)
 
@@ -164,16 +164,16 @@ export const ModalUsuarios = (props) => {
 
     let bodyF = new FormData()
 
-    //bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
-    //bodyF.append("Apellido", txtDireccion.current.value)
-    //bodyF.append("Cedula", txtCedula.current.value)
-    //bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    //bodyF.append("Edad", txtEdad.current.value)
-    //bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    //bodyF.append("Lente", cmbLentes.current.value)
-    //bodyF.append("metodoPago", cmbPago.current.value)
-    //bodyF.append("Referencia", txtReferencia.current.value)
-    //bodyF.append("cantidadDolar", txtDolar.current.value)
+    bodyF.append("Usuario", txtUsuario.current.value)
+    bodyF.append("Nombre", txtNombre.current.value)
+    bodyF.append("Apellido", txtApellido.current.value)
+    bodyF.append("Cedula", cmbNacionalidad.current.value + txtCedula.current.value)
+    bodyF.append("Telefono", cmbTelefono.current.value + txtTelefono.current.value)
+    bodyF.append("Direccion", txtDireccion.current.value)
+    bodyF.append("Correo", txtCorreo.current.value)
+    bodyF.append("Rol", txtRol.current.value)
+    bodyF.append("Sucursal", txtSucursal.current.value)
+
 
 
 

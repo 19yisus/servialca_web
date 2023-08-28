@@ -667,6 +667,8 @@ abstract class cls_poliza extends cls_db
 		return $resultado;
 	}
 
+
+	
 	public function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT poliza.*,vehiculo.*, titular.*, cliente.*, marca.*, modelo.*, usovehiculo.*, color.*,tipovehiculo.*, usuario.*, clasevehiculo.*, 
@@ -682,7 +684,11 @@ abstract class cls_poliza extends cls_db
         INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
         INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
         INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
+<<<<<<< HEAD
        /// INNER JOIN clasevehiculo ON clase_id = vehiculo.clase_id
+=======
+        INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
+>>>>>>> 979a7491e09cb82f9028e3e8bd52f199eb4b2be9
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
         WHERE poliza_id = $id");
