@@ -141,7 +141,7 @@ abstract class cls_claseVehiculo extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo ORDER BY clase_id DESC");
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo");
 		if ($sql->execute())
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else
