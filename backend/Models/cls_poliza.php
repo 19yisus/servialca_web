@@ -197,19 +197,18 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 
-			// $this->cobertura = $this->db->lastInsertId();
-			// $result = $this->db->query("SELECT * FROM poliza WHERE cliente_id = $this->cliente AND vehiculo_id = $this->vehiculo");
-			// // SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
-			// if ($result->rowCount() > 0) {
-			// 	$this->db->rollback();
-			// 	return [
-			// 		'data' => [
-			// 			'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
-			// 		],
-			// 		'code' => 400
-			// 	];
-			// }
-
+			$this->cobertura = $this->db->lastInsertId();
+			$result = $this->db->query("SELECT * FROM poliza WHERE cliente_id = $this->cliente AND vehiculo_id = $this->vehiculo");
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if ($result->rowCount() > 0) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"
+					],
+					'code' => 400
+				];
+			}
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
 			$this->generarQR($this->id);
@@ -668,7 +667,7 @@ abstract class cls_poliza extends cls_db
 	}
 
 
-	
+
 	public function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT poliza.*,vehiculo.*, titular.*, cliente.*, marca.*, modelo.*, usovehiculo.*, color.*,tipovehiculo.*, usuario.*, clasevehiculo.*, 
@@ -684,11 +683,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
         INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
         INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
-<<<<<<< HEAD
-       /// INNER JOIN clasevehiculo ON clase_id = vehiculo.clase_id
-=======
         INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
->>>>>>> 979a7491e09cb82f9028e3e8bd52f199eb4b2be9
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
         WHERE poliza_id = $id");
