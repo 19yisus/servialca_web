@@ -9,7 +9,6 @@
 * Contratos a creditos
 * Seguridad (que no deje escribir datos que no son)
 * buscador en select 
-* alerta de cierre de sección 
 * en la parte de gastos personales que salga el monto total de lo que se a echo en el mes 
 * poner id(de certificado o de rcv) en ingreso y egreso 
 * que las fecha de desde de las graficas no puedan ser menores que la del hasta 
@@ -17,11 +16,11 @@
 * Revisar la tabla de debito credito
 * Revisar lo de los saltos en el registro de poliza
 * Editar de permisos y de rol por parte del administrador a los usuarios
-* pie de pagina en los reportes 
 * Revisar los parametros de fecha de las graficas y los reportes
-* QR 
 // Preguntar  
 * contrato de grua
 * Factura
 * Documentos 
 * funeraria 
+* compras onlien
+* que cuando se escanee el qr me mande a otra pagina

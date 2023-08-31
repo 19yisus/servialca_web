@@ -22,6 +22,7 @@ export const ModalTipoVehiculo = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
+  const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
 
 
   const txtEdad = useRef();
@@ -57,10 +58,7 @@ export const ModalTipoVehiculo = (props) => {
     nacionalidad: "V",
     direccion: "",
     telefono: "",
-    celular: "",
-    estadocivil: 0,
-    correo: "",
-    tiposangre: "",
+   
   });
 
   const btnCancela = useRef();
@@ -127,18 +125,28 @@ export const ModalTipoVehiculo = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/tipo_vehiculo/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
-
-    //setLoading(false);
-
+    let endpoint;
     let bodyF = new FormData()
 
+   
+    setActivate(true)
+
+    if(operacion === 1){
+      endpoint = op.conexion + "/tipo_vehiculo/registrar";
+     
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/tipo_vehiculo/actualizar";
+      
+      bodyF.append("ID", props.idTipoVehiculo)
+    } else {
+      endpoint = op.conexion + "/tipo_vehiculo/eliminar";
+   
+      bodyF.append("ID", props.idTipoVehiculo)
+
+    }
+
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
-    bodyF.append("tipoVehiculo_precio", txtDolar.current.value)
+    bodyF.append("tipoVehiculo_precio", txtDolar.current.value.replace(/\./g, "").replace(",", "."))
 
 
 
@@ -155,9 +163,11 @@ export const ModalTipoVehiculo = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "peracion Exitosa",
           icono: "exito",
         });
+
+        props.render()
 
 
 
@@ -251,6 +261,11 @@ export const ModalTipoVehiculo = (props) => {
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
+      if(event.target.name === 'dolar'){
+        let bs = parseFloat(dolarbcv)
+        let total = parseFloat(event.target.value) * bs
+        txtBs.current.value =  formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+      }
       if (
         event.target.value === "" ||
         parseFloat(
@@ -277,6 +292,48 @@ export const ModalTipoVehiculo = (props) => {
     } else return false;
   };
 
+  const selecionarTipo = async (id) => {
+    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+        let $ =  response.tipoVehiculo_precio ? parseFloat(response.tipoVehiculo_precio) : 0;
+        let bs = parseFloat(dolarbcv);
+        let totalbs = $ * bs;
+
+       txtDescripcion.current.value = response.tipoVehiculo_nombre;
+       txtDolar.current.value = response.tipoVehiculo_precio ? formatMoneda(response.tipoVehiculo_precio.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00';
+       txtBs.current.value =  formatMoneda(totalbs.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       setValues(response);
+
+
+
+      })
+      .catch(error =>
+     
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <Modal
       {...props}
@@ -290,8 +347,8 @@ export const ModalTipoVehiculo = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+          selecionarTipo(props.idTipoVehiculo)
+          
         }
       }}
     >
@@ -337,11 +394,11 @@ export const ModalTipoVehiculo = (props) => {
 
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en $:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en Bs:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
           </div>
 
 

@@ -105,18 +105,7 @@ function MenuImpuestoPP(props) {
     })
   };*/
 
-  useEffect(() => {
-
-
-    /* if (pathname === "/pdfiglesias") {
-       seleccionaRegistrosIglesias()
   
-     } */
-
-
-
-
-  }, []);
   let permisos = JSON.parse(localStorage.getItem("permisos"))
   permisos = permisos.map( item => item.replace(" ","").replace(" ","").replace("de","").toLowerCase())
 
@@ -154,6 +143,50 @@ function MenuImpuestoPP(props) {
 
     }
   }
+
+  const selecionarDolar = async (id) => {
+    let endpoint = 'https://api.exchangedyn.com/markets/quotes/usdves/bcv';
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+
+
+
+    await fetch(endpoint, {
+      method: "GET",
+    
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+      
+       localStorage.setItem("dolarbcv", JSON.stringify(parseFloat(response.sources.BCV.quote)));
+
+
+      // txtDescripcion.current.value = response.clase_nombre;
+     //  setValues(response);
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+  useEffect(() => {
+
+
+    selecionarDolar()
+
+
+
+
+  }, []);
+  
   return (
     <div>
 

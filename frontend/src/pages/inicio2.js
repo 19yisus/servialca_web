@@ -76,6 +76,7 @@ function Inicio2() {
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
   const [mostrar3, setMostrar3] = useState(false);
+  const [idCliente, setIdCliente] = useState();
 
 
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -216,32 +217,47 @@ function Inicio2() {
   const gestionarRcv = (opcion) => (e) => {
     e.preventDefault()
 
-    if(opcion === 1){
+    if (opcion === 1) {
       setMostrar(true)
 
     } else {
       setMostrar2(true)
     }
 
-  } 
+  }
+
+  const imprimirCertificado = (id) =>{
+    setIdCliente(id)
+    setMostrar2(false)
+    setMostrar3(true)
+
+  }
+
   return (
     <div className="col-md-12 mx-auto p-2">
 
-      <ModalCertificadoMedico 
-       //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra
-       show={mostrar}
-       onHideCancela={()=>{setMostrar(false)}}
+      <ModalCertificadoMedico
+        //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra
+        show={mostrar}
+        onHideCancela={() => { setMostrar(false) }}
       />
 
-      <ModalRcv 
+      <ModalRcv
         show={mostrar2}
-        onHideCancela={()=>{setMostrar2(false)}}
+        onHideCancela={() => { setMostrar2(false) }}
+        onHideCancela2={imprimirCertificado}
+
       />
 
-      <ModalImprimir  
-      show={mostrar3}
-      onHideCancela={()=>{setMostrar3(false)}}
+  
+
+      <ModalImprimir
+        show={mostrar3}
+        onHideCancela={() => { setMostrar3(false) }}
+        idCliente={idCliente}
+
       />
+
 
       <div className="col-12 py-2">
         <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
@@ -254,11 +270,11 @@ function Inicio2() {
         <div className="row col-12 d-flex justify-content-between mb-2">
           <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
 
-        <div className='col-4 d-flex justify-content-end'>
+          <div className='col-4 d-flex justify-content-end'>
             <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(1)}><i class="fa fa-plus"></i> Certificado Medico</button>
             <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(2)}><i class="fa fa-plus"></i> Crear RCV</button>
 
-  </div> 
+          </div>
         </div>
         <TblContainer>
           <TblHead />

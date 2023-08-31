@@ -55,7 +55,7 @@ function TablaRoles() {
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
   const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [idRol, setIdRol] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
@@ -191,6 +191,7 @@ function TablaRoles() {
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setMostrar(true)
+    setIdRol(id)
     setOperacion(op)
 
   }
@@ -201,6 +202,8 @@ function TablaRoles() {
       operacion={operacion}
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
+      render={selecionarRegistros}
+      idRol={idRol}
       />
     
 

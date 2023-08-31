@@ -127,17 +127,26 @@ export const ModalSucursal = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/sucursal/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
-
-    //setLoading(false);
-
+    let endpoint;
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", txtDescripcion.current.value)
+
+    if(operacion === 1){
+      endpoint = op.conexion + "/sucursal/registrar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/sucursal/actualizar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.sucursal_id)
+    } else {
+      endpoint = op.conexion + "/sucursal/eliminar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.sucursal_id)
+
+    }
+    console.log(endpoint)
+    setActivate(true)
+    
 
     await fetch(endpoint, {
       method: "POST",
@@ -152,10 +161,45 @@ export const ModalSucursal = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
 
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+  const selecionarSucursal = async (id) => {
+    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+       txtDescripcion.current.value = response.sucursal_nombre;
+       setValues(response);
 
 
 
@@ -236,7 +280,9 @@ export const ModalSucursal = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
+    props.render()
+    props.onHideCancela();
+    
 
   }
 
@@ -287,8 +333,8 @@ export const ModalSucursal = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+          selecionarSucursal(props.idSucursal)
+          
         }
       }}
     >
@@ -329,7 +375,7 @@ export const ModalSucursal = (props) => {
          
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre De La Sucursal:</span>
-            <textarea type="textarea" style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false :true} style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           
 

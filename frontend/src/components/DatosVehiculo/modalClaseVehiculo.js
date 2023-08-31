@@ -107,39 +107,33 @@ export const ModalTransporte = (props) => {
             nombre: "",
             apellido: "",
             fecha_nac: "",
-            bas_agua: 1,
-
-            status: 1,
-            bas_espirit: 1,
-            cod_iglesia: "",
-            sexo: "M",
-            fecha_baus: "",
-            nacionalidad: "V",
-            direccion: "",
-            telefono: "",
-            celular: "",
-            estadocivil: 0,
-            correo: "",
-            tiposangre: "",
+            
         });
     };
 
 
 
     const actualizarCertificado = async () => {
-        let endpoint = op.conexion + "/claseVehiculo/registrar";
-        console.log(endpoint)
+        let endpoint;
+        let bodyF = new FormData()
+    
         setActivate(true)
 
+        console.log( values.clase_id)
 
-
-        //setLoading(false);
-
-        let bodyF = new FormData()
-
-        bodyF.append("Nombre", txtDescripcion.current.value)
-
-
+        if(operacion === 1){
+            endpoint = op.conexion + "/claseVehiculo/registrar";
+            bodyF.append("Nombre", txtDescripcion.current.value)
+          } else if(operacion === 2){
+            endpoint = op.conexion + "/claseVehiculo/actualizar";
+            bodyF.append("Nombre", txtDescripcion.current.value)
+            bodyF.append("ID", values.clase_id)
+          } else {
+            endpoint = op.conexion + "/claseVehiculo/eliminar";
+            bodyF.append("Nombre", txtDescripcion.current.value)
+            bodyF.append("ID", values.clase_id)
+      
+          }
 
 
         await fetch(endpoint, {
@@ -155,7 +149,7 @@ export const ModalTransporte = (props) => {
                 setMensaje({
                     mostrar: true,
                     titulo: "Exito.",
-                    texto: "Registro Guardado Exitosamente",
+                    texto: "Operacion Exitosa",
                     icono: "exito",
                 });
 
@@ -239,6 +233,7 @@ export const ModalTransporte = (props) => {
 
     const cerrarModal = () => {
         setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+        props.render()
         props.onHideCancela()
 
     }
@@ -277,6 +272,42 @@ export const ModalTransporte = (props) => {
         } else return false;
     };
 
+
+    const selecionarClase = async (id) => {
+        let endpoint = op.conexion + "/claseVehiculo/ConsultarUno?ID="+id;
+        console.log(endpoint)
+        setActivate(true)
+    
+    
+    
+        //setLoading(false);
+    
+        let bodyF = new FormData()
+    
+       // bodyF.append("Nombre", txtDescripcion.current.value)
+    
+        await fetch(endpoint, {
+          method: "POST",
+          body: bodyF
+        }).then(res => res.json())
+          .then(response => {
+    
+    
+            setActivate(false)
+            console.log(response)
+    
+           txtDescripcion.current.value = response.clase_nombre;
+           setValues(response);
+    
+    
+    
+          })
+          .catch(error =>
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+          )
+    
+      };
+
     return (
         <Modal
             {...props}
@@ -290,9 +321,9 @@ export const ModalTransporte = (props) => {
                 setOperacion(props.operacion);
 
                 if (props.operacion !== 1) {
-                    setValues(props.persona);
-                    console.log(props.persona);
-                }
+                    selecionarClase(props.idClase)
+                    
+                  }
             }}
         >
             <Modal.Header className="bg-danger">
@@ -332,7 +363,7 @@ export const ModalTransporte = (props) => {
 
                     <div class="input-group input-group-sm mb-3 col-md-12">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
-                        <textarea type="textarea" style={{ height: 40 }} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                        <textarea type="textarea" disabled={operacion === 1 ? false : operacion === 2 ? false : true} style={{ height: 40 }} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                     </div>
 
 

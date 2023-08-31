@@ -54,7 +54,7 @@ function TablaClaseVehiculo() {
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
   const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [idClase, setIdClase] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [operacion, setOperacion] = useState();
@@ -155,7 +155,7 @@ function TablaClaseVehiculo() {
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
+            if ((x.clase_id !== null ? String(x.clase_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -188,6 +188,7 @@ function TablaClaseVehiculo() {
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setOperacion(op)
+    setIdClase(id)
     setMostrar(true)
 
   }
@@ -198,6 +199,8 @@ function TablaClaseVehiculo() {
         operacion={operacion}
         show={mostrar}
         onHideCancela={() => { setMostrar(false) }}
+        idClase={idClase}
+        render={selecionarRegistros}
       />
 
 
@@ -222,14 +225,14 @@ function TablaClaseVehiculo() {
             {
               records && recordsAfterPagingAndSorting().map((item, index) => (
                 <TableRow key={index} style={{ padding: "0" }}>
-                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.claseVehiculo_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_id}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_nombre}</TableCell>
-                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.clase_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
 
 
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: 130 }}>
-                    <button onClick={gestionarBanco(2, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                    <button onClick={gestionarBanco(3, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                    <button onClick={gestionarBanco(2, item.clase_id)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={gestionarBanco(3, item.clase_id)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                   </TableCell>
                 </TableRow>
               ))
