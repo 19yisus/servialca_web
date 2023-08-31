@@ -55,7 +55,7 @@ function TablaTipoContratos() {
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [operacion, setOperacion] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
+  const [IdTipoContrato, setIdTipoContrato] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
   const [totalp, setTotalp] = useState(0.0);
@@ -166,7 +166,7 @@ console.log(endpoint)
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
+            if ((x.contrato_id !== null ? String(x.contrato_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -200,6 +200,7 @@ console.log(endpoint)
     e.preventDefault();
     setOperacion(op)
     setMostrar(true);
+    setIdTipoContrato(id)
 
 
   }
@@ -210,6 +211,8 @@ console.log(endpoint)
       operacion={operacion}
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
+      IdTipoContrato={IdTipoContrato}
+      render={selecionarRegistros}
 
       />
     
@@ -263,8 +266,8 @@ console.log(endpoint)
 
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
                         
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                          <button onClick={gestionarBanco(2, item.contrato_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                          <button onClick={gestionarBanco(3, item.contrato_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
                       </TableRow>
                     ))

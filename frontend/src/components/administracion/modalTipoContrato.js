@@ -135,28 +135,40 @@ export const ModalTipoContrato = (props) => {
   };
 
 
+  console.log( values.contrato_id)
 
+  
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/tipo_contrato/registrar";
+    let endpoint;
+    let bodyF = new FormData()
+
+    
+    if(operacion === 1){
+      endpoint = op.conexion + "/tipo_contrato/registrar";
+     
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/tipo_contrato/actualizar";
+      bodyF.append("ID", values.contrato_id)
+    
+    } else {
+      endpoint = op.conexion + "/tipo_contrato/eliminar";
+      bodyF.append("ID", values.contrato_id)
+     
+
+    }
     console.log(endpoint)
     setActivate(true)
 
-
-
-    //setLoading(false);
-
-    let bodyF = new FormData()
-
     bodyF.append("Nombre_contrato", txtDescripcion.current.value)
-    bodyF.append("dano_cosas", txtDanoaCosa.current.value)
-    bodyF.append("dano_personas", txtDanoPer.current.value)
-    bodyF.append("fianza_cuanti", txtFinanzaCuan.current.value)
-    bodyF.append("asistencia_legal", txtAsistenciaLegal.current.value)
-    bodyF.append("apov", txtApov.current.value)
-    bodyF.append("muerte", txtMuerte.current.value)
-    bodyF.append("invalidez", txtInvalidez.current.value)
-    bodyF.append("gasto_metico", txtGastosMed.current.value)
-    bodyF.append("grua", txtGrua.current.value)
+    bodyF.append("dano_cosas", txtDanoaCosa.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("dano_personas", txtDanoPer.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("fianza_cuanti", txtFinanzaCuan.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("asistencia_legal", txtAsistenciaLegal.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("apov", txtApov.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("muerte", txtMuerte.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("invalidez", txtInvalidez.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("gasto_metico", txtGastosMed.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("grua", txtGrua.current.value.replace(/\./g, "").replace(",", "."))
 
 
 
@@ -173,7 +185,7 @@ export const ModalTipoContrato = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
 
@@ -257,6 +269,7 @@ export const ModalTipoContrato = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+    props.render()
     props.onHideCancela()
 
   }
@@ -295,6 +308,51 @@ export const ModalTipoContrato = (props) => {
     } else return false;
   };
 
+  const selecionarTipoContrato = async (id) => {
+    let endpoint = op.conexion + "/tipo_contrato/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+       txtDescripcion.current.value = response.contrato_nombre;
+       txtDanoaCosa.current.value =  formatMoneda(response.dañoCosas.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtDanoPer.current.value =  formatMoneda(response.dañoPersonas.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtFinanzaCuan.current.value =  formatMoneda(response.fianzaCuanti.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtAsistenciaLegal.current.value =  formatMoneda(response.asistenciaLegal.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtApov.current.value =  formatMoneda(response.apov.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtMuerte.current.value =  formatMoneda(response.muerte.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtInvalidez.current.value =  formatMoneda(response.invalidez.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtGastosMed.current.value =  formatMoneda(response.gastosMedicos.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       txtGrua.current.value =  formatMoneda(response.grua.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+       setValues(response);
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+
   return (
     <Modal
       {...props}
@@ -306,10 +364,11 @@ export const ModalTipoContrato = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-
+  
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+        
+          selecionarTipoContrato(props.IdTipoContrato)
+          
         }
       }}
     >

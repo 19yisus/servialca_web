@@ -127,17 +127,26 @@ export const ModalRoles = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/transporte/registrar";
+    let endpoint ;
     console.log(endpoint)
     setActivate(true)
-
-
-
-    //setLoading(false);
-
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", txtDescripcion.current.value)
+
+    if(operacion === 1){
+      endpoint = op.conexion + "/roles/registrar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/roles/actualizar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.roles_id)
+    } else {
+      endpoint = op.conexion + "/roles/eliminar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.roles_id)
+
+    }
+
    
 
 
@@ -155,7 +164,7 @@ export const ModalRoles = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
 
@@ -207,14 +216,7 @@ export const ModalRoles = (props) => {
       bas_espirit: 1,
       cod_iglesia: "",
       sexo: "M",
-      fecha_baus: "",
-      nacionalidad: "V",
-      direccion: "",
-      telefono: "",
-      celular: "",
-      estadocivil: 0,
-      correo: "",
-      tiposangre: "",
+     
     });
   };
 
@@ -239,6 +241,7 @@ export const ModalRoles = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+    props.render()
     props.onHideCancela()
 
   }
@@ -277,6 +280,41 @@ export const ModalRoles = (props) => {
     } else return false;
   };
 
+  const selecionarRol = async (id) => {
+    let endpoint = op.conexion + "/roles/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+       txtDescripcion.current.value = response.roles_nombre;
+       setValues(response);
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <Modal
       {...props}
@@ -290,8 +328,8 @@ export const ModalRoles = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+          selecionarRol(props.idRol)
+          
         }
       }}
     >
@@ -332,7 +370,7 @@ export const ModalRoles = (props) => {
          
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
-            <textarea type="textarea" style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" style={{height:40}} disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           
 

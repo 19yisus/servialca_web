@@ -127,18 +127,23 @@ export const ModalUsoVehiculo = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/usoVehiculo/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
-
-    //setLoading(false);
-
+    let endpoint;
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", txtDescripcion.current.value)
 
+    if(operacion === 1){
+      endpoint = op.conexion + "/usoVehiculo/registrar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/usoVehiculo/actualizar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.usoVehiculo_id)
+    } else {
+      endpoint = op.conexion + "/usoVehiculo/eliminar";
+      bodyF.append("Nombre", txtDescripcion.current.value)
+      bodyF.append("ID", values.usoVehiculo_id)
+
+    }
 
 
 
@@ -155,7 +160,7 @@ export const ModalUsoVehiculo = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
 
@@ -239,6 +244,7 @@ export const ModalUsoVehiculo = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+    props.render()
     props.onHideCancela()
 
   }
@@ -277,6 +283,41 @@ export const ModalUsoVehiculo = (props) => {
     } else return false;
   };
 
+  const selecionarUso = async (id) => {
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+       txtDescripcion.current.value = response.usoVehiculo_nombre;
+       setValues(response);
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <Modal
       {...props}
@@ -290,8 +331,8 @@ export const ModalUsoVehiculo = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+          selecionarUso(props.idUso)
+          
         }
       }}
     >

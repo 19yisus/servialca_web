@@ -114,28 +114,37 @@ export const ModalTransporte = (props) => {
       cod_iglesia: "",
       sexo: "M",
       fecha_baus: "",
-      nacionalidad: "V",
-      direccion: "",
-      telefono: "",
-      celular: "",
-      estadocivil: 0,
-      correo: "",
-      tiposangre: "",
+    
     });
   };
 
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/transporte/registrar";
-    console.log(endpoint)
+ 
+   
     setActivate(true)
 
 
-
-    //setLoading(false);
-
+    let endpoint;
     let bodyF = new FormData()
+    console.log(endpoint)
+
+    if(operacion === 1){
+      endpoint = op.conexion + "/transporte/registrar";
+    
+    } else if(operacion === 2){
+      endpoint = op.conexion + "/transporte/actualizar";
+   
+      bodyF.append("ID", values.transporte_id)
+    } else {
+      endpoint = op.conexion + "/transporte/eliminar";
+   
+      bodyF.append("ID", values.transporte_id)
+
+    }
+
+
 
     bodyF.append("Nombre", txtDescripcion.current.value)
    
@@ -155,7 +164,7 @@ export const ModalTransporte = (props) => {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
 
@@ -239,6 +248,7 @@ export const ModalTransporte = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+    props.render()
     props.onHideCancela()
 
   }
@@ -277,6 +287,44 @@ export const ModalTransporte = (props) => {
     } else return false;
   };
 
+  
+  const selecionarTransporte = async (id) => {
+    let endpoint = op.conexion + "/transporte/ConsultarUno?ID="+id;
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    let bodyF = new FormData()
+
+   // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+
+       txtDescripcion.current.value = response.transporte_nombre;
+       setValues(response);
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
+
+
   return (
     <Modal
       {...props}
@@ -290,8 +338,8 @@ export const ModalTransporte = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+          selecionarTransporte(props.idTransporte)
+          
         }
       }}
     >
@@ -332,7 +380,7 @@ export const ModalTransporte = (props) => {
          
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
-            <textarea type="textarea" style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" style={{height:40}} disabled={operacion === 1 ? false : operacion === 2  ? false :true} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           
 

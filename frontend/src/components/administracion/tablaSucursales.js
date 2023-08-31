@@ -53,7 +53,7 @@ function TablaSursales() {
   const [presupuesto, setPresupuesto] = useState(0.0);
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
-  const [totalact, setTotalact] = useState(0.0);
+  const [idSucursal, setIdSucursal] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
@@ -189,6 +189,7 @@ console.log(endpoint)
     e.preventDefault();
     setMostrar(true)
     setOperacion(op)
+    setIdSucursal(id)
 
   }
   return (
@@ -198,6 +199,8 @@ console.log(endpoint)
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
       operacion={operacion}
+      idSucursal={idSucursal}
+      render={selecionarRegistros}
       />
     
 

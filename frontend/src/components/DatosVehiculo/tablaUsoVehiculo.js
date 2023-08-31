@@ -43,7 +43,7 @@ function TablaUsoVehiculo() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
+  const [idUso, setIdUso] = useState();
   const [operacion, setOperacion] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
@@ -189,6 +189,7 @@ console.log(endpoint)
     e.preventDefault();
     setOperacion(op)
     setMostrar(true)
+    setIdUso(id)
 
   }
   return (
@@ -198,6 +199,8 @@ console.log(endpoint)
       operacion={operacion}
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
+      idUso={idUso}
+      render={selecionarRegistros}
 
       />
     
@@ -229,8 +232,8 @@ console.log(endpoint)
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                          <button onClick={gestionarBanco(2, item.usoVehiculo_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                          <button onClick={gestionarBanco(3, item.usoVehiculo_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
                       </TableRow>
                     ))

@@ -115,7 +115,7 @@ export const ModalRcv = (props) => {
 
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
-
+  const[idContrato,setIdContrato] = useState()
   const [operacion, setOperacion] = useState(0);
 
 
@@ -243,6 +243,7 @@ export const ModalRcv = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
+        setIdContrato(response)
 
 
 
@@ -612,7 +613,7 @@ export const ModalRcv = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
+    props.onHideCancela2(idContrato)
 
   }
 

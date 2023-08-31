@@ -177,7 +177,7 @@ export const habilitarcampo = (campo) => {
 
 export function formatoMonto(val) {
   var valor = "";
-  if (val.length < 3 && val !== '')
+  if (val.length == 1 && val !== '')
     valor = val + ",00";
   else
     valor = val;

@@ -54,7 +54,7 @@ function TablaTransporte() {
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
   const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [idTransporte, setIdTransporte] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
   const [operacion, setOperacion] = useState();
@@ -156,7 +156,7 @@ console.log(endpoint)
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
+            if ((x.transporte_id !== null ? String(x.transporte_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -189,6 +189,7 @@ console.log(endpoint)
   const gestionarBanco = (op,id) => (e) => {
     e.preventDefault();
     setOperacion(op)
+    setIdTransporte(id)
     setMostrar(true)
 
   }
@@ -199,6 +200,8 @@ console.log(endpoint)
       operacion={operacion}
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
+      idTransporte={idTransporte}
+      render={selecionarRegistros}
       />
     
 
@@ -229,8 +232,8 @@ console.log(endpoint)
 
                    
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                          <button onClick={gestionarBanco(2, item.transporte_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                          <button onClick={gestionarBanco(3, item.transporte_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                         </TableCell>
                       </TableRow>
                     ))

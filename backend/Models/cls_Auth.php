@@ -250,7 +250,7 @@ class cls_Auth extends cls_db
     }
   }
 
-  protected function Delete()
+  protected function Delete($id)
   {
     try {
       $sql = $this->db->prepare("UPDATE usuario SET usuario_estatus = ? WHERE usuario_id = ?");
