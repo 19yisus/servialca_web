@@ -155,7 +155,7 @@ function TablaClaseVehiculo() {
           return items;
         else
           return items.filter(x => {
-            if ((x.clase_id !== null ? String(x.clase_id).includes(target.value) : 0)
+            if ((x.claseVehiculo_id !== null ? String(x.claseVehiculo_id).includes(target.value) : 0)
               || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
               || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
             ) {
@@ -225,14 +225,12 @@ function TablaClaseVehiculo() {
             {
               records && recordsAfterPagingAndSorting().map((item, index) => (
                 <TableRow key={index} style={{ padding: "0" }}>
-                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.claseVehiculo_id}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.clase_nombre}</TableCell>
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.clase_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
-
-
                   <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: 130 }}>
-                    <button onClick={gestionarBanco(2, item.clase_id)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                    <button onClick={gestionarBanco(3, item.clase_id)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
+                    <button onClick={gestionarBanco(2, item.claseVehiculo_id)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={gestionarBanco(3, item.claseVehiculo_id)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                   </TableCell>
                 </TableRow>
               ))

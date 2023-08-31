@@ -349,7 +349,8 @@ abstract class cls_poliza extends cls_db
 				$this->saveMedicoExecuted = true; // Marcar la función como ejecutada
 				return [
 					'data' => [
-						'res' => "Registro exitoso"
+						'res' => "Registro exitoso",
+						"id" => $this->id
 					],
 					'code' => 200
 				];
@@ -543,7 +544,6 @@ abstract class cls_poliza extends cls_db
             cliente_telefono, 
             cliente_correo, 
             cliente_direccion) VALUES (?,?,?,?,?,?,?)");
-
 			$sql->execute([
 				$this->nombre,
 				$this->apellido,

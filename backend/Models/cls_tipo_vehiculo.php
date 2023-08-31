@@ -78,13 +78,11 @@ abstract class cls_tipo_vehiculo extends cls_db
         ];
       }
       $sql = $this->db->prepare("UPDATE tipovehiculo SET
-          tipoVehiculo_nombre = ?,
-          tipoVehihculo_precio = ?,
+          tipoVehiculo_nombre = ?
         WHERE tipoVehiculo_id = ?");
       if (
         $sql->execute([
           $this->nombre,
-          $this->precio,
           $this->id
         ])
       ) {

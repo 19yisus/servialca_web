@@ -61,7 +61,7 @@ abstract class cls_claseVehiculo extends cls_db
 				];
 			}
 			$sql = $this->db->prepare("UPDATE clasevehiculo SET
-            clase_nombre = ? WHERE clase_id = ?");
+            clase_nombre = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->nombre, $this->id])) {
 				return [
 					"data" => [
@@ -89,7 +89,7 @@ abstract class cls_claseVehiculo extends cls_db
 	private function GetDuplicados()
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE 
-        clase_nombre =? AND clase_id = ?");
+        clase_nombre =? AND claseVehiculo_id = ?");
 		if ($sql->execute([$this->nombre, $this->id]))
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		else
@@ -100,7 +100,7 @@ abstract class cls_claseVehiculo extends cls_db
 	protected function Delete()
 	{
 		try {
-			$sql = $this->db->prepare("UPDATE clasevehiculo SET claseVehiculo_estatus = ? WHERE clase_id = ?");
+			$sql = $this->db->prepare("UPDATE clasevehiculo SET claseVehiculo_estatus = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
 				return [
 					"data" => [
@@ -121,7 +121,7 @@ abstract class cls_claseVehiculo extends cls_db
 
 	protected function GetOne($id)
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE clase_id = ?");
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE claseVehiculo_id = ?");
 		if ($sql->execute([$id]))
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		else
