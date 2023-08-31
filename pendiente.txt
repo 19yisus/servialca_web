@@ -17,6 +17,11 @@
 * Revisar lo de los saltos en el registro de poliza
 * Editar de permisos y de rol por parte del administrador a los usuarios
 * Revisar los parametros de fecha de las graficas y los reportes
+
+* Revisar grafica 
+* Galeria
+* Revisar tipo de vehiculo en editar
+
 // Preguntar  
 * contrato de grua
 * Factura
@@ -24,3 +29,6 @@
 * funeraria 
 * compras onlien
 * que cuando se escanee el qr me mande a otra pagina
+
+
+

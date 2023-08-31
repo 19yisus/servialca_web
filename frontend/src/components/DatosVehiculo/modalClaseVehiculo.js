@@ -119,7 +119,7 @@ export const ModalTransporte = (props) => {
     
         setActivate(true)
 
-        console.log( values.clase_id)
+        console.log( values.claseVehiculo_id)
 
         if(operacion === 1){
             endpoint = op.conexion + "/claseVehiculo/registrar";
@@ -127,11 +127,11 @@ export const ModalTransporte = (props) => {
           } else if(operacion === 2){
             endpoint = op.conexion + "/claseVehiculo/actualizar";
             bodyF.append("Nombre", txtDescripcion.current.value)
-            bodyF.append("ID", values.clase_id)
+            bodyF.append("ID", values.claseVehiculo_id)
           } else {
             endpoint = op.conexion + "/claseVehiculo/eliminar";
             bodyF.append("Nombre", txtDescripcion.current.value)
-            bodyF.append("ID", values.clase_id)
+            bodyF.append("ID", values.claseVehiculo_id)
       
           }
 

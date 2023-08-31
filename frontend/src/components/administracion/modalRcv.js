@@ -232,11 +232,8 @@ export const ModalRcv = (props) => {
       body: bodyF
     }).then(res => res.json())
       .then(response => {
-
-
         setActivate(false)
         console.log(response)
-
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
@@ -244,9 +241,6 @@ export const ModalRcv = (props) => {
           icono: "exito",
         });
         setIdContrato(response)
-
-
-
 
       })
       .catch(error =>

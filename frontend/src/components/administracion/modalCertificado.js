@@ -147,6 +147,8 @@ export const ModalCertificadoMedico = (props) => {
     bodyF.append("metodoPago", cmbPago.current.value)
     bodyF.append("Referencia", txtReferencia.current.value)
     bodyF.append("cantidadDolar", txtDolar.current.value)
+    bodyF.append("Telefono", null)
+    bodyF.append("Direccion", null)
 
 
 
