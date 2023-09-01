@@ -18,6 +18,7 @@ const TablaReportes = (props) => {
     var op = require('../../modulos/datos');
     let token = localStorage.getItem('jwtToken');
     const user_id = JSON.parse(localStorage.getItem("user_id"));
+    const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
 
 
     let el;
@@ -231,6 +232,43 @@ const TablaReportes = (props) => {
         }
     }
 
+    const generar = () => {
+
+        let sigue = true;
+
+        if(cmbTipo.current.value === ''){
+           sigue = false
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Seleccione un tipo de reposrte', icono: "informacion" })
+            cmbTipo.current.focus()
+            
+        } else if(cmbDato.current.value === ''){
+           sigue = false
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Seleccione un regsitro', icono: "informacion" })
+            cmbDato.current.focus()
+            
+        } else if(txtDesde.current.value === ''){
+           sigue = false
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Ingrese una fecha de inicio', icono: "informacion" })
+            txtDesde.current.focus()
+            
+        } else if(txtHasta.current.value === ''){
+           sigue = false
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Ingrese una fecha Final', icono: "informacion" })
+            txtHasta.current.focus()
+            
+        }  else if(txtDesde.current.value > txtHasta.current.value){
+           sigue = false
+            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'La fecha de inicio no debe ser mayora a la fecha final', icono: "informacion" })
+            txtHasta.current.focus()
+            
+        }
+
+        if(sigue){
+            window.open(`${op.conexion}/reporte_Ingreso_egreso?nota_id=
+            ${cmbTipo.current.value}&sucursal_id=${cmbDato.current.value}&user_id=${cmbDato.current.value}&fechaInicio=${moment(txtDesde.current.value).format('YYYY-MM-DD')}&fechaFin=${moment(txtHasta.current.value).format('YYYY-MM-DD')}`)
+        }
+     
+    }
 
     return (
         <div style={{ height: '100%', width: '100%' }}>
@@ -249,11 +287,11 @@ const TablaReportes = (props) => {
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Tipo:</span>
                                     <select class="form-select" aria-label="Default select example" ref={cmbTipo} onChange={consulta}>
                                         <option value=" ">Selecionar</option>
-                                        <option value="1">Usuarios</option>
-                                        <option value="2">Sucursales</option>
-                                        <option value="3">Ingreso</option>
-                                        <option value="4">Egreso</option>
-                                        <option value="5">Ingreso y Egreso</option>
+                                        <option value="4">Usuarios</option>
+                                        <option value="5">Sucursales</option>
+                                        <option value="1">Ingreso</option>
+                                        <option value="2">Egreso</option>
+                                        <option value="3">Ingreso y Egreso</option>
 
                                     </select>
                                     <select class="form-select" disabled={desabilitar} aria-label="Default select example" ref={cmbDato}>
@@ -268,17 +306,17 @@ const TablaReportes = (props) => {
                                 <div class="input-group input-group-sm mb-2 col-md-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Desde:</span>
                                     <input type="date" class="form-control" ref={txtDesde} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                                    defaultValue={moment().format('YYYY/MM/DD')} />
+                                    />
                                 </div>
                                 <div class="input-group input-group-sm mb-2 col-md-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Hasta:</span>
                                     <input type="date" class="form-control" ref={txtHasta} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                                    defaultValue={moment().format('YYYY-MMMM-DD')} />
+                                    />
                                 </div>
 
                             </div>
                             <div className='col-md-5 mx-auto row'>
-                            <button type="button" class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary">Generear </button>
+                            <button type="button" onClick={generar} class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary">Generear </button>
                             <button type="button" class="btn col-md-6 btn-sm mx-auto rounded-pill btn-danger">limpiar</button>
                             </div>
                             
