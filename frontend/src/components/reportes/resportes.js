@@ -219,12 +219,11 @@ const TablaReportes = (props) => {
 
     const consulta = (e) => {
 
-        if (parseInt(e.target.value) === 1) {
+        if (parseInt(e.target.value) === 5) {
             setDesabilitar(false)
             selecionarUsuarios()
-        } else if (parseInt(e.target.value) === 2) {
+        } else if (parseInt(e.target.value) === 4) {
             setDesabilitar(false)
-
             selecionarSucursal()
         } else {
             setRecords([])
@@ -264,8 +263,7 @@ const TablaReportes = (props) => {
         }
 
         if(sigue){
-            window.open(`${op.conexion}/reporte_Ingreso_egreso?nota_id=
-            ${cmbTipo.current.value}&sucursal_id=${cmbDato.current.value}&user_id=${cmbDato.current.value}&fechaInicio=${moment(txtDesde.current.value).format('YYYY-MM-DD')}&fechaFin=${moment(txtHasta.current.value).format('YYYY-MM-DD')}`)
+            window.open(`${op.conexion}/reporte_Ingreso_egreso?nota_id=${cmbTipo.current.value}&sucursal_id=${cmbDato.current.value}&user_id=${cmbDato.current.value}&fechaInicio=${moment(txtDesde.current.value).format('YYYY-MM-DD')}&fechaFin=${moment(txtHasta.current.value).format('YYYY-MM-DD')}`)
         }
      
     }
@@ -287,8 +285,8 @@ const TablaReportes = (props) => {
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Tipo:</span>
                                     <select class="form-select" aria-label="Default select example" ref={cmbTipo} onChange={consulta}>
                                         <option value=" ">Selecionar</option>
-                                        <option value="4">Usuarios</option>
-                                        <option value="5">Sucursales</option>
+                                        <option value="5">Usuarios</option>
+                                        <option value="4">Sucursales</option>
                                         <option value="1">Ingreso</option>
                                         <option value="2">Egreso</option>
                                         <option value="3">Ingreso y Egreso</option>

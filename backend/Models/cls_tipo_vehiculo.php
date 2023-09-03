@@ -5,7 +5,7 @@ if (!class_exists('cls_db'))
 
 abstract class cls_tipo_vehiculo extends cls_db
 {
-  protected $id, $nombre, $precio, $estatus;
+  protected $id, $nombre, $precio, $idContrato, $estatus;
 
   public function __construct()
   {
@@ -35,17 +35,15 @@ abstract class cls_tipo_vehiculo extends cls_db
         tipoVehiculo_estatus
         )  VALUES(?,1)");
       if (
-        $sql->execute([
-          $this->nombre
-        ])
+        $sql->execute([$this->nombre])
       ) {
         $this->id = $this->db->lastInsertId();
       }
-      $this->Precios($this->id);
       if ($sql->rowCount() > 0)
         return [
           "data" => [
-            "res" => "Registro exitoso"
+            "res" => "Registro exitoso",
+            "id" => $this->id
           ],
           "code" => 200
         ];
@@ -172,21 +170,41 @@ abstract class cls_tipo_vehiculo extends cls_db
     return $resultado;
   }
 
-  protected function Precios($id)
+  protected function savePrecio()
   {
-    foreach ($this as $key => $value) {
-      if (is_string($value)) {
-        $this->$key = str_replace(',', '.', $value);
+    try {
+      foreach ($this as $key => $value) {
+        if (is_string($value)) {
+          $this->$key = str_replace(',', '.', $value);
+        }
       }
+      $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, precio_monto)VALUES(?,?,?)");
+      if ($sql->execute([$this->id, $this->idContrato, $this->precio])) {
+        $this->id = $this->db->lastInsertId();
+      }
+      if ($sql->rowCount() > 0)
+        return [
+          "data" => [
+            "res" => "Vinculación exitosa",
+            "id" => $this->id
+          ],
+          "code" => 200
+        ];
+      return [
+        "data" => [
+          "res" => "El vhiculo ha fallado"
+        ],
+        "code" => 400
+      ];
+    } catch (PDOException $e) {
+      return [
+        "data" => [
+          'res' => "Error de consulta: " . $e->getMessage()
+        ],
+        "code" => 400
+      ];
     }
-    $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, precio_monto)VALUES(?,?,?)");
-    if (
-      $sql->execute([
-        $id,
-        1,
-        $this->precio
-      ])
-    )
-      ;
+
   }
+
 }
