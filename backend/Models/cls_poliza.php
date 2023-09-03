@@ -828,35 +828,30 @@ abstract class cls_poliza extends cls_db
 		$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
 		$sql2->execute([$QRcodeImg, $id]);
 	}
-	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechafinal){
+	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechaFinal)
+	{
+		// Consulta SQL con marcadores de posición
+		$sql = "SELECT * FROM poliza WHERE poliza_fechaInicio BETWEEN :fechaInicio AND :fechaFinal ";
 
-		$sql = "SELECT * FROM poliza 
-			INNER JOIN debitocredito ON poliza.debitoCredito = debitocredito.nota_id
-			INNER JOIN coberturas ON poliza.cobertura_id = coberturas.cobertura_id
-			INNER JOIN sucursal ON poliza.sucursal_id = sucursal.sucursal_id
-			INNER JOIN usuario ON poliza.usuario_id = usuario.usuario_id 
-			INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
-			INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-			WHERE poliza_fechaInicio BETWEEN $fechaInicio AND $fechafinal ";
+		// Arreglo de parámetros para la consulta preparada
+		$params = array(
+			':fechaInicio' => $fechaInicio,
+			':fechaFinal' => $fechaFinal
+		);
 
-		if($notaIE != "3"){
-			$sql .= "AND debitocredito.nota_IngresoEgreso = $notaIE ";
-		}else{
-			$sql .= "AND debitocredito.nota_IngresoEgreso != '' ";
+
+		// Preparar la consulta
+		$stmt = $this->db->prepare($sql);
+
+		// Ejecutar la consulta con los parámetros
+		$stmt->execute($params);
+
+		// Verificar si se encontraron resultados
+		if ($stmt->rowCount() > 0) {
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			return [];
 		}
-
-		if($idSu != ""){
-			$sql .= "AND sucursal.sucursal_id = $idSu ";
-		}
-
-		if($idU != ""){
-			$sql .= "AND usuario.usuario_id = $idU ";
-		}
-
-		$result = $this->db->query($sql);
-
-		if($result->RowCount() > 0)return $result->fetchAll(PDO::FETCH_ASSOC);
-		else return [];
 	}
 
 

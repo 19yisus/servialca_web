@@ -8,13 +8,19 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 		parent::__construct();
 		$this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
 		$this->nombre = isset($_POST["tipoVehiculo_nombre"]) ? $_POST["tipoVehiculo_nombre"] : null;
-		$this->precio = isset($_POST["tipoVehiculo_precio"]) ? $_POST["tipoVehiculo_precio"] : null;
+		$this->precio = isset($_POST["precio"]) ? $_POST["precio"] : null;
+		$this->idContrato = isset($_POST["idContrato"]) ? $_POST["idContrato"] : null;
 		$this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
 	}
 
 	public function registrar()
 	{
 		$resultado = $this->Save();
+		Response($resultado["data"], $resultado["code"]);
+	}
+
+	public function precio(){
+		$resultado = $this->precio();
 		Response($resultado["data"], $resultado["code"]);
 	}
 

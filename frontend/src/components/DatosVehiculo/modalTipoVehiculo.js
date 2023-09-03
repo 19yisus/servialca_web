@@ -146,7 +146,8 @@ export const ModalTipoVehiculo = (props) => {
     }
 
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
-    bodyF.append("tipoVehiculo_precio", txtDolar.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("precio", txtDolar.current.value.replace(/\./g, "").replace(",", "."))
+    bodyF.append("idContrato")
 
 
 
