@@ -218,7 +218,7 @@ export const ModalTipoVehiculo = (props) => {
     setActivate(true)
 
     if(operacion === 1){
-      endpoint = op.conexion + "/tipo_vehiculo/registrarr";
+      endpoint = op.conexion + "/tipo_vehiculo/registrar";
      
     } 
 
