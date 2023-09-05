@@ -35,9 +35,6 @@ function TablaTipoVehiculo() {
    
     { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
 
-
-
-
   ];
 
 

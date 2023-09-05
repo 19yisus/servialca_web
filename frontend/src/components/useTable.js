@@ -40,7 +40,7 @@ export default function useTable(records, headCells,filterFn) {
     const [orderBy, setOrderBy] = useState()
 
     const TblContainer = props => (
-        <TableContainer className={classes.container}>
+        <TableContainer className={classes.container} style={{maxHeight:props.maxHeight ? props.maxHeight : '100%'}}>
         <Table  /* className={classes.table} */  className="table table-striped table-hover table-sm ">
             {props.children}
         </Table>

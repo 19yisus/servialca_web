@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 /* import { Mensaje, MensajeSiNo } from "../mensajes"; */
 import { Loader, Dimmer, Label } from "semantic-ui-react";
+import { TableBody, TableRow, TableCell, InputAdornment } from '@material-ui/core';
+
 import {
   validaSoloNumero,
   formatMoneda,
@@ -16,8 +18,43 @@ import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
+import useTable from "../useTable";
+import CatalogoTiposContratos from "../../catalogos/catalogoTiposContratos";
+
 
 export const ModalTipoVehiculo = (props) => {
+
+  const headCells = [
+    { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Codigo', textAlign: 'center' },
+    { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Descripción', textAlign: 'center' },
+     { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Opcion', textAlign: 'center' },
+   
+  ]
+
+  const handleSearch = e => {
+    let target = e.target;
+    setFilterFn({
+      fn: items => {
+        if (target.value === "")
+          return items;
+        else
+          return items.filter(x => {
+            if ((x.tipoVehiculo_id !== null ? String(x.tipoVehiculo_id).includes(target.value) : 0)
+              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
+              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+            ) {
+              return x;
+            }
+          });
+      }
+    })
+
+  }
+
+
+
+
+
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
@@ -40,8 +77,10 @@ export const ModalTipoVehiculo = (props) => {
 
   const txtFechaNaci = useRef();
   const txtDescripcion = useRef();
+  const [records, setRecords] = useState([]);
 
-
+ 
+  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
   const [values, setValues] = useState({
     ced: "",
@@ -97,8 +136,16 @@ export const ModalTipoVehiculo = (props) => {
     } else return false; //alert(e.which);
   };
 
+  const {
+    TblContainer,
+    TblHead,
+    recordsAfterPagingAndSorting,
+    TblPagination
+  } = useTable(records, headCells, filterFn);
+
 
   const salir = () => {
+    setRecords([])
     props.onHideCancela();
     setValues({
       ced: "",
@@ -123,6 +170,45 @@ export const ModalTipoVehiculo = (props) => {
   };
 
 
+  const actualizarTiposContratos = async (idvehicuko) => {
+    let endpoint;
+    let bodyF = new FormData()
+
+   
+    setActivate(true)
+
+    for (let i = 0 ; i < records.length; i++){
+
+      if(operacion === 1){
+        endpoint = op.conexion + "/tipo_vehiculo/precio";
+       
+      } 
+  
+      bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
+   
+  
+  
+      await fetch(endpoint, {
+        method: "POST",
+        body: bodyF
+      }).then(res => res.json())
+        .then(response => {
+  
+  
+          setActivate(false)
+          console.log(response)
+  
+        
+  
+  
+  
+        })
+        .catch(error =>
+          setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+        )
+    }
+
+  };
 
   const actualizarCertificado = async () => {
     let endpoint;
@@ -132,23 +218,12 @@ export const ModalTipoVehiculo = (props) => {
     setActivate(true)
 
     if(operacion === 1){
-      endpoint = op.conexion + "/tipo_vehiculo/registrar";
+      endpoint = op.conexion + "/tipo_vehiculo/registrarr";
      
-    } else if(operacion === 2){
-      endpoint = op.conexion + "/tipo_vehiculo/actualizar";
-      
-      bodyF.append("ID", props.idTipoVehiculo)
-    } else {
-      endpoint = op.conexion + "/tipo_vehiculo/eliminar";
-   
-      bodyF.append("ID", props.idTipoVehiculo)
-
-    }
+    } 
 
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
-    bodyF.append("precio", txtDolar.current.value.replace(/\./g, "").replace(",", "."))
-    bodyF.append("idContrato")
-
+ 
 
 
     await fetch(endpoint, {
@@ -160,6 +235,7 @@ export const ModalTipoVehiculo = (props) => {
 
         setActivate(false)
         console.log(response)
+        actualizarTiposContratos(response)
 
         setMensaje({
           mostrar: true,
@@ -168,7 +244,7 @@ export const ModalTipoVehiculo = (props) => {
           icono: "exito",
         });
 
-        props.render()
+       
 
 
 
@@ -335,6 +411,56 @@ export const ModalTipoVehiculo = (props) => {
 
   };
 
+  const agregarTipoContrato = (values) => {
+
+    console.log(values)
+
+    let sigue = true;
+  
+    for(let i = 0; i < records.length; i++){
+
+      if( records.length > 0 && values.contrato_id === records[i].contrato_id){
+    
+        setMensaje({ mostrar: true, titulo: "Notificación", texto:'El contrato ya esta agregado.', icono: "informacion" })
+        sigue = false
+        
+      }
+
+     
+
+    }
+    if(sigue){
+      records.push(values)
+
+    }
+   
+    setMostrar(false)
+    console.log(values)
+   
+  }
+  const gestinarTipo = ()  => {
+   
+    setMostrar(true)
+  }
+  const elimminarrTipo = (id) => (e) => {
+
+    e.preventDefault()
+
+    let array = []
+
+    for( let i = 0; i < records.length; i++){
+
+      if(id !== records[i].contrato_id){
+    
+        array.push(records[i])
+        
+      }
+
+    }
+    setRecords(array)
+
+  }
+
   return (
     <Modal
       {...props}
@@ -370,11 +496,11 @@ export const ModalTipoVehiculo = (props) => {
         <Dimmer active={activate} inverted>
           <Loader inverted>cargando...</Loader>
         </Dimmer>
-        <CatalogoClientes
+        <CatalogoTiposContratos
 
           show={mostrar}
           onHideCancela={() => { setMostrar(false) }}
-          onHideCatalogo={seleccionarCliente}
+          onHideCatalogo={agregarTipoContrato}
 
         />
 
@@ -395,14 +521,42 @@ export const ModalTipoVehiculo = (props) => {
 
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en $:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
+            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} onBlur={handleInputMontoChange} />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en Bs:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
+            <input type="text" disabled class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
           </div>
-
-
+<div className="row col-12 d-flex justify-content-between mb-2 mt-4">
+                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+         
+                <div className='col-3 d-flex justify-content-end'>
+                  <button onClick={gestinarTipo} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
+                </div>
+              </div>
+          <div className="col-md-12" style={{ margin: "auto",  }} >
+            
+           <TblContainer >
+             <TblHead />
+             <TableBody >
+               {
+                 records && recordsAfterPagingAndSorting().map((item, index) => (
+                   <TableRow key={index} style={{ padding: "0" }}>
+                     <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.contrato_id}</TableCell>
+                     <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: '270px' }}>{item.contrato_nombre}</TableCell>
+                                      
+                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
+                   {// <button  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fas fa-backward"></i> </button>
+                  }  <button  className="btn btn-sm mx-1 btn-danger rounded-circle" onClick={elimminarrTipo(item.contrato_id)}><i className="fa fa-trash"></i> </button>
+                  </TableCell>
+                  
+                  </TableRow>
+                 ))
+               }
+             </TableBody>
+           </TblContainer>
+           <TblPagination />
+         </div>
 
         </div>
       </Modal.Body>
