@@ -20,7 +20,7 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 	}
 
 	public function precio(){
-		$resultado = $this->precio();
+		$resultado = $this->savePrecio();
 		Response($resultado["data"], $resultado["code"]);
 	}
 

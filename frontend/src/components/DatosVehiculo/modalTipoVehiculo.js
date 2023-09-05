@@ -184,8 +184,9 @@ export const ModalTipoVehiculo = (props) => {
        
       } 
   
-      bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
-   
+      bodyF.append("ID")
+      bodyF.append("precio")
+      bodyF.append("idContrato")
   
   
       await fetch(endpoint, {
