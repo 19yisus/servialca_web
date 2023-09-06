@@ -19,8 +19,9 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 		Response($resultado["data"], $resultado["code"]);
 	}
 
-	public function precio(){
-		$resultado = $this->precio();
+	public function precio()
+	{
+		$resultado = $this->savePrecio();
 		Response($resultado["data"], $resultado["code"]);
 	}
 
@@ -45,6 +46,12 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 	public function ConsultarTodos()
 	{
 		$resultado = $this->GetAll();
+		Response($resultado, 200);
+	}
+
+	public function ConsultarTipoVehiculo()
+	{
+		$resultado = $this->SearchByID($_GET["ID"]);
 		Response($resultado, 200);
 	}
 }
