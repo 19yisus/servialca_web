@@ -162,7 +162,10 @@ abstract class cls_tipo_vehiculo extends cls_db
 
   protected function GetAll()
   {
-    $sql = $this->db->prepare("SELECT * FROM tipovehiculo ORDER BY tipoVehiculo_id DESC");
+    $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*  FROM precio 
+    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = tipoVehiculo_id
+    INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
+    ");
     if ($sql->execute())
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     else
@@ -205,6 +208,19 @@ abstract class cls_tipo_vehiculo extends cls_db
       ];
     }
 
+  }
+
+  protected function SearchByID($id){
+    
+    $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*  FROM precio 
+    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = tipoVehiculo_id
+    INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
+    WHERE tipoVehiculo_id = ?");
+    if ($sql->execute([$id]))
+      $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
+    return $resultado;
   }
 
 }

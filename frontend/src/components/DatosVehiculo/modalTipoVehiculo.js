@@ -27,8 +27,8 @@ export const ModalTipoVehiculo = (props) => {
   const headCells = [
     { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Codigo', textAlign: 'center' },
     { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Descripción', textAlign: 'center' },
-     { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Opcion', textAlign: 'center' },
-   
+    { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Opcion', textAlign: 'center' },
+
   ]
 
   const handleSearch = e => {
@@ -79,7 +79,7 @@ export const ModalTipoVehiculo = (props) => {
   const txtDescripcion = useRef();
   const [records, setRecords] = useState([]);
 
- 
+
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
   const [values, setValues] = useState({
@@ -97,7 +97,7 @@ export const ModalTipoVehiculo = (props) => {
     nacionalidad: "V",
     direccion: "",
     telefono: "",
-   
+
   });
 
   const btnCancela = useRef();
@@ -170,61 +170,66 @@ export const ModalTipoVehiculo = (props) => {
   };
 
 
-  const actualizarTiposContratos = async (idvehicuko) => {
+  const actualizarTiposContratos = async (id) => {
     let endpoint;
     let bodyF = new FormData()
 
-   
+
     setActivate(true)
 
-    for (let i = 0 ; i < records.length; i++){
+    for (let i = 0; i < records.length; i++) {
 
-      if(operacion === 1){
+      if (operacion === 1) {
         endpoint = op.conexion + "/tipo_vehiculo/precio";
-       
-      } 
-  
-      bodyF.append("ID")
-      bodyF.append("precio")
-      bodyF.append("idContrato")
-  
-  
+
+      }
+
+      bodyF.append("ID", id)
+      bodyF.append("precio", txtDolar.current.value)
+      bodyF.append("idContrato", records[i].contrato_id)
+
+
       await fetch(endpoint, {
         method: "POST",
         body: bodyF
       }).then(res => res.json())
         .then(response => {
-  
-  
+
+
           setActivate(false)
           console.log(response)
-  
-        
-  
-  
-  
+
+
+
+
+
         })
         .catch(error =>
           setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
         )
     }
-
+    setMensaje({
+      mostrar: true,
+      titulo: "Exito.",
+      texto: "peracion Exitosa",
+      icono: "exito",
+    });
   };
 
   const actualizarCertificado = async () => {
     let endpoint;
     let bodyF = new FormData()
 
-   
+
     setActivate(true)
 
-    if(operacion === 1){
+    if (operacion === 1) {
       endpoint = op.conexion + "/tipo_vehiculo/registrar";
-     
-    } 
+
+    }
 
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
- 
+
 
 
     await fetch(endpoint, {
@@ -236,16 +241,11 @@ export const ModalTipoVehiculo = (props) => {
 
         setActivate(false)
         console.log(response)
-        actualizarTiposContratos(response)
+        actualizarTiposContratos(response.id)
 
-        setMensaje({
-          mostrar: true,
-          titulo: "Exito.",
-          texto: "peracion Exitosa",
-          icono: "exito",
-        });
 
-       
+
+
 
 
 
@@ -339,10 +339,10 @@ export const ModalTipoVehiculo = (props) => {
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
-      if(event.target.name === 'dolar'){
+      if (event.target.name === 'dolar') {
         let bs = parseFloat(dolarbcv)
         let total = parseFloat(event.target.value) * bs
-        txtBs.current.value =  formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+        txtBs.current.value = formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
       }
       if (
         event.target.value === "" ||
@@ -371,7 +371,7 @@ export const ModalTipoVehiculo = (props) => {
   };
 
   const selecionarTipo = async (id) => {
-    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarUno?ID="+id;
+    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarUno?ID=" + id;
     console.log(endpoint)
     setActivate(true)
 
@@ -381,7 +381,7 @@ export const ModalTipoVehiculo = (props) => {
 
     let bodyF = new FormData()
 
-   // bodyF.append("Nombre", txtDescripcion.current.value)
+    // bodyF.append("Nombre", txtDescripcion.current.value)
 
     await fetch(endpoint, {
       method: "POST",
@@ -393,20 +393,20 @@ export const ModalTipoVehiculo = (props) => {
         setActivate(false)
         console.log(response)
 
-        let $ =  response.tipoVehiculo_precio ? parseFloat(response.tipoVehiculo_precio) : 0;
+        let $ = response.tipoVehiculo_precio ? parseFloat(response.tipoVehiculo_precio) : 0;
         let bs = parseFloat(dolarbcv);
         let totalbs = $ * bs;
 
-       txtDescripcion.current.value = response.tipoVehiculo_nombre;
-       txtDolar.current.value = response.tipoVehiculo_precio ? formatMoneda(response.tipoVehiculo_precio.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00';
-       txtBs.current.value =  formatMoneda(totalbs.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-       setValues(response);
+        txtDescripcion.current.value = response.tipoVehiculo_nombre;
+        txtDolar.current.value = response.tipoVehiculo_precio ? formatMoneda(response.tipoVehiculo_precio.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00';
+        txtBs.current.value = formatMoneda(totalbs.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+        setValues(response);
 
 
 
       })
       .catch(error =>
-     
+
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
       )
 
@@ -417,30 +417,30 @@ export const ModalTipoVehiculo = (props) => {
     console.log(values)
 
     let sigue = true;
-  
-    for(let i = 0; i < records.length; i++){
 
-      if( records.length > 0 && values.contrato_id === records[i].contrato_id){
-    
-        setMensaje({ mostrar: true, titulo: "Notificación", texto:'El contrato ya esta agregado.', icono: "informacion" })
+    for (let i = 0; i < records.length; i++) {
+
+      if (records.length > 0 && values.contrato_id === records[i].contrato_id) {
+
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: 'El contrato ya esta agregado.', icono: "informacion" })
         sigue = false
-        
+
       }
 
-     
+
 
     }
-    if(sigue){
+    if (sigue) {
       records.push(values)
 
     }
-   
+
     setMostrar(false)
     console.log(values)
-   
+
   }
-  const gestinarTipo = ()  => {
-   
+  const gestinarTipo = () => {
+
     setMostrar(true)
   }
   const elimminarrTipo = (id) => (e) => {
@@ -449,12 +449,12 @@ export const ModalTipoVehiculo = (props) => {
 
     let array = []
 
-    for( let i = 0; i < records.length; i++){
+    for (let i = 0; i < records.length; i++) {
 
-      if(id !== records[i].contrato_id){
-    
+      if (id !== records[i].contrato_id) {
+
         array.push(records[i])
-        
+
       }
 
     }
@@ -476,7 +476,7 @@ export const ModalTipoVehiculo = (props) => {
 
         if (props.operacion !== 1) {
           selecionarTipo(props.idTipoVehiculo)
-          
+
         }
       }}
     >
@@ -528,36 +528,36 @@ export const ModalTipoVehiculo = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en Bs:</span>
             <input type="text" disabled class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
           </div>
-<div className="row col-12 d-flex justify-content-between mb-2 mt-4">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestinarTipo} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
-              </div>
-          <div className="col-md-12" style={{ margin: "auto",  }} >
-            
-           <TblContainer >
-             <TblHead />
-             <TableBody >
-               {
-                 records && recordsAfterPagingAndSorting().map((item, index) => (
-                   <TableRow key={index} style={{ padding: "0" }}>
-                     <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.contrato_id}</TableCell>
-                     <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: '270px' }}>{item.contrato_nombre}</TableCell>
-                                      
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
-                   {// <button  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fas fa-backward"></i> </button>
-                  }  <button  className="btn btn-sm mx-1 btn-danger rounded-circle" onClick={elimminarrTipo(item.contrato_id)}><i className="fa fa-trash"></i> </button>
-                  </TableCell>
-                  
-                  </TableRow>
-                 ))
-               }
-             </TableBody>
-           </TblContainer>
-           <TblPagination />
-         </div>
+          <div className="row col-12 d-flex justify-content-between mb-2 mt-4">
+            <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+
+            <div className='col-3 d-flex justify-content-end'>
+              <button onClick={gestinarTipo} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
+            </div>
+          </div>
+          <div className="col-md-12" style={{ margin: "auto", }} >
+
+            <TblContainer >
+              <TblHead />
+              <TableBody >
+                {
+                  records && recordsAfterPagingAndSorting().map((item, index) => (
+                    <TableRow key={index} style={{ padding: "0" }}>
+                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.contrato_id}</TableCell>
+                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: '270px' }}>{item.contrato_nombre}</TableCell>
+
+                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
+                        {// <button  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fas fa-backward"></i> </button>
+                        }  <button className="btn btn-sm mx-1 btn-danger rounded-circle" onClick={elimminarrTipo(item.contrato_id)}><i className="fa fa-trash"></i> </button>
+                      </TableCell>
+
+                    </TableRow>
+                  ))
+                }
+              </TableBody>
+            </TblContainer>
+            <TblPagination />
+          </div>
 
         </div>
       </Modal.Body>
