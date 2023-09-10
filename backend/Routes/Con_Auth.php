@@ -88,4 +88,30 @@ class Con_Auth extends cls_Auth
     $resultado = $this->GetAll();
     Response($resultado, 200);
   }
+  // falta el como se confirmaran las respuestas de seguridad 
+
+  // preguntas y respuestas de seguridad
+  public function registrar_respuestas()
+  {
+    $resultado = $this->Save_respuestas();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function actualizar_respuestas()
+  {
+    $resultado = $this->Update_respuestas();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function get_preguntas()
+  {
+    $resultado = $this->getPreguntas();
+    Response($resultado['data'], $resultado['code']);
+  }
+
+  public function get_preguntas_from_user()
+  {
+    $resultado = $this->getPreguntasFromUser();
+    Response($resultado['data'], $resultado['code']);
+  }
 }
