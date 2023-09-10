@@ -76,6 +76,8 @@ function Inicio2() {
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
   const [mostrar3, setMostrar3] = useState(false);
+  const [mostrar4, setMostrar4] = useState(false);
+
   const [idCliente, setIdCliente] = useState();
 
 
@@ -220,8 +222,10 @@ function Inicio2() {
     if (opcion === 1) {
       setMostrar(true)
 
-    } else {
+    } else if (opcion === 2){
       setMostrar2(true)
+    } else{
+      setMostrar4(true)
     }
 
   }
@@ -270,7 +274,9 @@ function Inicio2() {
         <div className="row col-12 d-flex justify-content-between mb-2">
           <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
 
-          <div className='col-4 d-flex justify-content-end'>
+          <div className='col-6 d-flex justify-content-end'>
+          <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(3)}><i class="fa fa-plus"></i> Licencia</button>
+
             <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(1)}><i class="fa fa-plus"></i> Certificado Medico</button>
             <button type="button" class="btn btn-primary btn-sm mx-1" onClick={gestionarRcv(2)}><i class="fa fa-plus"></i> Crear RCV</button>
 
