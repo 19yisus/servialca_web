@@ -163,8 +163,8 @@ abstract class cls_tipo_vehiculo extends cls_db
   protected function GetAll()
   {
     $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*  FROM precio 
-    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = tipoVehiculo_id
-    INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
+    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
+    INNER JOIN tipocontrato on tipocontrato.contrato_id = precio.tipoContrato_id
     ");
     if ($sql->execute())
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

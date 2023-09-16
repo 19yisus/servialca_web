@@ -17,7 +17,11 @@ import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
 
+<<<<<<< HEAD
+export const ModalCertificadoMedico = (props) => {
+=======
 export const ModalLicencia = (props) => {
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
@@ -28,6 +32,20 @@ export const ModalLicencia = (props) => {
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
   const txtCedula = useRef();
+<<<<<<< HEAD
+  const cmbLentes = useRef();
+  const cmbPago = useRef();
+  const cmbNacionalidad = useRef();
+
+  const txtDatosPastor = useRef();
+  const txtReferencia = useRef()
+  const txtBs = useRef();
+  const txtDolar = useRef();
+
+  const txtFechaNaci = useRef();
+  const txtApellido = useRef();
+  const [edad, setEdad] = useState('');
+=======
   const cmbTipoLicencia = useRef();
   const cmbPago = useRef();
   const cmbNacionalidad = useRef();
@@ -49,6 +67,7 @@ const check4 = useRef();
 
 
 
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
 
 
   const [values, setValues] = useState({
@@ -149,10 +168,17 @@ const check4 = useRef();
     bodyF.append("Nombre", cmbNacionalidad.current.value + txtNombre.current.value)
     bodyF.append("Apellido", txtApellido.current.value)
     bodyF.append("Cedula", txtCedula.current.value)
+<<<<<<< HEAD
+    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
+    bodyF.append("Edad", txtEdad.current.value)
+    bodyF.append("tipoSangre", txtTipoSangre.current.value)
+    bodyF.append("Lente", cmbLentes.current.value)
+=======
     bodyF.append("fechaNacimiento", txtCorreo.current.value)
     bodyF.append("Edad", txtEdad.current.value)
     bodyF.append("tipoSangre", txtTipoSangre.current.value)
     bodyF.append("Lente", cmbTipoLicencia.current.value)
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
     bodyF.append("metodoPago", cmbPago.current.value)
     bodyF.append("Referencia", txtReferencia.current.value)
     bodyF.append("cantidadDolar", txtDolar.current.value)
@@ -239,13 +265,21 @@ const check4 = useRef();
 
 
 
+<<<<<<< HEAD
+  const check = (e) => {
+=======
 
   /*const check = (e) => {
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
       regex = /[a-z]/ig;
     if (!regex.test(char)) e.preventDefault(); return false;
+<<<<<<< HEAD
+  }
+=======
   }*/
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
   const seleccionarCliente = (nombre, apellido, cedula) => {
 
     console.log(nombre, apellido, cedula)
@@ -266,6 +300,25 @@ const check4 = useRef();
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
   }
+<<<<<<< HEAD
+  function calcularEdad() {
+    const fechaNacimiento = new Date(txtFechaNaci.current.value);
+    fechaNacimiento.setHours(0, 0, 0, 0);
+
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
+
+    const diferenciaDias = Math.floor((fechaActual - fechaNacimiento) / (1000 * 60 * 60 * 24));
+    const edadCalculada = Math.floor(diferenciaDias / 365.25);
+
+    // Actualizar el estado de la variable 'edad' con el valor calculado
+    setEdad(edadCalculada);
+
+  }
+
+
+=======
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
 
   const handleInputMontoChange = (event) => {
     validaMonto(event);
@@ -316,7 +369,11 @@ const check4 = useRef();
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
+<<<<<<< HEAD
+          Registrar Certificado Medico
+=======
           Registrar Licencia
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -370,6 +427,19 @@ const check4 = useRef();
             <input type="text" class="form-control" ref={txtApellido} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
+<<<<<<< HEAD
+            <span class="input-group-text" id="inputGroup-sizing-sm">Fecha de Nacimiento:</span>
+            <input type="date" class="form-control" onChange={calcularEdad} ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+          </div>
+          <div class="input-group input-group-sm mb-3 col-md-2">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Edad:</span>
+            <input type="text" value={edad} class="form-control text-right" maxLength={2} ref={txtEdad} onChange={handleInputNumChange} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+          </div>
+          <div class="input-group input-group-sm mb-3 col-md-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de Sangre:</span>
+            <input type="text" class="form-control" ref={txtTipoSangre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+          </div>
+=======
             <span class="input-group-text" id="inputGroup-sizing-sm">Correo:</span>
             <input type="text" class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
@@ -433,6 +503,7 @@ const check4 = useRef();
               </label>
             </div>
           </div>
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Usa lentes:</span>
             <select class="form-select" ref={cmbLentes} aria-label="Default select example">
@@ -442,7 +513,10 @@ const check4 = useRef();
 
             </select>
           </div>
+<<<<<<< HEAD
+=======
          
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago:</span>
             <select class="form-select" ref={cmbPago} aria-label="Default select example">
@@ -455,12 +529,23 @@ const check4 = useRef();
 
             </select>
           </div>
+<<<<<<< HEAD
+=======
           <div class="col-md-5"></div>
 
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Referencia:</span>
             <input type="text" class="form-control" ref={txtReferencia} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
+<<<<<<< HEAD
+          <div class="input-group input-group-sm mb-3 col-md-5">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad:</span>
+            <input type="text" class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Bolivares" onChange={handleInputMontoChange} />
+            <input type="text" class="form-control text-right" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Dolares" onChange={handleInputMontoChange} />
+          </div>
+
+=======
           <div class="col-md-6"></div>
           <div class="input-group input-group-sm mb-3 col-md-2">
             <span class="input-group-text" id="inputGroup-sizing-sm">Total:</span>
@@ -478,6 +563,7 @@ const check4 = useRef();
           </div>
 
           
+>>>>>>> 1ad0a02783bba7d4c187225e55d6c089084d3bd0
 
         </div>
       </Modal.Body>
