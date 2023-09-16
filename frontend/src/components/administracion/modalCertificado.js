@@ -39,7 +39,7 @@ export const ModalCertificadoMedico = (props) => {
 
   const txtFechaNaci = useRef();
   const txtApellido = useRef();
-
+  const [edad, setEdad] = useState('');
 
 
   const [values, setValues] = useState({
@@ -137,7 +137,7 @@ export const ModalCertificadoMedico = (props) => {
 
     let bodyF = new FormData()
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
+    bodyF.append("Nombre", cmbNacionalidad.current.value + txtNombre.current.value)
     bodyF.append("Apellido", txtApellido.current.value)
     bodyF.append("Cedula", txtCedula.current.value)
     bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
@@ -230,7 +230,6 @@ export const ModalCertificadoMedico = (props) => {
 
 
 
-
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
@@ -257,6 +256,22 @@ export const ModalCertificadoMedico = (props) => {
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
   }
+  function calcularEdad() {
+    const fechaNacimiento = new Date(txtFechaNaci.current.value);
+    fechaNacimiento.setHours(0, 0, 0, 0);
+
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
+
+    const diferenciaDias = Math.floor((fechaActual - fechaNacimiento) / (1000 * 60 * 60 * 24));
+    const edadCalculada = Math.floor(diferenciaDias / 365.25);
+
+    // Actualizar el estado de la variable 'edad' con el valor calculado
+    setEdad(edadCalculada);
+
+  }
+
+
 
   const handleInputMontoChange = (event) => {
     validaMonto(event);
@@ -340,7 +355,7 @@ export const ModalCertificadoMedico = (props) => {
         <div className="col-md-12 row mx-auto">
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-             <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
+            <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
 
               <option value="V-">V-</option>
               <option value="E-">E-</option>
@@ -362,11 +377,11 @@ export const ModalCertificadoMedico = (props) => {
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Fecha de Nacimiento:</span>
-            <input type="date" class="form-control" ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="date" class="form-control" onChange={calcularEdad} ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-2">
             <span class="input-group-text" id="inputGroup-sizing-sm">Edad:</span>
-            <input type="text" class="form-control text-right" maxLength={2} ref={txtEdad} onChange={handleInputNumChange} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text" value={edad} class="form-control text-right" maxLength={2} ref={txtEdad} onChange={handleInputNumChange} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de Sangre:</span>

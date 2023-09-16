@@ -5,16 +5,12 @@
 * pregunta de seguridad de los usuarios
 * recuperacion de contraseña por preguntas de seg
 * recuperación de contraseña por correo 
-* cada asesor pueda modificar la lista de precios de su propia sucursal 
 * Contratos a creditos
-* Seguridad (que no deje escribir datos que no son)
 * buscador en select 
 * en la parte de gastos personales que salga el monto total de lo que se a echo en el mes 
-* poner id(de certificado o de rcv) en ingreso y egreso 
 * que las fecha de desde de las graficas no puedan ser menores que la del hasta 
 * alerta en los reporte de que no alla datos para que no mande a un reporte vacio 
 * Revisar la tabla de debito credito
-* Revisar lo de los saltos en el registro de poliza
 * Editar de permisos y de rol por parte del administrador a los usuarios
 * Revisar los parametros de fecha de las graficas y los reportes
 
