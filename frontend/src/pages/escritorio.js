@@ -25,6 +25,8 @@ import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
 import TablaReportes from "../components/reportes/resportes";
+import TablaMorosos from "../components/administracion/tablaMorosos";
+import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 
 
 function MenuImpuestoPP(props) {
@@ -259,6 +261,11 @@ function MenuImpuestoPP(props) {
                               <span>Tipos de Contratos</span>
                             </a>
                           }
+                            {permisos.includes("tipocontratos") &&
+                            <a href="/morosos" className="list-group-item list-group-item-action py-2 ripple">
+                              <span>Listado de Morosos</span>
+                            </a>
+                          }
                         </div>
                       </div>
                     </div>
@@ -297,6 +304,11 @@ function MenuImpuestoPP(props) {
                         {permisos.includes("tipovehiculo") &&
                           <a href="/tipovehiculo" className="list-group-item list-group-item-action py-2 ripple">
                             <span>Tipos de Vehiculos</span>
+                          </a>
+                        }
+                         {permisos.includes("tipovehiculo") &&
+                          <a href="/tipovehiculobocono" className="list-group-item list-group-item-action py-2 ripple">
+                            <span>Tipos de Vehiculos Bocono</span>
                           </a>
                         }
                         {permisos.includes("lineatransporte") &&
@@ -416,7 +428,11 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/cumpleañeros" component={TablaClumpeañeros} />
               <AuthRoute exact path="/graficasingegre" component={GraficosIngresos} />
               <AuthRoute exact path="/tipovehiculo" component={TablaTipoVehiculo} />
+              <AuthRoute exact path="/tipovehiculobocono" component={TablaTipoVehiculoBocono} />
+
               <AuthRoute exact path="/reportes" component={TablaReportes} />
+              <AuthRoute exact path="/morosos" component={TablaMorosos} />
+
 
               
               

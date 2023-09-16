@@ -25,6 +25,7 @@ import { GestionarPreguntas } from "../components/componentesIglesia/configuraci
 import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
 import { ModalRcv } from "../components/administracion/modalRcv";
 import { ModalImprimir } from "../components/administracion/modalImprimir";
+import { ModalLicencia } from "../components/administracion/modalLicencia";
 function Inicio2() {
   var op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");
@@ -218,6 +219,7 @@ function Inicio2() {
   }
   const gestionarRcv = (opcion) => (e) => {
     e.preventDefault()
+    console.log(opcion)
 
     if (opcion === 1) {
       setMostrar(true)
@@ -261,6 +263,13 @@ function Inicio2() {
         idCliente={idCliente}
 
       />
+
+      <ModalLicencia 
+       show={mostrar4}
+       onHideCancela={() => { setMostrar4(false) }}
+       idCliente={idCliente}
+
+     />
 
 
       <div className="col-12 py-2">
