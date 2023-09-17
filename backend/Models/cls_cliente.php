@@ -25,7 +25,20 @@ abstract class cls_cliente extends cls_db
         return $resultado;
     }
 
-   
+    protected function GetAll()
+    {
+        $sql = $this->db->prepare("SELECT * FROM cliente WHERE 
+        cliente_nombre IS NOT NULL
+        AND cliente_apellido IS NOT NULL
+        AND cliente_cedula IS NOT NULL");
+        if ($sql->execute()) {
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $resultado = [];
+        }
+        return $resultado;
+    }
+
 }
 
 

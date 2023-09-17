@@ -12,4 +12,9 @@ class Con_cliente extends cls_cliente
         $resultado = $this->cumpleañero();
         Response($resultado, 200);
     }
+
+    public function ConsultarTodos(){
+        $resultado = $this->GetAll();
+        Response($resultado,200);
+    }
 }
