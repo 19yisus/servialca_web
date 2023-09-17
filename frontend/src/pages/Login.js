@@ -4,7 +4,6 @@ import { useForm } from "../util/hooks";
 import axios from "axios";
 import { MensajeAlert, MensajeMinimal } from "../components/Alerta";
 import { Loader, Dimmer, Label } from "semantic-ui-react";
-
 import { GestionarClave } from "../components/componentesIglesia/configuracion/cambiarClavePersonal";
 import md5 from "md5";
 import { Mensaje } from '../components/mensajes'
@@ -205,13 +204,13 @@ function Login(props) {
         }}
       />
 
-      <div>
+     {/*} <div>
         <nav
           className="navbar navbar-expand-lg navbar-dark d-none d-lg-block"
           style={{ zIndex: 2000 }}
         >
           <div className="container-fluid d-flex justify-content-between">
-            {/* Navbar brand */}
+            
             <a
               className="navbar-brand nav-link"
               target="_blank"
@@ -290,7 +289,7 @@ function Login(props) {
                 <div className="col-xl-5 col-md-5 px-5">
                   <form
                     className="bg-white  rounded-3 shadow-5-strong py-4 px-5 rounded"
-                    onSubmit={onSubmit}
+                   
                   >
                     <div className="h-100 d-flex justify-content-center m-2">
                       <div
@@ -298,9 +297,7 @@ function Login(props) {
                         style={{ height: 120, width: 120, margin: "auto" }}
                       ></div>
                     </div>
-                    <Dimmer active={loading} inverted>
-                      <Loader inverted>cargando...</Loader>
-                    </Dimmer>
+                   >
 
 
 
@@ -308,13 +305,9 @@ function Login(props) {
                       <label class="form-label">Usuario</label>
                       <input
                         type="text"
-                        autoComplete="off"
+                        
                         className="form-control form-control-sm"
-                        required
-
-                        name="username"
-                        value={values.username}
-                        onChange={onChange}
+                       
                       />
                     </div>
 
@@ -323,14 +316,9 @@ function Login(props) {
                       <input
                         ref={txtPassword}
                         type="password"
-                        autoComplete="off"
+                       
                         className="form-control form-control-sm"
-                        required
-
-                        name="password"
-                        value={values.password}
-                        onChange={onChange}
-                        maxLength={10}
+                       
                       />
 
                     </div>
@@ -360,7 +348,7 @@ function Login(props) {
           </div>
         </div>
         <footer className="bg-light text-lg-start">
-          {/* Copyright */}
+        
           <div
             className="text-center p-3"
             style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
@@ -370,9 +358,78 @@ function Login(props) {
               Servialca
             </a>
           </div>
-          {/* Copyright */}
+        
         </footer>
+      </div>*/}
+      <div class="container-fluid ps-md-0">
+      <Dimmer active={loading} inverted>
+                      <Loader inverted>cargando...</Loader>
+                    </Dimmer>
+  <div class="row g-0">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
+
+
+    <video controls>
+        <source src="./servialca.mp4" width="100%" height="100%" loop autoplay controls type="video/mp4" />
+        Tu navegador no soporta la reproducción de video.
+      </video>
+
+    </div>
+    <div class="col-md-8 col-lg-6">
+   
+      <div class="login d-flex align-items-center ">
+        
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              
+            
+                      <div
+                        className=" img-fluid mx-auto logo-login"
+                        style={{ height: 120, width: 280}}
+                      ></div>
+                    
+                   
+              <h3 class="login-heading text-center fw-bold mb-4"> Sistema de Servial C.A</h3>
+
+            
+              <form  onSubmit={onSubmit}>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control"  required
+autoComplete="off"
+                        name="username"
+                        value={values.username}
+                        onChange={onChange}/>
+                  <label for="floatingInput">Usuario</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control"  required
+ autoComplete="off"
+                        name="password"
+                        value={values.password}
+                        onChange={onChange}
+                        maxLength={10}/>
+                  <label for="floatingPassword">Contraseña</label>
+                </div>
+
+                
+
+                <div class="d-grid">
+                  <button class="btn rounded-pill btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
+                  <div class="text-center">
+                    <a class="small" href="#">Forgot password?</a>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 }
