@@ -17,7 +17,7 @@ import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
 
-export const ModalCertificadoMedico = (props) => {
+export const ModalLicencia = (props) => {
   /*  variables de estados */
 
   let op = require("../../modulos/datos");

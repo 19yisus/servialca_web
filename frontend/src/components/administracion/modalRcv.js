@@ -612,6 +612,15 @@ export const ModalRcv = (props) => {
 
   }
 
+  const validarTitular = (e) => {
+    if (e.target.value === txtCedula.current.value) {
+      console.log('hola')
+      txtNombreTitular.current.value = txtNombre.current.value
+      txtApellidoTitular.current.value = txtApellido.current.value
+
+    }
+  }
+
   function soloLetras(event) {
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
@@ -793,7 +802,7 @@ export const ModalRcv = (props) => {
                 <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos del contratante</legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
+                  <select class="form-select col-md-3" ref={cmbNacionalidad}  aria-label="Default select example">
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
