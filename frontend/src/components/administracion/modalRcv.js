@@ -115,7 +115,7 @@ export const ModalRcv = (props) => {
 
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
-  const[idContrato,setIdContrato] = useState()
+  const [idContrato, setIdContrato] = useState()
   const [operacion, setOperacion] = useState(0);
 
 
@@ -585,8 +585,9 @@ export const ModalRcv = (props) => {
       tiposangre: "",
     });
   };
-
-
+  // Para poder la fecha en rcv
+  const fechaSistema = moment();
+  const fechaHasta = fechaSistema.clone().add(1, 'year');
 
 
   const check = (e) => {
@@ -644,6 +645,8 @@ export const ModalRcv = (props) => {
       return true;
     } else return false;
   };
+
+
 
   return (
     <Modal
@@ -760,13 +763,29 @@ export const ModalRcv = (props) => {
               <div class="col-md-3">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Desde</span>
-                  <input type="date" class="form-control" ref={txtDesde} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" defaultValue={moment(fechasistema).format('YYYY/MM/DD')} max={moment(fechasistema).format('YYYY/MM/DD')} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    ref={txtDesde}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    defaultValue={fechaSistema.format('YYYY-MM-DD')}
+                    max={fechaSistema.format('YYYY-MM-DD')}
+                  />
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Hasta</span>
-                  <input type="date" class="form-control" ref={txtHasta} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" defaultValue={moment(fechasistema).format('YYYY/MM/DD')} max={moment(fechasistema).format('YYYY/MM/DD')} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    ref={txtHasta}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    defaultValue={fechaHasta.format('YYYY-MM-DD')}
+                    max={fechaHasta.format('YYYY-MM-DD')}
+                  />
                 </div>
               </div>
 
@@ -774,13 +793,11 @@ export const ModalRcv = (props) => {
                 <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos del contratante</legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
-
+                  <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
                     <option value="G-">G-</option>
-
                   </select>
                   <input type="text" class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                   <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
@@ -807,19 +824,15 @@ export const ModalRcv = (props) => {
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <div class="input-group input-group-sm mb-2">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Telefono</span>
-                    <select class="form-select col-md-1" ref={cmbTelefono} aria-label="Default select example">
-
+                    <select class="form-select col-md-4" ref={cmbTelefono} aria-label="Default select example">
                       <option value="0414-">0414</option>
                       <option value="0424-">0424</option>
                       <option value="0416-">0416</option>
                       <option value="0426-">0426</option>
                       <option value="0412-">0412</option>
-
-
-
                     </select>
                     <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
                   </div>
@@ -886,13 +899,11 @@ export const ModalRcv = (props) => {
                 <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Titular</legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select" ref={cmbNacionalidadTitular} aria-label="Default select example">
-
+                  <select class="form-select col-md-3" ref={cmbNacionalidadTitular} aria-label="Default select example">
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
                     <option value="G-">G-</option>
-
                   </select>
                   <input type="text" class="form-control" ref={txtCedulatTitular} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                   <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
@@ -1035,11 +1046,6 @@ export const ModalRcv = (props) => {
                   <input type="text" class="form-control" ref={txtCapTon} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                 </div>
               </div>
-
-
-
-
-
             </div>
           </div>
           <div class="tab-pane fade" id="ex1-tabs-3"
