@@ -1047,7 +1047,7 @@ cursor: default;
 }
 
 .logo-login{
-  background-image: url('./imagenes/logo2.png');
+  background-image: url('./imagenes/logo.png');
   background-size: 100% 100%;
 }
 
@@ -1383,4 +1383,24 @@ opacity: 1;
 display: block;
 -webkit-transform: translate3d(-100px,0,0);
 -webkit-transition: all .35s ease-in-out;
+}
+
+.login {
+  min-height: 100vh;
+}
+
+.bg-image {
+ /* background-image: url('https://source.unsplash.com/WEQbe2jBg40/600x1200');*/
+  background-size: cover;
+  background-position: center;
+}
+
+.login-heading {
+  font-weight: 300;
+}
+
+.btn-login {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
 }
