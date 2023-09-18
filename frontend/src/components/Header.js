@@ -36,7 +36,7 @@ function Header(props) {
           style={{ height: "50px", width: "180px" }}
           type="button"
         >
-          <i class="fas fa-bars fa-2x"></i>
+          <i className="fas fa-bars fa-2x" style={{ marginTop: "10px", marginLeft: "10px" }}></i>
         </a>
       </div>
 

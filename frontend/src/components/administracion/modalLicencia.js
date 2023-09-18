@@ -41,11 +41,11 @@ export const ModalLicencia = (props) => {
   const txtAbono = useRef();
   const txtCorreo = useRef();
   const txtApellido = useRef();
-const txtRestante = useRef();
-const check1 = useRef();
-const check2 = useRef();
-const check3 = useRef();
-const check4 = useRef();
+  const txtRestante = useRef();
+  const check1 = useRef();
+  const check2 = useRef();
+  const check3 = useRef();
+  const check4 = useRef();
 
 
 
@@ -262,6 +262,30 @@ const check4 = useRef();
 
   }
 
+  const actualizarValores = (tipoLicenciaValue, abonoValue) => {
+    let totalValue = 0;
+    let restanteValue = 0;
+
+    if (tipoLicenciaValue === '0' || tipoLicenciaValue === '1') {
+      totalValue = 20.00;
+    } else if (tipoLicenciaValue === '2' || tipoLicenciaValue === '3') {
+      totalValue = 25.00;
+    }
+
+    restanteValue = (totalValue - abonoValue).toFixed(2);
+    console.log("Abono Value:", abonoValue);
+    txtTotal.current.value = totalValue.toFixed(2);
+    txtRestante.current.value = restanteValue;
+  };
+
+  const handleTipoLicenciaChange = () => {
+    const selectedValue = cmbTipoLicencia.current.value;
+    const abonoValue = parseFloat(txtAbono.current.value) || 0; // Convertir a número o 0 si no es un número
+
+    actualizarValores(selectedValue, abonoValue);
+  };
+
+
   function soloLetras(event) {
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
@@ -347,9 +371,9 @@ const check4 = useRef();
           }} />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-            <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
+            <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
 
               <option value="V-">V-</option>
               <option value="E-">E-</option>
@@ -373,9 +397,9 @@ const check4 = useRef();
             <span class="input-group-text" id="inputGroup-sizing-sm">Correo:</span>
             <input type="text" class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">Telefono</span>
-            <select class="form-select col-md-4" ref={cmbTelefono} aria-label="Default select example">
+            <select class="form-select col-md-3" ref={cmbTelefono} aria-label="Default select example">
 
               <option value="0414-">0414</option>
               <option value="0424-">0424</option>
@@ -388,46 +412,41 @@ const check4 = useRef();
             </select>
             <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de Sangre:</span>
             <input type="text" class="form-control" ref={txtTipoSangre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Tipo De Licencia:</span>
-            <select class="form-select" ref={cmbTipoLicencia} aria-label="Default select example">
+            <select class="form-select" ref={cmbTipoLicencia} aria-label="Default select example" onChange={handleTipoLicenciaChange}>
               <option value=" ">Seleccionar</option>
-
               <option value="0">Licencia de 2da</option>
               <option value="1">Licencia de 3da</option>
               <option value="2">Licencia de 4da</option>
-              <option value="0">Licencia de 5da</option>
-
-
-
-
+              <option value="3">Licencia de 5da</option>
             </select>
           </div>
           <div className="col-md-4 mx-auto row">
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check1} type="checkbox" value="" id="flexCheckDefault"/>
+              <input class="form-check-input my-auto" ref={check1} type="checkbox" value="" id="flexCheckDefault" />
               <label class="form-check-label my-auto" >
                 2da
               </label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check2} type="checkbox" value="" id="flexCheckDefault"/>
+              <input class="form-check-input my-auto" ref={check2} type="checkbox" value="" id="flexCheckDefault" />
               <label class="form-check-label my-auto" >
-               3ra
+                3ra
               </label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check3} type="checkbox" value="" id="flexCheckDefault"/>
+              <input class="form-check-input my-auto" ref={check3} type="checkbox" value="" id="flexCheckDefault" />
               <label class="form-check-label my-auto" >
-               4ta
+                4ta
               </label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check4} type="checkbox" value="" id="flexCheckDefault"/>
+              <input class="form-check-input my-auto" ref={check4} type="checkbox" value="" id="flexCheckDefault" />
               <label class="form-check-label my-auto" >
                 5ta
               </label>
@@ -436,48 +455,38 @@ const check4 = useRef();
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Usa lentes:</span>
             <select class="form-select" ref={cmbLentes} aria-label="Default select example">
-
-              <option value="1">Si</option>
               <option value="0">No</option>
-
+              <option value="1">Si</option>
             </select>
           </div>
-         
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago:</span>
-            <select class="form-select" ref={cmbPago} aria-label="Default select example">
-
+            <select class="form-select" ref={cmbPago} aria-label="Default select example" >
               <option value="0">Pago Movil</option>
               <option value="1">Efectivo</option>
               <option value="2">Transferencia</option>
               <option value="3">Punto</option>
-
-
             </select>
           </div>
-          <div class="col-md-5"></div>
-
-          <div class="input-group input-group-sm mb-3 col-md-3">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Referencia:</span>
             <input type="text" class="form-control" ref={txtReferencia} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
-          <div class="col-md-6"></div>
-          <div class="input-group input-group-sm mb-3 col-md-2">
+          <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">Total:</span>
             <input type="text" class="form-control text-right" ref={txtTotal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled onChange={handleInputMontoChange} />
           </div>
-
-          <div class="input-group input-group-sm mb-3 col-md-2">
+          <div class=" col-md-2"></div>
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Abono:</span>
-            <input type="text" class="form-control text-right" ref={txtAbono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+            <input type="text" class="form-control text-right" ref={txtAbono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleTipoLicenciaChange} />
           </div>
-
-          <div class="input-group input-group-sm mb-3 col-md-2">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Restante:</span>
             <input type="text" class="form-control text-right" ref={txtRestante} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
           </div>
 
-          
+
 
         </div>
       </Modal.Body>

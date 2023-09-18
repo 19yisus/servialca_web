@@ -22,8 +22,8 @@ function Login(props) {
   const [mensaje, setMensaje] = useState({ mostrar: false, titulo: '', texto: '', icono: '' });
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "hola",
-    password: "hola",
+    username: "mfigueroa",
+    password: "+11078879*",
   });
 
 
@@ -403,7 +403,7 @@ autoComplete="off"
                   <label for="floatingInput">Usuario</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <input type="password" class="form-control"  required
+                  <input type="password" class="form-control text-uppercase"  required
  autoComplete="off"
                         name="password"
                         value={values.password}

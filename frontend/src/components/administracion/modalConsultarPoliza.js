@@ -304,8 +304,10 @@ export const ModalConsultarPoliza = (props) => {
         txtPlaca.current.value = response[0].vehiculo_placa;
         txtPuestos.current.value = response[0].vehiculo_puesto;
         txtUso.current.value = response[0].usoVehiculo_nombre;
+        txtAnio.current.value= response[0].vehiculo_año;
         txtSerMotor.current.value = response[0].vehiculo_serialMotor;
         txtClase.current.value = response[0].clase_nombre;
+        txtColor.current.value = response[0].color_nombre;
         txtSerCarroceria.current.value = response[0].vehiculo_serialCarroceria;
         txtTipoVehiculo.current.value = response[0].tipoVehiculo_nombre;
         txtPeso.current.value = formatMoneda(response[0].vehiculo_peso.toString().replace(',', '').replace('.', ','), ',', '.', 2)
@@ -389,11 +391,11 @@ export const ModalConsultarPoliza = (props) => {
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
             <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Emisión:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaEmision} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaEmision} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
             <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Vencimiento:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaVencimiento} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaVencimiento} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
           </div>
         </fieldset>
         <fieldset class="border rounded-3 p-3 row mx-auto border rounded mb-2">
@@ -424,7 +426,7 @@ export const ModalConsultarPoliza = (props) => {
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
             <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Nacimiento:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
           </div>
 
         </fieldset>
