@@ -16,7 +16,7 @@ import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
-
+const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
 export const ModalCertificadoMedico = (props) => {
   /*  variables de estados */
 
@@ -276,6 +276,11 @@ export const ModalCertificadoMedico = (props) => {
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
+      if (event.target.name === 'dolar') {
+        let bs = parseFloat(dolarbcv)
+        let total = parseFloat(event.target.value) * bs
+        txtBs.current.value = formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+      }
       if (
         event.target.value === "" ||
         parseFloat(
@@ -355,7 +360,7 @@ export const ModalCertificadoMedico = (props) => {
         <div className="col-md-12 row mx-auto">
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-            <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
+            <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
 
               <option value="V-">V-</option>
               <option value="E-">E-</option>
@@ -414,8 +419,9 @@ export const ModalCertificadoMedico = (props) => {
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad:</span>
+            <input type="text" class="form-control text-right" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Dolares" onChange={handleInputMontoChange} name="dolar" />
             <input type="text" class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Bolivares" onChange={handleInputMontoChange} />
-            <input type="text" class="form-control text-right" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Dolares" onChange={handleInputMontoChange} />
+
           </div>
 
 

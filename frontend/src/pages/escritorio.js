@@ -393,7 +393,7 @@ function MenuImpuestoPP(props) {
                   href="/reportes"
                   className=" list-group-item list-group-item-action py-2 ripple"
                 >
-                  <i className="fas fa-fw me-3 fa-cash-register" />
+                  <i className="fas fa-fw me-3 fa-cash-register " />
                   <span>Reportes</span>
                 </a>
                 <a
