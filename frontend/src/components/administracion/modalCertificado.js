@@ -157,17 +157,16 @@ export const ModalCertificadoMedico = (props) => {
       body: bodyF
     }).then(res => res.json())
       .then(response => {
-
-
         setActivate(false)
         console.log(response)
-
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
+
+        window.open(`${op.conexion}/reporte/reporteMedico?ID=${response.id}`);
 
 
 

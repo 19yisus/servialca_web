@@ -10,14 +10,16 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from '@material-ui/core';
-
+import { ModalImgLicencia } from "./modalCertificado";
 
 function TablaCertificado() {
+
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const [mostrar4, setMostrar4] = useState(false);
   const [activate, setActivate] = useState(false);
+  const [idLicencia, setIdLicencia] = useState()
   const [mensaje, setMensaje] = useState({
     mostrar: false,
     titulo: "",
@@ -27,16 +29,16 @@ function TablaCertificado() {
 
   console.log(user_id)
   const headCells = [
-    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Cedula", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Nombre", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Edad", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Fecha Inicio", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Fecha Vencimiento", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Tipo de Sangre", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Usa lentes", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
- 
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    { label: "Codigo", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Cedula", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Nombre", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Edad", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Fecha Inicio", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Fecha Vencimiento", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Tipo de Sangre", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    { label: "Usa lentes", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+
+    { label: "Opciones", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
 
 
 
@@ -89,7 +91,7 @@ function TablaCertificado() {
     },
   };
 
-  
+
   const labels = [
     "Lunes",
     "Martes",
@@ -116,40 +118,46 @@ function TablaCertificado() {
     recordsAfterPagingAndSorting,
     TblPagination
   } = useTable(records, headCells, filterFn);
-  
-  
+
+  const handleFileInputChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      // Aquí puedes realizar acciones con el archivo seleccionado, como subirlo al servidor o mostrar una vista previa en tu aplicación.
+      console.log(`Archivo seleccionado: ${selectedFile.name}`);
+    }
+  };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/medico/ConsultarTodos";
-console.log(endpoint)
+    console.log(endpoint)
     setActivate(true)
-   
 
-  
+
+
     //setLoading(false);
 
     let bodyF = new FormData()
 
     bodyF.append("ID", user_id)
- 
+
 
     await fetch(endpoint, {
       method: "POST",
       body: bodyF
     }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
+      .then(response => {
+
+
+        setActivate(false)
+        console.log(response)
+        setRecords(response)
+
 
 
 
       })
-      .catch(error =>  
+      .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+      )
 
   };
 
@@ -174,15 +182,15 @@ console.log(endpoint)
   }
 
 
-  
+
 
   console.log('estas en menu')
 
-  
+
 
   useEffect(() => {
     selecionarRegistros()
-   
+
   }, []);
 
   const regPre = () => {
@@ -190,57 +198,73 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+
+  const imprimir = (id) => (e) => {
+    e.preventDefault()
+
+    window.open(`${op.conexion}/reporte/reporteMedico?ID=${id}`);
+  }
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
 
+
+  }
+  const abrirImg = (id) => (e) => {
+    e.preventDefault()
+    setIdLicencia(id)
+    setMostrar4(true)
   }
   return (
     <div className="col-md-12 mx-auto p-2">
-    
+      <ModalImgLicencia
+        show={mostrar4}
+        IdLicencia={idLicencia}
+        onHideCancela={() => { setMostrar4(false) }}
+      />
+      <div className="col-12 py-2">
+        <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
+          <h2 className=' col-5 text-light'>Certificados Medicos</h2>
+        </div>
+      </div>
+      <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody >
+            {
+              records && recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_id}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre + ' ' + item.cliente_apellido}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_edad}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{moment(item.medico_fechaInicio).format('DD/MM/YYYY')}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{moment(item.medico_fechaVencimiento).format('DD/MM/YYYY')}</TableCell>
 
-<div className="col-12 py-2">
-           <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>Certificados Medicos</h2>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_tipoSangre}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_lente === 1 ? 'SI' : 'NO'}</TableCell>
 
-              </div>
-              
-            </div>
-            <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
-              <div className="row col-12 d-flex justify-content-between mb-2">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                
-              </div>
-              <TblContainer>
-                <TblHead />
-                <TableBody >
-                  {
-                    records && recordsAfterPagingAndSorting().map((item, index) => (
-                      <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_cedula}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.cliente_nombre+' '+item.cliente_apellido}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_edad}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{moment(item.medico_fechaInicio).format('DD/MM/YYYY')}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{moment(item.medico_fechaVencimiento).format('DD/MM/YYYY')}</TableCell>
+                  <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: 130 }}>
+                    <button onClick={imprimir(item.medico_id)} className="btn btn-sm mx-1 btn-info rounded-circle">
+                      <i className="fas fa-print"></i>
+                    </button>
+                    <button onClick={gestionarBanco(2, item.idcuentabancaria)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
+                    <button onClick={abrirImg(item.medico_id)} className="btn btn-sm mx-1 btn-danger rounded-circle">
+                      <i className="fas fa-camera"></i>
+                    </button>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_tipoSangre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.medico_lente === 1 ? 'SI' : 'NO'}</TableCell>
-                   
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(4, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
-                          <button onClick={gestionarBanco(2, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.idcuentabancaria)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
-            </div>
-      
+
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>
@@ -248,7 +272,7 @@ console.log(endpoint)
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+            "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }

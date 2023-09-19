@@ -626,7 +626,16 @@ export const ModalRcv = (props) => {
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
   }
+  const handleFormaPagoChange = () => {
+    const selectedOption = cmbFormaPago.current.value;
 
+    // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
+    if (selectedOption === '1' || selectedOption === '3') {
+      txtReferencia.current.disabled = true;
+    } else {
+      txtReferencia.current.disabled = false;
+    }
+  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -1070,7 +1079,7 @@ export const ModalRcv = (props) => {
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago </span>
 
-                  <select class="form-select" ref={cmbFormaPago} aria-label="Default select example">
+                  <select class="form-select" ref={cmbFormaPago} aria-label="Default select example" onChange={handleFormaPagoChange}>
                     <option value="0">Pago Movil</option>
                     <option value="1">Efectivo</option>
                     <option value="2">Transferencia</option>
@@ -1087,7 +1096,7 @@ export const ModalRcv = (props) => {
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en $</span>
-                  <input type="text" class="form-control" name= "dolar"ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <input type="text" class="form-control" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                 </div>
               </div>
               <div class="col-md-4">
