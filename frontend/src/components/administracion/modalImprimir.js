@@ -144,21 +144,14 @@ export const ModalImprimir = (props) => {
       body: bodyF
     }).then(res => res.json())
       .then(response => {
-
-
         setActivate(false)
         console.log(response)
-
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-
-
-
-
       })
       .catch(error =>
         setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
