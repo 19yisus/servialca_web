@@ -23,7 +23,7 @@ export const ModalImgLicencia = (props) => {
     let op = require("../../modulos/datos");
     let token = localStorage.getItem("jwtToken");
 
-    const txtImg = useRef()
+    const txtImg = useRef();
     const txtEdad = useRef();
     const txtNombre = useRef();
     const txtTipoSangre = useRef();
@@ -126,15 +126,12 @@ export const ModalImgLicencia = (props) => {
 
 
 
-    const actualizarCertificado = async () => {
-        let endpoint;
+    const actualizarCertificado = async (id) => {
+        let endpoint = op.conexion + "/medico/SetImg";
         let bodyF = new FormData()
-        if (operacion === 1) {
-            endpoint = op.conexion + "/medico/SetImg";
-            bodyF.append("Imagen", txtImg.current.value)
-            bodyF.append("ID", values.medico_id)
-
-        }
+        bodyF.append("Imagen", txtImg.current.value);
+        bodyF.append("ID",id);
+        console.log(txtImg.current.value)
         console.log(endpoint)
         setActivate(true)
 
@@ -209,7 +206,8 @@ export const ModalImgLicencia = (props) => {
         let calculo = 0;
 
         if (sigue) {
-            actualizarCertificado();
+            actualizarCertificado(props.idLicencia);
+            console.log("Modal" + props.idLicencia);
         }
     };
 
@@ -310,13 +308,13 @@ export const ModalImgLicencia = (props) => {
             keyboard={false}
             onShow={() => {
                 setOperacion(props.operacion);
-
+                
 
             }}
         >
             <Modal.Header className="bg-danger">
                 <Modal.Title style={{ color: "#fff" }}>
-                    {operacion === 1 ? 'Registrar Imagen' : operacion === 2 ? 'Subir imagen' : 'Subir imagen'}
+                    {operacion === 1 ? 'Registrar Sucursal' : operacion === 2 ? 'Subir imagen' : 'Subir imagen'}
                 </Modal.Title>
                 <button
                     ref={btnCancela}
@@ -351,6 +349,7 @@ export const ModalImgLicencia = (props) => {
                         <span class="input-group-text" id="inputGroup-sizing-sm">Seleccione la imagen: </span>
                         <input
                             type="file"
+                            name="Imagen"  // Asegúrate de que el atributo name sea "Imagen"
                             className="form-control"
                             aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-sm"
