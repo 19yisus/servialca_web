@@ -31,10 +31,10 @@ abstract class cls_medico extends cls_db
         return $resultado;
     }
 
-    public function SaveImg($ruta,$id){
+    public function SaveImg($ruta){
        try{
-        $sql = $this->db->prepare("UPDATE medico set medico_foto = ? WHERE medico_id = ?");
-        $sql->execute([$ruta,$id]);
+        $sql = $this->db->prepare("UPDATE medico set medico_foto = ?");
+        $sql->execute([$ruta]);
         if ($sql->rowCount()>0) return[
             "data" => [
                 "res" => "Imagen guardada"
