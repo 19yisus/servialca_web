@@ -168,9 +168,21 @@ console.log(endpoint)
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+            if ((x.usuario_id !== null ? String(x.usuario_id).includes(target.value) : 0)
+              || (x.usuario_usuario !== null ? x.usuario_usuario.toLowerCase().includes(target.value.toLowerCase()) : '')
+              || (x.usuario_cedula !== null ? x.usuario_cedula.includes(target.value) : '')
+              || (x.usuario_cedula !== null ? x.usuario_cedula.includes(target.value) : '')
+
+              || (x.usuario_telefono !== null ? x.usuario_telefono.includes(target.value) : '')
+
+              || (x.usuario_direccion !== null ? x.usuario_direccion.includes(target.value) : '')
+
+              || (x.usuario_correo !== null ? x.usuario_correo.includes(target.value) : '')
+
+              || (x.roles_nombre !== null ? x.roles_nombre.includes(target.value) : '')
+
+              || (x.sucursal_nombre !== null ? x.sucursal_nombre.includes(target.value) : '')
+
             ) {
               return x;
             }

@@ -16,6 +16,12 @@ import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
+import CatalogoTipoContrato from "../../catalogos/catalagoTipoContrato";
+import CatalogoAcesor from "../../catalogos/catalogoAcesor";
+import CatalogoSucursal from "../../catalogos/catalagoSucursal";
+import CatalogoTransporte from "../../catalogos/catalagoTransporte";
+import CatalogoUso from "../../catalogos/catalogoUso";
+import CatalogoClase from "../../catalogos/catalogoClase";
 
 export const ModalRcv = (props) => {
   /*  variables de estados */
@@ -26,13 +32,13 @@ export const ModalRcv = (props) => {
   const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
 
   //Contrato
-  const cmbTipoContrato = useRef();
+  const TxtTipoContrato = useRef();
   const txtDesde = useRef();
   const txtHasta = useRef();
   const cmbEstado = useRef();
-  const cmbAcesor = useRef();
+  const txtAcesor = useRef();
   const cmbSucursal = useRef();
-  const cmbLinea = useRef();
+  const txtLinea = useRef();
   //Contratante
   const cmbNacionalidad = useRef();
   const txtCedula = useRef();
@@ -54,7 +60,7 @@ export const ModalRcv = (props) => {
   const txtUso = useRef();
   const txtAño = useRef();
   const txtSerMotor = useRef();
-  const cmbClase = useRef();
+  const txtClase = useRef();
   const txtColor = useRef();
   const txtSerCarroceria = useRef();
   const cmbTipo = useRef();
@@ -69,7 +75,7 @@ export const ModalRcv = (props) => {
   const txtBs = useRef();
   const txtDolar = useRef();
 
-  const [tipoContrato, setTipoContrato] = useState()
+  const [tipoContrato, setTipoContrato] = useState([])
   const [estados, setEstados] = useState();
   const [acesor, setAcesor] = useState();
   const [sucursal, setSucursal] = useState();
@@ -115,6 +121,23 @@ export const ModalRcv = (props) => {
 
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
+  const [mostrar1, setMostrar1] = useState(false);
+  const [mostrar2, setMostrar2] = useState(false);
+  const [mostrar3, setMostrar3] = useState(false);
+
+  const [mostrar4, setMostrar4] = useState(false);
+
+  const [mostrar5, setMostrar5] = useState(false);
+
+  const [mostrar6, setMostrar6] = useState(false);
+
+  const [mostrar7, setMostrar7] = useState(false);
+
+  const [mostrar8, setMostrar9] = useState(false);
+
+
+
+
   const [idContrato, setIdContrato] = useState()
   const [operacion, setOperacion] = useState(0);
 
@@ -178,7 +201,7 @@ export const ModalRcv = (props) => {
     //Contrato
     bodyF.append("fechaInicio", txtDesde.current.value)
     bodyF.append("fechaVencimiento", txtHasta.current.value)
-    bodyF.append("tipoContrato", cmbTipoContrato.current.value)
+    bodyF.append("tipoContrato", TxtTipoContrato.current.value)
     bodyF.append("Estado", cmbEstado.current.value)
 
     //Contratante
@@ -202,7 +225,7 @@ export const ModalRcv = (props) => {
     bodyF.append("serialCarroceria", txtSerCarroceria.current.value)
     bodyF.append("Color", txtColor.current.value)
     bodyF.append("Uso", txtUso.current.value)
-    bodyF.append("Clase", cmbClase.current.value)
+    bodyF.append("Clase", txtClase.current.value)
     bodyF.append("Tipo", cmbTipo.current.value)
     bodyF.append("Modelo", txtModelo.current.value)
     bodyF.append("Marca", txtMarca.current.value)
@@ -670,7 +693,35 @@ export const ModalRcv = (props) => {
     } else return false;
   };
 
+const selectTipoContrato = (nombre) =>{
+  setMostrar1(false)
+   TxtTipoContrato.current.value = nombre
+}
 
+const selectAcesor = (nombre) =>{
+  setMostrar2(false)
+   txtAcesor.current.value = nombre
+}
+
+const selectSucursal = (nombre) =>{
+  setMostrar3(false)
+   cmbSucursal.current.value = nombre
+}
+
+const selectTransporte = (nombre) =>{
+  setMostrar4(false)
+   txtLinea.current.value = nombre
+}
+
+const selectUso = (nombre) => {
+  setMostrar5(false)
+  txtUso.current.value = nombre
+}
+
+const selectClase = (nombre) => {
+  setMostrar6(false)
+  txtClase.current.value = nombre
+}
 
   return (
     <Modal
@@ -725,6 +776,56 @@ export const ModalRcv = (props) => {
 
         />
 
+        <CatalogoTipoContrato
+records={tipoContrato}
+show={mostrar1}
+onHideCancela={() => { setMostrar1(false) }}
+onHideCatalogo={selectTipoContrato}
+
+
+        />
+
+<CatalogoAcesor
+records={acesor}
+show={mostrar2}
+onHideCancela={() => { setMostrar2(false) }}
+onHideCatalogo={selectAcesor}
+
+
+        />
+
+        <CatalogoSucursal
+        records={sucursal}
+        show={mostrar3}
+        onHideCancela={() => { setMostrar3(false) }}
+        onHideCatalogo={selectSucursal}
+        />
+
+        <CatalogoTransporte
+
+records={transporte}
+show={mostrar4}
+onHideCancela={() => { setMostrar4(false) }}
+onHideCatalogo={selectTransporte}
+        
+        
+        />
+
+        <CatalogoUso 
+        records={uso}
+        show={mostrar5}
+        onHideCancela={() => { setMostrar5(false) }}
+        onHideCatalogo={selectUso}
+          
+        />
+
+        <CatalogoClase 
+         records={clase}
+         show={mostrar6}
+         onHideCancela={() => { setMostrar6(false) }}
+         onHideCatalogo={selectClase}
+        />
+
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
@@ -775,12 +876,15 @@ export const ModalRcv = (props) => {
               <div class="col-md-5">
                 <div class="input-group input-group-sm mb-2 ">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de contrato: </span>
-                  <select class="form-select" ref={cmbTipoContrato} aria-label="Default select example">
+                  {/*<select class="form-select" ref={} aria-label="Default select example">
 
                     {tipoContrato && tipoContrato.map((item, index) => (
                       <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
                     ))}
-                  </select>
+                  </select>*/}
+                  <input type="text" class="form-control" ref={TxtTipoContrato} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar1(true) }}><i class="fa fa-search"></i></button>
+
                 </div>
               </div>
               <div class="col-md-1"></div>
@@ -887,33 +991,44 @@ export const ModalRcv = (props) => {
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Acesor: </span>
-                    <select class="form-select" ref={cmbAcesor} aria-label="Default select example">
+                    {/*<select class="form-select" ref={txtAcesor} aria-label="Default select example">
 
                       {acesor && acesor.map((item, index) => (
                         <option key={index} value={item.usuario_id} > {item.usuario_nombre} </option>
                       ))}
-                    </select>
+                    </select>*/}
+                     <input type="text" class="form-control" ref={txtAcesor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar2(true) }}><i class="fa fa-search"></i></button>
+
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Sucursal: </span>
-                    <select class="form-select" ref={cmbSucursal} aria-label="Default select example">
+
+                    <input type="text" class="form-control" ref={cmbSucursal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar3(true) }}><i class="fa fa-search"></i></button>
+                  
+                    {/*<select class="form-select" ref={cmbSucursal} aria-label="Default select example">
                       {sucursal && sucursal.map((item, index) => (
                         <option key={index} value={item.sucursal_id} > {item.sucursal_nombre} </option>
                       ))}
-                    </select>
+                      </select>*/}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Linea de Transporte: </span>
-                    <select class="form-select" ref={cmbLinea} aria-label="Default select example">
+                    {/*<select class="form-select" ref={txtLinea} aria-label="Default select example">
 
                       {transporte && transporte.map((item, index) => (
                         <option key={index} value={item.transporte_id} > {item.transporte_nombre} </option>
                       ))}
-                    </select>
+                    </select>*/}
+
+
+                    <input type="text" class="form-control" ref={txtLinea} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar4(true) }}><i class="fa fa-search"></i></button>
                   </div>
                 </div>
 
@@ -977,11 +1092,13 @@ export const ModalRcv = (props) => {
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Uso</span>
 
-                  <select class="form-select" ref={txtUso} aria-label="Default select example">
+                  {/*<select class="form-select" ref={txtUso} aria-label="Default select example">
                     {uso && uso.map((item, index) => (
                       <option key={index} value={item.usoVehiculo_id} > {item.usoVehiculo_nombre} </option>
                     ))}
-                  </select>
+                  </select>*/}
+                   <input type="text" class="form-control" ref={txtUso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar5(true) }}><i class="fa fa-search"></i></button>
 
                 </div>
               </div>
@@ -1005,12 +1122,13 @@ export const ModalRcv = (props) => {
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Clase</span>
 
-                  <select class="form-select" ref={cmbClase} aria-label="Default select example">
+                  {/*<select class="form-select" ref={txtClase} aria-label="Default select example">
                     {clase && clase.map((item, index) => (
                       <option key={index} value={item.claseVehiculo_id} > {item.clase_nombre} </option>
                     ))}
-                  </select>
-
+                  </select>*/}
+ <input type="text" class="form-control" ref={txtClase} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <button type="button" class="btn btn-success" onClick={() => { setMostrar6(true) }}><i class="fa fa-search"></i></button>
                 </div>
               </div>
 

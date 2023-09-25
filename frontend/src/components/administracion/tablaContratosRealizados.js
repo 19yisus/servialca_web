@@ -1,4 +1,5 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
+
 
 
 import { Mensaje } from "../mensajes";
@@ -13,7 +14,7 @@ import { TableBody, TableRow, TableCell } from '@material-ui/core';
 import { ModalImprimir } from "./modalImprimir";
 import { ModalConsultarPoliza } from "./modalConsultarPoliza";
 import { ModalRenovarPoliza } from "./modalRenovar";
-
+import { formatMoneda,validaMonto,formatoMonto } from "../../util/varios";
 
 function TablaContratosRealizados() {
   var op = require("../../modulos/datos");
@@ -93,6 +94,48 @@ function TablaContratosRealizados() {
     },
   };
 
+  
+const BCV = JSON.parse(localStorage.getItem('dolarbcv'))
+const txtDolar = useRef();
+const txtBs = useRef();
+
+const calcular = (e) =>{
+
+  if(e.target.value !== ''){
+    let total  = parseFloat(txtDolar.current.value) * parseFloat(BCV)
+        txtBs.current.value =  formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+  } else {
+    txtBs.current.value = '0,00'
+  }
+}
+const handleInputMontoChange = (event) => {
+  validaMonto(event);
+  if (event.which === 13 || typeof event.which === "undefined") {
+    if (
+      event.target.value === "" ||
+      parseFloat(
+        event.target.value.trim().replace(".", "").replace(",", ".")
+      ) === 0.0
+    ) {
+      event.target.value = "0,00";
+    }
+    event.target.value = formatoMonto(event.target.value);
+    let char1 = event.target.value.substring(0, 1);
+    let char2 = event.target.value.substring(1, 2);
+    if (char1 === "0" && char2 !== ",") {
+      event.target.value = event.target.value.substring(
+        1,
+        event.target.value.legth
+      );
+    }
+  } else if (event.which === 46) {
+    return false;
+  } else if (event.which >= 48 && event.which <= 57) {
+    return true;
+  } else if (event.which === 8 || event.which === 0 || event.which === 44) {
+    return true;
+  } else return false;
+};
 
   const labels = [
     "Lunes",
@@ -165,9 +208,16 @@ function TablaContratosRealizados() {
           return items;
         else
           return items.filter(x => {
-            if ((x.poliza_id !== null ? String(x.poliza_id).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+            if ((x.cliente_cedula !== null ? x.cliente_cedula.toLowerCase().includes(target.value) : 0)
+              || (x.cliente_nombre !== null ? x.cliente_nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
+              || (x.cliente_telefono !== null ? x.cliente_telefono.includes(target.value) : '')
+              || (x.vehiculo_placa !== null ? x.vehiculo_placa.toLowerCase().includes(target.value) : '')
+              || (x.usuario_nombre !== null ? x.usuario_nombre.toLowerCase().includes(target.value) : '')
+              || (x.poliza_id !== null ? String(x.poliza_id).includes(target.value) : '')
+
+              || (x.sucursal_nombre !== null ? x.sucursal_nombre.toLowerCase().includes(target.value) : '')
+
+
             ) {
               return x;
             }
@@ -237,7 +287,12 @@ function TablaContratosRealizados() {
       <div className="col-12 py-2">
         <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
           <h2 className=' col-5 text-light'>Lista De Contratos</h2>
-
+          <div class="input-group input-group-sm col-md-4 my-auto">
+            <span class="input-group-text bg-transparent border-0 fw-bold text-light" id="inputGroup-sizing-sm">Calcular $:</span>
+            <input type="text" class="form-control bg-transparent text-light text-right" onKeyUp={handleInputMontoChange} onChange={calcular} ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+            <input type="text" class="form-control bg-transparent text-light text-right" ref={txtBs} disabled aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
+         
+          </div>
         </div>
 
       </div>

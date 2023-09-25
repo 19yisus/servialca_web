@@ -24,7 +24,7 @@ export const ModalSucursal = (props) => {
   let token = localStorage.getItem("jwtToken");
 
 
-  const txtEdad = useRef();
+  const txtDireccion = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
   const txtCedula = useRef();
@@ -376,6 +376,12 @@ export const ModalSucursal = (props) => {
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre De La Sucursal:</span>
             <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false :true} style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+          </div>
+
+
+          <div class="input-group input-group-sm mb-3 col-md-12">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Dirección:</span>
+            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false :true} style={{height:40}} class="form-control" ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
           
 
