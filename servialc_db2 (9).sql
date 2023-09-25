@@ -27,35 +27,35 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `administrador`
 --
 
-CREATE TABLE `administrador` (
-  `id` int NOT NULL,
-  `claveAcceso` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE administrador (
+  id int NOT NULL,
+  claveAcceso varchar(100) NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `administrador`
+-- Volcado de datos para la tabla administrador
 --
 
-INSERT INTO `administrador` (`id`, `claveAcceso`) VALUES
+INSERT INTO administrador (id, claveAcceso) VALUES
 (1, '+11078879*');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clasevehiculo`
+-- Estructura de tabla para la tabla clasevehiculo
 --
 
-CREATE TABLE `clasevehiculo` (
-  `clase_id` bigint NOT NULL,
-  `clase_nombre` varchar(100) NOT NULL,
-  `clase_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE clasevehiculo (
+  clase_id bigint NOT NULL,
+  clase_nombre varchar(100) NOT NULL,
+  clase_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `clasevehiculo`
+-- Volcado de datos para la tabla clasevehiculo
 --
 
-INSERT INTO `clasevehiculo` (`clase_id`, `clase_nombre`, `clase_estatus`) VALUES
+INSERT INTO clasevehiculo (clase_id, clase_nombre, clase_estatus) VALUES
 (1, 'automovil', 1),
 (2, 'vehiculo taxi', 1),
 (3, 'camioneta', 1),
@@ -88,25 +88,36 @@ INSERT INTO `clasevehiculo` (`clase_id`, `clase_nombre`, `clase_estatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cliente`
+-- Estructura de tabla para la tabla cliente
 --
 
-CREATE TABLE `cliente` (
-  `cliente_id` bigint NOT NULL,
-  `cliente_nombre` varchar(250) NOT NULL,
-  `cliente_apellido` varchar(250) DEFAULT NULL,
-  `cliente_cedula` char(15) DEFAULT NULL,
-  `cliente_fechaNacimiento` date DEFAULT NULL,
-  `cliente_telefono` char(25) DEFAULT NULL,
-  `cliente_correo` varchar(150) DEFAULT NULL,
-  `cliente_direccion` varchar(150) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE cliente (
+  cliente_id bigint NOT NULL,
+  cliente_nombre varchar(250) NOT NULL,
+  cliente_apellido varchar(250) DEFAULT NULL,
+  cliente_cedula char(15) DEFAULT NULL,
+  cliente_fechaNacimiento date DEFAULT NULL,
+  cliente_telefono char(25) DEFAULT NULL,
+  cliente_correo varchar(150) DEFAULT NULL,
+  cliente_direccion varchar(150) DEFAULT NULL
+);
 
+CREATE TABLE tiggerCliente (
+  cliente_id bigint NOT NULL,
+  cliente_nombre varchar(250) NOT NULL,
+  cliente_apellido varchar(250) DEFAULT NULL,
+  cliente_cedula char(15) DEFAULT NULL,
+  cliente_fechaNacimiento date DEFAULT NULL,
+  cliente_telefono char(25) DEFAULT NULL,
+  cliente_correo varchar(150) DEFAULT NULL,
+  cliente_direccion varchar(150) DEFAULT NULL,
+  tigger_motivo varchar(150) DEFAULT NULL
+);
 --
--- Volcado de datos para la tabla `cliente`
+-- Volcado de datos para la tabla cliente
 --
 
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (1, 'ENZO ', 'MAZZARELLA CORTEZ', 'V-9563290', '0000-00-00', '0412-1515382', '', 'ARAURE CALLE 1 CON AV2'),
 (2, 'TRANSPORTE DUALFI SRL', ' ', 'J-30119815', '2021-03-20', '0416-1548396', '', 'AV PAEZ, A LADO DEL HOTEL SAN CARLOS'),
 (3, 'XIOMARA COROMOTO', 'PARRA MEJIAS', 'V-09844861', '0000-00-00', '0416-8553454', '', 'URB LLANO ALTO CONJ. LA GLADIOLA CALLE LOS ROMERITOS CASA 26'),
@@ -506,7 +517,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (397, 'ALI  ENRIQUE ', 'HERNANDEZ  QUERALES', 'V-26442973', '0000-00-00', '0412-0518685', '', 'urb. la granja casa. a 11'),
 (398, 'DENNY  ARACELIS ', 'PENA  PEREZ ', 'V-11077718', '0000-00-00', '0424-5009367', '', 'urb. la granja casa. a 11'),
 (399, 'MARIA  JOSEFINA ', 'CAMACHO  DE SANABRIA', 'V-8000050', '0000-00-00', '0412-1769368', 'JUANCHOOOO17@GMAIL.COM', 'URB CAMBURITO CALLE 1 No de casa 32-17');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (400, 'BML  ENVIOS ', 'CA ', 'J-500396244', '0000-00-00', '0414-5614391', '', 'av.21 con calle 38 sector villa pastora acarigua'),
 (401, 'JEANETTE  JOSEFA', 'OSAL  SEQUERA ', 'V-16238809', '0000-00-00', '0414-5762797', '', 'urb san jose ii calle 6 casa 1 araure'),
 (402, 'CARLOS  ANDRES ', 'SEQUERA ', 'V-14425703', '0000-00-00', '0414-5203046', '', 'VELLA VISTA II CALLE 25 CASA 74-54'),
@@ -624,7 +635,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (514, 'ANGEL MIGUEL ', 'PEREZ  MONTES ', 'V-18672753', '0000-00-00', '0414-5792594', '', 'urb. pedro camejo zona sur de acarigua'),
 (515, 'JORGE  ALBERTO ', 'LOPEZ  MEDINA ', 'V-15209494', '0000-00-00', '0424-5372257', '', 'URB.  PARQUE CEDERAL CASA NRO 63 ARAURE '),
 (516, 'SANTOS  RAMON ', 'CONDE  NATERA ', 'V-5749060', '0000-00-00', '0414-5545173', '', 'av 4 con calle 8 san rafael de onoto'),
-(517, 'RAFAEL  MARIA ', 'PEREZ  MENA ', 'V-12942818', '0000-00-00', '0414-`549285', '', 'urb. camburito '),
+(517, 'RAFAEL  MARIA ', 'PEREZ  MENA ', 'V-12942818', '0000-00-00', '0414-549285', '', 'urb. camburito '),
 (518, 'PEDRO  LUIS ', 'RODRIGUEZ  TORREALBA ', 'V-25026248', '0000-00-00', '0424-5635655', '', 'araure av. 22 casa nro 5 sector la canal '),
 (519, 'INGRID  SABINA ', 'IBARRA  JIMENEZ ', 'V-5720701', '0000-00-00', '0416-7595163', '', 'resind. los apamates torre a piso 4 appto 44'),
 (520, 'FRANKLIN  DAVID ', 'CORONEL  RAMOS ', 'V-20156109', '0000-00-00', '0424-5607980', '', 'araure av. 5 de dicimbre edf. el saman residencia el parque '),
@@ -908,7 +919,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (798, 'SAIDA  YANISE ', 'HERNANDEZ  DE OCHOA', 'V-4871135', '0000-00-00', '0424-5385969', '', 'urb. del este av. 4 manzana 5 casa nro. 12'),
 (799, 'LUIS  ENRIQUE ', 'MENDOZA GONZALEZ ', 'V-13226901', '0000-00-00', '0412-5163515', '', 'urb. llano alto '),
 (800, 'LUIS  ENRIQUE', 'MENDOZA  GONZALEZ ', 'V-13226901', '0000-00-00', '0412-5163515', '', 'urb. llano alto ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (801, 'LUIS ENRIQUE ', 'MENDOZA  GONZALEZ ', 'V-13226901', '0000-00-00', '0412-5163515', '', 'urb. llano alto '),
 (802, 'LUIS  ENRIQUE ', 'MENDOZA  GONZALEZ ', 'V-13226901', '0000-00-00', '0412-5163515', '', 'urb. llano alto '),
 (803, 'RAFFAELE  EDUARDO', 'MORRONE  WOJCIK', 'V-9879040', '0000-00-00', '0414-3557337', '', 'urb. agua clara'),
@@ -1319,7 +1330,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (1208, 'JOEL  LIECER ', 'PINO  HERNANDEZ ', 'V-4339438', '0000-00-00', '0414-8469269', '', 'la goajira puente barrio bolivar '),
 (1209, 'ANTONIO  JOSE ', 'FALCON ', 'V-9842041', '0000-00-00', '0426-7356130', '', 'caserio los mamones '),
 (1210, 'GERARDO  ANTONIO ', 'GONZALEZ  RAMIRES ', 'V-7599172', '0000-00-00', '-', '', 'sector paraguay grainsa ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (1211, 'CARLOS  ANDRES ', 'CASTILLO  VASQUEZ ', 'V-12528763', '0000-00-00', '0424-5408408', '', 'barrio america noveno arte '),
 (1212, 'OSWEL ALEJANDRO ', 'IGLESIA  VELASCO ', 'V-31306720', '0000-00-00', '-', '', 'las majaguas '),
 (1213, 'OSWEL  ALEJANDRO ', 'IGLESIA  VELASCO ', 'V-31306720', '0000-00-00', '-', '', 'las majaguas '),
@@ -1718,7 +1729,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (1606, 'NEVIO  ALONSO ', 'CEBALLOS  CADAVID ', 'V-14425111', '1958-06-14', '0424-5520560', '', 'vencedores de araure '),
 (1607, 'URVE GABRIEL', 'ROLDAN RAMIREZ', 'V-20158547', '1990-12-27', '0414-5451411', '', 'andre bello'),
 (1608, 'CARLOS  ALBERTO ', 'PINA TORRELLES ', 'V-9569814', '0000-00-00', '0426-1026439', '', 'urb. maria jose calle principal casa n-42 araure ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (1609, 'NAILET  JOSEFINA ', 'HERNANDEZ  PINA ', 'V-10142699', '1970-12-09', '0412-6544855', '', 'los cortijos '),
 (1610, 'FRANCISCO JAVIER', 'DURAN PINEDA', 'V-18929628', '1986-12-05', '0424-5651410', '', 'complejo habitacional simon bolivar'),
 (1611, 'ELIO  ANTONIO ', 'CHAVEZ  BAMBEL ', 'V-20350519', '1984-01-13', '0424-5319651', '', 'BARAURE CENTRO '),
@@ -2117,7 +2128,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (2005, 'COROMOTO ELENA', 'DIAZ YOVERA', 'V-9561474', '0000-00-00', '-', '', 'linea altamira'),
 (2006, 'ANA  ROSA ', 'RODRIGUEZ  ALVARADO ', 'V-5944725', '0000-00-00', '-', '', 'linea altamira '),
 (2007, 'JOSE ANGEL', 'RAMOS SIRA', 'V-30484292', '0000-00-00', '0412-5273667', '', 'Final av paez, sector centro acarigua');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (2008, 'JOHNNY  JOSE ', 'RODRIGUEZ  SUAREZ ', 'V-15350407', '0000-00-00', '-', '', 'linea altamira '),
 (2009, 'RITO  MEDARDO ', 'ESTRADA  ', 'V-6220345', '1958-05-22', '-', '', 'edo barinas arismendi '),
 (2010, 'GOROKAR  EDUARDO ', 'QUINTERO  BETANCOURT ', 'V-12090580', '1974-09-05', '0412-2623934', '', 'araure '),
@@ -2126,7 +2137,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (2013, 'CARLOS ', 'USCATEGUI RANGEL', 'V-8047599', '1962-02-12', '0414-3539462', '', 'araure edo portuguesa'),
 (2014, 'CARLOS  EDUARDO ', 'NINO  MENDEZ ', 'V-15213512', '0000-00-00', '0424-5378223', '', 'av.39 eon calle 36 y 37 bella vista 1'),
 (2015, 'RICARDO JOSE', 'LOPEZ GOMEZ', 'V-21137131', '1990-06-02', '0412-4785493', '', 'sector villa pastora, acarigua'),
-(2016, 'GABRIELE  JOSE', 'D`ORAZIO DI NATALE', 'V-12091375', '1970-02-15', '0414-5581251', '', 'av. 17 casa # 17e-27'),
+(2016, 'GABRIELE  JOSE', 'DORAZIO DI NATALE', 'V-12091375', '1970-02-15', '0414-5581251', '', 'av. 17 casa # 17e-27'),
 (2017, 'FRANCISCO JAVIER', 'CALVO JILABERT', 'V-9843229', '1969-01-16', '0414-5561333', 'FINCASANJAIRO@GMAIL.COM', 'CALLE MONTAÑUELA NUM.51 URB SAN FRANCISCO ARAURE'),
 (2018, 'JESUS  ANTONIO ', 'PEREZ  SANCHEZ ', 'V-11390970', '0000-00-00', '0424-6674889', '', 'rio-acarigua araure  '),
 (2019, 'OMALITZA ANTONIETA', 'PEREZ PEREZ', 'V-20156484', '1991-01-25', '0412-8318472', '', 'urb bosque de camoruco micro 15 # 15-22'),
@@ -2510,7 +2521,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (2397, 'FRANCISCA  DEL CARMEN', 'CASU MEJIAS', 'V-6777148', '1955-10-02', '0412-5581968', '', 'urb 9 de marzo, agua blanca'),
 (2398, 'LUIS  EDGARDO ', 'PERAZA ANZOLA ', 'V-18672160', '0000-00-00', '0412-7723465', '', 'urb el este manzana 6 casa no 12 araure '),
 (2399, 'EDUARDO JOSE', 'SEGOVIA CELIS', 'V-14665228', '1956-10-04', '0424-7145945', '', 'acarigua-araure');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (2400, 'WILMER JOSE ', 'MOLINA RAMIREZ', 'V-9341031', '1972-09-05', '0414-6472181', '', 'acarigua-araure'),
 (2401, 'DARWIN OCTAVIO', 'VALDERRAMA COLMENAREZ', 'V-14068915', '1979-12-05', '0414-0541437', '', 'acarigua edo portuguesa'),
 (2402, 'EGIDIO ANTONIO', 'RIOS COLMENAREZ', 'V-11082887', '1971-08-19', '0414-541868', '', 'urb 24 de julio, acarigua edo portuguesa'),
@@ -2907,7 +2918,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (2793, 'JULIO LISBARDO', 'PETIT SANCHEZ', 'V-8658830', '1968-02-06', '0424-5171770', '', 'urb. las palmas calle 5 # 85, araure'),
 (2794, 'ISMAEL ENRIQUE', 'GOMEZ GUTIERREZ', 'V-9564112', '1964-10-08', '0426-3094689', '', 'urb. lomas de santa sofia, araure'),
 (2795, 'EDINSSON  ', 'MORENO  FIGUEROA ', 'V-16294532', '0000-00-00', '0412-5239502', '', 'AGUA BLANCA EDO PORTUGUESA ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (2796, 'YORBYS RAFAEL', 'MENDOZA AGRAI', 'V-21563089', '1983-08-20', '0414-3533215', '', 'av. ppal, agua blanca'),
 (2797, 'YORBYS  RAFAEL ', 'MENDOZA AGRAI ', 'V-21563089', '0000-00-00', '0414-3533215', '', 'agua blanca edo portuguesa '),
 (2798, 'EDWARD JOSE', 'LISCANO TORRES', 'V-17795659', '1984-10-04', '0412-5230913', '', 'caserio maratan, parroquia ramon peraza'),
@@ -3307,7 +3318,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (3192, 'HEBERT JOSE', 'RIVAS SANCHEZ', 'V-21057618', '1993-01-23', '0412-6131787', '', 'ACARIGUA EDO PORTUGUESA '),
 (3193, 'MANUEL ALEJANDRO', 'SANCHEZ DELGADO', 'V-18800123', '1987-11-10', '0424-1637516', '', 'ACARIGUA EDO PORTUGUESA '),
 (3194, 'CARLOS JAVIER', 'REAL RUIZ', 'V-24026484', '1995-06-16', '0412-5535743', '', 'ACARIGUA EDO PORTUGUESA ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (3195, 'CARLOS JAVIER', 'REAL RUIZ', 'V-24026484', '1995-06-16', '0412-5535743', '', 'ACARIGUA EDO PORTUGUESA '),
 (3196, 'GAUCAREL ALEXANDER', 'RODRIGUEZ CASTILLO', 'V-20157503', '1990-05-17', '0424-5805984', '', 'ACARIGUA EDO PORTUGUESA '),
 (3197, 'LISBETH JOSEFINA', 'USEA ORTIZ', 'V-10636713', '0000-00-00', '0424-5449742', '', 'urb la hacienda, ciudad jardin calle 6 casa 05, araure'),
@@ -3627,7 +3638,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (3511, 'FRANCISCO JAVIER', 'VEGAS ', 'V-19798036', '1987-04-04', '0412-5268811', '', 'acarigua gonzalo barrios'),
 (3512, 'FRANCISCO JAVIER', 'VEGAS ', 'V-19798036', '1987-04-04', '0412-5268811', '', 'acarigua gonzalo barrios'),
 (3513, 'VEGA URBINA', 'EDIXON ', 'E-1092388905', '0000-00-00', '0424-5275159', '', 'acarigua edo portiguesa'),
-(3514, 'RAFAEL  MARIA ', 'PEREZ  MENA ', 'V-12942818', '1977-01-14', '0414-`549285', '', 'urb. camburito '),
+(3514, 'RAFAEL  MARIA ', 'PEREZ  MENA ', 'V-12942818', '1977-01-14', '0414-549285', '', 'urb. camburito '),
 (3515, 'JULIO CESAR', 'TORREALBA AGUERO', 'V-16294517', '1980-03-14', '-', '', 'cono sur, la gonzalo barrios, acarigua'),
 (3516, 'LUIS  ALBERTO ', 'CORONADO  MEDINA', 'V-8662413', '0000-00-00', '0414-1575961', '', 'av los pionero'),
 (3517, 'JAIRO GABRIEL', 'DURAN GOMEZ', 'V-12114709', '1975-01-26', '0414-3782676', '', 'acarigua edo portiguesa'),
@@ -3714,7 +3725,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (3598, 'JOVITO ANTONIO ', 'COLMENAREZ BRICEÑO', 'V-12884860', '0000-00-00', '0414-3355668', '', 'Acarigua edo portuguesa'),
 (3599, 'ROBERT  ANTONIO ', 'CAMACHO  DURAN', 'V-13228487', '1978-07-10', '0424-5239648', '', 'comunidad saman, calle francisco de miranda, casa 36'),
 (3600, 'JOSE  ELISEO ', 'TORTOLERO  BOLIVAR ', 'V-11546405', '0000-00-00', '0424-5048299', '', 'urb. molino 3 casa 51 final av. paez araure ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (3601, 'ALEXANDER  ANTONIO ', 'GUTIERREZ  VARELA ', 'V-14981686', '0000-00-00', '0424-4195013', '', 'urb llano alto conjunto residencial las gladiolas casa 11'),
 (3602, 'DAVID  JOSE ', 'MONASTERIO  ', 'V-14177768', '0000-00-00', '0424-5681042', '', 'urb. bosuqes de camoruco acarigua edo portuguesa '),
 (3603, 'JOSE  GREGORIO ', 'HERNANDEZ  VIERA ', 'V-20041843', '0000-00-00', '0412-7749667', '', 'URB LOS MOLINOS CASA NRO 160 ARAURE EDO PORTUGUESA '),
@@ -3941,7 +3952,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (3824, 'LUIS  JOSE', 'SOTO MEDINA', 'V-20158570', '1987-03-08', '0424-5249929', '', 'durigua calle 4 casa nro 12 acarigua edo portuguesa '),
 (3825, 'DIEGO  FERNANDO ', 'VARELA AL CALDE  ', 'E-83098307', '0000-00-00', '0412-3523792', '', 'urb palo gordo acarigua edo portuguesa'),
 (3826, 'PAUSIDES MANUEL', 'LINAREZ SANCHEZ', 'V-17278722', '1984-04-16', '0412-1875709', '', 'araure urb los cedro '),
-(3827, 'BRUDDY BREUNDY', 'CALZADA MAVAREZ', 'V-15630452', '1982-12-03', '0412-1550992', '', 'p`rado del sol araure'),
+(3827, 'BRUDDY BREUNDY', 'CALZADA MAVAREZ', 'V-15630452', '1982-12-03', '0412-1550992', '', 'prado del sol araure'),
 (3828, 'LUIS IVAN', 'MARQUEZ MENDOZA', 'V-14332566', '1974-09-24', '0414-5758674', '', 'CARRETERA PRINCIPAL MUNICIPIO PAPELON'),
 (3829, 'LUIS IVAN', 'MARQUEZ MENDOZA', 'V-14332566', '1974-09-24', '0414-5758674', '', 'CARRETERA PRINCIPAL MUNICIPIO PAPELON'),
 (3830, 'DELFIN ANTONIO', 'ABREU ', 'V-9841867', '1967-12-24', '0412-5514864', '', 'algodonal '),
@@ -4118,7 +4129,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (4001, 'CARLOS ALBERTO', 'CABRERA GOMEZ', 'V-11695258', '0000-00-00', '0412-5231874', 'carcabalgo@gmail.com', 'urb. los robles i # 92'),
 (4002, 'ZHUXIANG ', 'FENG ', 'E-83624855', '0000-00-00', '0412-0765017', '', 'acarigua edo portuguesa'),
 (4003, 'RONNY EDUARDO', 'QUERALES VARGAS', 'V-26674003', '1999-04-07', '0412-5595094', '', 'acarigua edo portuguesa');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (4004, 'PABLO  JOSE ', 'PEREIRA  CASTILLO ', 'V-20390312', '0000-00-00', '0412-6813680', '', 'urb los cortijos '),
 (4005, 'PABLO  JOSE ', 'PEREIRA  CASTILLO ', 'V-20390312', '0000-00-00', '0412-6813680', '', 'urb los cortijos '),
 (4006, 'NELSON ENRIQUE', 'ARADES ', 'V-10658418', '1972-12-18', '0426-7903607', '', 'calle 2 casa 481, urb villas del pilar'),
@@ -4530,7 +4541,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (4412, 'ARNELIS  COROMOTO ', 'SANCHEZ  CASTILLO ', 'V-17366436', '0000-00-00', '0416-9054435', '', 'algodonal '),
 (4413, 'ANDREA SOFIA', 'GARCIA VARGAS', 'V-26504164', '0000-00-00', '-', '', 'urb santa rita calle 02 casa 33'),
 (4414, 'ERMELINDA   ', 'VARGAS ', 'V-15568999', '0000-00-00', '-', '', 'urb lomas de santa sofia conj 13 No 24');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (4415, 'RAMON ANTONIO', 'ROJAS REPOSO', 'V-13555270', '0000-00-00', '0414-5510608', '', 'durigua 4 calle 6 casa nro 6 '),
 (4416, 'YOHAN CARLOS', 'ANTONIO PEREIRA C', 'V-20388637', '1991-05-04', '0416-2506229', '', 'municipio ospino'),
 (4417, 'DEIBYS ALEXANDER', 'AGUIRRE RONDON', 'V-15419356', '1981-08-11', '0424-5425804', '', 'aRAURE edo portuguesa'),
@@ -4923,7 +4934,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (4804, 'JOSE LUIS', 'CARDENAS SALAZAR', 'V-18102180', '1983-08-05', '0426-1074981', '', 'BARRIO CAFETAL CALLE PRINCIPAL GUANARITO'),
 (4805, 'JONNY HUMBERTO', 'DOMOROMO ARANGUREN', 'V-16566869', '1979-05-03', '0424-5933143', '', 'avenida ricardo perez zambrano '),
 (4806, 'ARMANDO ', 'LOPEZ MELO', 'V-31787493', '1968-07-13', '0424-5296439', '', 'urb. atapaima casa s/n, agua blanca ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (4807, 'JONATHAN CECILIO', 'CARRILLO PEREZ', 'V-14068593', '1979-04-19', '0414-5455635', '', 'av 7 via el tumulo la romana'),
 (4808, 'BRAYAN  STEEVEN ', 'MENDEZ  COLMENAREZ ', 'V-28382764', '0000-00-00', '0414-5050134', '', 'urb villas del pilar calle15 casa nro 367 araure '),
 (4809, 'RUBEN  ANTONIO ', 'MEDINA  CARRILLO ', 'V-16860787', '0000-00-00', '0424-5275159', '', 'fe y alegria calle 25 c casa nro 08'),
@@ -5331,7 +5342,7 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 (5211, 'FRANKLIN S JOSE ', 'MONTERO QUINTERO ', 'V-23470271', '0000-00-00', '0414-9532639', '', 'URB BELLAS VISTA 1 CALLE 37 AV 40 ACARIGUA-PORTUGUESA '),
 (5212, 'NELSON ALEXANDER ', 'HEREDIA ANDRADE ', 'V-12091003', '0000-00-00', '0414-5737272', '', 'ARAURE SAN JOSE 2 EDO PORTUGUESA '),
 (5213, 'BIAGO TORO ', 'INGHILTERRA ', 'V-24319368', '0000-00-00', '0412-2669584', '', 'URB HACIENDA SAN JOSE 2 ');
-INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `cliente_cedula`, `cliente_fechaNacimiento`, `cliente_telefono`, `cliente_correo`, `cliente_direccion`) VALUES
+INSERT INTO cliente (cliente_id, cliente_nombre, cliente_apellido, cliente_cedula, cliente_fechaNacimiento, cliente_telefono, cliente_correo, cliente_direccion) VALUES
 (5214, 'JOSE ANTONIO', 'GRATEROL GOMEZ', 'V-9961859', '1971-10-06', '', '', ''),
 (5215, 'JORLANDO ANTONIO', 'GONZALEZ RODRIGUEZ', 'V-27636267', '2001-01-15', '0412-6763540', '', 'SAN JOSE 2 CALLE 13 -25'),
 (5216, 'NINOSKA YOSELIN', 'CASTAÑEDA RODRIGUEZ', 'V-19715908', '1988-01-17', '', '', ''),
@@ -5654,28 +5665,28 @@ INSERT INTO `cliente` (`cliente_id`, `cliente_nombre`, `cliente_apellido`, `clie
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `coberturas`
+-- Estructura de tabla para la tabla coberturas
 --
 
-CREATE TABLE `coberturas` (
-  `cobertura_id` bigint NOT NULL,
-  `cobertura_danoCosas` decimal(9,2) DEFAULT NULL,
-  `cobertura_danoPersonas` decimal(9,2) DEFAULT NULL,
-  `cobertura_fianzaCuanti` decimal(9,2) DEFAULT NULL,
-  `cobertura_asistenciaLegal` decimal(9,2) DEFAULT NULL,
-  `cobertura_apov` decimal(9,2) DEFAULT NULL,
-  `cobertura_muerte` decimal(9,2) DEFAULT NULL,
-  `cobertura_invalidez` decimal(9,2) DEFAULT NULL,
-  `cobertura_gastosMedicos` decimal(9,2) DEFAULT NULL,
-  `cobertura_grua` decimal(9,2) DEFAULT NULL,
-  `totalPagar` float(20,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE coberturas (
+  cobertura_id bigint NOT NULL,
+  cobertura_danoCosas decimal(9,2) DEFAULT NULL,
+  cobertura_danoPersonas decimal(9,2) DEFAULT NULL,
+  cobertura_fianzaCuanti decimal(9,2) DEFAULT NULL,
+  cobertura_asistenciaLegal decimal(9,2) DEFAULT NULL,
+  cobertura_apov decimal(9,2) DEFAULT NULL,
+  cobertura_muerte decimal(9,2) DEFAULT NULL,
+  cobertura_invalidez decimal(9,2) DEFAULT NULL,
+  cobertura_gastosMedicos decimal(9,2) DEFAULT NULL,
+  cobertura_grua decimal(9,2) DEFAULT NULL,
+  totalPagar float(20,2) DEFAULT NULL
+);
 
 --
--- Volcado de datos para la tabla `coberturas`
+-- Volcado de datos para la tabla coberturas
 --
 
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (1, 11.90, 5.95, 2.98, 2.98, 29.76, 2.98, 0.00, 0.00, 2.98, 297.60),
 (2, 12.04, 6.02, 3.01, 3.01, 30.10, 3.01, 0.00, 0.00, 3.01, 301.00),
 (3, 12.04, 6.02, 3.01, 3.01, 30.10, 3.01, 0.00, 0.00, 3.01, 301.00),
@@ -6238,7 +6249,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (560, 10.00, 5.00, 2.50, 2.50, 0.00, 2.50, 0.00, 0.00, 2.50, 25.00),
 (561, 19.56, 9.78, 4.89, 4.89, 0.00, 4.89, 0.00, 0.00, 4.89, 48.90),
 (562, 47.20, 23.60, 11.80, 11.80, 0.00, 11.80, 0.00, 0.00, 11.80, 118.00);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (563, 19.80, 9.90, 4.95, 4.95, 0.00, 4.95, 0.00, 0.00, 4.95, 49.50),
 (564, 19.80, 9.90, 4.95, 4.95, 0.00, 4.95, 0.00, 0.00, 4.95, 49.50),
 (565, 72.00, 36.00, 18.00, 18.00, 0.00, 18.00, 0.00, 0.00, 18.00, 180.00),
@@ -6962,7 +6973,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (1283, 19.60, 9.80, 4.90, 4.90, 49.00, 4.90, 0.00, 0.00, 4.90, 49.00),
 (1284, 19.60, 9.80, 4.90, 4.90, 49.00, 4.90, 0.00, 0.00, 4.90, 49.00),
 (1285, 19.60, 9.80, 4.90, 4.90, 49.00, 4.90, 0.00, 0.00, 4.90, 49.00);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (1286, 18.00, 9.00, 4.50, 4.50, 45.00, 4.50, 0.00, 0.00, 4.50, 45.00),
 (1287, 18.00, 9.00, 4.50, 4.50, 45.00, 4.50, 0.00, 0.00, 4.50, 45.00),
 (1288, 18.00, 9.00, 4.50, 4.50, 45.00, 4.50, 0.00, 0.00, 4.50, 45.00),
@@ -7670,7 +7681,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (1991, 10.40, 5.20, 2.60, 2.60, 26.00, 2.60, 0.00, 0.00, 2.60, 26.00),
 (1992, 24.00, 12.00, 6.00, 6.00, 60.00, 6.00, 0.00, 0.00, 6.00, 60.00),
 (1993, 24.00, 12.00, 6.00, 6.00, 60.00, 6.00, 0.00, 0.00, 6.00, 60.00);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (1994, 48.00, 24.00, 12.00, 12.00, 120.00, 12.00, 0.00, 0.00, 12.00, 120.00),
 (1995, 36.00, 18.00, 9.00, 9.00, 90.00, 9.00, 0.00, 0.00, 9.00, 90.00),
 (1996, 24.00, 12.00, 6.00, 6.00, 60.00, 6.00, 0.00, 0.00, 6.00, 60.00),
@@ -8376,7 +8387,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (2696, 48.00, 24.00, 12.00, 12.00, 120.00, 12.00, 0.00, 0.00, 12.00, 120.00),
 (2697, 39.16, 19.58, 9.79, 9.79, 97.90, 9.79, 0.00, 0.00, 9.79, 97.90),
 (2698, 39.16, 19.58, 9.79, 9.79, 97.90, 9.79, 0.00, 0.00, 9.79, 97.90);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (2699, 39.20, 19.60, 9.80, 9.80, 0.00, 9.80, 0.00, 0.00, 9.80, 98.00),
 (2700, 39.20, 19.60, 9.80, 9.80, 98.00, 9.80, 0.00, 0.00, 9.80, 98.00),
 (2701, 39.20, 19.60, 9.80, 9.80, 0.00, 9.80, 0.00, 0.00, 9.80, 98.00),
@@ -9041,7 +9052,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (3360, 138.00, 69.00, 34.50, 34.50, 0.00, 34.50, 0.00, 0.00, 34.50, 345.00),
 (3361, 92.60, 46.30, 23.15, 23.15, 231.50, 23.15, 0.00, 0.00, 23.15, 231.50),
 (3362, 92.60, 46.30, 23.15, 23.15, 231.50, 23.15, 0.00, 0.00, 23.15, 231.50);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (3363, 92.60, 46.30, 23.15, 23.15, 231.50, 23.15, 0.00, 0.00, 23.15, 231.50),
 (3364, 92.60, 46.30, 23.15, 23.15, 231.50, 23.15, 0.00, 0.00, 23.15, 231.50),
 (3365, 92.60, 46.30, 23.15, 23.15, 0.00, 23.15, 0.00, 0.00, 23.15, 231.50),
@@ -9697,7 +9708,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (4015, 98.00, 49.00, 24.50, 24.50, 245.00, 24.50, 0.00, 0.00, 24.50, 245.00),
 (4016, 98.00, 49.00, 24.50, 24.50, 245.00, 24.50, 0.00, 0.00, 24.50, 245.00),
 (4017, 98.00, 49.00, 24.50, 24.50, 245.00, 24.50, 0.00, 0.00, 24.50, 245.00);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (4018, 98.00, 49.00, 24.50, 24.50, 245.00, 24.50, 0.00, 0.00, 24.50, 245.00),
 (4019, 98.00, 49.00, 24.50, 24.50, 245.00, 24.50, 0.00, 0.00, 24.50, 245.00),
 (4020, 49.00, 24.50, 12.25, 12.25, 122.50, 12.25, 0.00, 0.00, 12.25, 122.50),
@@ -10351,7 +10362,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (4668, 52.00, 26.00, 13.00, 13.00, 130.00, 13.00, 0.00, 0.00, 13.00, 130.00),
 (4669, 156.00, 78.00, 39.00, 39.00, 390.00, 39.00, 0.00, 0.00, 39.00, 390.00),
 (4670, 52.00, 26.00, 13.00, 13.00, 130.00, 13.00, 0.00, 0.00, 13.00, 130.00);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (4671, 104.00, 52.00, 26.00, 26.00, 260.00, 26.00, 0.00, 0.00, 26.00, 260.00),
 (4672, 104.00, 52.00, 26.00, 26.00, 260.00, 26.00, 0.00, 0.00, 26.00, 260.00),
 (4673, 158.00, 79.00, 39.50, 39.50, 395.00, 39.50, 0.00, 0.00, 39.50, 395.00),
@@ -11002,7 +11013,7 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 (5362, 185.88, 92.94, 46.47, 46.47, 464.70, 46.47, 0.00, 0.00, 46.47, 464.70),
 (5363, 185.88, 92.94, 46.47, 46.47, 464.70, 46.47, 0.00, 0.00, 46.47, 464.70),
 (5364, 123.92, 61.96, 30.98, 30.98, 309.80, 30.98, 0.00, 0.00, 30.98, 309.80);
-INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_danoPersonas`, `cobertura_fianzaCuanti`, `cobertura_asistenciaLegal`, `cobertura_apov`, `cobertura_muerte`, `cobertura_invalidez`, `cobertura_gastosMedicos`, `cobertura_grua`, `totalPagar`) VALUES
+INSERT INTO coberturas (cobertura_id, cobertura_danoCosas, cobertura_danoPersonas, cobertura_fianzaCuanti, cobertura_asistenciaLegal, cobertura_apov, cobertura_muerte, cobertura_invalidez, cobertura_gastosMedicos, cobertura_grua, totalPagar) VALUES
 (5365, 123.92, 61.96, 30.98, 30.98, 309.80, 30.98, 0.00, 0.00, 30.98, 309.80),
 (5366, 123.92, 61.96, 30.98, 30.98, 309.80, 30.98, 0.00, 0.00, 30.98, 309.80),
 (5367, 123.92, 61.96, 30.98, 30.98, 309.80, 30.98, 0.00, 0.00, 30.98, 309.80),
@@ -11345,20 +11356,20 @@ INSERT INTO `coberturas` (`cobertura_id`, `cobertura_danoCosas`, `cobertura_dano
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `color`
+-- Estructura de tabla para la tabla color
 --
 
-CREATE TABLE `color` (
-  `color_id` bigint NOT NULL,
-  `color_nombre` varchar(150) NOT NULL,
-  `color_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE color (
+  color_id bigint NOT NULL,
+  color_nombre varchar(150) NOT NULL,
+  color_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `color`
+-- Volcado de datos para la tabla color
 --
 
-INSERT INTO `color` (`color_id`, `color_nombre`, `color_estatus`) VALUES
+INSERT INTO color (color_id, color_nombre, color_estatus) VALUES
 (1, 'MARRON', 1),
 (2, 'BLANCO ', 1),
 (3, 'AZUL    ', 1),
@@ -11545,28 +11556,28 @@ INSERT INTO `color` (`color_id`, `color_nombre`, `color_estatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `debitocredito`
+-- Estructura de tabla para la tabla debitocredito
 --
 
-CREATE TABLE `debitocredito` (
-  `nota_id` bigint NOT NULL,
-  `nota_IngresoEgreso` tinyint(1) DEFAULT NULL,
-  `nota_motivo` varchar(150) DEFAULT NULL,
-  `nota_fecha` date DEFAULT NULL,
-  `nota_hora` time DEFAULT NULL,
-  `nota_tipoPago` int DEFAULT NULL,
-  `nota_referencia` varchar(4) DEFAULT NULL,
-  `nota_monto` decimal(9,2) DEFAULT NULL,
-  `precioDolar_id` bigint DEFAULT NULL,
-  `usuario_id` bigint DEFAULT NULL,
-  `sucursal_id` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE debitocredito (
+  nota_id bigint NOT NULL,
+  nota_IngresoEgreso BOOLEAN DEFAULT NULL,
+  nota_motivo varchar(150) DEFAULT NULL,
+  nota_fecha date DEFAULT NULL,
+  nota_hora time DEFAULT NULL,
+  nota_tipoPago int DEFAULT NULL,
+  nota_referencia varchar(4) DEFAULT NULL,
+  nota_monto decimal(9,2) DEFAULT NULL,
+  precioDolar_id bigint DEFAULT NULL,
+  usuario_id bigint DEFAULT NULL,
+  sucursal_id bigint DEFAULT NULL
+);
 
 --
--- Volcado de datos para la tabla `debitocredito`
+-- Volcado de datos para la tabla debitocredito
 --
 
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -12334,7 +12345,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (765, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (766, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (767, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (768, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (769, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (770, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -13092,7 +13103,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (1522, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (1523, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (1524, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (1525, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (1526, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (1527, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -13847,7 +13858,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (2277, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2278, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2279, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (2280, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2281, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2282, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -14602,7 +14613,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (3031, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3032, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3033, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (3034, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3035, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3036, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -15357,7 +15368,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (3785, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3786, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3787, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (3788, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3789, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3790, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -16112,7 +16123,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (4539, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (4540, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (4541, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (4542, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (4543, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (4544, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -16872,7 +16883,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (5339, 1, 'RCV', '2021-01-23', NULL, 0, '', 646.00, NULL, 1, 1),
 (5340, 1, 'RCV', '2021-03-17', NULL, 0, '', 657.00, NULL, 1, 1),
 (5341, 1, 'RCV', '2021-03-17', NULL, 0, '', 328.00, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (5342, 1, 'RCV', '2021-03-17', NULL, 0, '', 657.00, NULL, 1, 1),
 (5343, 1, 'RCV', '2021-03-17', NULL, 0, '', 327.00, NULL, 1, 1),
 (5344, 1, 'RCV', '2021-03-17', NULL, 0, '', 653.00, NULL, 1, 1),
@@ -17684,7 +17695,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (6153, 1, 'RCV', '2022-03-02', NULL, 0, '', 1.69, NULL, 1, 1),
 (6154, 1, 'RCV', '2022-03-03', NULL, 0, '', 2.69, NULL, 1, 1),
 (6155, 1, 'RCV', '2022-03-03', NULL, 0, '', 1.78, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (6156, 1, 'RCV', '2022-03-03', NULL, 0, '', 1.78, NULL, 1, 1),
 (6157, 1, 'RCV', '2022-03-03', NULL, 0, '', 1.78, NULL, 1, 1),
 (6158, 1, 'RCV', '2022-03-03', NULL, 0, '', 1.78, NULL, 1, 1),
@@ -18499,7 +18510,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (6992, 1, 'RCV', '2022-06-17', NULL, 0, '', 1.80, NULL, 1, 1),
 (6993, 1, 'RCV', '2022-06-17', NULL, 0, '', 3.81, NULL, 1, 1),
 (6994, 1, 'RCV', '2022-06-17', NULL, 0, '', 2.81, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (6995, 1, 'RCV', '2022-06-17', NULL, 0, '', 1.80, NULL, 1, 1),
 (6996, 1, 'RCV', '2022-06-18', NULL, 0, '', 2.05, NULL, 1, 1),
 (6997, 1, 'RCV', '2022-06-18', NULL, 0, '', 1.80, NULL, 1, 1),
@@ -19315,7 +19326,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (7809, 1, 'RCV', '2022-11-07', NULL, 0, '', 1.58, NULL, 1, 1),
 (7810, 1, 'RCV', '2022-11-07', NULL, 0, '', 3.15, NULL, 1, 1),
 (7811, 1, 'RCV', '2022-11-07', NULL, 0, '', 3.05, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (7812, 1, 'RCV', '2022-11-08', NULL, 0, '', 3.15, NULL, 12, 1),
 (7813, 1, 'RCV', '2022-11-08', NULL, 0, '', 3.15, NULL, 12, 1),
 (7814, 1, 'RCV', '2022-11-08', NULL, 0, '', 1.62, NULL, 1, 1),
@@ -20130,7 +20141,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (8625, 1, 'RCV', '2023-02-13', NULL, 0, '', 8.63, NULL, 6, 1),
 (8626, 1, 'RCV', '2023-02-13', NULL, 0, '', 8.98, NULL, 22, 2),
 (8627, 1, 'RCV', '2023-02-27', NULL, 0, '', 13.18, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (8628, 1, 'RCV', '2023-02-13', NULL, 0, '', 8.69, NULL, 1, 1),
 (8629, 1, 'RCV', '2023-02-13', NULL, 0, '', 8.69, NULL, 1, 1),
 (8630, 1, 'RCV', '2023-02-13', NULL, 0, '', 8.69, NULL, 1, 1),
@@ -20943,7 +20954,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (9438, 1, 'RCV', '2023-04-14', NULL, 0, '', 8.81, NULL, 1, 1),
 (9439, 1, 'RCV', '2023-04-14', NULL, 0, '', 8.81, NULL, 12, 1),
 (9440, 1, 'RCV', '2023-04-14', NULL, 0, '', 8.81, NULL, 1, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (9441, 1, 'RCV', '2023-04-14', NULL, 0, '', 8.80, NULL, 1, 1),
 (9442, 1, 'RCV', '2023-04-14', NULL, 0, '', 4.38, NULL, 1, 1),
 (9443, 1, 'RCV', '2023-04-14', NULL, 0, '', 8.76, NULL, 1, 1),
@@ -21747,7 +21758,7 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 (10325, 1, 'RCV', '2023-07-17', NULL, 0, '', 25.00, NULL, 57, 1),
 (10326, 1, 'RCV', '2023-07-17', NULL, 0, '', 15.00, NULL, 57, 1),
 (10327, 1, 'RCV', '2023-07-17', NULL, 0, '', 10.00, NULL, 57, 1);
-INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `nota_fecha`, `nota_hora`, `nota_tipoPago`, `nota_referencia`, `nota_monto`, `precioDolar_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO debitocredito (nota_id, nota_IngresoEgreso, nota_motivo, nota_fecha, nota_hora, nota_tipoPago, nota_referencia, nota_monto, precioDolar_id, usuario_id, sucursal_id) VALUES
 (10328, 1, 'RCV', '2023-07-17', NULL, 0, '', 15.00, NULL, 57, 1),
 (10329, 1, 'RCV', '2023-07-17', NULL, 0, '', 10.00, NULL, 57, 1),
 (10330, 1, 'RCV', '2023-07-17', NULL, 0, '', 10.00, NULL, 57, 1),
@@ -22391,20 +22402,20 @@ INSERT INTO `debitocredito` (`nota_id`, `nota_IngresoEgreso`, `nota_motivo`, `no
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `estado`
+-- Estructura de tabla para la tabla estado
 --
 
-CREATE TABLE `estado` (
-  `estado_id` bigint NOT NULL,
-  `estado_nombre` varchar(150) NOT NULL,
-  `estado_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE estado (
+  estado_id bigint NOT NULL,
+  estado_nombre varchar(150) NOT NULL,
+  estado_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `estado`
+-- Volcado de datos para la tabla estado
 --
 
-INSERT INTO `estado` (`estado_id`, `estado_nombre`, `estado_estatus`) VALUES
+INSERT INTO estado (estado_id, estado_nombre, estado_estatus) VALUES
 (1, 'Amazonas', 1),
 (2, 'Anzoategui', 1),
 (3, 'Apure', 1),
@@ -22433,23 +22444,23 @@ INSERT INTO `estado` (`estado_id`, `estado_nombre`, `estado_estatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `file_contents`
+-- Estructura de tabla para la tabla file_contents
 --
 
-CREATE TABLE `file_contents` (
-  `id_file` int NOT NULL,
-  `nombre_img` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `tag` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `ruta_img` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `upload_date` datetime NOT NULL,
-  `estatus_img` tinyint(1) NOT NULL
+CREATE TABLE file_contents (
+  id_file int NOT NULL,
+  nombre_img varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  tag varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  ruta_img varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  upload_date datetime NOT NULL,
+  estatus_img BOOLEAN NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `file_contents`
+-- Volcado de datos para la tabla file_contents
 --
 
-INSERT INTO `file_contents` (`id_file`, `nombre_img`, `tag`, `ruta_img`, `upload_date`, `estatus_img`) VALUES
+INSERT INTO file_contents (id_file, nombre_img, tag, ruta_img, upload_date, estatus_img) VALUES
 (13, '20230724155537_(0)_carrusel1', 'carrusel_1', 'was1.jpeg', '2023-07-24 11:55:37', 1),
 (14, '20230724155537_(1)_carrusel2', 'carrusel_2', 'was2.jpeg', '2023-07-24 11:55:37', 1),
 (15, '20230724155537_(2)_carrusel3', 'carrusel_3', 'was1.jpeg', '2023-07-24 11:55:37', 1),
@@ -22460,27 +22471,27 @@ INSERT INTO `file_contents` (`id_file`, `nombre_img`, `tag`, `ruta_img`, `upload
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `licencia`
+-- Estructura de tabla para la tabla licencia
 --
 
-CREATE TABLE `licencia` (
-  `licencia_id` bigint NOT NULL,
-  `cliente_id` bigint NOT NULL,
-  `licencia_correo` varchar(150) NOT NULL,
-  `licencia_sangre` varchar(15) NOT NULL,
-  `licencia_lente` tinyint(1) NOT NULL,
-  `licencia_licencia` varchar(50) NOT NULL,
-  `licencia_licenciaRestante` varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `licencia_montoTolar` decimal(9,2) NOT NULL,
-  `licencia_abonado` decimal(9,2) NOT NULL,
-  `licencia_restante` decimal(9,2) NOT NULL
+CREATE TABLE licencia (
+  licencia_id bigint NOT NULL,
+  cliente_id bigint NOT NULL,
+  licencia_correo varchar(150) NOT NULL,
+  licencia_sangre varchar(15) NOT NULL,
+  licencia_lente BOOLEAN NOT NULL,
+  licencia_licencia varchar(50) NOT NULL,
+  licencia_licenciaRestante varchar(150) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  licencia_montoTolar decimal(9,2) NOT NULL,
+  licencia_abonado decimal(9,2) NOT NULL,
+  licencia_restante decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `licencia`
+-- Volcado de datos para la tabla licencia
 --
 
-INSERT INTO `licencia` (`licencia_id`, `cliente_id`, `licencia_correo`, `licencia_sangre`, `licencia_lente`, `licencia_licencia`, `licencia_licenciaRestante`, `licencia_montoTolar`, `licencia_abonado`, `licencia_restante`) VALUES
+INSERT INTO licencia (licencia_id, cliente_id, licencia_correo, licencia_sangre, licencia_lente, licencia_licencia, licencia_licenciaRestante, licencia_montoTolar, licencia_abonado, licencia_restante) VALUES
 (1, 5520, '', 'N/S', 0, '2Da', '', 20.00, 0.00, 20.00),
 (2, 5521, '', 'O+', 0, '2Da', '', 20.00, 0.00, 20.00),
 (3, 5524, '', '0+', 0, '3Ra', '', 20.00, 0.00, 20.00),
@@ -22499,20 +22510,20 @@ INSERT INTO `licencia` (`licencia_id`, `cliente_id`, `licencia_correo`, `licenci
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `marca`
+-- Estructura de tabla para la tabla marca
 --
 
-CREATE TABLE `marca` (
-  `marca_id` bigint NOT NULL,
-  `marca_nombre` varchar(150) NOT NULL,
-  `marca_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE marca (
+  marca_id bigint NOT NULL,
+  marca_nombre varchar(150) NOT NULL,
+  marca_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `marca`
+-- Volcado de datos para la tabla marca
 --
 
-INSERT INTO `marca` (`marca_id`, `marca_nombre`, `marca_estatus`) VALUES
+INSERT INTO marca (marca_id, marca_nombre, marca_estatus) VALUES
 (1, 'HAIMA', 1),
 (2, 'CHEVROLET', 1),
 (3, 'BERA  ', 1),
@@ -22738,28 +22749,28 @@ INSERT INTO `marca` (`marca_id`, `marca_nombre`, `marca_estatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `medico`
+-- Estructura de tabla para la tabla medico
 --
 
-CREATE TABLE `medico` (
-  `medico_id` bigint NOT NULL,
-  `cliente_id` bigint DEFAULT NULL,
-  `medico_edad` int DEFAULT NULL,
-  `medico_fechaInicio` date DEFAULT NULL,
-  `medico_fechaVencimiento` date DEFAULT NULL,
-  `medico_tipoSangre` varchar(10) DEFAULT NULL,
-  `medico_lente` tinyint(1) DEFAULT NULL,
-  `medico_observacion` varchar(150) DEFAULT NULL,
-  `debitoCredito_id` bigint DEFAULT NULL,
-  `usuario_id` bigint DEFAULT NULL,
-  `sucursal_id` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE medico (
+  medico_id bigint NOT NULL,
+  cliente_id bigint DEFAULT NULL,
+  medico_edad int DEFAULT NULL,
+  medico_fechaInicio date DEFAULT NULL,
+  medico_fechaVencimiento date DEFAULT NULL,
+  medico_tipoSangre varchar(10) DEFAULT NULL,
+  medico_lente BOOLEAN DEFAULT NULL,
+  medico_observacion varchar(150) DEFAULT NULL,
+  debitoCredito_id bigint DEFAULT NULL,
+  usuario_id bigint DEFAULT NULL,
+  sucursal_id bigint DEFAULT NULL
+);
 
 --
--- Volcado de datos para la tabla `medico`
+-- Volcado de datos para la tabla medico
 --
 
-INSERT INTO `medico` (`medico_id`, `cliente_id`, `medico_edad`, `medico_fechaInicio`, `medico_fechaVencimiento`, `medico_tipoSangre`, `medico_lente`, `medico_observacion`, `debitoCredito_id`, `usuario_id`, `sucursal_id`) VALUES
+INSERT INTO medico (medico_id, cliente_id, medico_edad, medico_fechaInicio, medico_fechaVencimiento, medico_tipoSangre, medico_lente, medico_observacion, debitoCredito_id, usuario_id, sucursal_id) VALUES
 (1, 5023, 15, '2023-07-08', '2028-07-08', 'A+', 1, '', NULL, 1, 1),
 (2, 270, 40, '2023-07-08', '2028-07-08', 'O+', 0, '', NULL, 1, 1),
 (3, 3005, 67, '2023-07-11', '2028-07-11', 'O+', 0, '', NULL, 1, 1),
@@ -22929,20 +22940,20 @@ INSERT INTO `medico` (`medico_id`, `cliente_id`, `medico_edad`, `medico_fechaIni
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `modelo`
+-- Estructura de tabla para la tabla modelo
 --
 
-CREATE TABLE `modelo` (
-  `modelo_id` bigint NOT NULL,
-  `modelo_nombre` varchar(150) NOT NULL,
-  `modelo_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE modelo (
+  modelo_id bigint NOT NULL,
+  modelo_nombre varchar(150) NOT NULL,
+  modelo_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `modelo`
+-- Volcado de datos para la tabla modelo
 --
 
-INSERT INTO `modelo` (`modelo_id`, `modelo_nombre`, `modelo_estatus`) VALUES
+INSERT INTO modelo (modelo_id, modelo_nombre, modelo_estatus) VALUES
 (1, 'HAIMA 7/SUV', 1),
 (2, 'NPR / NPR CHASS', 1),
 (3, 'AVEO       ', 1),
@@ -24631,57 +24642,57 @@ INSERT INTO `modelo` (`modelo_id`, `modelo_nombre`, `modelo_estatus`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `moroso`
+-- Estructura de tabla para la tabla moroso
 --
 
-CREATE TABLE `moroso` (
-  `moroso_id` bigint NOT NULL,
-  `poliza_id` bigint NOT NULL,
-  `moroso_abonado` decimal(9,2) NOT NULL,
-  `moroso_restante` decimal(9,2) NOT NULL
+CREATE TABLE moroso (
+  moroso_id bigint NOT NULL,
+  poliza_id bigint NOT NULL,
+  moroso_abonado decimal(9,2) NOT NULL,
+  moroso_restante decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pagina_web`
+-- Estructura de tabla para la tabla pagina_web
 --
 
-CREATE TABLE `pagina_web` (
-  `text_home` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_about` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_mision` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_vision` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_ubicacion` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_correo` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_telefono` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `text_fax` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL
+CREATE TABLE pagina_web (
+  text_home varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_about longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_mision longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_vision longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_ubicacion varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_correo varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_telefono varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  text_fax varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `pagina_web`
+-- Volcado de datos para la tabla pagina_web
 --
 
-INSERT INTO `pagina_web` (`text_home`, `text_about`, `text_mision`, `text_vision`, `text_ubicacion`, `text_correo`, `text_telefono`, `text_fax`) VALUES
+INSERT INTO pagina_web (text_home, text_about, text_mision, text_vision, text_ubicacion, text_correo, text_telefono, text_fax) VALUES
 ('fasdfasdfasdf', 'dfasdfasdf', 'asdfasdf', 'fasdfasdf', 'fasdfasdf', 'fasdfasdf@gmail.com', '0424545464', 'fasdfasdfa');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `permisos_usuario`
+-- Estructura de tabla para la tabla permisos_usuario
 --
 
-CREATE TABLE `permisos_usuario` (
-  `permisos_id` bigint NOT NULL,
-  `permiso_modulo` varchar(150) NOT NULL,
-  `usuario_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE permisos_usuario (
+  permisos_id bigint NOT NULL,
+  permiso_modulo varchar(150) NOT NULL,
+  usuario_id int NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `permisos_usuario`
+-- Volcado de datos para la tabla permisos_usuario
 --
 
-INSERT INTO `permisos_usuario` (`permisos_id`, `permiso_modulo`, `usuario_id`) VALUES
+INSERT INTO permisos_usuario (permisos_id, permiso_modulo, usuario_id) VALUES
 (11, 'Contratos realizados', 57),
 (12, 'Lista de asesores', 57),
 (13, 'Lista de sucursales', 57),
@@ -24731,32 +24742,32 @@ INSERT INTO `permisos_usuario` (`permisos_id`, `permiso_modulo`, `usuario_id`) V
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `poliza`
+-- Estructura de tabla para la tabla poliza
 --
 
-CREATE TABLE `poliza` (
-  `poliza_id` bigint NOT NULL,
-  `cliente_id` bigint DEFAULT NULL,
-  `titular_id` bigint DEFAULT NULL,
-  `vehiculo_id` bigint DEFAULT NULL,
-  `poliza_fechaInicio` date DEFAULT NULL,
-  `poliza_fechaVencimiento` date DEFAULT NULL,
-  `tipoContrato_id` bigint DEFAULT NULL,
-  `estado_id` bigint DEFAULT NULL,
-  `usuario_id` bigint DEFAULT NULL,
-  `sucursal_id` bigint DEFAULT NULL,
-  `transporte_id` bigint DEFAULT NULL,
-  `cobertura_id` bigint DEFAULT NULL,
-  `poliza_renovacion` int DEFAULT NULL,
-  `poliza_qr` blob,
-  `debitoCredito` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE poliza (
+  poliza_id bigint NOT NULL,
+  cliente_id bigint DEFAULT NULL,
+  titular_id bigint DEFAULT NULL,
+  vehiculo_id bigint DEFAULT NULL,
+  poliza_fechaInicio date DEFAULT NULL,
+  poliza_fechaVencimiento date DEFAULT NULL,
+  tipoContrato_id bigint DEFAULT NULL,
+  estado_id bigint DEFAULT NULL,
+  usuario_id bigint DEFAULT NULL,
+  sucursal_id bigint DEFAULT NULL,
+  transporte_id bigint DEFAULT NULL,
+  cobertura_id bigint DEFAULT NULL,
+  poliza_renovacion int DEFAULT NULL,
+  poliza_qr blob,
+  debitoCredito bigint DEFAULT NULL
+);
 
 --
--- Volcado de datos para la tabla `poliza`
+-- Volcado de datos para la tabla poliza
 --
 
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (4, 4, 5524, 4, '2023-09-15', '2024-09-15', 1, NULL, 3, 1, NULL, 4, 3, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030342d30332e706e67, 11087),
 (5, 1324, 2093, 5, '2021-01-04', '2022-03-02', 1, NULL, 3, 1, NULL, 5, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030352d30312e706e67, 5),
 (6, 6, 4772, 6, '2021-01-05', '2022-03-02', 1, NULL, 2, 1, NULL, 6, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030362d30312e706e67, 6),
@@ -25073,7 +25084,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (453, 2561, 2560, 453, '2021-12-22', '2022-12-22', 1, NULL, 1, 1, NULL, 453, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303435332d30312e706e67, 453),
 (454, 2918, 2916, 454, '2021-12-22', '2022-12-22', 1, NULL, 1, 1, NULL, 454, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303435342d30312e706e67, 454),
 (455, 2918, 2917, 455, '2021-12-22', '2022-12-22', 1, NULL, 1, 1, NULL, 455, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303435352d30312e706e67, 455);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (456, 456, 456, 456, '2022-12-27', '2023-12-27', 1, NULL, 1, 1, NULL, 456, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303435362d30312e706e67, 456),
 (457, 457, 457, 457, '2021-12-23', '2022-12-23', 1, NULL, 1, 1, NULL, 457, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303435372d30312e706e67, 457),
 (460, 460, 460, 460, '2021-12-24', '2022-12-24', 1, NULL, 1, 1, NULL, 460, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303436302d30312e706e67, 460),
@@ -25387,7 +25398,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (879, 4661, 4660, 852, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 879, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303837392d30312e706e67, 879),
 (880, 4661, 4660, 852, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 880, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303838302d30312e706e67, 880),
 (882, 3844, 3843, 854, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 882, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303838322d30312e706e67, 882);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (883, 3844, 3843, 855, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 883, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303838332d30312e706e67, 883),
 (884, 884, 884, 856, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 884, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303838342d30312e706e67, 884),
 (885, 885, 885, 857, '2022-02-24', '2023-02-24', 1, NULL, 1, 1, NULL, 885, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f30303030303838352d30312e706e67, 885),
@@ -25691,7 +25702,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (1322, 1322, 1322, 1241, '2022-04-13', '2023-04-13', 1, NULL, 1, 1, NULL, 1322, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332322d30312e706e67, 1322),
 (1325, 4399, 4398, 105, '2022-04-14', '2023-04-14', 1, NULL, 1, 1, NULL, 1325, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332352d30312e706e67, 1325),
 (1326, 1326, 1326, 1244, '2022-04-14', '2023-04-14', 1, NULL, 1, 1, NULL, 1326, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332362d30312e706e67, 1326);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (1327, 1327, 1327, 1245, '2022-04-15', '2023-04-15', 1, NULL, 58, 1, NULL, 1327, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332372d30312e706e67, 1327),
 (1328, 1328, 1328, 1246, '2022-04-16', '2023-04-16', 1, NULL, 1, 1, NULL, 1328, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332382d30312e706e67, 1328),
 (1329, 1329, 1329, 1247, '2022-04-16', '2023-04-16', 1, NULL, 1, 1, NULL, 1329, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313332392d30312e706e67, 1329),
@@ -25991,7 +26002,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (1731, 1731, 1731, 1612, '2022-06-09', '2023-06-09', 1, NULL, 1, 1, NULL, 1731, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313733312d30312e706e67, 1731),
 (1733, 1733, 1733, 1614, '2022-06-10', '2023-06-10', 1, NULL, 1, 1, NULL, 1733, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313733332d30312e706e67, 1733),
 (1736, 1736, 1736, 1617, '2022-06-10', '2023-06-10', 1, NULL, 1, 1, NULL, 1736, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313733362d30312e706e67, 1736);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (1737, 1737, 1737, 1618, '2022-06-10', '2023-06-10', 1, NULL, 1, 1, NULL, 1737, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313733372d30312e706e67, 1737),
 (1738, 1738, 1738, 1619, '2022-06-10', '2023-06-10', 1, NULL, 1, 1, NULL, 1738, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313733382d30322e706e67, 1738),
 (1741, 4809, 4808, 1622, '2022-06-11', '2023-06-11', 1, NULL, 1, 1, NULL, 1741, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030313734312d30312e706e67, 1741),
@@ -26291,7 +26302,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (2139, 2139, 2138, 1997, '2022-08-19', '2023-08-19', 1, NULL, 64, 2, NULL, 2139, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323133392d30312e706e67, 2139),
 (2142, 2142, 2141, 2000, '2022-08-19', '2023-08-19', 1, NULL, 1, 1, NULL, 2142, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323134322d30312e706e67, 2142),
 (2144, 2144, 2143, 2002, '2023-08-22', '2024-08-22', 1, NULL, 1, 1, NULL, 2144, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323134342d30322e706e67, 10804);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (2145, 2145, 2144, 643, '2022-08-20', '2023-08-20', 1, NULL, 1, 1, NULL, 2145, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323134352d30312e706e67, 2145),
 (2146, 2146, 2145, 2003, '2022-08-20', '2023-08-20', 1, NULL, 1, 1, NULL, 2146, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323134362d30312e706e67, 2146),
 (2147, 2147, 2146, 2004, '2022-08-22', '2023-08-22', 1, NULL, 1, 1, NULL, 2147, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323134372d30312e706e67, 2147),
@@ -26591,7 +26602,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (2539, 2539, 2538, 2352, '2022-10-28', '2023-10-28', 1, NULL, 1, 1, NULL, 2539, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323533392d30312e706e67, 2539),
 (2540, 2540, 2539, 2353, '2022-10-28', '2023-10-28', 1, NULL, 1, 1, NULL, 2540, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323534302d30312e706e67, 2540),
 (2541, 3915, 2540, 2354, '2022-10-29', '2023-10-29', 1, NULL, 1, 1, NULL, 2541, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323534312d30312e706e67, 2541);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (2543, 2543, 4511, 2356, '2022-10-29', '2023-10-29', 1, NULL, 1, 1, NULL, 2543, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323534332d30312e706e67, 2543),
 (2544, 2544, 2543, 2357, '2022-10-29', '2023-10-29', 1, NULL, 1, 1, NULL, 2544, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323534342d30312e706e67, 2544),
 (2545, 4222, 2544, 2358, '2022-10-29', '2023-10-29', 1, NULL, 1, 1, NULL, 2545, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323534352d30312e706e67, 2545),
@@ -26891,7 +26902,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (2916, 2916, 2915, 2665, '2022-12-23', '2023-12-23', 1, NULL, 1, 1, NULL, 2916, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323931362d30312e706e67, 2916),
 (2917, 2918, 2916, 454, '2022-12-23', '2023-12-23', 1, NULL, 1, 1, NULL, 2917, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323931372d30322e706e67, 2917),
 (2918, 2918, 2917, 455, '2022-12-23', '2023-12-23', 1, NULL, 1, 1, NULL, 2918, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323931382d30322e706e67, 2918);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (2920, 4454, 4453, 2667, '2022-12-24', '2023-12-24', 1, NULL, 1, 1, NULL, 2920, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323932302d30312e706e67, 2920),
 (2921, 2921, 2920, 2668, '2022-12-24', '2023-12-24', 1, NULL, 1, 1, NULL, 2921, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323932312d30312e706e67, 2921),
 (2922, 2922, 2921, 2669, '2022-12-24', '2023-12-24', 1, NULL, 1, 1, NULL, 2922, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030323932322d30312e706e67, 2922),
@@ -27191,7 +27202,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (3313, 3313, 3312, 2977, '2023-02-02', '2024-02-02', 1, NULL, 1, 1, NULL, 3313, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333331332d30312e706e67, 3313),
 (3317, 3317, 3316, 2981, '2023-02-02', '2024-02-02', 1, NULL, 6, 1, NULL, 3317, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333331372d30312e706e67, 3317),
 (3318, 3318, 3317, 2982, '2023-02-02', '2024-02-02', 1, NULL, 1, 1, NULL, 3318, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333331382d30312e706e67, 3318);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (3320, 3320, 3319, 2984, '2023-02-03', '2024-02-03', 1, NULL, 1, 1, NULL, 3320, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333332302d30312e706e67, 3320),
 (3321, 3321, 3320, 2985, '2023-02-03', '2024-02-03', 1, NULL, 1, 1, NULL, 3321, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333332312d30312e706e67, 3321),
 (3322, 3322, 3321, 2986, '2023-02-03', '2024-02-03', 1, NULL, 47, 1, NULL, 3322, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333332322d30312e706e67, 3322),
@@ -27491,7 +27502,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (3709, 3709, 3708, 3291, '2023-03-09', '2024-03-09', 1, NULL, 1, 1, NULL, 3709, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333730392d30312e706e67, 3709),
 (3711, 3711, 3710, 3292, '2023-03-09', '2024-03-09', 2, NULL, 1, 1, NULL, 3711, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333731312d30312e706e67, 3711),
 (3713, 3713, 3712, 3294, '2023-03-10', '2024-03-10', 1, NULL, 1, 1, NULL, 3713, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333731332d30312e706e67, 3713);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (3714, 3714, 3713, 3295, '2023-03-10', '2024-03-10', 1, NULL, 1, 1, NULL, 3714, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333731342d30312e706e67, 3714),
 (3715, 3715, 3714, 3296, '2023-03-10', '2024-03-10', 1, NULL, 1, 1, NULL, 3715, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333731352d30312e706e67, 3715),
 (3716, 3716, 3715, 3297, '2023-03-10', '2024-03-10', 2, NULL, 3, 1, NULL, 3716, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030333731362d30312e706e67, 3716),
@@ -27791,7 +27802,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (4127, 4127, 4126, 3595, '2023-04-10', '2024-04-10', 2, NULL, 1, 1, NULL, 4127, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343132372d30312e706e67, 4127),
 (4128, 4129, 4128, 3596, '2023-04-10', '2024-04-10', 1, NULL, 55, 1, NULL, 4128, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343132382d30312e706e67, 4128),
 (4129, 4129, 4128, 3596, '2023-04-10', '2024-04-10', 1, NULL, 55, 1, NULL, 4129, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343132392d30312e706e67, 4129);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (4130, 4130, 4129, 3597, '2023-04-10', '2024-04-10', 1, NULL, 1, 1, NULL, 4130, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343133302d30312e706e67, 4130),
 (4132, 4132, 4131, 1128, '2023-04-10', '2024-04-10', 2, NULL, 1, 1, NULL, 4132, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343133322d30322e706e67, 4132),
 (4133, 4133, 4132, 3599, '2023-04-10', '2024-04-10', 1, NULL, 1, 1, NULL, 4133, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343133332d30312e706e67, 4133),
@@ -28091,7 +28102,7 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 (4530, 4530, 4529, 1479, '2023-05-17', '2024-05-17', 1, NULL, 19, 1, NULL, 4530, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533302d30322e706e67, 4530),
 (4531, 4531, 4530, 1535, '2023-05-24', '2024-05-24', 1, NULL, 19, 1, NULL, 4531, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533312d30322e706e67, 4531),
 (4532, 4532, 4531, 1536, '2023-05-24', '2024-05-24', 1, NULL, 19, 1, NULL, 4532, 2, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533322d30322e706e67, 4532);
-INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `poliza_fechaInicio`, `poliza_fechaVencimiento`, `tipoContrato_id`, `estado_id`, `usuario_id`, `sucursal_id`, `transporte_id`, `cobertura_id`, `poliza_renovacion`, `poliza_qr`, `debitoCredito`) VALUES
+INSERT INTO poliza (poliza_id, cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento, tipoContrato_id, estado_id, usuario_id, sucursal_id, transporte_id, cobertura_id, poliza_renovacion, poliza_qr, debitoCredito) VALUES
 (4537, 4537, 4536, 3906, '2023-05-11', '2024-05-11', 1, NULL, 1, 1, NULL, 4537, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533372d30312e706e67, 4537),
 (4538, 4538, 4537, 3907, '2023-05-11', '2024-05-11', 1, NULL, 1, 1, NULL, 4538, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533382d30312e706e67, 4538),
 (4539, 4539, 4538, 3908, '2023-05-11', '2024-05-11', 1, NULL, 1, 1, NULL, 4539, 1, 0x2e2e2f436f6e74726f6c61646f722f496d6751722f3030303030343533392d30312e706e67, 4539),
@@ -28366,34 +28377,34 @@ INSERT INTO `poliza` (`poliza_id`, `cliente_id`, `titular_id`, `vehiculo_id`, `p
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `precio`
+-- Estructura de tabla para la tabla precio
 --
 
-CREATE TABLE `precio` (
-  `precio_id` bigint NOT NULL,
-  `tipoVehiculo_id` bigint NOT NULL,
-  `tipoContrato_id` bigint NOT NULL,
-  `precio_monto` decimal(9,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE precio (
+  precio_id bigint NOT NULL,
+  tipoVehiculo_id bigint NOT NULL,
+  tipoContrato_id bigint NOT NULL,
+  precio_monto decimal(9,2) NOT NULL
+);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `preciodolar`
+-- Estructura de tabla para la tabla preciodolar
 --
 
-CREATE TABLE `preciodolar` (
-  `dolar_id` bigint NOT NULL,
-  `dolar_monto` decimal(9,2) NOT NULL,
-  `dolar_hora` time NOT NULL,
-  `dolar_fecha` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE preciodolar (
+  dolar_id bigint NOT NULL,
+  dolar_monto decimal(9,2) NOT NULL,
+  dolar_hora time NOT NULL,
+  dolar_fecha date NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `preciodolar`
+-- Volcado de datos para la tabla preciodolar
 --
 
-INSERT INTO `preciodolar` (`dolar_id`, `dolar_monto`, `dolar_hora`, `dolar_fecha`) VALUES
+INSERT INTO preciodolar (dolar_id, dolar_monto, dolar_hora, dolar_fecha) VALUES
 (5, 29.51, '09:31:52', '2023-07-29'),
 (6, 29.51, '10:19:05', '2023-07-30'),
 (7, 29.51, '09:36:29', '2023-07-31'),
@@ -28457,40 +28468,40 @@ INSERT INTO `preciodolar` (`dolar_id`, `dolar_monto`, `dolar_hora`, `dolar_fecha
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `roles`
+-- Estructura de tabla para la tabla roles
 --
 
-CREATE TABLE `roles` (
-  `roles_id` bigint NOT NULL,
-  `roles_nombre` varchar(150) NOT NULL,
-  `roles_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE roles (
+  roles_id bigint NOT NULL,
+  roles_nombre varchar(150) NOT NULL,
+  roles_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `roles`
+-- Volcado de datos para la tabla roles
 --
 
-INSERT INTO `roles` (`roles_id`, `roles_nombre`, `roles_estatus`) VALUES
+INSERT INTO roles (roles_id, roles_nombre, roles_estatus) VALUES
 (1, 'Administrador', 1),
 (2, 'Vendedor', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sucursal`
+-- Estructura de tabla para la tabla sucursal
 --
 
-CREATE TABLE `sucursal` (
-  `sucursal_id` bigint NOT NULL,
-  `sucursal_nombre` varchar(150) NOT NULL,
-  `sucursal_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE sucursal (
+  sucursal_id bigint NOT NULL,
+  sucursal_nombre varchar(150) NOT NULL,
+  sucursal_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `sucursal`
+-- Volcado de datos para la tabla sucursal
 --
 
-INSERT INTO `sucursal` (`sucursal_id`, `sucursal_nombre`, `sucursal_estatus`) VALUES
+INSERT INTO sucursal (sucursal_id, sucursal_nombre, sucursal_estatus) VALUES
 (1, 'ACARIGUA', 1),
 (2, 'GUANARITO', 1),
 (3, 'TUREN', 1),
@@ -28509,29 +28520,29 @@ INSERT INTO `sucursal` (`sucursal_id`, `sucursal_nombre`, `sucursal_estatus`) VA
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipocontrato`
+-- Estructura de tabla para la tabla tipocontrato
 --
 
-CREATE TABLE `tipocontrato` (
-  `contrato_id` bigint NOT NULL,
-  `contrato_nombre` varchar(150) NOT NULL,
-  `dañoCosas` decimal(9,2) NOT NULL,
-  `dañoPersonas` decimal(9,2) NOT NULL,
-  `fianzaCuanti` decimal(9,2) NOT NULL,
-  `asistenciaLegal` decimal(9,2) NOT NULL,
-  `apov` decimal(9,2) NOT NULL,
-  `muerte` decimal(9,2) NOT NULL,
-  `invalidez` decimal(9,2) NOT NULL,
-  `gastosMedicos` decimal(9,2) NOT NULL,
-  `grua` decimal(9,2) NOT NULL,
-  `contrato_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE tipocontrato (
+  contrato_id bigint NOT NULL,
+  contrato_nombre varchar(150) NOT NULL,
+  dañoCosas decimal(9,2) NOT NULL,
+  dañoPersonas decimal(9,2) NOT NULL,
+  fianzaCuanti decimal(9,2) NOT NULL,
+  asistenciaLegal decimal(9,2) NOT NULL,
+  apov decimal(9,2) NOT NULL,
+  muerte decimal(9,2) NOT NULL,
+  invalidez decimal(9,2) NOT NULL,
+  gastosMedicos decimal(9,2) NOT NULL,
+  grua decimal(9,2) NOT NULL,
+  contrato_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `tipocontrato`
+-- Volcado de datos para la tabla tipocontrato
 --
 
-INSERT INTO `tipocontrato` (`contrato_id`, `contrato_nombre`, `dañoCosas`, `dañoPersonas`, `fianzaCuanti`, `asistenciaLegal`, `apov`, `muerte`, `invalidez`, `gastosMedicos`, `grua`, `contrato_estatus`) VALUES
+INSERT INTO tipocontrato (contrato_id, contrato_nombre, dañoCosas, dañoPersonas, fianzaCuanti, asistenciaLegal, apov, muerte, invalidez, gastosMedicos, grua, contrato_estatus) VALUES
 (1, 'BASICO', 500.00, 500.00, 200.00, 500.00, 0.00, 300.00, 50.00, 150.00, 300.00, 1),
 (2, 'A.P.O.V', 500.00, 500.00, 200.00, 500.00, 0.00, 300.00, 50.00, 300.00, 150.00, 1),
 (3, 'COBERTURA AMPLIA', 18000.00, 18000.00, 2500.00, 4500.00, 0.00, 9000.00, 0.00, 6000.00, 6000.00, 1),
@@ -28542,21 +28553,21 @@ INSERT INTO `tipocontrato` (`contrato_id`, `contrato_nombre`, `dañoCosas`, `da�
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipovehiculo`
+-- Estructura de tabla para la tabla tipovehiculo
 --
 
-CREATE TABLE `tipovehiculo` (
-  `tipoVehiculo_id` bigint NOT NULL,
-  `tipoVehiculo_nombre` varchar(150) NOT NULL,
-  `tipoVehiculo_precio` decimal(9,2) DEFAULT NULL,
-  `tipoVehiculo_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE tipovehiculo (
+  tipoVehiculo_id bigint NOT NULL,
+  tipoVehiculo_nombre varchar(150) NOT NULL,
+  tipoVehiculo_precio decimal(9,2) DEFAULT NULL,
+  tipoVehiculo_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `tipovehiculo`
+-- Volcado de datos para la tabla tipovehiculo
 --
 
-INSERT INTO `tipovehiculo` (`tipoVehiculo_id`, `tipoVehiculo_nombre`, `tipoVehiculo_precio`, `tipoVehiculo_estatus`) VALUES
+INSERT INTO tipovehiculo (tipoVehiculo_id, tipoVehiculo_nombre, tipoVehiculo_precio, tipoVehiculo_estatus) VALUES
 (1, 'sedan', 10.00, 1),
 (2, 'coupe', 10.00, 1),
 (3, 'taxi', 10.00, 1),
@@ -28606,22 +28617,22 @@ INSERT INTO `tipovehiculo` (`tipoVehiculo_id`, `tipoVehiculo_nombre`, `tipoVehic
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titular`
+-- Estructura de tabla para la tabla titular
 --
 
-CREATE TABLE `titular` (
-  `titular_id` bigint NOT NULL,
-  `titular_nombre` varchar(150) NOT NULL,
-  `titular_apellido` varchar(150) NOT NULL,
-  `titular_cedula` char(15) NOT NULL,
-  `titular_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE titular (
+  titular_id bigint NOT NULL,
+  titular_nombre varchar(150) NOT NULL,
+  titular_apellido varchar(150) NOT NULL,
+  titular_cedula char(15) NOT NULL,
+  titular_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `titular`
+-- Volcado de datos para la tabla titular
 --
 
-INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titular_cedula`, `titular_estatus`) VALUES
+INSERT INTO titular (titular_id, titular_nombre, titular_apellido, titular_cedula, titular_estatus) VALUES
 (1, 'LEONARDO JESUS', 'FAGUNDEZ BAUTE', 'V-10739517', 1),
 (2, 'TRANSPORTE DUALFI', 'DUALFI SRL', 'J-30119815', 1),
 (3, 'XIOMARA COROMOTO', 'PARRA MEJIAS', 'V-09844861', 1),
@@ -29487,7 +29498,7 @@ INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titu
 (863, 'DANIEL JACOB', 'DESPUJOS MENDOZA', 'V-19636612', 1),
 (864, 'TERESA JOSEFINA', 'NIETO ', 'V-8662493', 1),
 (865, 'ANDER ANTONIO', 'COLINA ', 'V-10327350', 1),
-(866, 'ALVARO JOSE', 'PRIETO ', 'V-`18124911', 1),
+(866, 'ALVARO JOSE', 'PRIETO ', 'V-18124911', 1),
 (867, 'ALVARO JOSE', 'PRIETO ', 'V-18124911', 1),
 (868, 'JOSE ANTONIO', 'RIVERO ', 'V-3866841', 1),
 (869, 'CLENY MILAGROS', 'ORTEGA ORTEGA', 'V-14426397', 1),
@@ -29536,7 +29547,7 @@ INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titu
 (912, 'FREDDY JOSE', 'QUIROZ AZUAJE', 'V-12991362', 1),
 (913, 'JOSE GREGORIO', 'BARRIOS PELAYO', 'V-24936837', 1),
 (914, 'EFRAIN ENRIQUE', 'PINTO ', 'V-10065258', 1);
-INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titular_cedula`, `titular_estatus`) VALUES
+INSERT INTO titular (titular_id, titular_nombre, titular_apellido, titular_cedula, titular_estatus) VALUES
 (915, 'RIXIO LUIS', 'MANTILLA ANTUNEZ', 'V-4712812', 1),
 (916, 'RIXIO LUIS', 'MANTILLA ANTUNEZ', 'V-4712812', 1),
 (917, 'RAFAEL ANTONIO', 'ROMERO PRADO', 'V-11076177', 1),
@@ -30469,7 +30480,7 @@ INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titu
 (1844, 'ANA MARIA', 'COLMENAREZ ', 'V-14092915', 1),
 (1845, 'PABLO HUMBERTO', 'DURAND ', 'V-1122134', 1),
 (1846, 'LUIS EDUARDO', 'EDUARDO RODRIGUEZ', 'V-20240104', 1);
-INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titular_cedula`, `titular_estatus`) VALUES
+INSERT INTO titular (titular_id, titular_nombre, titular_apellido, `titular_cedula`, `titular_estatus`) VALUES
 (1847, 'DANY WILLIAMS', 'ESCALONA SILVA', 'V-13555090', 1),
 (1848, 'RAMON OMAR', 'PEREZ ', 'V-3689400', 1),
 (1849, 'MICAELA MARINA', 'CIMINI ', 'V-23580684', 1),
@@ -34164,8 +34175,8 @@ INSERT INTO `titular` (`titular_id`, `titular_nombre`, `titular_apellido`, `titu
 CREATE TABLE `transporte` (
   `transporte_id` bigint NOT NULL,
   `transporte_nombre` varchar(150) NOT NULL,
-  `transporte_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `transporte_estatus` BOOLEAN NOT NULL
+);
 
 --
 -- Volcado de datos para la tabla `transporte`
@@ -34181,17 +34192,17 @@ INSERT INTO `transporte` (`transporte_id`, `transporte_nombre`, `transporte_esta
 -- Estructura de tabla para la tabla `usovehiculo`
 --
 
-CREATE TABLE `usovehiculo` (
-  `usoVehiculo_id` bigint NOT NULL,
-  `usoVehiculo_nombre` varchar(150) NOT NULL,
-  `usoVehiculo_estatus` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE usovehiculo (
+  usoVehiculo_id bigint NOT NULL,
+  usoVehiculo_nombre varchar(150) NOT NULL,
+  usoVehiculo_estatus BOOLEAN NOT NULL
+);
 
 --
--- Volcado de datos para la tabla `usovehiculo`
+-- Volcado de datos para la tabla usovehiculo
 --
 
-INSERT INTO `usovehiculo` (`usoVehiculo_id`, `usoVehiculo_nombre`, `usoVehiculo_estatus`) VALUES
+INSERT INTO usovehiculo (usoVehiculo_id, usoVehiculo_nombre, usoVehiculo_estatus) VALUES
 (1, 'PARTICULAR', 1),
 (2, 'CARGA', 1),
 (3, 'RUSTICO PARTICULAR', 1),
@@ -34208,29 +34219,29 @@ INSERT INTO `usovehiculo` (`usoVehiculo_id`, `usoVehiculo_nombre`, `usoVehiculo_
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Estructura de tabla para la tabla usuario
 --
 
-CREATE TABLE `usuario` (
-  `usuario_id` bigint NOT NULL,
-  `usuario_usuario` varchar(150) DEFAULT NULL,
-  `usuario_nombre` varchar(150) DEFAULT NULL,
-  `usuario_apellido` varchar(150) DEFAULT NULL,
-  `usuario_cedula` char(15) DEFAULT NULL,
-  `usuario_telefono` char(15) DEFAULT NULL,
-  `usuario_direccion` varchar(150) DEFAULT NULL,
-  `usuario_correo` varchar(150) DEFAULT NULL,
-  `usuario_clave` varchar(150) DEFAULT NULL,
-  `roles_id` int DEFAULT NULL,
-  `sucursal_id` int DEFAULT NULL,
-  `usuario_estatus` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE usuario (
+  usuario_id bigint NOT NULL,
+  usuario_usuario varchar(150) DEFAULT NULL,
+  usuario_nombre varchar(150) DEFAULT NULL,
+  usuario_apellido varchar(150) DEFAULT NULL,
+  usuario_cedula char(15) DEFAULT NULL,
+  usuario_telefono char(15) DEFAULT NULL,
+  usuario_direccion varchar(150) DEFAULT NULL,
+  usuario_correo varchar(150) DEFAULT NULL,
+  usuario_clave varchar(150) DEFAULT NULL,
+  roles_id int DEFAULT NULL,
+  sucursal_id int DEFAULT NULL,
+  usuario_estatus bigint DEFAULT NULL
+);
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Volcado de datos para la tabla usuario
 --
 
-INSERT INTO `usuario` (`usuario_id`, `usuario_usuario`, `usuario_nombre`, `usuario_apellido`, `usuario_cedula`, `usuario_telefono`, `usuario_direccion`, `usuario_correo`, `usuario_clave`, `roles_id`, `sucursal_id`, `usuario_estatus`) VALUES
+INSERT INTO usuario (usuario_id, usuario_usuario, usuario_nombre, usuario_apellido, usuario_cedula, usuario_telefono, usuario_direccion, usuario_correo, usuario_clave`, `roles_id`, `sucursal_id`, `usuario_estatus`) VALUES
 (1, '', 'MIGUEL ', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1),
 (2, '', 'ASESOR', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1),
 (3, '', 'OFICINA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1),
@@ -34310,7 +34321,7 @@ CREATE TABLE `vehiculo` (
   `uso_id` bigint DEFAULT NULL,
   `clase_id` bigint DEFAULT NULL,
   `tipo_id` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Volcado de datos para la tabla `vehiculo`

@@ -247,7 +247,7 @@ if ($datos == null) {
     $Pdf->SetFont('Arial', 'B', 10);
     $Pdf->Cell(72, 183, ""); //Observaciones: 
     $Pdf->SetFont('Arial', 'B', 8);
-    $Pdf->Cell(86, 183, "" . utf8_decode(strtoupper($datos[0]["medico_observacion"])));
+    // $Pdf->Cell(86, 183, "" . utf8_decode(strtoupper($datos[0]["medico_observacion"])));
     // $Pdf->Cell(86,183,"".utf8_decode(strtoupper($result['observacion'])));
 
     $Pdf->Ln(9);

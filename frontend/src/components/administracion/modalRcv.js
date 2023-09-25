@@ -29,7 +29,7 @@ export const ModalRcv = (props) => {
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
-
+  const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
 
   //Contrato
   const TxtTipoContrato = useRef();
@@ -637,10 +637,11 @@ export const ModalRcv = (props) => {
 
   const validarTitular = (e) => {
     if (e.target.value === txtCedula.current.value) {
-      console.log('hola')
       txtNombreTitular.current.value = txtNombre.current.value
       txtApellidoTitular.current.value = txtApellido.current.value
-
+    } else {
+      txtNombreTitular.current.value = "";
+      txtApellidoTitular.current.value = "";
     }
   }
 
@@ -648,10 +649,24 @@ export const ModalRcv = (props) => {
     if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
       event.returnValue = false;
   }
+  const handleFormaPagoChange = () => {
+    const selectedOption = cmbFormaPago.current.value;
 
+    // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
+    if (selectedOption === '1' || selectedOption === '3') {
+      txtReferencia.current.disabled = true;
+    } else {
+      txtReferencia.current.disabled = false;
+    }
+  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
+      if (event.target.name === 'dolar') {
+        let bs = parseFloat(dolarbcv)
+        let total = parseFloat(event.target.value) * bs
+        txtBs.current.value = formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+      }
       if (
         event.target.value === "" ||
         parseFloat(
@@ -906,7 +921,7 @@ onHideCatalogo={selectTransporte}
                 <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos del contratante</legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select col-md-3" ref={cmbNacionalidad}  aria-label="Default select example">
+                  <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
@@ -926,7 +941,7 @@ onHideCatalogo={selectTransporte}
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
                     <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
-                    <input type="text" ref={txtNombre} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" ref={txtNombre} class="form-control " aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -1029,7 +1044,7 @@ onHideCatalogo={selectTransporte}
                     <option value="J-">J-</option>
                     <option value="G-">G-</option>
                   </select>
-                  <input type="text" class="form-control" ref={txtCedulatTitular} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <input type="text" class="form-control" onChange={validarTitular} ref={txtCedulatTitular} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
                   <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
                 </div>
                 <div class="col-md-9"></div>
@@ -1182,14 +1197,12 @@ onHideCatalogo={selectTransporte}
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago </span>
 
-                  <select class="form-select" ref={cmbFormaPago} aria-label="Default select example">
+                  <select class="form-select" ref={cmbFormaPago} aria-label="Default select example" onChange={handleFormaPagoChange}>
                     <option value="0">Pago Movil</option>
                     <option value="1">Efectivo</option>
                     <option value="2">Transferencia</option>
                     <option value="3">Punto</option>
-
                   </select>
-
                 </div>
               </div>
               <div class="col-md-4">
@@ -1201,7 +1214,7 @@ onHideCatalogo={selectTransporte}
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en $</span>
-                  <input type="text" class="form-control" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <input type="text" class="form-control" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
                 </div>
               </div>
               <div class="col-md-4">

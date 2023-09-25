@@ -274,7 +274,7 @@ console.log(endpoint)
                       <TableRow key={index} style={{ padding: "0" }}>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_id}</TableCell> 
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.tipoVehiculo_precio}</TableCell>
+                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.precio_monto}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.tipoVehiculo_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
 
                    

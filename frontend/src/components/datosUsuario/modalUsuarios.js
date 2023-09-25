@@ -503,7 +503,7 @@ export const ModalUsuarios = (props) => {
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-            <select class="form-select" ref={cmbNacionalidad} aria-label="Default select example">
+            <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
 
               <option value="V-">V-</option>
               <option value="E-">E-</option>
@@ -515,7 +515,7 @@ export const ModalUsuarios = (props) => {
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">Telefono:</span>
-            <select class="form-select col-md-2" ref={cmbTelefono} aria-label="Default select example">
+            <select class="form-select col-md-4" ref={cmbTelefono} aria-label="Default select example">
 
               <option value="0414-">0414-</option>
               <option value="0424-">0424-</option>
