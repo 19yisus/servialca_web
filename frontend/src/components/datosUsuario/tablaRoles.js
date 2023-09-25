@@ -159,8 +159,8 @@ function TablaRoles() {
         else
           return items.filter(x => {
             if ((x.roles_id !== null ? String(x.roles_id).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+              || (x.roles_nombre !== null ? x.roles_nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
+             
             ) {
               return x;
             }
