@@ -24,7 +24,7 @@ class Con_medico extends cls_medico
             $rutaDestino = "fotosCliente/" . $imagenNombreOriginal;
             // Mueve el archivo temporal a la ubicación deseada
             if (move_uploaded_file($imagenRutaTemporal, $rutaDestino)) {
-                $resultado = $this->SaveImg($rutaDestino,$_POST["ID"]);
+                $resultado = $this->SaveImg($rutaDestino);
                 Response($resultado, 200);
             }
         }
