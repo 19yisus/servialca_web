@@ -7,6 +7,7 @@ import MenuImpuestoPP from "./pages/escritorio";
 import "./Hero.css";
 import { MensajeSiNo } from "./components/mensajesCerrar";
 import { AuthContext } from "../src/context/auth";
+import PaginaWeb from "./pages/paginaWeb";
 
 
 function App(props) {
@@ -42,7 +43,7 @@ function App(props) {
     currSeconds++;
    /*  console.log(currSeconds); */
 
-     if (currSeconds === 180 && pathname !== "/") {
+     if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
      
       setMensaje({
         mostrar: true,
@@ -52,8 +53,8 @@ function App(props) {
       });
     }
 
-    if (currSeconds === 190 && pathname !== "/") {
-        window.location.href = "/"; 
+    if (currSeconds === 190 && pathname !== "/login" && pathname !== "/") {
+        window.location.href = "/login"; 
       setMensaje({
         mostrar: false,
         icono: "",
@@ -71,7 +72,7 @@ function App(props) {
       <MensajeSiNo
         mensaje={mensaje}
         onHideSi={() => {
-          window.location.href = "/";
+          window.location.href = "/login";
         }}
         onHideNo={() => {
           setMensaje({
@@ -84,8 +85,10 @@ function App(props) {
       />
       <AuthProvider>
         <Router>
-          <Route exact path="/" component={Login} />
-          {pathname !== "/" && (
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={PaginaWeb} />
+
+          {pathname !== "/" && pathname !== "/login" && (
             <div>
               <MenuImpuestoPP />
             </div>
