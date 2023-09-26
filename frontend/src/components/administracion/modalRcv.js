@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -22,14 +22,15 @@ import CatalogoSucursal from "../../catalogos/catalagoSucursal";
 import CatalogoTransporte from "../../catalogos/catalagoTransporte";
 import CatalogoUso from "../../catalogos/catalogoUso";
 import CatalogoClase from "../../catalogos/catalogoClase";
+import CatalogoTipo  from "../../catalogos/catalagoTipoVehiculo";
 
 export const ModalRcv = (props) => {
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-  const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
-  const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
+  const fechasistema = JSON.parse(localStorage.getItem("fechasistema"));
+  const dolarbcv = JSON.parse(localStorage.getItem("dolarbcv"));
 
   //Contrato
   const TxtTipoContrato = useRef();
@@ -71,11 +72,11 @@ export const ModalRcv = (props) => {
 
   //Pago
   const cmbFormaPago = useRef();
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtBs = useRef();
   const txtDolar = useRef();
 
-  const [tipoContrato, setTipoContrato] = useState([])
+  const [tipoContrato, setTipoContrato] = useState([]);
   const [estados, setEstados] = useState();
   const [acesor, setAcesor] = useState();
   const [sucursal, setSucursal] = useState();
@@ -83,9 +84,6 @@ export const ModalRcv = (props) => {
   const [uso, setUso] = useState();
   const [clase, setClase] = useState();
   const [tipo, setTipo] = useState();
-
-
-
 
   const [values, setValues] = useState({
     ced: "",
@@ -118,7 +116,6 @@ export const ModalRcv = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
   const [mostrar1, setMostrar1] = useState(false);
@@ -135,14 +132,8 @@ export const ModalRcv = (props) => {
 
   const [mostrar8, setMostrar9] = useState(false);
 
-
-
-
-  const [idContrato, setIdContrato] = useState()
+  const [idContrato, setIdContrato] = useState();
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -160,7 +151,6 @@ export const ModalRcv = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
-
 
   const salir = () => {
     props.onHideCancela();
@@ -186,380 +176,356 @@ export const ModalRcv = (props) => {
     });
   };
 
-
-
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/poliza/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
     //Contrato
-    bodyF.append("fechaInicio", txtDesde.current.value)
-    bodyF.append("fechaVencimiento", txtHasta.current.value)
-    bodyF.append("tipoContrato", TxtTipoContrato.current.value)
-    bodyF.append("Estado", cmbEstado.current.value)
+    bodyF.append("fechaInicio", txtDesde.current.value);
+    bodyF.append("fechaVencimiento", txtHasta.current.value);
+    bodyF.append("tipoContrato", TxtTipoContrato.current.value);
+    bodyF.append("Estado", cmbEstado.current.value);
 
     //Contratante
-    bodyF.append("Cedula", cmbNacionalidad.current.value + txtCedula.current.value)
-    bodyF.append("Nombre", txtNombre.current.value)
-    bodyF.append("Apellido", txtApellido.current.value)
-    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    bodyF.append("Telefono", cmbTelefono.current.value + txtTelefono.current.value)
-    bodyF.append("Correo", txtCorreo.current.value)
-    bodyF.append("Direccion", txtDirec.current.value)
+    bodyF.append(
+      "Cedula",
+      cmbNacionalidad.current.value + txtCedula.current.value
+    );
+    bodyF.append("Nombre", txtNombre.current.value);
+    bodyF.append("Apellido", txtApellido.current.value);
+    bodyF.append("fechaNacimiento", txtFechaNaci.current.value);
+    bodyF.append(
+      "Telefono",
+      cmbTelefono.current.value + txtTelefono.current.value
+    );
+    bodyF.append("Correo", txtCorreo.current.value);
+    bodyF.append("Direccion", txtDirec.current.value);
     //titular
-    bodyF.append("cedulaTitular", cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value)
-    bodyF.append("nombreTitular", txtNombreTitular.current.value)
-    bodyF.append("apellidoTitular", txtApellidoTitular.current.value)
+    bodyF.append(
+      "cedulaTitular",
+      cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value
+    );
+    bodyF.append("nombreTitular", txtNombreTitular.current.value);
+    bodyF.append("apellidoTitular", txtApellidoTitular.current.value);
 
     //Vehiculo
-    bodyF.append("Placa", txtPlaca.current.value)
-    bodyF.append("Puesto", txtPuesto.current.value)
-    bodyF.append("Ano", txtAño.current.value)
-    bodyF.append("serialMotor", txtSerMotor.current.value)
-    bodyF.append("serialCarroceria", txtSerCarroceria.current.value)
-    bodyF.append("Color", txtColor.current.value)
-    bodyF.append("Uso", txtUso.current.value)
-    bodyF.append("Clase", txtClase.current.value)
-    bodyF.append("Tipo", cmbTipo.current.value)
-    bodyF.append("Modelo", txtModelo.current.value)
-    bodyF.append("Marca", txtMarca.current.value)
-    bodyF.append("Peso", txtPeso.current.value)
-    bodyF.append("Capacidad", txtCapTon.current.value)
+    bodyF.append("Placa", txtPlaca.current.value);
+    bodyF.append("Puesto", txtPuesto.current.value);
+    bodyF.append("Ano", txtAño.current.value);
+    bodyF.append("serialMotor", txtSerMotor.current.value);
+    bodyF.append("serialCarroceria", txtSerCarroceria.current.value);
+    bodyF.append("Color", txtColor.current.value);
+    bodyF.append("Uso", txtUso.current.value);
+    bodyF.append("Clase", txtClase.current.value);
+    bodyF.append("Tipo", cmbTipo.current.value);
+    bodyF.append("Modelo", txtModelo.current.value);
+    bodyF.append("Marca", txtMarca.current.value);
+    bodyF.append("Peso", txtPeso.current.value);
+    bodyF.append("Capacidad", txtCapTon.current.value);
 
     //Cobertura
-    var monto = txtDolar.current.value.replace(',', '.');
-    bodyF.append("danoCosas", monto * 0.40)
-    bodyF.append("danoPersonas", monto * 0.20)
-    bodyF.append("fianza", monto * 0.10)
-    bodyF.append("asistencia", monto * 0.10)
-    bodyF.append("apov", monto * 1)
-    bodyF.append("muerte", monto * 0.10)
-    bodyF.append("invalidez", monto * 0)
-    bodyF.append("medico", monto * 0)
-    bodyF.append("grua", monto * 0.10)
-    bodyF.append("monto", monto)
+    var monto = txtDolar.current.value.replace(",", ".");
+    bodyF.append("danoCosas", monto * 0.4);
+    bodyF.append("danoPersonas", monto * 0.2);
+    bodyF.append("fianza", monto * 0.1);
+    bodyF.append("asistencia", monto * 0.1);
+    bodyF.append("apov", monto * 1);
+    bodyF.append("muerte", monto * 0.1);
+    bodyF.append("invalidez", monto * 0);
+    bodyF.append("medico", monto * 0);
+    bodyF.append("grua", monto * 0.1);
+    bodyF.append("monto", monto);
 
     //Pago
-    bodyF.append("metodoPago", cmbFormaPago.current.value)
-    bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", monto)
+    bodyF.append("metodoPago", cmbFormaPago.current.value);
+    bodyF.append("Referencia", txtReferencia.current.value);
+    bodyF.append("cantidadDolar", monto);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-        setIdContrato(response)
-
+        setIdContrato(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarTipoContrato = async () => {
     let endpoint = op.conexion + "/tipo_contrato/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('tipo contrato')
-        setTipoContrato(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("tipo contrato");
+        setTipoContrato(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarEstado = async () => {
     let endpoint = op.conexion + "/estado/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("esyado");
 
-
-        setActivate(false)
-        console.log('esyado')
-
-        setEstados(response)
-        console.log(response)
-
-
-
-
+        setEstados(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarAcesor = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('acesor')
-        setAcesor(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("acesor");
+        setAcesor(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarSucursal = async () => {
     let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('sucursal')
-        setSucursal(response)
-        console.log(response)
-
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("sucursal");
+        setSucursal(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarTransporte = async () => {
     let endpoint = op.conexion + "/transporte/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('transporte')
-        setTransporte(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("transporte");
+        setTransporte(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarUso = async () => {
     let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('uso')
-        setUso(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("uso");
+        setUso(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarClase = async () => {
     let endpoint = op.conexion + "/claseVehiculo/ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('clase')
-        setClase(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("clase");
+        setClase(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const selecionarTipo = async () => {
     let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("ID", user_id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log('tipo')
-        setTipo(response)
-        console.log(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("tipo");
+        setTipo(response);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const onChangeValidar = () => {
@@ -583,8 +549,6 @@ export const ModalRcv = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -610,50 +574,51 @@ export const ModalRcv = (props) => {
   };
   // Para poder la fecha en rcv
   const fechaSistema = moment();
-  const fechaHasta = fechaSistema.clone().add(1, 'year');
-
+  const fechaHasta = fechaSistema.clone().add(1, "year");
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela2(idContrato)
-
-  }
+    props.onHideCancela2(idContrato);
+  };
 
   const validarTitular = (e) => {
     if (e.target.value === txtCedula.current.value) {
-      txtNombreTitular.current.value = txtNombre.current.value
-      txtApellidoTitular.current.value = txtApellido.current.value
+      txtNombreTitular.current.value = txtNombre.current.value;
+      txtApellidoTitular.current.value = txtApellido.current.value;
     } else {
       txtNombreTitular.current.value = "";
       txtApellidoTitular.current.value = "";
     }
-  }
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
   const handleFormaPagoChange = () => {
     const selectedOption = cmbFormaPago.current.value;
 
     // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
-    if (selectedOption === '1' || selectedOption === '3') {
+    if (selectedOption === "1" || selectedOption === "3") {
       txtReferencia.current.disabled = true;
     } else {
       txtReferencia.current.disabled = false;
@@ -662,10 +627,15 @@ export const ModalRcv = (props) => {
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
-      if (event.target.name === 'dolar') {
-        let bs = parseFloat(dolarbcv)
-        let total = parseFloat(event.target.value) * bs
-        txtBs.current.value = formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+      if (event.target.name === "dolar") {
+        let bs = parseFloat(dolarbcv);
+        let total = parseFloat(event.target.value) * bs;
+        txtBs.current.value = formatMoneda(
+          total.toString().replace(",", "").replace(".", ","),
+          ",",
+          ".",
+          2
+        );
       }
       if (
         event.target.value === "" ||
@@ -693,35 +663,41 @@ export const ModalRcv = (props) => {
     } else return false;
   };
 
-const selectTipoContrato = (nombre) =>{
-  setMostrar1(false)
-   TxtTipoContrato.current.value = nombre
-}
+  const selectTipoContrato = (nombre) => {
+    setMostrar1(false);
+    TxtTipoContrato.current.value = nombre;
+  };
 
-const selectAcesor = (nombre) =>{
-  setMostrar2(false)
-   txtAcesor.current.value = nombre
-}
+  const selectAcesor = (nombre) => {
+    setMostrar2(false);
+    txtAcesor.current.value = nombre;
+  };
 
-const selectSucursal = (nombre) =>{
-  setMostrar3(false)
-   cmbSucursal.current.value = nombre
-}
+  const selectSucursal = (nombre) => {
+    setMostrar3(false);
+    cmbSucursal.current.value = nombre;
+  };
 
-const selectTransporte = (nombre) =>{
-  setMostrar4(false)
-   txtLinea.current.value = nombre
-}
+  const selectTransporte = (nombre) => {
+    setMostrar4(false);
+    txtLinea.current.value = nombre;
+  };
 
-const selectUso = (nombre) => {
-  setMostrar5(false)
-  txtUso.current.value = nombre
-}
+  const selectUso = (nombre) => {
+    setMostrar5(false);
+    txtUso.current.value = nombre;
+  };
 
-const selectClase = (nombre) => {
-  setMostrar6(false)
-  txtClase.current.value = nombre
-}
+  const selectClase = (nombre) => {
+    setMostrar6(false);
+    txtClase.current.value = nombre;
+  };
+  
+  const selectTipo = (nombre,precio) =>{
+    setMostrar7(false);
+    cmbTipo.current.value = nombre;
+    txtDolar.current.value= precio;
+  }
 
   return (
     <Modal
@@ -735,7 +711,6 @@ const selectClase = (nombre) => {
       onShow={() => {
         setOperacion(props.operacion);
         selecionarClase();
-
         selecionarTipoContrato();
         selecionarEstado();
         selecionarAcesor();
@@ -751,10 +726,7 @@ const selectClase = (nombre) => {
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>
-          Registro de RCV
-
-        </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>Registro de RCV</Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -769,69 +741,87 @@ const selectClase = (nombre) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoClientes
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={seleccionarCliente}
-
         />
 
         <CatalogoTipoContrato
-records={tipoContrato}
-show={mostrar1}
-onHideCancela={() => { setMostrar1(false) }}
-onHideCatalogo={selectTipoContrato}
-
-
+          records={tipoContrato}
+          show={mostrar1}
+          onHideCancela={() => {
+            setMostrar1(false);
+          }}
+          onHideCatalogo={selectTipoContrato}
         />
 
-<CatalogoAcesor
-records={acesor}
-show={mostrar2}
-onHideCancela={() => { setMostrar2(false) }}
-onHideCatalogo={selectAcesor}
-
-
+        <CatalogoAcesor
+          records={acesor}
+          show={mostrar2}
+          onHideCancela={() => {
+            setMostrar2(false);
+          }}
+          onHideCatalogo={selectAcesor}
         />
 
         <CatalogoSucursal
-        records={sucursal}
-        show={mostrar3}
-        onHideCancela={() => { setMostrar3(false) }}
-        onHideCatalogo={selectSucursal}
+          records={sucursal}
+          show={mostrar3}
+          onHideCancela={() => {
+            setMostrar3(false);
+          }}
+          onHideCatalogo={selectSucursal}
         />
 
         <CatalogoTransporte
-
-records={transporte}
-show={mostrar4}
-onHideCancela={() => { setMostrar4(false) }}
-onHideCatalogo={selectTransporte}
-        
-        
+          records={transporte}
+          show={mostrar4}
+          onHideCancela={() => {
+            setMostrar4(false);
+          }}
+          onHideCatalogo={selectTransporte}
         />
 
-        <CatalogoUso 
-        records={uso}
-        show={mostrar5}
-        onHideCancela={() => { setMostrar5(false) }}
-        onHideCatalogo={selectUso}
-          
+        <CatalogoUso
+          records={uso}
+          show={mostrar5}
+          onHideCancela={() => {
+            setMostrar5(false);
+          }}
+          onHideCatalogo={selectUso}
         />
 
-        <CatalogoClase 
-         records={clase}
-         show={mostrar6}
-         onHideCancela={() => { setMostrar6(false) }}
-         onHideCatalogo={selectClase}
+        <CatalogoClase
+          records={clase}
+          show={mostrar6}
+          onHideCancela={() => {
+            setMostrar6(false);
+          }}
+          onHideCatalogo={selectClase}
         />
-
+        <CatalogoTipo
+          records={tipo}
+          show={mostrar7}
+          onHideCancela={() => {
+            setMostrar7(false);
+          }}
+          onHideCatalogo={selectTipo}
+        />
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <ul class="nav nav-tabs mb-2" id="ex1" role="tablist">
           <li class="nav-item" role="presentation">
@@ -842,7 +832,10 @@ onHideCatalogo={selectTransporte}
               href="#ex1-tabs-1"
               role="tab"
               aria-controls="ex1-tabs-1"
-              aria-selected="true">Datos del Cliente</a>
+              aria-selected="true"
+            >
+              Datos del Cliente
+            </a>
           </li>
           <li class="nav-item" role="presentation">
             <a
@@ -852,7 +845,10 @@ onHideCatalogo={selectTransporte}
               href="#ex1-tabs-2"
               role="tab"
               aria-controls="ex1-tabs-2"
-              aria-selected="false">Datos del Vehiculo</a>
+              aria-selected="false"
+            >
+              Datos del Vehiculo
+            </a>
           </li>
           <li class="nav-item" role="presentation">
             <a
@@ -862,7 +858,10 @@ onHideCatalogo={selectTransporte}
               href="#ex1-tabs-3"
               role="tab"
               aria-controls="ex1-tabs-3"
-              aria-selected="false">Forma de Pago</a>
+              aria-selected="false"
+            >
+              Forma de Pago
+            </a>
           </li>
         </ul>
 
@@ -871,144 +870,280 @@ onHideCatalogo={selectTransporte}
             class="tab-pane fade show active"
             id="ex1-tabs-1"
             role="tabpanel"
-            aria-labelledby="ex1-tab-1">
+            aria-labelledby="ex1-tab-1"
+          >
             <div class="col-md-12 row mx-auto">
               <div class="col-md-5">
                 <div class="input-group input-group-sm mb-2 ">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de contrato: </span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Tipo de contrato:{" "}
+                  </span>
                   {/*<select class="form-select" ref={} aria-label="Default select example">
 
                     {tipoContrato && tipoContrato.map((item, index) => (
                       <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
                     ))}
                   </select>*/}
-                  <input type="text" class="form-control" ref={TxtTipoContrato} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar1(true) }}><i class="fa fa-search"></i></button>
-
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={TxtTipoContrato}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar1(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
               <div class="col-md-1"></div>
               <div class="col-md-3">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Desde</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Desde
+                  </span>
                   <input
                     type="date"
                     className="form-control"
                     ref={txtDesde}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    defaultValue={fechaSistema.format('YYYY-MM-DD')}
-                    max={fechaSistema.format('YYYY-MM-DD')}
+                    defaultValue={fechaSistema.format("YYYY-MM-DD")}
+                    max={fechaSistema.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Hasta</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Hasta
+                  </span>
                   <input
                     type="date"
                     className="form-control"
                     ref={txtHasta}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    defaultValue={fechaHasta.format('YYYY-MM-DD')}
-                    max={fechaHasta.format('YYYY-MM-DD')}
+                    defaultValue={fechaHasta.format("YYYY-MM-DD")}
+                    max={fechaHasta.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>
 
               <fieldset class="border rounded-3 p-3 row mx-auto">
-                <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos del contratante</legend>
+                <legend
+                  class="float-none w-auto px-3 fw-bold"
+                  style={{ fontSize: 15 }}
+                >
+                  Datos del contratante
+                </legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Cedula:
+                  </span>
+                  <select
+                    class="form-select col-md-3"
+                    ref={cmbNacionalidad}
+                    aria-label="Default select example"
+                  >
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
                     <option value="G-">G-</option>
                   </select>
-                  <input type="text" class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtCedula}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
                 <div class="col-md-5"></div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Fecha Nacimiento</span>
-                    <input type="date" ref={txtFechaNaci} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Fecha Nacimiento
+                    </span>
+                    <input
+                      type="date"
+                      ref={txtFechaNaci}
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
-                    <input type="text" ref={txtNombre} class="form-control " aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Nombre
+                    </span>
+                    <input
+                      type="text"
+                      ref={txtNombre}
+                      class="form-control "
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Apellido</span>
-                    <input type="text" ref={txtApellido} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Apellido
+                    </span>
+                    <input
+                      type="text"
+                      ref={txtApellido}
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
-
-
                 <div class="col-md-5">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Telefono</span>
-                    <select class="form-select col-md-4" ref={cmbTelefono} aria-label="Default select example">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Telefono
+                    </span>
+                    <select
+                      class="form-select col-md-4"
+                      ref={cmbTelefono}
+                      aria-label="Default select example"
+                    >
                       <option value="0414-">0414</option>
                       <option value="0424-">0424</option>
                       <option value="0416-">0416</option>
                       <option value="0426-">0426</option>
                       <option value="0412-">0412</option>
                     </select>
-                    <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={txtTelefono}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      onChange={handleInputNumChange}
+                    />
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Correo</span>
-                    <input type="text" class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Correo
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={txtCorreo}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Direción</span>
-                    <input type="text" class="form-control" ref={txtDirec} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Direción
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={txtDirec}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2 ">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Estado: </span>
-                    <select class="form-select" ref={cmbEstado} aria-label="Default select example">
-
-                      {estados && estados.map((item, index) => (
-                        <option key={index} value={item.estado_id} > {item.estado_nombre} </option>
-                      ))}
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Estado:{" "}
+                    </span>
+                    <select
+                      class="form-select"
+                      ref={cmbEstado}
+                      aria-label="Default select example"
+                    >
+                      {estados &&
+                        estados.map((item, index) => (
+                          <option key={index} value={item.estado_id}>
+                            {" "}
+                            {item.estado_nombre}{" "}
+                          </option>
+                        ))}
                     </select>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2 ">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Acesor: </span>
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Acesor:{" "}
+                    </span>
                     {/*<select class="form-select" ref={txtAcesor} aria-label="Default select example">
 
                       {acesor && acesor.map((item, index) => (
                         <option key={index} value={item.usuario_id} > {item.usuario_nombre} </option>
                       ))}
                     </select>*/}
-                     <input type="text" class="form-control" ref={txtAcesor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar2(true) }}><i class="fa fa-search"></i></button>
-
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={txtAcesor}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onClick={() => {
+                        setMostrar2(true);
+                      }}
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2 ">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Sucursal: </span>
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Sucursal:{" "}
+                    </span>
 
-                    <input type="text" class="form-control" ref={cmbSucursal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar3(true) }}><i class="fa fa-search"></i></button>
-                  
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={cmbSucursal}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onClick={() => {
+                        setMostrar3(true);
+                      }}
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
+
                     {/*<select class="form-select" ref={cmbSucursal} aria-label="Default select example">
                       {sucursal && sucursal.map((item, index) => (
                         <option key={index} value={item.sucursal_id} > {item.sucursal_nombre} </option>
@@ -1018,7 +1153,9 @@ onHideCatalogo={selectTransporte}
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2 ">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Linea de Transporte: </span>
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Linea de Transporte:{" "}
+                    </span>
                     {/*<select class="form-select" ref={txtLinea} aria-label="Default select example">
 
                       {transporte && transporte.map((item, index) => (
@@ -1026,178 +1163,372 @@ onHideCatalogo={selectTransporte}
                       ))}
                     </select>*/}
 
-
-                    <input type="text" class="form-control" ref={txtLinea} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar4(true) }}><i class="fa fa-search"></i></button>
+                    <input
+                      type="text"
+                      class="form-control"
+                      ref={txtLinea}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onClick={() => {
+                        setMostrar4(true);
+                      }}
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
                   </div>
                 </div>
-
-
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
-                <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Titular</legend>
+                <legend
+                  class="float-none w-auto px-3 fw-bold"
+                  style={{ fontSize: 15 }}
+                >
+                  Titular
+                </legend>
                 <div class="input-group input-group-sm mb-3 col-md-5">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-                  <select class="form-select col-md-3" ref={cmbNacionalidadTitular} aria-label="Default select example">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Cedula:
+                  </span>
+                  <select
+                    class="form-select col-md-3"
+                    ref={cmbNacionalidadTitular}
+                    aria-label="Default select example"
+                  >
                     <option value="V-">V-</option>
                     <option value="E-">E-</option>
                     <option value="J-">J-</option>
                     <option value="G-">G-</option>
                   </select>
-                  <input type="text" class="form-control" onChange={validarTitular} ref={txtCedulatTitular} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={validarTitular}
+                    ref={txtCedulatTitular}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
                 <div class="col-md-9"></div>
 
-
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
-                    <input type="text" ref={txtNombreTitular} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Nombre
+                    </span>
+                    <input
+                      type="text"
+                      ref={txtNombreTitular}
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Apellido</span>
-                    <input type="text" ref={txtApellidoTitular} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Apellido
+                    </span>
+                    <input
+                      type="text"
+                      ref={txtApellidoTitular}
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
-
               </fieldset>
-
-
-
             </div>
           </div>
-          <div class="tab-pane fade" id="ex1-tabs-2"
-            role="tabpanel" aria-labelledby="ex1-tab-2">
+          <div
+            class="tab-pane fade"
+            id="ex1-tabs-2"
+            role="tabpanel"
+            aria-labelledby="ex1-tab-2"
+          >
             <div class="col-md-12 row mx-auto">
-
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Placa</span>
-                  <input type="text" ref={txtPlaca} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Placa
+                  </span>
+                  <input
+                    type="text"
+                    ref={txtPlaca}
+                    class="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
 
-
-
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Puesto</span>
-                  <input type="text" ref={txtPuesto} class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Puesto
+                  </span>
+                  <input
+                    type="text"
+                    ref={txtPuesto}
+                    class="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputNumChange}
+                  />
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Uso</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Uso
+                  </span>
 
                   {/*<select class="form-select" ref={txtUso} aria-label="Default select example">
                     {uso && uso.map((item, index) => (
                       <option key={index} value={item.usoVehiculo_id} > {item.usoVehiculo_nombre} </option>
                     ))}
                   </select>*/}
-                   <input type="text" class="form-control" ref={txtUso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar5(true) }}><i class="fa fa-search"></i></button>
-
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtUso}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar5(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Año</span>
-                  <input type="text" class="form-control" ref={txtAño} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Año
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtAño}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputNumChange}
+                  />
                 </div>
               </div>
 
-
-
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Ser. Motor</span>
-                  <input type="text" class="form-control" ref={txtSerMotor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Ser. Motor
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtSerMotor}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Clase</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Clase
+                  </span>
 
                   {/*<select class="form-select" ref={txtClase} aria-label="Default select example">
                     {clase && clase.map((item, index) => (
                       <option key={index} value={item.claseVehiculo_id} > {item.clase_nombre} </option>
                     ))}
                   </select>*/}
- <input type="text" class="form-control" ref={txtClase} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                  <button type="button" class="btn btn-success" onClick={() => { setMostrar6(true) }}><i class="fa fa-search"></i></button>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtClase}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar6(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                  <input type="text" class="form-control" ref={txtColor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                </div>
-              </div>
-
-
-
-              <div class="col-md-4">
-                <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Ser. Carroceria</span>
-                  <input type="text" class="form-control" ref={txtSerCarroceria} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Tipo </span>
-
-                  <select class="form-select" ref={cmbTipo} aria-label="Default select example">
-
-                    {tipo && tipo.map((item, index) => (
-                      <option key={index} value={item.tipoVehiculo_id} > {item.tipoVehiculo_nombre} </option>
-                    ))}
-                  </select>
-
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Color
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtColor}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Modelo</span>
-                  <input type="text" class="form-control" ref={txtModelo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Ser. Carroceria
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtSerCarroceria}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Tipo
+                  </span>
+                  {/* <select
+                    class="form-select"
+                    ref={cmbTipo}
+                    aria-label="Default select example"
+                  >
+                    {tipo &&
+                      tipo.map((item, index) => (
+                        <option key={index} value={item.tipoVehiculo_id}>
+                          {" "}
+                          {item.tipoVehiculo_nombre}{" "}
+                        </option>
+                      ))}
+                  </select> */}
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={cmbTipo}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar7(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Marca</span>
-                  <input type="text" class="form-control" ref={txtMarca} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Modelo
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtModelo}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Peso</span>
-                  <input type="text" class="form-control" ref={txtPeso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Marca
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtMarca}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
 
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Cap. Ton.</span>
-                  <input type="text" class="form-control" ref={txtCapTon} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Peso
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtPeso}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputMontoChange}
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="input-group input-group-sm mb-2">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Cap. Ton.
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtCapTon}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputMontoChange}
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="ex1-tabs-3"
-            role="tabpanel" aria-labelledby="ex1-tab-3">
+          <div
+            class="tab-pane fade"
+            id="ex1-tabs-3"
+            role="tabpanel"
+            aria-labelledby="ex1-tab-3"
+          >
             <div class="col-md-12 row mx-auto">
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago </span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Forma de Pago{" "}
+                  </span>
 
-                  <select class="form-select" ref={cmbFormaPago} aria-label="Default select example" onChange={handleFormaPagoChange}>
+                  <select
+                    class="form-select"
+                    ref={cmbFormaPago}
+                    aria-label="Default select example"
+                    onChange={handleFormaPagoChange}
+                  >
                     <option value="0">Pago Movil</option>
                     <option value="1">Efectivo</option>
                     <option value="2">Transferencia</option>
@@ -1207,23 +1538,49 @@ onHideCatalogo={selectTransporte}
               </div>
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Referencia</span>
-                  <input type="text" class="form-control" ref={txtReferencia} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Referencia
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtReferencia}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en $</span>
-                  <input type="text" class="form-control" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Cantidad a pagar en $
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="dolar"
+                    ref={txtDolar}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputMontoChange}
+                  />
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad a pagar en bs</span>
-                  <input type="text" class="form-control" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+                  <span class="input-group-text" id="inputGroup-sizing-sm">
+                    Cantidad a pagar en bs
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ref={txtBs}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-sm"
+                    onChange={handleInputMontoChange}
+                  />
                 </div>
               </div>
-
             </div>
           </div>
         </div>
