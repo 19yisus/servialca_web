@@ -1404,3 +1404,41 @@ display: block;
   letter-spacing: 0.05rem;
   padding: 0.75rem 1rem;
 }
+
+
+
+.slider {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  transition: transform 1s ease-in-out;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+#slide1 { background-image: url('https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds.jpg'); }
+#slide2 { background-image: url('https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds.jpg'); }
+#slide3 { background-image: url('https://previews.123rf.com/images/artshock/artshock1209/artshock120900045/15221647-imag-of-heart-in-the-blue-sky-against-a-background-of-white-clouds.jpg'); }
+/* Agrega más estilos según sea necesario */
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + .slider .slides {
+  transform: translateX(-100%);
+}
+
+input[type="radio"]#slide1:checked + .slider .slides { transform: translateX(0%); }
+input[type="radio"]#slide2:checked + .slider .slides { transform: translateX(-100%); }
+input[type="radio"]#slide3:checked + .slider .slides { transform: translateX(-200%); }
+/* Agrega más reglas para slides adicionales si es necesario */
