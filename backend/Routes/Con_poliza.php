@@ -111,4 +111,12 @@ class Con_poliza extends cls_poliza
         $resultado = $this->Vencer($_GET["ID"]);
         Response($resultado, 200);
     }
+
+    public function Semanal()
+    {
+        $resultado = $this->consultaSemanal($_POST["Desde"], $_POST["Hasta"]);
+        Response($resultado, 200);
+    }
+
+    
 }

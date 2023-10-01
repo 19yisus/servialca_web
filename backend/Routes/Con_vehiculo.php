@@ -13,5 +13,10 @@ class Con_vehiculo extends cls_vehiculo
         $resultado = $this->GetOne($_GET["Placa"]);
         Response($resultado, 200);
     }
-}
 
+    public function ConsultarTodos()
+    {
+        $resultado = $this->GetAll();
+        Response($resultado, 200);
+    }
+}

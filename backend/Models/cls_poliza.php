@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("America/Caracas");
 error_reporting(E_ERROR | E_PARSE);
 
 require("./QR/qrlib.php");
@@ -27,6 +28,7 @@ abstract class cls_poliza extends cls_db
 	$idColor, $idModelo, $idMarca,
 	// Medico
 	$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
+
 
 
 
@@ -209,6 +211,7 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$this->SearchbyContrato();
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
 			$this->generarQR($this->id);
@@ -307,6 +310,7 @@ abstract class cls_poliza extends cls_db
 			if (!$this->db->inTransaction()) {
 				$this->db->beginTransaction();
 			}
+			
 
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
@@ -372,8 +376,6 @@ abstract class cls_poliza extends cls_db
 		}
 	}
 
-
-
 	protected function RegistraCobertura()
 	{
 
@@ -399,7 +401,7 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->cobertura;
 	}
-
+	
 	protected function RegistrarPoliza()
 	{
 		$sql = $this->db->prepare("SELECT * FROM poliza WHERE cliente_id = ? AND vehiculo_id = ?");
@@ -526,7 +528,12 @@ abstract class cls_poliza extends cls_db
 			return false;
 		return $this->vehiculo;
 	}
-
+	protected function SearchbyContrato(){
+		$sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_nombre = ?");
+		$sql->execute([$this->tipoContrato]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		$this->tipoContrato = $resultado["contrato_id"];
+	}
 	protected function SearchByCliente()
 	{
 		$sql = $this->db->prepare("SELECT * FROM cliente WHERE cliente_cedula = ?");
@@ -559,8 +566,6 @@ abstract class cls_poliza extends cls_db
 
 		return $this->cliente;
 	}
-
-
 
 	protected function SearchByModelo()
 	{
@@ -852,6 +857,66 @@ abstract class cls_poliza extends cls_db
 		} else {
 			return [];
 		}
+	}
+
+	public function Reporte($data, $desde, $hasta)
+	{
+		$resultado = null;
+		$sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_nombre = ?");
+		$sql->execute([$data]);
+		$usuario = $sql->fetchAll(PDO::FETCH_ASSOC);
+		if (!empty($usuario)) {
+			$resultado = $usuario;
+		} else {
+			$sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
+			$sql->execute([$data]);
+			$usuario = $sql->fetchAll(PDO::FETCH_ASSOC);
+			$resultado = $usuario;
+		}
+
+		if (!empty($resultado)) {
+			$usuarioID = isset($resultado[0]["usuario_id"]) ? $resultado[0]["usuario_id"] : null;
+			// $sucursalID = isset($resultado[0]["sucursal_id"]) ? $resultado[0]["sucursal_id"] : null;
+			$sql = $this->db->prepare("SELECT poliza.*, usuario.*, sucursal.*, cliente.*, tipocontrato.*, vehiculo.*, usovehiculo.*, clasevehiculo.*, color.*,
+            modelo.*, marca.*, tipovehiculo.*, debitocredito.* , coberturas.*, roles.*
+            FROM poliza
+            INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
+            INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+            INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
+            INNER JOIN roles ON roles.roles_id = usuario.roles_id
+            INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
+            INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+            INNER JOIN usovehiculo ON usovehiculo.usoVehiculo_id = vehiculo.uso_id
+            INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
+            INNER JOIN color ON color.color_id = vehiculo.color_id
+            INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
+            INNER JOIN marca ON marca.marca_id = vehiculo.marca_id
+            INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
+            INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+            INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
+            WHERE (poliza.usuario_id = ?) AND poliza_fechaInicio BETWEEN ? AND ?
+            ORDER BY poliza_fechaInicio DESC"); // Ordenar en orden descendente por poliza_fechaInicio
+
+			$sql->execute([$usuarioID, $desde, $hasta]);
+			$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $dato;
+		}
+		return [];
+	}
+	public function consultaSemanal($desde, $hasta)
+	{
+		$sql = $this->db->prepare("SELECT usuario.usuario_nombre AS nombre_usuario, sucursal.sucursal_nombre AS nombre_sucursal, 
+		SUM(debitocredito.nota_monto) AS total_monto_notas, 
+		COUNT(DISTINCT debitocredito.nota_id) AS cantidad_poliza_id FROM usuario 
+		INNER JOIN poliza ON usuario.usuario_id = poliza.usuario_id 
+		INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id 
+		INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+		WHERE debitocredito.nota_fecha BETWEEN ? AND ? 
+		AND usuario.usuario_id > 56
+		GROUP BY usuario.usuario_id, sucursal.sucursal_nombre, usuario.usuario_nombre");
+		$sql->execute([$desde, $hasta]);
+		$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
+		return $dato;
 	}
 
 

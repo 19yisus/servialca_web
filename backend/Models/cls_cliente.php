@@ -39,6 +39,16 @@ abstract class cls_cliente extends cls_db
         return $resultado;
     }
 
+    protected function GetAllTitular(){
+        $sql = $this->db->prepare("SELECT * FROM titular");
+        if ($sql->execute()){
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        }else{
+            $resultado = [];
+        }
+        return $resultado;
+    }
+
 }
 
 

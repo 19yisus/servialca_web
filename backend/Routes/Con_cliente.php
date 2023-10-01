@@ -13,8 +13,15 @@ class Con_cliente extends cls_cliente
         Response($resultado, 200);
     }
 
-    public function ConsultarTodos(){
+    public function ConsultarTodos()
+    {
         $resultado = $this->GetAll();
-        Response($resultado,200);
+        Response($resultado, 200);
+    }
+
+    public function ConsultarTodosTitular()
+    {
+        $resultado = $this->GetAllTitular();
+        Response($resultado, 200);
     }
 }

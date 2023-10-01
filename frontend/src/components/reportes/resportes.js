@@ -1,344 +1,413 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { TableBody, TableRow, TableCell, InputAdornment } from '@material-ui/core';
-import { Loader, Dimmer } from 'semantic-ui-react';
-import { Search } from "@material-ui/icons";
-import axios from 'axios';
-/* import { Dona, Torta } from '../graficos/graficos'; */
-/* import CartasAgentes from './cartasAgentes'; */
-import { Mensaje, MensajeSiNo } from '../mensajes';
-/* import { GestionarExpendedor } from './modalExpendedor'; */
+import React, { useEffect, useRef, useContext, useState } from "react";
+
+import { Mensaje } from "../mensajes";
+import { Loader, Dimmer } from "semantic-ui-react";
+import moment from "moment";
+
+import axios from "axios";
 import useTable from "../useTable";
+import { TableBody, TableRow, TableCell } from "@material-ui/core";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
-import { formatMoneda } from '../../util/varios';
+function TablaSursales() {
+  var op = require("../../modulos/datos");
+  let token = localStorage.getItem("jwtToken");
+  const user_id = JSON.parse(localStorage.getItem("user_id"));
 
-import moment from 'moment'
+  const [activate, setActivate] = useState(false);
+  const [mensaje, setMensaje] = useState({
+    mostrar: false,
+    titulo: "",
+    texto: "",
+    icono: "",
+  });
 
-const TablaReportes = (props) => {
+  console.log(user_id);
+  const headCells = [
+    {
+      label: "Nombre del vendedor",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Sucursal",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Cantidad de contratos",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
 
-    var op = require('../../modulos/datos');
-    let token = localStorage.getItem('jwtToken');
-    const user_id = JSON.parse(localStorage.getItem("user_id"));
-    const fechasistema = JSON.parse(localStorage.getItem('fechasistema'))
+    {
+      label: "Monto",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
 
+    {
+      label: "Generar Reporte",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+  ];
 
-    let el;
-    let municipios = [];
+  const codigo = JSON.parse(localStorage.getItem("codigo"));
+  const permiso = JSON.parse(localStorage.getItem("permiso"));
+  const [idSucursal, setIdSucursal] = useState(0.0);
+  const [operacion, setOperacion] = useState(0.0);
+  const [mostrar, setMostrar] = useState(false);
 
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
 
-    const headCells = [
-        { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Fecha', textAlign: 'center' },
-        { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Rerencia', textAlign: 'center' },
-        { id: 'nombre', color: 'rgba(5, 81, 130, 1)', label: 'Concepto', textAlign: 'center' },
-        { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Monto', textAlign: 'center' },
-        { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Opcion', textAlign: 'center' },
+  const [records, setRecords] = useState([
+    {
+      idproducto: "",
+      codigo: "",
+      cantidad: "",
+      producto: "",
+      precio: "",
+      iva: "",
+      motoiva: "",
+      descuento: "",
+      total: "",
+    },
+  ]);
 
-    ]
+  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  const txtDolar = useRef();
+  const txtBs = useRef();
 
-    const colores = [
-        '#17a2b8',
-        '#ffae00',
-        '#dc3545',
-        '#BDB76B',
-        '#7B68EE',
-        '#4B0082',
-        '#00ffff',
-        '#0080ff',
-        '#0000ff',
-        '#8000ff',
-        '#ff00ff',
-        '#ff0080',
-    ];
-
-    const cmbTipo = useRef()
-    const cmbDato = useRef()
-
-    const txtDesde = useRef()
-
-    const txtHasta = useRef()
-
-
-    const [mensaje, setMensaje] = useState({ mostrar: false, titulo: '', texto: '', icono: '' });
-    const [mensajesino, setMensajesino] = useState({ mostrar: false, titulo: '', texto: '', icono: '' });
-    const txtBuscador = useRef();
-    const [cuentas, setCuentas] = useState();
-    const [saldo, setSaldo] = useState(0.00)
-    const [mostrar, setMostrar] = useState(false);
-    const [mostrar4, setMostrar4] = useState(false);
-    const [titulo1, setTitulo1] = useState();
-    const [desabilitar, setDesabilitar] = useState(false);
-    const [activate, setActivate] = useState(false);
-    const [records, setRecords] = useState([]);
-    const [expendedor, setExpendedor] = useState([]);
-    const [operacion, setOperacion] = useState(1);
-    const [btnAgre, setBtnAgre] = useState(true)
-    const [persona, setPersona] = useState()
-    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
-    const [ciudades, setCiudades] = useState()
-    const [credito, setCredito] = useState();
-    const [total, setTotal] = useState(0);
-    const [activos, setActivos] = useState(0);
-    const [inactivos, setInactivos] = useState(0);
-    const [municipiosEx, setMunicipiosEx] = useState([]);
-    const [municipiosData, setMunicipiosData] = useState([]);
-    const [iglesia, setIglesia] = useState()
-    const [notaDebito, setNotaDebito] = useState()
-    const [estado, setEstado] = useState()
-    const [idcuentabancaria, setIdCuentaBancaria] = useState('')
-    const [datos, setDatos] = useState([]);
-
-
-
-
-
-    const seleccionaOperacion = (id, op) => (e) => {
-        e.preventDefault()
-        setOperacion(op)
-        if (op === 1) {
-            setMostrar(true)
-        }
-
-
-
-
+  const calcular = (e) => {
+    if (e.target.value !== "") {
+      let total = parseFloat(txtDolar.current.value) * parseFloat(BCV);
+      txtBs.current.value = formatMoneda(
+        total.toString().replace(",", "").replace(".", ","),
+        ",",
+        ".",
+        2
+      );
+    } else {
+      txtBs.current.value = "0,00";
     }
-
-
-
-    const handleCancela2 = () => {
-
-        setExpendedor('')
-        setCredito('')
-    }
-
-    const handleCloseSi = () => {
-        setActivate(false);
-
-        setMostrar4(false);
-        setMensajesino({ mostrar: false, titulo: '', texto: '', icono: '' })
-
-    };
-
-    const handleCloseNo = () => {
-        setMostrar4(false);
-    };
-
-
-
-
-
-    const cerrarModal = () => {
-        setMostrar(false)
-        setIglesia('')
-    }
-    useEffect(() => {
-
-        /*  setActivate(true); */
-    }, []);
-
-    const selecionarUsuarios = async () => {
-        let endpoint = op.conexion + "/Auth/ConsultarTodos";
-        console.log(endpoint)
-        setActivate(true)
-
-
-
-        //setLoading(false);
-
-        let bodyF = new FormData()
-
-        bodyF.append("ID", user_id)
-
-
-        await fetch(endpoint, {
-            method: "POST",
-            body: bodyF
-        }).then(res => res.json())
-            .then(response => {
-
-
-                setActivate(false)
-                console.log(response)
-                let array = [];
-
-                for (let i = 0; i < response.length; i++) {
-
-                    array.push({
-                        id: response[i].usuario_id,
-                        nombre: response[i].usuario_nombre
-                    })
-
-                }
-
-                setRecords(array)
-
-
-
-
-            })
-            .catch(error =>
-                setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-            )
-
-    };
-
-    const selecionarSucursal = async () => {
-        let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-        console.log(endpoint)
-        setActivate(true)
-
-        await fetch(endpoint, {
-            method: "POST",
-
-        }).then(res => res.json())
-            .then(response => {
-
-
-                setActivate(false)
-                let array = [];
-
-                for (let i = 0; i < response.length; i++) {
-
-                    array.push({
-                        id: response[i].sucursal_id,
-                        nombre: response[i].sucursal_nombre
-                    })
-
-                }
-
-                setRecords(array)
-
-
-
-
-            })
-            .catch(error =>
-                setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-            )
-
-    };
-
-    const consulta = (e) => {
-
-        if (parseInt(e.target.value) === 5) {
-            setDesabilitar(false)
-            selecionarUsuarios()
-        } else if (parseInt(e.target.value) === 4) {
-            setDesabilitar(false)
-            selecionarSucursal()
-        } else {
-            setRecords([])
-            setDesabilitar(true)
-        }
-    }
-
-    const generar = () => {
-
-        let sigue = true;
-
-        if(cmbTipo.current.value === ''){
-           sigue = false
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Seleccione un tipo de reposrte', icono: "informacion" })
-            cmbTipo.current.focus()
-            
-        } else if(cmbDato.current.value === ''){
-           sigue = false
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Seleccione un regsitro', icono: "informacion" })
-            cmbDato.current.focus()
-            
-        } else if(txtDesde.current.value === ''){
-           sigue = false
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Ingrese una fecha de inicio', icono: "informacion" })
-            txtDesde.current.focus()
-            
-        } else if(txtHasta.current.value === ''){
-           sigue = false
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'Ingrese una fecha Final', icono: "informacion" })
-            txtHasta.current.focus()
-            
-        }  else if(txtDesde.current.value > txtHasta.current.value){
-           sigue = false
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: 'La fecha de inicio no debe ser mayora a la fecha final', icono: "informacion" })
-            txtHasta.current.focus()
-            
-        }
-
-        if(sigue){
-            window.open(`${op.conexion}/reporte_Ingreso_egreso?nota_id=${cmbTipo.current.value}&sucursal_id=${cmbDato.current.value}&user_id=${cmbDato.current.value}&fechaInicio=${moment(txtDesde.current.value).format('YYYY-MM-DD')}&fechaFin=${moment(txtHasta.current.value).format('YYYY-MM-DD')}`)
-        }
-     
-    }
-
-    return (
-        <div style={{ height: '100%', width: '100%' }}>
-            <div className="row col-md-12 py-4 px-2">
-                <div className='row col-md-12 mx-auto ' >
-                    <div className='col-md-10 card mx-auto py-3'>
-                        <div className='col-md-12 mx-auto row'>
-
-                            <div className='col-md-12 mx-auto d-flex justify-content-center px-3 mb-4'>
-                                <h3 className='text-dark'>Genearar Reporte</h3>
-                            </div>
-
-                            <div className="col-12 p-2 row">
-
-                                <div class="input-group input-group-sm mb-2 col-md-6">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Tipo:</span>
-                                    <select class="form-select" aria-label="Default select example" ref={cmbTipo} onChange={consulta}>
-                                        <option value=" ">Selecionar</option>
-                                        <option value="5">Usuarios</option>
-                                        <option value="4">Sucursales</option>
-                                        <option value="1">Ingreso</option>
-                                        <option value="2">Egreso</option>
-                                        <option value="3">Ingreso y Egreso</option>
-
-                                    </select>
-                                    <select class="form-select" disabled={desabilitar} aria-label="Default select example" ref={cmbDato}>
-
-                                        <option value="">Seleccionar</option>
-                                        {records && records.map((item, index) => (
-                                            <option key={index} value={item.id}> {item.nombre} </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div class="input-group input-group-sm mb-2 col-md-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Desde:</span>
-                                    <input type="date" class="form-control" ref={txtDesde} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                                    />
-                                </div>
-                                <div class="input-group input-group-sm mb-2 col-md-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Hasta:</span>
-                                    <input type="date" class="form-control" ref={txtHasta} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                                    />
-                                </div>
-
-                            </div>
-                            <div className='col-md-5 mx-auto row'>
-                            <button type="button" onClick={generar} class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary">Generear </button>
-                            <button type="button" class="btn col-md-6 btn-sm mx-auto rounded-pill btn-danger">limpiar</button>
-                            </div>
-                            
-                        </div>
-
-
-
-
-                    </div>
-
-
-                </div>
-            </div >
-
-
-            <Dimmer active={activate} inverted>
-                <Loader inverted>cargando...</Loader>
-            </Dimmer>
-            <Mensaje mensaje={mensaje}
-                onHide={() => setMensaje({ mostrar: false, titulo: '', texto: '', icono: '' })} />
-            <MensajeSiNo mensaje={mensajesino}
-                onHideNo={() => setMensajesino({ mostrar: false, titulo: '', texto: '', icono: '' })} onHideSi={handleCloseSi} />
-
-        </div>
+  };
+  const handleInputMontoChange = (event) => {
+    validaMonto(event);
+    if (event.which === 13 || typeof event.which === "undefined") {
+      if (
+        event.target.value === "" ||
+        parseFloat(
+          event.target.value.trim().replace(".", "").replace(",", ".")
+        ) === 0.0
+      ) {
+        event.target.value = "0,00";
+      }
+      event.target.value = formatoMonto(event.target.value);
+      let char1 = event.target.value.substring(0, 1);
+      let char2 = event.target.value.substring(1, 2);
+      if (char1 === "0" && char2 !== ",") {
+        event.target.value = event.target.value.substring(
+          1,
+          event.target.value.legth
+        );
+      }
+    } else if (event.which === 46) {
+      return false;
+    } else if (event.which >= 48 && event.which <= 57) {
+      return true;
+    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
+      return true;
+    } else return false;
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Chart.js Bar Chart",
+      },
+    },
+  };
+
+  const labels = [
+    "Lunes",
+    "Martes",
+    "Miercoles",
+    "Jueves",
+    "Viernes ",
+    "Sabado",
+    "Domingo",
+  ];
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Miembros",
+        data: [12, 4, 34, 54, 7, 12, 78],
+        backgroundColor: "rgb(149, 187, 227)",
+      },
+    ],
+  };
+  const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
+    useTable(records, headCells, filterFn);
+
+  const imprimir = (id,desde,hasta) => (e) => {
+    e.preventDefault();
+    window.open(
+      `${op.conexion}/reporte/reporteIngresoEgreso?Nombre=${id}&Desde=${desde}&Hasta=${hasta}`
     );
+  };
+
+  const selecionarRegistros = async () => {
+    let endpoint = op.conexion + "/poliza/Semanal";
+    console.log(endpoint);
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("Desde", desde.current.value);
+    bodyF.append("Hasta", hasta.current.value);
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  const handleSearch = (e) => {
+    let target = e.target;
+    setFilterFn({
+      fn: (items) => {
+        if (target.value === "") return items;
+        else
+          return items.filter((x) => {
+            if (
+              (x.sucursal_id !== null
+                ? String(x.sucursal_id).includes(target.value)
+                : 0) ||
+              (x.sucursal_nombre !== null
+                ? x.sucursal_nombre
+                    .toLowerCase()
+                    .includes(target.value.toLowerCase())
+                : "")
+            ) {
+              return x;
+            }
+          });
+      },
+    });
+  };
+
+  console.log("estas en menu");
+
+  const obtenerLunesDeEstaSemana = () => {
+    const fechaActual = new Date();
+    const diaSemanaActual = fechaActual.getDay();
+    const diasHastaLunes = diaSemanaActual === 0 ? 1 : 1 - diaSemanaActual;
+    const fechaLunes = new Date(fechaActual);
+    fechaLunes.setDate(fechaActual.getDate() + diasHastaLunes);
+
+    // Formatea la fecha en "año-mes-día" usando moment
+    console.log(moment(fechaLunes).format("YYYY-MM-DD"));
+    return moment(fechaLunes).format("YYYY-MM-DD");
+  };
+
+  // Función para obtener la fecha del sábado de la semana actual
+  const obtenerSabadoDeEstaSemana = () => {
+    const fechaLunes = new Date(obtenerLunesDeEstaSemana());
+    const fechaSabado = new Date(fechaLunes);
+    fechaSabado.setDate(fechaLunes.getDate() + 6); // Suma 5 días a partir del lunes
+    // Formatea la fecha en "año-mes-día" usando moment
+    console.log(moment(fechaSabado).format("YYYY-MM-DD"));
+    return moment(fechaSabado).format("YYYY-MM-DD");
+  };
+
+  const desde = useRef(obtenerLunesDeEstaSemana());
+  const hasta = useRef(obtenerSabadoDeEstaSemana());
+
+  useEffect(() => {
+    selecionarRegistros();
+    obtenerLunesDeEstaSemana();
+    obtenerSabadoDeEstaSemana();
+  }, []);
+
+  const regPre = () => {
+    setMostrar(true);
+    setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+  };
+
+  const gestionarBanco = (op, id) => (e) => {
+    e.preventDefault();
+    setMostrar(true);
+    setOperacion(op);
+    setIdSucursal(id);
+  };
+  return (
+    <div className="col-md-12 mx-auto p-2">
+      <div className="col-12 py-2">
+        <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
+          <h2 className=" col-5 text-light">Lista De Vendedores Semanal</h2>
+          <div class="input-group input-group-sm col-md-4 my-auto">
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular $:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              onKeyUp={handleInputMontoChange}
+              onChange={calcular}
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              ref={txtBs}
+              disabled
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="col-md-12 bg-light py-2 rounded"
+        style={{ margin: "auto" }}
+      >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input
+            type="text"
+            className=" col-3 form-control form-control-sm rounded-pill"
+            onChange={handleSearch}
+            placeholder="Buscar"
+          />
+          <input
+            type="date"
+            className=" col-3 form-control form-control-sm rounded-pill"
+            ref={desde}
+            defaultValue={moment(desde.current, "YYYY-MM-DD").format(
+              "YYYY-MM-DD"
+            )}
+            onChange={(e) => (desde.current = e.target.value)}
+          />
+          <input
+            type="date"
+            className=" col-3 form-control form-control-sm rounded-pill"
+            ref={hasta}
+            defaultValue={moment(hasta.current, "YYYY-MM-DD").format(
+              "YYYY-MM-DD"
+            )}
+            onChange={(e) => (hasta.current = e.target.value)}
+          />
+          <input
+            type="button"
+            className=" col-3"
+            placeholder="Buscar"
+            onClick={selecionarRegistros}
+          />
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody>
+            {records &&
+              recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.nombre_usuario}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.nombre_sucursal}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.cantidad_poliza_id}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.total_monto_notas}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{
+                      textAlign: "center",
+                      alignItems: "center",
+                      width: 130,
+                    }}
+                  >
+                    <button
+
+                      onClick={imprimir(
+                        item.nombre_usuario,
+                        desde.current.value,
+                        hasta.current.value
+                      )}
+                      className="btn btn-sm mx-1 btn-warning rounded-circle"
+                    >
+                      <i className="fa fa-print"></i>
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
+      <Dimmer active={activate} inverted>
+        <Loader inverted>cargando...</Loader>
+      </Dimmer>
+      <Mensaje
+        mensaje={mensaje}
+        onHide={() =>
+          mensaje.texto ===
+          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+            ? regPre()
+            : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
+        }
+      />
+    </div>
+  );
 }
-export default TablaReportes;
+
+export default TablaSursales;
