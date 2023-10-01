@@ -27,6 +27,7 @@ import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
 import TablaReportes from "../components/reportes/resportes";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
+import TablaLicencia from "../components/licencia/tablaLicencia";
 
 
 function MenuImpuestoPP(props) {
@@ -397,6 +398,13 @@ function MenuImpuestoPP(props) {
                   <span>Reportes</span>
                 </a>
                 <a
+                  href="/licencia"
+                  className=" list-group-item list-group-item-action py-2 ripple"
+                >
+                  <i className="fas fa-fw me-3 fa-cash-register " />
+                  <span>Licencias</span>
+                </a>
+                <a
                   href="/cumpleañeros"
                   className=" list-group-item list-group-item-action py-2 ripple"
                 >
@@ -429,13 +437,9 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/graficasingegre" component={GraficosIngresos} />
               <AuthRoute exact path="/tipovehiculo" component={TablaTipoVehiculo} />
               <AuthRoute exact path="/tipovehiculobocono" component={TablaTipoVehiculoBocono} />
-
+              <AuthRoute exact path="/licencia" component={TablaLicencia} />
               <AuthRoute exact path="/reportes" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
-
-
-              
-              
             </div>
           </div>
         </div>

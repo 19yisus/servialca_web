@@ -1,18 +1,14 @@
-import React, { useEffect, useContext, useState,useRef } from "react";
-import { formatMoneda,validaMonto,formatoMonto } from "../../util/varios";
-
+import React, { useEffect, useContext, useState, useRef } from "react";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
 
-
-
 import axios from "axios";
 import useTable from "../useTable";
-import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { ModalTransporte } from "./modalLineaTransporte";
-
 
 function TablaTransporte() {
   var op = require("../../modulos/datos");
@@ -27,62 +23,80 @@ function TablaTransporte() {
     icono: "",
   });
 
-  console.log(user_id)
+  console.log(user_id);
   const headCells = [
-    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Descripción", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Estatus", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-   
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    {
+      label: "Codigo",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Descripción",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Estatus",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
 
-
-
-
+    {
+      label: "Opciones",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
   ];
 
-   
-const BCV = JSON.parse(localStorage.getItem('dolarbcv'))
-const txtDolar = useRef();
-const txtBs = useRef();
+  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  const txtDolar = useRef();
+  const txtBs = useRef();
 
-const calcular = (e) =>{
-
-  if(e.target.value !== ''){
-    let total  = parseFloat(txtDolar.current.value) * parseFloat(BCV)
-        txtBs.current.value =  formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-  } else {
-    txtBs.current.value = '0,00'
-  }
-}
-const handleInputMontoChange = (event) => {
-  validaMonto(event);
-  if (event.which === 13 || typeof event.which === "undefined") {
-    if (
-      event.target.value === "" ||
-      parseFloat(
-        event.target.value.trim().replace(".", "").replace(",", ".")
-      ) === 0.0
-    ) {
-      event.target.value = "0,00";
-    }
-    event.target.value = formatoMonto(event.target.value);
-    let char1 = event.target.value.substring(0, 1);
-    let char2 = event.target.value.substring(1, 2);
-    if (char1 === "0" && char2 !== ",") {
-      event.target.value = event.target.value.substring(
-        1,
-        event.target.value.legth
+  const calcular = (e) => {
+    if (e.target.value !== "") {
+      let total = parseFloat(txtDolar.current.value) * parseFloat(BCV);
+      txtBs.current.value = formatMoneda(
+        total.toString().replace(",", "").replace(".", ","),
+        ",",
+        ".",
+        2
       );
+    } else {
+      txtBs.current.value = "0,00";
     }
-  } else if (event.which === 46) {
-    return false;
-  } else if (event.which >= 48 && event.which <= 57) {
-    return true;
-  } else if (event.which === 8 || event.which === 0 || event.which === 44) {
-    return true;
-  } else return false;
-};
-
+  };
+  const handleInputMontoChange = (event) => {
+    validaMonto(event);
+    if (event.which === 13 || typeof event.which === "undefined") {
+      if (
+        event.target.value === "" ||
+        parseFloat(
+          event.target.value.trim().replace(".", "").replace(",", ".")
+        ) === 0.0
+      ) {
+        event.target.value = "0,00";
+      }
+      event.target.value = formatoMonto(event.target.value);
+      let char1 = event.target.value.substring(0, 1);
+      let char2 = event.target.value.substring(1, 2);
+      if (char1 === "0" && char2 !== ",") {
+        event.target.value = event.target.value.substring(
+          1,
+          event.target.value.legth
+        );
+      }
+    } else if (event.which === 46) {
+      return false;
+    } else if (event.which >= 48 && event.which <= 57) {
+      return true;
+    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
+      return true;
+    } else return false;
+  };
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
@@ -99,7 +113,11 @@ const handleInputMontoChange = (event) => {
   const [totalact, setTotalact] = useState(0.0);
   const [idTransporte, setIdTransporte] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
   const [operacion, setOperacion] = useState();
 
   const [records, setRecords] = useState([
@@ -129,7 +147,6 @@ const handleInputMontoChange = (event) => {
     },
   };
 
-  
   const labels = [
     "Lunes",
     "Martes",
@@ -150,77 +167,63 @@ const handleInputMontoChange = (event) => {
       },
     ],
   };
-  const {
-    TblContainer,
-    TblHead,
-    recordsAfterPagingAndSorting,
-    TblPagination
-  } = useTable(records, headCells, filterFn);
-  
-  
+  const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
+    useTable(records, headCells, filterFn);
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/transporte/ConsultarTodos";
-console.log(endpoint)
-    setActivate(true)
-   
+    console.log(endpoint);
+    setActivate(true);
 
-  
     //setLoading(false);
-
-  
- 
 
     await fetch(endpoint, {
       method: "POST",
-     
-    }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
-
-
-
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
       })
-      .catch(error =>  
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
-      fn: items => {
-        if (target.value === "")
-          return items;
+      fn: (items) => {
+        if (target.value === "") return items;
         else
-          return items.filter(x => {
-            if ((x.transporte_id !== null ? String(x.transporte_id).includes(target.value) : 0)
-              || (x.transporte_nombre !== null ? x.transporte_nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-             
+          return items.filter((x) => {
+            if (
+              (x.transporte_id !== null
+                ? String(x.transporte_id).includes(target.value)
+                : 0) ||
+              (x.transporte_nombre !== null
+                ? x.transporte_nombre
+                    .toLowerCase()
+                    .includes(target.value.toLowerCase())
+                : "")
             ) {
               return x;
             }
           });
-      }
-    })
+      },
+    });
+  };
 
-  }
-
-
-  
-
-  console.log('estas en menu')
-
-  
+  console.log("estas en menu");
 
   useEffect(() => {
-    selecionarRegistros()
-   
+    selecionarRegistros();
   }, []);
 
   const regPre = () => {
@@ -228,69 +231,130 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setOperacion(op)
-    setIdTransporte(id)
-    setMostrar(true)
-
-  }
+    setOperacion(op);
+    setIdTransporte(id);
+    setMostrar(true);
+  };
   return (
     <div className="col-md-12 mx-auto p-2">
-
       <ModalTransporte
-      operacion={operacion}
-      show={mostrar}
-      onHideCancela={()=>{setMostrar(false)}}
-      idTransporte={idTransporte}
-      render={selecionarRegistros}
+        operacion={operacion}
+        show={mostrar}
+        onHideCancela={() => {
+          setMostrar(false);
+        }}
+        idTransporte={idTransporte}
+        render={selecionarRegistros}
       />
-    
 
-<div className="col-12 py-2">
-           <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>Lineas de Transporte</h2>
-                <div class="input-group input-group-sm col-md-4 my-auto">
-            <span class="input-group-text bg-transparent border-0 fw-bold text-light" id="inputGroup-sizing-sm">Calcular $:</span>
-            <input type="text" class="form-control bg-transparent text-light text-right" onKeyUp={handleInputMontoChange} onChange={calcular} ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
-            <input type="text" class="form-control bg-transparent text-light text-right" ref={txtBs} disabled aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
-         
+      <div className="col-12 py-2">
+        <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
+          <h2 className=" col-5 text-light">Lineas de Transporte</h2>
+          <div class="input-group input-group-sm col-md-4 my-auto">
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular $:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              onKeyUp={handleInputMontoChange}
+              onChange={calcular}
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              ref={txtBs}
+              disabled
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
-              </div>
-              
-            </div>
-            <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
-              <div className="row col-12 d-flex justify-content-between mb-2">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
-              </div>
-              <TblContainer>
-                <TblHead />
-                <TableBody >
-                  {
-                    records && recordsAfterPagingAndSorting().map((item, index) => (
-                      <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.transporte_nombre}</TableCell>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.transporte_estatus) === 1 ? 'ACTIVO' : 'INACTIVO' }</TableCell>
+        </div>
+      </div>
+      <div
+        className="col-md-12 bg-light py-2 rounded"
+        style={{ margin: "auto" }}
+      >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input
+            type="text"
+            className=" col-3 form-control form-control-sm rounded-pill"
+            onChange={handleSearch}
+            placeholder="Buscar"
+          />
 
-                   
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                          <button onClick={gestionarBanco(2, item.transporte_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.transporte_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
-            </div>
-      
+          <div className="col-3 d-flex justify-content-end">
+            <button
+              onClick={gestionarBanco(1, "")}
+              className="btn btn-sm btn-primary rounded-circle"
+            >
+              <i className="fas fa-plus"></i>{" "}
+            </button>
+          </div>
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody>
+            {records &&
+              recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.transporte_id}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.transporte_nombre}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {parseInt(item.transporte_estatus) === 1
+                      ? "ACTIVO"
+                      : "INACTIVO"}
+                  </TableCell>
+
+                  <TableCell
+                    className="align-baseline"
+                    style={{
+                      textAlign: "center",
+                      alignItems: "center",
+                      width: 130,
+                    }}
+                  >
+                    <button
+                      onClick={gestionarBanco(2, item.transporte_id)}
+                      className="btn btn-sm mx-1 btn-warning rounded-circle"
+                    >
+                      <i className="fa fa-edit"></i>{" "}
+                    </button>
+                    <button
+                      onClick={gestionarBanco(3, item.transporte_id)}
+                      className="btn btn-sm mx-1 btn-danger rounded-circle"
+                    >
+                      <i className="fa fa-trash"></i>{" "}
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>

@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 
-const CatalogoClientes = (props) => {
+const CatalogoTitular = (props) => {
   let op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
@@ -92,11 +92,11 @@ const CatalogoClientes = (props) => {
         } else {
           return items.filter((x) => {
             if (
-              x.cliente_cedula.includes(target.value) ||
-              x.cliente_nombre
+              x.titular_cedula.includes(target.value) ||
+              x.titular_nombre
                 .toLowerCase()
                 .includes(target.value.toLowerCase()) ||
-              x.cliente_apellido
+              x.titular_apellido
                 .toLowerCase()
                 .includes(target.value.toLowerCase())
             ) {
@@ -109,7 +109,7 @@ const CatalogoClientes = (props) => {
   };
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/cliente/ConsultarTodos";
+    let endpoint = op.conexion + "/cliente/ConsultarTodosTitular";
     console.log(endpoint);
     setActivate(true);
 
@@ -163,19 +163,13 @@ const CatalogoClientes = (props) => {
 
   const seleccionarClase = (index) => (event) => {
     var cedulaCompleta =
-      recordsAfterPagingAndSorting()[index].cliente_cedula.split("-");
-    var telefonoCompleto =
-      recordsAfterPagingAndSorting()[index].cliente_telefono.split("-");
+      recordsAfterPagingAndSorting()[index].titular_cedula.split("-");
     var nac = cedulaCompleta[0];
     var ced = cedulaCompleta[1];
-    var nom = recordsAfterPagingAndSorting()[index].cliente_nombre;
-    var ape = recordsAfterPagingAndSorting()[index].cliente_apellido;
-    var cor = recordsAfterPagingAndSorting()[index].cliente_correo;
-    var cod = telefonoCompleto[0];
-    var tel = telefonoCompleto[1];
-    var dir = recordsAfterPagingAndSorting()[index].cliente_direccion;
+    var nom = recordsAfterPagingAndSorting()[index].titular_nombre;
+    var ape = recordsAfterPagingAndSorting()[index].titular_apellido;
     blanquear();
-    props.onHideCatalogo(nom, ape, ced, nac, cor, cod, tel, dir);
+    props.onHideCatalogo(nom, ape, ced, nac);
   };
 
   return (
@@ -193,7 +187,7 @@ const CatalogoClientes = (props) => {
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          Seleccionar Cliente.
+          Seleccionar titular.
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -234,7 +228,7 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_cedula}
+                      {item.titular_cedula}
                     </TableCell>
                     <TableCell
                       style={{
@@ -243,7 +237,7 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_nombre}
+                      {item.titular_nombre}
                     </TableCell>
                     <TableCell
                       style={{
@@ -252,7 +246,7 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_apellido}
+                      {item.titular_apellido}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -274,4 +268,4 @@ const CatalogoClientes = (props) => {
   );
 };
 
-export default CatalogoClientes;
+export default CatalogoTitular;

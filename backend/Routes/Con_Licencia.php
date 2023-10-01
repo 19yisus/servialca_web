@@ -21,11 +21,7 @@ class Con_Licencia extends cls_Licencia
     $this->restante = isset($_POST["Restante"]) ? $_POST["Restante"] : null;
   }
 
-  public function registrar()
-  {
-    $resultado = $this->RegistroLicencia($this->buscarCliente());
-    Response($resultado["data"], $resultado["code"]);
-  }
+ 
 
   // public function actualizar()
   // {
@@ -39,11 +35,7 @@ class Con_Licencia extends cls_Licencia
   //   Response($resultado["data"], $resultado["code"]);
   // }
 
-  public function ConsultarUno()
-  {
-    $resultado = $this->GetOne($_GET['ID']);
-    Response($resultado, 200);
-  }
+
 
   public function ConsultarTodos()
   {

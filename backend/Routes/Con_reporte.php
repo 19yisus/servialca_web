@@ -18,6 +18,6 @@ class Con_reporte
     }
 
     public function reporteIngresoEgreso(){
-        include("Con_reporte_Ingreso_egreso.php");
+        include("Con_reporteVendedores.php");
     }
 }

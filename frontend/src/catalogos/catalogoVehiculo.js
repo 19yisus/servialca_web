@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 
-const CatalogoClientes = (props) => {
+const CatalogoVehiculo = (props) => {
   let op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
@@ -36,42 +36,56 @@ const CatalogoClientes = (props) => {
   });
   const headCells = [
     {
-      id: "Cedula",
+      id: "Placa",
       label: (
         <i
           style={{ color: "#1793dd", textAlign: "center" }}
           className="fas fa-code"
         >
           {" "}
-          Cedula
+          Placa
         </i>
       ),
       textAlign: "center",
       fontFamily: "georgia",
     },
     {
-      id: "Nombre",
+      id: "Modelo",
       label: (
         <i
           style={{ color: "#1793dd", textAlign: "center" }}
           className="fas fa-signature"
         >
           {" "}
-          Nombre
+          Modelo
         </i>
       ),
       textAlign: "center",
       fontFamily: "georgia",
     },
     {
-      id: "Apellido",
+      id: "Marca",
       label: (
         <i
           style={{ color: "#1793dd", textAlign: "center" }}
           className="fas fa-code-branch"
         >
           {" "}
-          Apellido
+          Marca
+        </i>
+      ),
+      textAlign: "center",
+      fontFamily: "georgia",
+    },
+    {
+      id: "Color",
+      label: (
+        <i
+          style={{ color: "#1793dd", textAlign: "center" }}
+          className="fas fa-signature"
+        >
+          {" "}
+          Color
         </i>
       ),
       textAlign: "center",
@@ -92,13 +106,11 @@ const CatalogoClientes = (props) => {
         } else {
           return items.filter((x) => {
             if (
-              x.cliente_cedula.includes(target.value) ||
-              x.cliente_nombre
+              x.vehiculo_placa.includes(target.value) ||
+              x.modelo_nombre
                 .toLowerCase()
                 .includes(target.value.toLowerCase()) ||
-              x.cliente_apellido
-                .toLowerCase()
-                .includes(target.value.toLowerCase())
+              x.marca_nombre.toLowerCase().includes(target.value.toLowerCase())
             ) {
               return x;
             }
@@ -109,7 +121,7 @@ const CatalogoClientes = (props) => {
   };
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/cliente/ConsultarTodos";
+    let endpoint = op.conexion + "/vehiculo/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
@@ -162,20 +174,35 @@ const CatalogoClientes = (props) => {
   };
 
   const seleccionarClase = (index) => (event) => {
-    var cedulaCompleta =
-      recordsAfterPagingAndSorting()[index].cliente_cedula.split("-");
-    var telefonoCompleto =
-      recordsAfterPagingAndSorting()[index].cliente_telefono.split("-");
-    var nac = cedulaCompleta[0];
-    var ced = cedulaCompleta[1];
-    var nom = recordsAfterPagingAndSorting()[index].cliente_nombre;
-    var ape = recordsAfterPagingAndSorting()[index].cliente_apellido;
-    var cor = recordsAfterPagingAndSorting()[index].cliente_correo;
-    var cod = telefonoCompleto[0];
-    var tel = telefonoCompleto[1];
-    var dir = recordsAfterPagingAndSorting()[index].cliente_direccion;
+    var pla = recordsAfterPagingAndSorting()[index].vehiculo_placa;
+    var pue = recordsAfterPagingAndSorting()[index].vehiculo_puesto;
+    var uso = recordsAfterPagingAndSorting()[index].usoVehiculo_nombre;
+    var ano = recordsAfterPagingAndSorting()[index].vehiculo_año;
+    var serM = recordsAfterPagingAndSorting()[index].vehiculo_serialMotor;
+    var cla = recordsAfterPagingAndSorting()[index].clase_nombre;
+    var col = recordsAfterPagingAndSorting()[index].color_nombre;
+    var serC = recordsAfterPagingAndSorting()[index].vehiculo_serialCarroceria;
+    var tip = recordsAfterPagingAndSorting()[index].tipoVehiculo_nombre;
+    var mar = recordsAfterPagingAndSorting()[index].marca_nombre;
+    var mod = recordsAfterPagingAndSorting()[index].modelo_nombre;
+    var pes = recordsAfterPagingAndSorting()[index].vehiculo_peso;
+    var capT = recordsAfterPagingAndSorting()[index].vehiculo_capTon;
     blanquear();
-    props.onHideCatalogo(nom, ape, ced, nac, cor, cod, tel, dir);
+    props.onHideCatalogo(
+      pla,
+      pue,
+      uso,
+      ano,
+      serM,
+      cla,
+      col,
+      serC,
+      tip,
+      mod,
+      mar,
+      pes,
+      capT
+    );
   };
 
   return (
@@ -234,7 +261,7 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_cedula}
+                      {item.vehiculo_placa}
                     </TableCell>
                     <TableCell
                       style={{
@@ -243,7 +270,7 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_nombre}
+                      {item.modelo_nombre}
                     </TableCell>
                     <TableCell
                       style={{
@@ -252,7 +279,16 @@ const CatalogoClientes = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.cliente_apellido}
+                      {item.marca_nombre}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "10px",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {item.color_nombre}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -274,4 +310,4 @@ const CatalogoClientes = (props) => {
   );
 };
 
-export default CatalogoClientes;
+export default CatalogoVehiculo;

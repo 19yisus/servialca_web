@@ -31,4 +31,30 @@ abstract class cls_vehiculo extends cls_db
 
 		return $resultado;
 	}
+
+	protected function GetAll()
+	{
+		$sql = $this->db->prepare("SELECT vehiculo.*, 
+		color.*, 
+		modelo.*, 
+		marca.*, 
+		usovehiculo.*, 
+		tipovehiculo.*,
+		clasevehiculo.* 
+		FROM vehiculo 
+		INNER JOIN color ON color.color_id = vehiculo.color_id 
+		INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id 
+		INNER JOIN marca ON marca.marca_id = vehiculo.marca_id 
+		INNER JOIN usovehiculo ON usovehiculo.usoVehiculo_id = vehiculo.uso_id 
+		INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id 
+		INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
+		");
+		if ($sql->execute()) {
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			$resultado = [];
+		}
+
+		return $resultado;
+	}
 }

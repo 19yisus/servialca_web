@@ -22,8 +22,9 @@ import CatalogoSucursal from "../../catalogos/catalagoSucursal";
 import CatalogoTransporte from "../../catalogos/catalagoTransporte";
 import CatalogoUso from "../../catalogos/catalogoUso";
 import CatalogoClase from "../../catalogos/catalogoClase";
-import CatalogoTipo  from "../../catalogos/catalagoTipoVehiculo";
-
+import CatalogoTipo from "../../catalogos/catalagoTipoVehiculo";
+import CatalogoTitular from "../../catalogos/catalogoTitular";
+import CatalogoVehiculo from "../../catalogos/catalogoVehiculo";
 export const ModalRcv = (props) => {
   /*  variables de estados */
 
@@ -76,6 +77,7 @@ export const ModalRcv = (props) => {
   const txtBs = useRef();
   const txtDolar = useRef();
 
+  const [vehiculo, setVehiculo] = useState();
   const [tipoContrato, setTipoContrato] = useState([]);
   const [estados, setEstados] = useState();
   const [acesor, setAcesor] = useState();
@@ -129,8 +131,8 @@ export const ModalRcv = (props) => {
   const [mostrar6, setMostrar6] = useState(false);
 
   const [mostrar7, setMostrar7] = useState(false);
-
-  const [mostrar8, setMostrar9] = useState(false);
+  const [mostrar8, setMostrar8] = useState(false);
+  const [mostrar9, setMostrar9] = useState(false);
 
   const [idContrato, setIdContrato] = useState();
   const [operacion, setOperacion] = useState(0);
@@ -496,6 +498,38 @@ export const ModalRcv = (props) => {
       );
   };
 
+  const selecionarVehiculo = async () => {
+    let endpoint = op.conexion + "/vehiculo/ConsultarTodos";
+    console.log(endpoint);
+    setActivate(true);
+
+    //setLoading(false);
+
+    let bodyF = new FormData();
+
+    // bodyF.append("ID", user_id)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("Vehiculo");
+        setVehiculo(response);
+        console.log(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   const selecionarTipo = async () => {
     let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
     console.log(endpoint);
@@ -583,11 +617,49 @@ export const ModalRcv = (props) => {
     if (!regex.test(char)) e.preventDefault();
     return false;
   };
-  const seleccionarCliente = (nombre, apellido, cedula) => {
+  const seleccionarCliente = (
+    nombre,
+    apellido,
+    cedula,
+    nacionalidad,
+    correo,
+    codigo,
+    telefono,
+    dir
+  ) => {
     console.log(nombre, apellido, cedula);
+    cmbNacionalidad.current.value = nacionalidad + "-";
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
+    cmbTelefono.current.value = codigo + "-";
+    txtTelefono.current.value = telefono;
+    txtCorreo.current.value = correo;
+    txtDirec.current.value = dir;
+    setMostrar(false);
+  };
+  const seleccionarVehiculo = (placa, 
+    puesto, uso, ano, serMotor, clase, color, 
+    serCarroceria, tipo, modelo, marca, peso, capTotal) =>{
+    txtPlaca.current.value = placa;
+    txtPuesto.current.value = puesto;
+    txtUso.current.value = uso;
+    txtAño.current.value = ano;
+    txtSerMotor.current.value = serMotor;
+    txtClase.current.value = clase;
+    txtColor.current.value = color;
+    txtSerCarroceria.current.value = serCarroceria;
+    cmbTipo.current.value = tipo;
+    txtModelo.current.value = modelo;
+    txtMarca.current.value = marca;
+    txtPeso.current.value = peso;
+    txtCapTon.current.value = capTotal;
+  }
+  const seleccionarTitular = (nombre, apellido, cedula, nacionalidad) => {
+    cmbNacionalidadTitular.current.value = nacionalidad + "-";
+    txtCedulatTitular.current.value = cedula;
+    txtNombreTitular.current.value = nombre;
+    txtApellidoTitular.current.value = apellido;
     setMostrar(false);
   };
 
@@ -692,12 +764,20 @@ export const ModalRcv = (props) => {
     setMostrar6(false);
     txtClase.current.value = nombre;
   };
-  
-  const selectTipo = (nombre,precio) =>{
+
+  const selectTipo = (nombre, precio) => {
     setMostrar7(false);
     cmbTipo.current.value = nombre;
-    txtDolar.current.value= precio;
-  }
+    txtDolar.current.value = precio;
+    let bs = parseFloat(dolarbcv);
+    let total = parseFloat(precio) * bs;
+    txtBs.current.value = formatMoneda(
+      total.toString().replace(",", "").replace(".", ","),
+      ",",
+      ".",
+      2
+    );
+  };
 
   return (
     <Modal
@@ -718,7 +798,6 @@ export const ModalRcv = (props) => {
         selecionarTransporte();
         selecionarUso();
         selecionarTipo();
-
         if (props.operacion !== 1) {
           setValues(props.persona);
           console.log(props.persona);
@@ -740,12 +819,28 @@ export const ModalRcv = (props) => {
         <Dimmer active={activate} inverted>
           <Loader inverted>cargando...</Loader>
         </Dimmer>
+        <CatalogoVehiculo
+          show={mostrar8}
+          onHideCancela={() => {
+            setMostrar8(false);
+          }}
+          onHideCatalogo={seleccionarVehiculo}
+        />
+
         <CatalogoClientes
           show={mostrar}
           onHideCancela={() => {
             setMostrar(false);
           }}
           onHideCatalogo={seleccionarCliente}
+        />
+
+        <CatalogoTitular
+          show={mostrar9}
+          onHideCancela={() => {
+            setMostrar9(false);
+          }}
+          onHideCatalogo={seleccionarTitular}
         />
 
         <CatalogoTipoContrato
@@ -1215,7 +1310,7 @@ export const ModalRcv = (props) => {
                     type="button"
                     class="btn btn-success"
                     onClick={() => {
-                      setMostrar(true);
+                      setMostrar9(true);
                     }}
                   >
                     <i class="fa fa-search"></i>
@@ -1273,9 +1368,17 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                   />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    onClick={() => {
+                      setMostrar8(true);
+                    }}
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
-
               <div class="col-md-4">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
