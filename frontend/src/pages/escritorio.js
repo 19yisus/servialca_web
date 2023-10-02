@@ -28,6 +28,7 @@ import TablaReportes from "../components/reportes/resportes";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
+import Panel from "./panel";
 
 
 function MenuImpuestoPP(props) {
@@ -221,7 +222,7 @@ function MenuImpuestoPP(props) {
                   className="list-group-item list-group-item-action py-2 ripple active rounded"
                   aria-current="true"
                 >
-                  <i className="fas fa-tachometer-alt fa-fw me-3" />
+                  <i className="fas fa-tachometer-alt fa-fw me-1" />
                   <span>Panel de Control</span>
                 </a>
                 <div className="accordion  px-0 border-0" id="accordionExample">
@@ -236,7 +237,8 @@ function MenuImpuestoPP(props) {
                           aria-expanded="false"
                           aria-controls="collapseOne"
                         >
-                          <i className="fas fa-fw me-3 fa-cash-register" />
+                          <i class="fas fa-fw me-1 fa-user-shield"></i>
+                         
                           <span>Administración</span>
                         </button>
                       </h2>
@@ -249,21 +251,25 @@ function MenuImpuestoPP(props) {
                         <div className="accordion-body py-0 list-group px-0">
                           {permisos.includes("contratosrealizados") &&
                             <a href="/contratosrealizados" className="list-group-item list-group-item-action py-2 ripple">
+                             <i class="fas fas-fw me-1 fa-file-signature"></i>
                               <span>Contratos Realizados</span>
                             </a>
                           }
                           {permisos.includes("listasucursales") &&                        
                             <a href="/sucursales" className="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fas-fw me-1 fa-map-signs"></i>
                               <span>Lista de Sucursales</span>
                             </a>
                           }
                           {permisos.includes("tipocontratos") &&
                             <a href="/tipocontratos" className="list-group-item list-group-item-action py-2 ripple">
+                             <i class="fas fas-fw me-1 fa-clipboard-list"></i>
                               <span>Tipos de Contratos</span>
                             </a>
                           }
                             {permisos.includes("tipocontratos") &&
                             <a href="/morosos" className="list-group-item list-group-item-action py-2 ripple">
+                             <i class="fas fas-fw me-1 fa-hand-holding-usd"></i>
                               <span>Listado de Morosos</span>
                             </a>
                           }
@@ -281,7 +287,7 @@ function MenuImpuestoPP(props) {
                         aria-expanded="false"
                         aria-controls="collapse2"
                       >
-                        <i className="fas fa-fw me-3 fa-cash-register" />
+                        <i class="fas fa-car fa-fw me-1"></i>
                         <span>Datos del Vehiculo</span>
                       </button>
                     </h2>
@@ -294,26 +300,31 @@ function MenuImpuestoPP(props) {
                       <div className="accordion-body py-0 list-group px-0">
                         {permisos.includes("usovehiculo") &&
                           <a href="/usovehiculo" className="list-group-item list-group-item-action py-2 ripple">
+                          <i class="fas fas-fw me-1 fa-file-contract"></i>
                             <span>Uso del Vehiculo</span>
                           </a>
                         }
                         {permisos.includes("clasevehiculo") &&
                           <a href="/clasevehiculo" className="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fas-fw me-1 fa-taxi"></i>
                             <span>Clases de Vehiculos</span>
                           </a>
                         }
                         {permisos.includes("tipovehiculo") &&
                           <a href="/tipovehiculo" className="list-group-item list-group-item-action py-2 ripple">
+                           <i class="fas fas-fw me-1 fa-caravan"></i>
                             <span>Tipos de Vehiculos</span>
                           </a>
                         }
                          {permisos.includes("tipovehiculo") &&
                           <a href="/tipovehiculobocono" className="list-group-item list-group-item-action py-2 ripple">
+                           <i class="fas fas-fw me-1 fa-shuttle-van"></i>
                             <span>Tipos de Vehiculos Bocono</span>
                           </a>
                         }
                         {permisos.includes("lineatransporte") &&
                           <a href="/transporte" className="list-group-item list-group-item-action py-2 ripple">
+                          <i class="fas fas-fw me-1 fa-bus"></i>
                             <span>Lineas de Transporte</span>
                           </a>
                         }
@@ -331,7 +342,8 @@ function MenuImpuestoPP(props) {
                         aria-expanded="false"
                         aria-controls="collapse3"
                       >
-                        <i className="fas fa-fw me-3 fa-cash-register" />
+                        <i class="fas fa-fw me-1 fa-server"></i>
+                       
                         <span>Datos de Usuario</span>
                       </button>
                     </h2>
@@ -344,11 +356,13 @@ function MenuImpuestoPP(props) {
                       <div className="accordion-body py-0 list-group px-0">
                         {permisos.includes("usuarios") &&
                           <a href="/usarios" className="list-group-item list-group-item-action py-2 ripple">
+                           <i class="fas fa-users fs-fw me-1"></i>
                             <span>Usuarios</span>
                           </a>
                         }
                         {permisos.includes("roles") &&
                           <a href="/roles" className="list-group-item list-group-item-action py-2 ripple">
+                           <i class="fas fa-user-tag fs-fw me-1"></i>
                             <span>Roles</span>
                           </a>
                         }
@@ -365,7 +379,8 @@ function MenuImpuestoPP(props) {
                         aria-expanded="false"
                         aria-controls="collapse4"
                       >
-                        <i className="fas fa-fw me-3 fa-cash-register" />
+                        <i class="far fa-chart-bar fa-fw me-1"></i>
+                      
                         <span>Graficas</span>
                       </button>
                     </h2>
@@ -377,7 +392,7 @@ function MenuImpuestoPP(props) {
                     >
                       <div className="accordion-body py-0 list-group px-0">
                         <a href="/graficasingegre" className="list-group-item list-group-item-action py-2 ripple">
-                          <span>Ingresos y Egresos</span>
+                        <i class="fas fa-money-check-alt fa-fw me-1"></i><span>Ingresos y Egresos</span>
                         </a>
                       </div>
                     </div>
@@ -385,36 +400,48 @@ function MenuImpuestoPP(props) {
                 </div>
                 <a
                   href="/certificadomedico"
-                  className=" list-group-item list-group-item-action py-2 ripple"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i className="fas fa-fw me-3 fa-cash-register" />
+                  <i class="fas fa-prescription-bottle-alt fa-fw me-1"></i>
+                 
                   <span>Certificado Medico</span>
                 </a>
                 <a
                   href="/reportes"
-                  className=" list-group-item list-group-item-action py-2 ripple"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i className="fas fa-fw me-3 fa-cash-register " />
+                  <i className="fas fa-fw me-1 fa-print " />
                   <span>Reportes</span>
                 </a>
                 <a
                   href="/licencia"
-                  className=" list-group-item list-group-item-action py-2 ripple"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i className="fas fa-fw me-3 fa-cash-register " />
+                  <i class="fas fa-id-card fa-fw me-1"></i>
+                 
                   <span>Licencias</span>
                 </a>
                 <a
                   href="/cumpleañeros"
-                  className=" list-group-item list-group-item-action py-2 ripple"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i className="fas fa-fw me-3 fa-cash-register" />
+                  <i class="fas fa-birthday-cake  fa-fw me-1 "></i>
+               
                   <span>Cumpleañeros</span>
-                </a>  <a
-                  href="/"
-                  className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple"
+                </a> 
+                <a
+                  href="/panel"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i className="fas fa-power-off fa-fw me-3" />
+                  <i class="fas fa-fw me-1 fa-solar-panel"></i>
+                 
+                  <span>Panel</span>
+                </a> 
+                 <a
+                  href="/"
+                  className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
+                >
+                  <i className="fas fa-power-off fa-fw me-1" />
                   <span>Salir</span>
                 </a>
               </div>
@@ -440,6 +467,8 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
               <AuthRoute exact path="/reportes" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
+              <AuthRoute exact path="/panel" component={Panel} />
+
             </div>
           </div>
         </div>
