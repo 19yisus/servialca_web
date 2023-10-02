@@ -66,7 +66,14 @@
       },
       "vehiculo":{
         "1": "vehiculo/ConsultarTodos"
-      }
+      },
+      "Auth":{
+        "1": "Auth/registrar_respuestas",
+        "2": "Auth/actualizar_respuestas",
+        "3": "Auth/get_preguntas",
+        "4": "Auth/get_preguntas_from_user",
+        "5": "Auth/actualizar_password"
+      }      
     }
   }
 ]
