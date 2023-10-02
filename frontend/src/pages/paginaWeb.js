@@ -9,6 +9,7 @@ import md5 from "md5";
 import { Mensaje } from '../components/mensajes'
 import logo from '../imagenes/logo1.png'
 import banner1 from '../imagenes/banner1.jpeg'
+import Fade from 'react-reveal/Fade';
 
 
 function PaginaWeb(props) {
@@ -194,128 +195,138 @@ function PaginaWeb(props) {
           <img src="https://pixabay.com/static/uploads/photo/2014/09/23/20/13/photography-458050_960_720.jpg" alt=""/>
           </figure>
         </div>
-        <div class="col-md-12 mx-auto" id="home">
-          <div class="col-md-12 mx-auto row py-5"  id="homediv">
+        <Fade left>
+          <div class="col-md-12 mx-auto" id="home">
+            <div class="col-md-12 mx-auto row py-5"  id="homediv">
 
-            <div class="col-md-12 mx-auto text-center mt-5 py-4">
-              <h1 class="fw-bold text-center text-servial">- <i class="fas fa-home"></i> Home -</h1>
-            </div>
-
-            <div class="col-md-5 mx-auto">
-              
-            </div>
-            <div class="col-md-7 mx-auto text-center">
-              aqui si le pone el texto de quienes son son y todo eso
-            </div>
-
-          </div>
-        </div>
-        <div class="col-md-12 mx-auto px-0" >
-          <img src={banner1} style={{width:'100%'}}  class=" img-fluid" />
-        </div>
-        <div class="col-md-12 mx-auto py-5" id="quienes" >
-          <div class="row col-md-12 mx-auto"   id="quienesdiv">
-            <div class="col-md-12 mx-auto row py-5" >
-
-              <div class="col-md-12 mx-auto text-center">
-                <h1 class="fw-bold text-center text-servial">- <i class="fas fa-id-card-alt"></i> Quienes Somos -
-                </h1>
+              <div class="col-md-12 mx-auto text-center mt-5 py-4">
+                <h1 class="fw-bold text-center text-servial">- <i class="fas fa-home"></i> Home -</h1>
               </div>
-            </div>
-            <div class="col-md-12 mx-auto row py-5" >
-              <div class="col-md-6 mx-auto text-center">
+
+              <div class="col-md-5 mx-auto">
+                
+              </div>
+              <div class="col-md-7 mx-auto text-center">
                 aqui si le pone el texto de quienes son son y todo eso
               </div>
 
-              <div class="col-md-6 mx-auto py-4">
-                <img src="" alt="" class="img-fluid" srcset=""/>
-              </div>
-
             </div>
-
-
-
           </div>
-        </div>
-        <div class="col-md-12 py-5" id="contact" >
-          <div class="row  col-md-12 mt-5 mb-5 " id="contactanos">
-            <div class="col-md-12 mx-auto row py-5" >
-
-              <div class="col-md-12 mx-auto text-center">
-                <h1 class="fw-bold text-center text-servial">- <i class="fas fa-address-book"></i> Contactanos -
-                </h1>
-              </div>
-            </div>
-            <div class="col-md-12 mx-auto row py-5">
-              <div class="col-md-4 mx-auto py-4">
-                <form class="card shadow p-4 rounded border">
-                  <div class="mb-2">
-                    <label for="exampleInputEmail1" class="form-label">Tu Correo:</label>
-                    <input type="email" class="form-control form-control-sm bg-transparent rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp"/>
-                    <div id="emailHelp" class="form-text">Ingresa tu correo para poder comunicarnos contigo,</div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Mensaje</label>
-                    <textarea type="textarea" class="form-control" id="exampleInputPassword1"></textarea>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary btn-sm rounded-pill">Enviar Mensaje</button>
-                </form>
-              </div>
-              <div class="col-md-5 mx-auto py-4">
-                <ul class="fa-ul" >
-                  <li class="mb-3">
-                    <h5 class="fa-li"><i class="fas fa-home"></i></h5>
-                    <h5 class="ms-2">Acarigua</h5>
-                  </li>
-                  <li class="mb-3">
-                    <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
-                    <h5 class="ms-2">acarigua@example.com</h5>
-                  </li>
-                  <li class="mb-3">
-                    <h5 class="fa-li"><i class="fas fa-phone"></i></h5>
-                    <h5 class="ms-2">+ 00 000 000 00</h5>
-                  </li>
-                  <li class="mb-3">
-                    <h5 class="fa-li"><i class="fas fa-print"></i></h5>
-                    <h5 class="ms-2">+ 00 000 000 00</h5>
-                  </li>
-                </ul>
-              </div>
-
-            </div>
-
-
-
+        </Fade>
+        <Fade right>
+          <div class="col-md-12 mx-auto px-0" >
+            <img src={banner1} style={{width:'100%'}}  class=" img-fluid" />
           </div>
-        </div>
-        <div class="row  col-md-12 mt-5 mb-5" id="misionvision">
-          
-          <div class="col-md-12 mx-auto row py-5" >
-            <div class="col-md-6 mx-auto py-4">
-            <div class="col-md-12 mx-auto row py-5" >
+        </Fade>
+        <Fade left>
+          <div class="col-md-12 mx-auto py-5" id="quienes" >
+            <div class="row col-md-12 mx-auto"   id="quienesdiv">
+              <div class="col-md-12 mx-auto row py-5" >
 
-            <div class="col-md-12 mx-auto text-center">
-              <h1 class="fw-bold text-center text-servial" >- Vision -
-              </h1>
-            </div>
-            </div>
-            </div>
-            <div class="col-md-6 mx-auto py-4">
-            <div class="col-md-12 mx-auto row py-5">
+                <div class="col-md-12 mx-auto text-center">
+                  <h1 class="fw-bold text-center text-servial">- <i class="fas fa-id-card-alt"></i> Quienes Somos -
+                  </h1>
+                </div>
+              </div>
+              <div class="col-md-12 mx-auto row py-5" >
+                <div class="col-md-6 mx-auto text-center">
+                  aqui si le pone el texto de quienes son son y todo eso
+                </div>
 
-              <div class="col-md-12 mx-auto text-center">
-                <h1 class="fw-bold text-center text-servial" >- Mision -
-                </h1>
+                <div class="col-md-6 mx-auto py-4">
+                  <img src="" alt="" class="img-fluid" srcset=""/>
+                </div>
+
               </div>
-              </div>
+
+
+
             </div>
+          </div>
+        </Fade>
+        <Fade right>
+          <div class="col-md-12 py-5" id="contact" >
+            <div class="row  col-md-12 mt-5 mb-5 " id="contactanos">
+              <div class="col-md-12 mx-auto row py-5" >
+
+                <div class="col-md-12 mx-auto text-center">
+                  <h1 class="fw-bold text-center text-servial">- <i class="fas fa-address-book"></i> Contactanos -
+                  </h1>
+                </div>
+              </div>
+              <div class="col-md-12 mx-auto row py-5">
+                <div class="col-md-4 mx-auto py-4">
+                  <form class="card shadow p-4 rounded border">
+                    <div class="mb-2">
+                      <label for="exampleInputEmail1" class="form-label">Tu Correo:</label>
+                      <input type="email" class="form-control form-control-sm bg-transparent rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+                      <div id="emailHelp" class="form-text">Ingresa tu correo para poder comunicarnos contigo,</div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Mensaje</label>
+                      <textarea type="textarea" class="form-control" id="exampleInputPassword1"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm rounded-pill">Enviar Mensaje</button>
+                  </form>
+                </div>
+                <div class="col-md-5 mx-auto py-4">
+                  <ul class="fa-ul" >
+                    <li class="mb-3">
+                      <h5 class="fa-li"><i class="fas fa-home"></i></h5>
+                      <h5 class="ms-2">Acarigua</h5>
+                    </li>
+                    <li class="mb-3">
+                      <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
+                      <h5 class="ms-2">acarigua@example.com</h5>
+                    </li>
+                    <li class="mb-3">
+                      <h5 class="fa-li"><i class="fas fa-phone"></i></h5>
+                      <h5 class="ms-2">+ 00 000 000 00</h5>
+                    </li>
+                    <li class="mb-3">
+                      <h5 class="fa-li"><i class="fas fa-print"></i></h5>
+                      <h5 class="ms-2">+ 00 000 000 00</h5>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+
+
+
+            </div>
+          </div>
+        </Fade>
+        <Fade left>
+          <div class="row  col-md-12 mt-5 mb-5" id="misionvision">
             
+            <div class="col-md-12 mx-auto row py-5" >
+              <div class="col-md-6 mx-auto py-4">
+              <div class="col-md-12 mx-auto row py-5" >
+
+              <div class="col-md-12 mx-auto text-center">
+                <h1 class="fw-bold text-center text-servial" >- Vision -
+                </h1>
+              </div>
+              </div>
+              </div>
+              <div class="col-md-6 mx-auto py-4">
+              <div class="col-md-12 mx-auto row py-5">
+
+                <div class="col-md-12 mx-auto text-center">
+                  <h1 class="fw-bold text-center text-servial" >- Mision -
+                  </h1>
+                </div>
+                </div>
+              </div>
+              
+            </div>
+
+
+
           </div>
-
-
-
-        </div>
+        </Fade>
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2" >
             <div class="slide-track d-flex justify-content-end" >
