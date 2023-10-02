@@ -8,6 +8,7 @@ import "./Hero.css";
 import { MensajeSiNo } from "./components/mensajesCerrar";
 import { AuthContext } from "../src/context/auth";
 import PaginaWeb from "./pages/paginaWeb";
+import Galeria from "./pages/galeria";
 
 
 function App(props) {
@@ -87,6 +88,8 @@ function App(props) {
         <Router>
           <Route exact path="/login" component={Login} />
           <Route exact path="/" component={PaginaWeb} />
+          <Route exact path="/galeria" component={Galeria} />
+
 
           {pathname !== "/" && pathname !== "/login" && (
             <div>
