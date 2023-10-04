@@ -83,21 +83,33 @@ function App(props) {
             texto: "",
           });
         }}
-      />
-      <AuthProvider>
-        <Router>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/" component={PaginaWeb} />
-          <Route exact path="/galeria" component={Galeria} />
+      />{ pathname === "/" || pathname === "/galeria" ? 
+      <Router>
+     
+      <Route exact path="/" component={PaginaWeb} />
+      <Route exact path="/galeria" component={Galeria} />
 
 
-          {pathname !== "/" && pathname !== "/login" && (
-            <div>
-              <MenuImpuestoPP />
-            </div>
-          )}
-        </Router>
-      </AuthProvider>
+     
+    </Router>
+
+    : 
+    <AuthProvider>
+    <Router>
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/" component={PaginaWeb} />
+      <Route exact path="/galeria" component={Galeria} />
+
+
+      {pathname !== "/" && pathname !== "/login" && (
+        <div>
+          <MenuImpuestoPP />
+        </div>
+      )}
+    </Router>
+  </AuthProvider>
+      }
+     
 
       {/* }
        */}
