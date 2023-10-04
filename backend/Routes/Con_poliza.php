@@ -89,8 +89,7 @@ class Con_poliza extends cls_poliza
     }
     public function renovar()
     {
-        $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-        $resultado = $this->renovar();
+        $resultado = $this->renovarRCV();
         Response($resultado['data'], $resultado['code']);
     }
 
