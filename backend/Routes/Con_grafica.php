@@ -6,7 +6,7 @@ class Con_grafica extends cls_grafica
 
     public function Diario()
     {
-        $resultado = $this->Consultar_Diario($_POST["Desde"], $_POST["Hasta"]);
+        $resultado = $this->Consultar_Diario();
         Response($resultado, 200);
     }
 

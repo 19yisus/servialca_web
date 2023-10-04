@@ -638,9 +638,22 @@ export const ModalRcv = (props) => {
     txtDirec.current.value = dir;
     setMostrar(false);
   };
-  const seleccionarVehiculo = (placa, 
-    puesto, uso, ano, serMotor, clase, color, 
-    serCarroceria, tipo, modelo, marca, peso, capTotal) =>{
+  const seleccionarVehiculo = (
+    placa,
+    puesto,
+    uso,
+    ano,
+    serMotor,
+    clase,
+    color,
+    serCarroceria,
+    tipo,
+    modelo,
+    marca,
+    peso,
+    capTotal
+  ) => {
+   
     txtPlaca.current.value = placa;
     txtPuesto.current.value = puesto;
     txtUso.current.value = uso;
@@ -654,7 +667,8 @@ export const ModalRcv = (props) => {
     txtMarca.current.value = marca;
     txtPeso.current.value = peso;
     txtCapTon.current.value = capTotal;
-  }
+    setMostrar(false);
+  };
   const seleccionarTitular = (nombre, apellido, cedula, nacionalidad) => {
     cmbNacionalidadTitular.current.value = nacionalidad + "-";
     txtCedulatTitular.current.value = cedula;

@@ -20,4 +20,8 @@ class Con_reporte
     public function reporteIngresoEgreso(){
         include("Con_reporteVendedores.php");
     }
+
+    public function reporteLicencia(){
+        include("Con_reporteLicencia.php");
+    }
 }

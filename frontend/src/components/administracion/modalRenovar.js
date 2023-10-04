@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -22,7 +22,6 @@ export const ModalRenovarPoliza = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
 
   const txtEdad = useRef();
   const txtNombre = useRef();
@@ -39,14 +38,12 @@ export const ModalRenovarPoliza = (props) => {
 
   const txtHasta = useRef();
 
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtBs = useRef();
   const txtDolar = useRef();
 
   const txtFechaNaci = useRef();
   const txtApellido = useRef();
-
-
 
   const [values, setValues] = useState({
     ced: "",
@@ -79,14 +76,10 @@ export const ModalRenovarPoliza = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -104,7 +97,6 @@ export const ModalRenovarPoliza = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
-
 
   const salir = () => {
     props.onHideCancela();
@@ -130,43 +122,39 @@ export const ModalRenovarPoliza = (props) => {
     });
   };
 
-
-
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/poliza/registrarCertificado";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value+txtNombre.current.value)
-    bodyF.append("Apellido", txtApellido.current.value)
-    bodyF.append("Cedula", txtCedula.current.value)
-    bodyF.append("fechaNacimiento", txtFechaNaci.current.value)
-    bodyF.append("Edad", txtEdad.current.value)
-    bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    bodyF.append("Lente", cmbLentes.current.value)
-    bodyF.append("metodoPago", cmbPago.current.value)
-    bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", txtDolar.current.value)
-    bodyF.append("Telefono", null)
-    bodyF.append("Direccion", null)
-
-
+    bodyF.append(
+      "Nombre",
+      cmbNacionalidad.current.value + txtNombre.current.value
+    );
+    bodyF.append("Apellido", txtApellido.current.value);
+    bodyF.append("Cedula", txtCedula.current.value);
+    bodyF.append("fechaNacimiento", txtFechaNaci.current.value);
+    bodyF.append("Edad", txtEdad.current.value);
+    bodyF.append("tipoSangre", txtTipoSangre.current.value);
+    bodyF.append("Lente", cmbLentes.current.value);
+    bodyF.append("metodoPago", cmbPago.current.value);
+    bodyF.append("Referencia", txtReferencia.current.value);
+    bodyF.append("cantidadDolar", txtDolar.current.value);
+    bodyF.append("Telefono", null);
+    bodyF.append("Direccion", null);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
 
         setMensaje({
           mostrar: true,
@@ -174,18 +162,16 @@ export const ModalRenovarPoliza = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-
-
-
-
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -208,8 +194,6 @@ export const ModalRenovarPoliza = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -234,33 +218,32 @@ export const ModalRenovarPoliza = (props) => {
     });
   };
 
-
-
-
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
-
-  }
+    props.onHideCancela();
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
 
@@ -312,10 +295,7 @@ export const ModalRenovarPoliza = (props) => {
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>
-        Renovacion
-
-        </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>Renovacion</Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -330,80 +310,187 @@ export const ModalRenovarPoliza = (props) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoClientes
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={seleccionarCliente}
-
         />
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <div className="col-md-12 row mx-auto">
-        <fieldset class="border rounded-3 p-3 row mx-auto border rounded  mb-2">
-                <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos Del Contrato</legend>
-                <div class="input-group input-group-sm mb-2 col-md-3">
-                    <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">N° De Contrato:</span>
-                    <input type="text" class="form-control bg-transparent border-0 " ref={txtNContrato} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
-                </div>
-                <div class="input-group input-group-sm mb-2 col-md-5">
-                    <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Nombre:</span>
-                    <input type="text" class="form-control bg-transparent border-0 " ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
-                </div>
-                <div class="input-group input-group-sm mb-2 col-md-3">
-                    <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Cédula:</span>
-                    <select disabled class="form-select  bg-transparent border-0" ref={cmbNacionalidad} aria-label="Default select example">
-
-                        <option value="V-">V-</option>
-                        <option value="E-">E-</option>
-                        <option value="J-">J-</option>
-                        <option value="G-">G-</option>
-
-                    </select>
-                    <input type="text" class="form-control bg-transparent border-0 " ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
-                </div>
-                <div class="input-group input-group-sm mb-2 col-md-4">
-                    <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Placa del Vehiculo:</span>
-                    <input type="text" class="form-control bg-transparent border-0 " ref={txtPlaca} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
-                </div>
-        </fieldset>
-        <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Desde:</span>
-            <input type="date" class="form-control " aria-label="Sizing example input" ref={txtDesde} aria-describedby="inputGroup-sizing-sm" />
+          <fieldset class="border rounded-3 p-3 row mx-auto border rounded  mb-2">
+            <legend
+              class="float-none w-auto px-3 fw-bold"
+              style={{ fontSize: 15 }}
+            >
+              Datos Del Contrato
+            </legend>
+            <div class="input-group input-group-sm mb-2 col-md-3">
+              <span
+                class="input-group-text bg-transparent border-0"
+                id="inputGroup-sizing-sm"
+              >
+                N° De Contrato:
+              </span>
+              <input
+                type="text"
+                class="form-control bg-transparent border-0 "
+                ref={txtNContrato}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </div>
+            <div class="input-group input-group-sm mb-2 col-md-5">
+              <span
+                class="input-group-text bg-transparent border-0"
+                id="inputGroup-sizing-sm"
+              >
+                Nombre:
+              </span>
+              <input
+                type="text"
+                class="form-control bg-transparent border-0 "
+                ref={txtNombre}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </div>
+            <div class="input-group input-group-sm mb-2 col-md-3">
+              <span
+                class="input-group-text bg-transparent border-0"
+                id="inputGroup-sizing-sm"
+              >
+                Cédula:
+              </span>
+              <select
+                disabled
+                class="form-select  bg-transparent border-0"
+                ref={cmbNacionalidad}
+                aria-label="Default select example"
+              >
+                <option value="V-">V-</option>
+                <option value="E-">E-</option>
+                <option value="J-">J-</option>
+                <option value="G-">G-</option>
+              </select>
+              <input
+                type="text"
+                class="form-control bg-transparent border-0 "
+                ref={txtCedula}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </div>
+            <div class="input-group input-group-sm mb-2 col-md-4">
+              <span
+                class="input-group-text bg-transparent border-0"
+                id="inputGroup-sizing-sm"
+              >
+                Placa del Vehiculo:
+              </span>
+              <input
+                type="text"
+                class="form-control bg-transparent border-0 "
+                ref={txtPlaca}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                disabled
+              />
+            </div>
+          </fieldset>
+          <div class="input-group input-group-sm mb-2 col-md-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Desde:
+            </span>
+            <input
+              type="date"
+              class="form-control "
+              aria-label="Sizing example input"
+              ref={txtDesde}
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Hasta:</span>
-            <input type="date" class="form-control " aria-label="Sizing example input" ref={txtHasta} aria-describedby="inputGroup-sizing-sm" disabled/>
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Hasta:
+            </span>
+            <input
+              type="date"
+              class="form-control "
+              aria-label="Sizing example input"
+              ref={txtHasta}
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class=" col-md-6"></div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago:</span>
-            <select class="form-select" ref={cmbPago} aria-label="Default select example">
-
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Forma de Pago:
+            </span>
+            <select
+              class="form-select"
+              ref={cmbPago}
+              aria-label="Default select example"
+            >
               <option value="0">Pago Movil</option>
               <option value="1">Efectivo</option>
               <option value="2">Transferencia</option>
               <option value="3">Punto</option>
-
-
             </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Referencia:</span>
-            <input type="text" class="form-control" ref={txtReferencia} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Referencia:
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              ref={txtReferencia}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Cantidad:</span>
-            <input type="text" class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Bolivares" onChange={handleInputMontoChange} />
-            <input type="text" class="form-control text-right" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Dolares" onChange={handleInputMontoChange} />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Cantidad:
+            </span>
+            <input
+              type="text"
+              class="form-control text-right"
+              ref={txtBs}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              placeholder="Bolivares"
+              onChange={handleInputMontoChange}
+            />
+            <input
+              type="text"
+              class="form-control text-right"
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              placeholder="Dolares"
+              onChange={handleInputMontoChange}
+            />
           </div>
-
-
         </div>
       </Modal.Body>
       <Modal.Footer>
