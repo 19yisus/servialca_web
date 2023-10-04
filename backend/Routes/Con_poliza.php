@@ -68,6 +68,10 @@ class Con_poliza extends cls_poliza
         $this->edad = isset($_POST["Edad"]) ? $_POST["Edad"] : null;
         $this->sangre = isset($_POST["tipoSangre"]) ? $_POST["tipoSangre"] : null;
         $this->lente = isset($_POST["Lente"]) ? $_POST["Lente"] : null;
+
+        $this->cliente = isset($_POST["idCliente"]) ? $_POST["idCliente"] : null;
+        $this->idTitular = isset($_POST["idTitular"]) ? $_POST["idTitular"] : null;
+        $this->vehiculo = isset($_POST["idVehiculo"]) ? $_POST["idVehiculo"] : null;
     }
 
     public function registrar()
@@ -78,7 +82,7 @@ class Con_poliza extends cls_poliza
 
     public function editar()
     {
-        $resultado = $this->Save($_POST["idCliente"], $_POST["idTitular"], $_POST["idVehiculo"]);
+        $resultado = $this->Edit();
         Response($resultado['data'], $resultado['code']);
     }
 
@@ -89,8 +93,11 @@ class Con_poliza extends cls_poliza
     }
     public function renovar()
     {
-        $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-        $resultado = $this->renovar();
+        $resultado = $this->renovar_poliza();
+        if ($resultado['code'] == 200) {
+            $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
+            $this->Edit();
+        }
         Response($resultado['data'], $resultado['code']);
     }
 
@@ -117,6 +124,4 @@ class Con_poliza extends cls_poliza
         $resultado = $this->consultaSemanal($_POST["Desde"], $_POST["Hasta"]);
         Response($resultado, 200);
     }
-
-    
 }
