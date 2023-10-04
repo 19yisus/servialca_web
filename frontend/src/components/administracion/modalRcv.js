@@ -261,7 +261,7 @@ export const ModalRcv = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-        setIdContrato(response);
+        setIdContrato(response.id);
       })
       .catch((error) =>
         setMensaje({
@@ -653,6 +653,7 @@ export const ModalRcv = (props) => {
     peso,
     capTotal
   ) => {
+    setMostrar8(false)
    
     txtPlaca.current.value = placa;
     txtPuesto.current.value = puesto;
@@ -670,6 +671,7 @@ export const ModalRcv = (props) => {
     setMostrar(false);
   };
   const seleccionarTitular = (nombre, apellido, cedula, nacionalidad) => {
+    setMostrar9(false)
     cmbNacionalidadTitular.current.value = nacionalidad + "-";
     txtCedulatTitular.current.value = cedula;
     txtNombreTitular.current.value = nombre;

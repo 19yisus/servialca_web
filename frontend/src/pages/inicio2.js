@@ -6,8 +6,8 @@ import useTableScroll from "../components/useTableScroll2";
 import { Mensaje } from "../components/mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-import logo from "../imagenes/logo.png";
-import {
+/*import logo from "../../public/mdb/img/mdb-favicon.ico";
+*/import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -339,6 +339,7 @@ function Inicio2() {
 
   const imprimirCertificado = (id) => {
     setIdCliente(id);
+    console.log(id)
     setMostrar2(false);
     setMostrar3(true);
   };

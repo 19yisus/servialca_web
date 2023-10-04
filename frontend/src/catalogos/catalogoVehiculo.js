@@ -220,7 +220,7 @@ const CatalogoVehiculo = (props) => {
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          Seleccionar Cliente.
+          Seleccionar Vehiculo.
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

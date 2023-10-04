@@ -1533,3 +1533,60 @@ div#slider figure {
   margin-right:-600px ;
   font-weight: bold;
 }
+
+/* line 34, src/assets/scss/theme.scss */
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  -webkit-transition: .2s ease;
+  transition: .2s ease;
+  background-color: #008CBA; }
+
+/* line 46, src/assets/scss/theme.scss */
+.card {
+  border: 0; }
+
+/* line 47, src/assets/scss/theme.scss */
+.card-pin:hover .overlay {
+  opacity: .5;
+  border: 5px solid #f3f3f3;
+  -webkit-transition: ease .2s;
+  transition: ease .2s;
+  background-color: #000000;
+  cursor: -webkit-zoom-in;
+  cursor: zoom-in; }
+
+/* line 55, src/assets/scss/theme.scss */
+.more {
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-transform: uppercase;
+  -webkit-transform: translate(-20%, -20%);
+          transform: translate(-20%, -20%);
+  -ms-transform: translate(-50%, -50%); }
+
+/* line 66, src/assets/scss/theme.scss */
+.card-pin:hover .card-title {
+  color: #ffffff;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.2em; }
+
+/* line 73, src/assets/scss/theme.scss */
+.card-pin:hover .more a {
+  text-decoration: none;
+  color: #ffffff; }
+
+/* line 78, src/assets/scss/theme.scss */
+.card-pin:hover .download a {
+  text-decoration: none;
+  color: #ffffff; }
