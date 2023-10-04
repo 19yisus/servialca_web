@@ -1,17 +1,14 @@
-import React, { useEffect,useRef, useContext, useState } from "react";
-
+import React, { useEffect, useRef, useContext, useState } from "react";
 
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
 
-
-
 import axios from "axios";
 import useTable from "../useTable";
-import { TableBody, TableRow, TableCell } from '@material-ui/core';
+import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { ModalTipoContrato } from "./modalTipoContrato";
-import { formatMoneda,validaMonto,formatoMonto } from "../../util/varios";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
 function TablaTipoContratos() {
   var op = require("../../modulos/datos");
@@ -26,44 +23,117 @@ function TablaTipoContratos() {
     icono: "",
   });
 
-  console.log(user_id)
+  console.log(user_id);
   const headCells = [
-    { label: "Codigo", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Nombre", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Daño Cosas", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Daño Personas", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Fianza Cuantitativa", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Asistencia Legal", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "A.P.O.V.", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Muerte", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Invalidez", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Gastos Medicos", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    
-    { label: "Grua y Estacionamiento", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
-    { label: "Status", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    {
+      label: "Codigo",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Nombre",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Daño Cosas",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Daño Personas",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Fianza Cuantitativa",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Asistencia Legal",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "A.P.O.V.",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Muerte",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Invalidez",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Gastos Medicos",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
 
- 
-    { label: "Opciones", textAlign: "center",backgroundColor:'#e70101bf',color:'white' },
+    {
+      label: "Grua y Estacionamiento",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Status",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
 
-
-
-
+    {
+      label: "Opciones",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
   ];
 
-
-  const BCV = JSON.parse(localStorage.getItem('dolarbcv'))
+  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
   const txtDolar = useRef();
   const txtBs = useRef();
-  
-  const calcular = (e) =>{
-  
-    if(e.target.value !== ''){
-      let total  = parseFloat(txtDolar.current.value) * parseFloat(BCV)
-          txtBs.current.value =  formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+
+  const calcular = () => {
+    const cantidadDolares = parseFloat(txtDolar.current.value);
+    const precio = parseFloat(BCV);
+
+    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
+      const total = cantidadDolares * precio;
+      txtBs.current.value = total.toFixed(2).replace(".", ",");
     } else {
-      txtBs.current.value = '0,00'
+      txtBs.current.value = "0,00";
     }
-  }
+  };
+  const calcular2 = () => {
+    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
+    const cantidadBs = parseFloat(cantidadBsStr);
+    const precioDolar = parseFloat(BCV);
+
+    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
+      const totalDolares = cantidadBs / precioDolar;
+      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
+    } else {
+      txtDolar.current.value = "0,00";
+    }
+  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -92,7 +162,6 @@ function TablaTipoContratos() {
       return true;
     } else return false;
   };
-  
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
@@ -109,7 +178,11 @@ function TablaTipoContratos() {
   const [totalact, setTotalact] = useState(0.0);
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
 
   const [records, setRecords] = useState([
     {
@@ -138,7 +211,6 @@ function TablaTipoContratos() {
     },
   };
 
-  
   const labels = [
     "Lunes",
     "Martes",
@@ -159,77 +231,63 @@ function TablaTipoContratos() {
       },
     ],
   };
-  const {
-    TblContainer,
-    TblHead,
-    recordsAfterPagingAndSorting,
-    TblPagination
-  } = useTable(records, headCells, filterFn);
-  
-  
+  const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
+    useTable(records, headCells, filterFn);
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/tipo_contrato/ConsultarTodos";
-console.log(endpoint)
-    setActivate(true)
-   
+    console.log(endpoint);
+    setActivate(true);
 
-  
     //setLoading(false);
-
-  
- 
 
     await fetch(endpoint, {
       method: "POST",
-      
-    }).then(res => res.json())
-      .then(response =>{
-     
-        
-       setActivate(false)
-       console.log(response)
-       setRecords(response)
-  
-
-
-
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
       })
-      .catch(error =>  
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
-      fn: items => {
-        if (target.value === "")
-          return items;
+      fn: (items) => {
+        if (target.value === "") return items;
         else
-          return items.filter(x => {
-            if ((x.contrato_id !== null ? String(x.contrato_id).includes(target.value) : 0)
-              || (x.contrato_nombre !== null ? x.contrato_nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-             
+          return items.filter((x) => {
+            if (
+              (x.contrato_id !== null
+                ? String(x.contrato_id).includes(target.value)
+                : 0) ||
+              (x.contrato_nombre !== null
+                ? x.contrato_nombre
+                    .toLowerCase()
+                    .includes(target.value.toLowerCase())
+                : "")
             ) {
               return x;
             }
           });
-      }
-    })
+      },
+    });
+  };
 
-  }
-
-
-  
-
-  console.log('estas en menu')
-
-  
+  console.log("estas en menu");
 
   useEffect(() => {
-    selecionarRegistros()
-   
+    selecionarRegistros();
   }, []);
 
   const regPre = () => {
@@ -237,93 +295,291 @@ console.log(endpoint)
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
- 
-  const gestionarBanco = (op,id) => (e) => {
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setOperacion(op)
+    setOperacion(op);
     setMostrar(true);
-    setIdTipoContrato(id)
-
-
-  }
+    setIdTipoContrato(id);
+  };
   return (
     <div className="col-md-12 mx-auto p-2">
-
       <ModalTipoContrato
-      operacion={operacion}
-      show={mostrar}
-      onHideCancela={()=>{setMostrar(false)}}
-      IdTipoContrato={IdTipoContrato}
-      render={selecionarRegistros}
-
+        operacion={operacion}
+        show={mostrar}
+        onHideCancela={() => {
+          setMostrar(false);
+        }}
+        IdTipoContrato={IdTipoContrato}
+        render={selecionarRegistros}
       />
-    
 
-<div className="col-12 py-2">
-           <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-                <h2 className=' col-5 text-light'>Tipos de Contratos</h2>
-                < div class="input-group input-group-sm col-md-4 my-auto">
-            <span class="input-group-text bg-transparent border-0 fw-bold text-light" id="inputGroup-sizing-sm">Calcular $:</span>
-            <input type="text" class="form-control bg-transparent text-light text-right" onKeyUp={handleInputMontoChange} onChange={calcular} ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
-            <input type="text" class="form-control bg-transparent text-light text-right" ref={txtBs} disabled aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"/>
-         
+      <div className="col-12 py-2">
+        <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
+          <h2 className=" col-5 text-light">Tipos de Contratos</h2>
+          <div class="input-group input-group-sm col-md-4 my-auto">
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular $:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              onChange={calcular}
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              placeholder="$"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular BS:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              ref={txtBs}
+              onChange={calcular2}
+              aria-label="Sizing example input"
+              placeholder="BS"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
-              </div>
-              
-            </div>
-            <div className="col-md-12 bg-light py-2 rounded" style={{ margin: "auto" }} >
-              <div className="row col-12 d-flex justify-content-between mb-2">
-                <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-         
-                <div className='col-3 d-flex justify-content-end'>
-                  <button onClick={gestionarBanco(1, '')} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
-                </div>
-              </div>
-              <TblContainer>
-                <TblHead />
-                <TableBody >
-                  {
-                    records && recordsAfterPagingAndSorting().map((item, index) => (
-                      <TableRow key={index} style={{ padding: "0" }}>
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.contrato_id}</TableCell> 
-                        <TableCell className='align-baseline' style={{ textAlign: "left", alignItems: 'center' }}>{item.contrato_nombre}</TableCell>
-                   
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.dañoCosas ? formatMoneda(item.dañoCosas.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+        </div>
+      </div>
+      <div
+        className="col-md-12 bg-light py-2 rounded"
+        style={{ margin: "auto" }}
+      >
+        <div className="row col-12 d-flex justify-content-between mb-2">
+          <input
+            type="text"
+            className=" col-3 form-control form-control-sm rounded-pill"
+            onChange={handleSearch}
+            placeholder="Buscar"
+          />
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.dañoPersonas ? formatMoneda(item.dañoPersonas.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
-                       
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.fianzaCuanti ? formatMoneda(item.fianzaCuanti.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+          <div className="col-3 d-flex justify-content-end">
+            <button
+              onClick={gestionarBanco(1, "")}
+              className="btn btn-sm btn-primary rounded-circle"
+            >
+              <i className="fas fa-plus"></i>{" "}
+            </button>
+          </div>
+        </div>
+        <TblContainer>
+          <TblHead />
+          <TableBody>
+            {records &&
+              recordsAfterPagingAndSorting().map((item, index) => (
+                <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.contrato_id}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "left", alignItems: "center" }}
+                  >
+                    {item.contrato_nombre}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.asistenciaLegal ? formatMoneda(item.asistenciaLegal.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.dañoCosas
+                      ? formatMoneda(
+                          item.dañoCosas
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.dañoPersonas
+                      ? formatMoneda(
+                          item.dañoPersonas
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.apov ? formatMoneda(item.apov.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.fianzaCuanti
+                      ? formatMoneda(
+                          item.fianzaCuanti
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.muerte ? formatMoneda(item.muerte.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.asistenciaLegal
+                      ? formatMoneda(
+                          item.asistenciaLegal
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.apov
+                      ? formatMoneda(
+                          item.apov
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.invalidez ? formatMoneda(item.invalidez.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.muerte
+                      ? formatMoneda(
+                          item.muerte
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.gastosMedicos ? formatMoneda(item.gastosMedicos.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.invalidez
+                      ? formatMoneda(
+                          item.invalidez
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.grua ? formatMoneda(item.grua.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00'}</TableCell>
-                       
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{parseInt(item.contrato_estatus) === 1 ? 'ACTIVO' : 'INACTIVO'}</TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.gastosMedicos
+                      ? formatMoneda(
+                          item.gastosMedicos
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.grua
+                      ? formatMoneda(
+                          item.grua
+                            .toString()
+                            .replace(",", "")
+                            .replace(".", ","),
+                          ",",
+                          ".",
+                          2
+                        )
+                      : "0,00"}
+                  </TableCell>
 
-                        <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center',width:130 }}>
-                        
-                          <button onClick={gestionarBanco(2, item.contrato_id)}  className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
-                          <button onClick={gestionarBanco(3, item.contrato_id)}  className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </TblContainer>
-              <TblPagination />
-            </div>
-      
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {parseInt(item.contrato_estatus) === 1
+                      ? "ACTIVO"
+                      : "INACTIVO"}
+                  </TableCell>
+
+                  <TableCell
+                    className="align-baseline"
+                    style={{
+                      textAlign: "center",
+                      alignItems: "center",
+                      width: 130,
+                    }}
+                  >
+                    <button
+                      onClick={gestionarBanco(2, item.contrato_id)}
+                      className="btn btn-sm mx-1 btn-warning rounded-circle"
+                    >
+                      <i className="fa fa-edit"></i>{" "}
+                    </button>
+                    <button
+                      onClick={gestionarBanco(3, item.contrato_id)}
+                      className="btn btn-sm mx-1 btn-danger rounded-circle"
+                    >
+                      <i className="fa fa-trash"></i>{" "}
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </TblContainer>
+        <TblPagination />
+      </div>
+
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>

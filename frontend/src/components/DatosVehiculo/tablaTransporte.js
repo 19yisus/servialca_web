@@ -56,17 +56,27 @@ function TablaTransporte() {
   const txtDolar = useRef();
   const txtBs = useRef();
 
-  const calcular = (e) => {
-    if (e.target.value !== "") {
-      let total = parseFloat(txtDolar.current.value) * parseFloat(BCV);
-      txtBs.current.value = formatMoneda(
-        total.toString().replace(",", "").replace(".", ","),
-        ",",
-        ".",
-        2
-      );
+  const calcular = () => {
+    const cantidadDolares = parseFloat(txtDolar.current.value);
+    const precio = parseFloat(BCV);
+
+    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
+      const total = cantidadDolares * precio;
+      txtBs.current.value = total.toFixed(2).replace(".", ",");
     } else {
       txtBs.current.value = "0,00";
+    }
+  };
+  const calcular2 = () => {
+    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
+    const cantidadBs = parseFloat(cantidadBsStr);
+    const precioDolar = parseFloat(BCV);
+
+    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
+      const totalDolares = cantidadBs / precioDolar;
+      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
+    } else {
+      txtDolar.current.value = "0,00";
     }
   };
   const handleInputMontoChange = (event) => {
@@ -262,18 +272,25 @@ function TablaTransporte() {
             <input
               type="text"
               class="form-control bg-transparent text-light text-right"
-              onKeyUp={handleInputMontoChange}
               onChange={calcular}
               ref={txtDolar}
               aria-label="Sizing example input"
+              placeholder="$"
               aria-describedby="inputGroup-sizing-sm"
             />
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular BS:
+            </span>
             <input
               type="text"
               class="form-control bg-transparent text-light text-right"
               ref={txtBs}
-              disabled
+              onChange={calcular2}
               aria-label="Sizing example input"
+              placeholder="BS"
               aria-describedby="inputGroup-sizing-sm"
             />
           </div>

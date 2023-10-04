@@ -18,35 +18,20 @@ abstract class cls_Licencia extends cls_db
       ORDER BY licencia_id DESC");
     if ($sql->execute())
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-      else
+    else
       $resultado = [];
     return $resultado;
   }
 
-  protected function consultarUno($id)
+  public function consultarUno($id)
   {
     $sql = $this->db->prepare("SELECT cliente.*, licencia.* FROM licencia
       INNER JOIN cliente on cliente.cliente_id = licencia.cliente_id
       WHERE licencia_id = ?");
-    $sql->execute([$id]);
-
-    if ($sql->rowCount() > 0) {
+    if ($sql->execute([$id]))
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-      return [
-        "data" => [
-          "res" => "Consulta exitosa",
-          "result" => $resultado
-        ],
-        "code" => 200
-      ];
-    } else {
-      return [
-        "data" => [
-          "res" => "No hay nada para consultar",
-          "result" => []
-        ],
-        "code" => 400
-      ];
-    }
+    else
+      $resultado = [];
+    return $resultado;
   }
 }

@@ -1,9 +1,8 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 
-
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut } from "react-chartjs-2";
 
 import moment from "moment";
 import {
@@ -14,16 +13,12 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-
-
-
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 import axios from "axios";
 import useTable from "../useTable";
-import { TableBody, TableRow, TableCell } from '@material-ui/core';
-
+import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
 function GraficosIngresos() {
   var op = require("../../modulos/datos");
@@ -38,17 +33,62 @@ function GraficosIngresos() {
     icono: "",
   });
 
-  console.log(user_id)
+  console.log(user_id);
   const headCells = [
-    { label: "Fecha", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Hora", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Asesor", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Debito/Credito", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Motivo", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Tipo de pago", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Referencia", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Monto", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
-    { label: "Total neto", textAlign: "center", backgroundColor: '#e70101bf', color: 'white' },
+    {
+      label: "Fecha",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Hora",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Asesor",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Debito/Credito",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Motivo",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Tipo de pago",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Referencia",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Monto",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Total neto",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
   ];
 
   const txtDate1 = useRef();
@@ -69,7 +109,11 @@ function GraficosIngresos() {
   const [totalact, setTotalact] = useState(0.0);
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
 
   const [records, setRecords] = useState([]);
 
@@ -86,7 +130,6 @@ function GraficosIngresos() {
     },
   };
 
-
   const labels = [
     "Enero",
     "Febrero",
@@ -99,7 +142,7 @@ function GraficosIngresos() {
     "Septiembre",
     "Octubre",
     "Noviembre",
-    "Diciembre"
+    "Diciembre",
   ];
 
   const data = {
@@ -114,106 +157,122 @@ function GraficosIngresos() {
   };
 
   const data2 = {
-    labels: ['RCV', 'Certificado medico', 'Renovación', 'Abonos', 'Egresos', 'Orange'],
+    labels: [
+      "RCV",
+      "Certificado medico",
+      "Renovación",
+      "Abonos",
+      "Egresos",
+      "Orange",
+    ],
     datasets: [
       {
-        label: '# of Votes',
+        label: "# of Votes",
         data: [1, 1, 1, 1, 1, 1],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
         ],
         borderWidth: 1,
       },
     ],
   };
 
-  const {
-    TblContainer,
-    TblHead,
-    recordsAfterPagingAndSorting,
-    TblPagination
-  } = useTable(records, headCells, filterFn);
+  const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
+    useTable(records, headCells, filterFn);
 
-
-  const selecionarRegistros = async (e) => {
-    e.preventDefault()
-    let endpoint = op.conexion + "/grafica/Diario";
-    console.log(endpoint)
-    setActivate(true)
-
-
-
-    //setLoading(false);
-
-    let bodyF = new FormData()
-
-    bodyF.append("Desde", txtDate1.current.value)
-    bodyF.append("Hasta", txtDate2.current.value)
-
+  const selecionarRegistrosAnual = async (e) => {
+    let endpoint = op.conexion + "/grafica/Anual";
+    console.log(endpoint);
+    setActivate(true);
+    let bodyF = new FormData();
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
-        setRecords(response)
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
-  const handleSearch = e => {
+  const selecionarRegistros = async (e) => {
+    let endpoint = op.conexion + "/grafica/Diario";
+    console.log(endpoint);
+    setActivate(true);
+    let bodyF = new FormData();
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
-      fn: items => {
-        if (target.value === "")
-          return items;
+      fn: (items) => {
+        if (target.value === "") return items;
         else
-          return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+          return items.filter((x) => {
+            if (
+              (x.idcuentabancaria !== null
+                ? String(x.idcuentabancaria).includes(target.value)
+                : 0) ||
+              (x.nombre !== null
+                ? x.nombre.toLowerCase().includes(target.value.toLowerCase())
+                : "") ||
+              (x.cuentabancaria !== null
+                ? x.cuentabancaria.includes(target.value)
+                : "")
             ) {
               return x;
             }
           });
-      }
-    })
+      },
+    });
+  };
 
-  }
-
-
-
-
-  console.log('estas en menu')
-
-
+  console.log("estas en menu");
 
   useEffect(() => {
-    // selecionarRegistros()
-
+    selecionarRegistros();
+    
   }, []);
 
   const regPre = () => {
@@ -221,23 +280,14 @@ function GraficosIngresos() {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
-
-  const gestionarBanco = (op, id) => (e) => {
-    e.preventDefault();
-
-  }
   return (
     <div className="col-md-12 mx-auto p-2">
-
-
       <div className="col-12 py-2">
-        <div className='col-12 row d-flex justify-content-between py-2 mt-5 mb-3'>
-          <h2 className=' col-5 text-light'>Ingreso Y Egreso</h2>
-
+        <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
+          <h2 className=" col-5 text-light">Ingreso Y Egreso</h2>
         </div>
-
       </div>
-      <div className="col-md-12 bg-light py-2 rounded row py-5" >
+      <div className="col-md-12 bg-light py-2 rounded row py-5">
         <div className="row col-6 d-flex justify-content-between mb-2">
           <Bar options={options} data={data} />
         </div>
@@ -245,42 +295,111 @@ function GraficosIngresos() {
           <Doughnut data={data2} />
         </div>
         <div className="row col-12 d-flex justify-content-between mb-4 mt-3">
-          <input type="text" className=" col-3 form-control form-control-sm rounded-pill mb-4 " onChange={handleSearch} placeholder="Buscar" />
+          <input
+            type="text"
+            className=" col-3 form-control form-control-sm rounded-pill mb-4 "
+            onChange={handleSearch}
+            placeholder="Buscar"
+          />
 
-          <div className='col-4 mb-4'>
+          <div className="col-4 mb-4">
             <div class="input-group flex-nowrap">
-              <span class="input-group-text" id="addon-wrapping">Desde:</span>
-              <input type="date" class="form-control" ref={txtDate1} aria-label="Username" aria-describedby="addon-wrapping" />
+              <span class="input-group-text" id="addon-wrapping">
+                Desde:
+              </span>
+              <input
+                type="date"
+                class="form-control"
+                ref={txtDate1}
+                aria-label="Username"
+                aria-describedby="addon-wrapping"
+              />
 
-              <span class="input-group-text" id="addon-wrapping">Hasta:</span>
-              <input type="date" class="form-control" ref={txtDate2} aria-label="Username" aria-describedby="addon-wrapping" />
-              <button type="button" onClick={selecionarRegistros} class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i>Buscar</button>
+              <span class="input-group-text" id="addon-wrapping">
+                Hasta:
+              </span>
+              <input
+                type="date"
+                class="form-control"
+                ref={txtDate2}
+                aria-label="Username"
+                aria-describedby="addon-wrapping"
+              />
+              <button
+                type="button"
+                onClick={selecionarRegistros}
+                class="btn btn-success"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i>Buscar
+              </button>
             </div>
           </div>
           <TblContainer>
             <TblHead />
-            <TableBody >
-              {
-                records && recordsAfterPagingAndSorting().map((item, index) => (
+            <TableBody>
+              {records &&
+                recordsAfterPagingAndSorting().map((item, index) => (
                   <TableRow key={index} style={{ padding: "0" }}>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_fecha}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_hora}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.usuario_usuario}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_IngresoEgreso}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_motivo}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_tipoPago}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_referencia}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.nota_monto}</TableCell>
-                    <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{ }</TableCell>
-
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_fecha}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_hora}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.usuario_usuario}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_IngresoEgreso}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_motivo}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_tipoPago}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_referencia}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_monto}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {}
+                    </TableCell>
                   </TableRow>
-                ))
-              }
+                ))}
             </TableBody>
           </TblContainer>
           <TblPagination />
         </div>
-
       </div>
 
       <Dimmer active={activate} inverted>
@@ -290,7 +409,7 @@ function GraficosIngresos() {
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-            "Este Usuario No posee preguntas de seguridad debe registrarlas"
+          "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }

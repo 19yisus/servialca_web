@@ -8,12 +8,10 @@ abstract class cls_grafica extends cls_db
         parent::__construct();
     }
 
-    public function Consultar_Diario($desde, $hasta)
+    public function Consultar_Diario()
     {
-        if (empty($desde) && empty($hasta)) {
-            $desde = date("Y-m-d");
-            $hasta = date("Y-m-d");
-        }
+        $desde = "2023-09-01";
+        $hasta = "2023-09-30";
         $sql = $this->db->prepare("SELECT debitocredito.*, usuario.*, sucursal.* FROM debitocredito
         LEFT JOIN usuario ON usuario.usuario_id = debitocredito.usuario_id
         LEFT JOIN sucursal ON sucursal.sucursal_id = debitocredito.sucursal_id
