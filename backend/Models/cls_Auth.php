@@ -274,6 +274,40 @@ class cls_Auth extends cls_db
     }
   }
 
+  protected function updatePass()
+  {
+    try {
+      $sql = $this->db->prepare("UPDATE usuario SET usuario_clave = ? WHERE usuario_id = ?");
+      if (
+        $sql->execute([
+          $this->clave,
+          $this->id
+        ])
+      ) {
+        return [
+          'data' => [
+            'res' => "Actualización de datos exitosa"
+          ],
+          'code' => 300
+        ];
+      } 
+
+      return [
+        'data' => [
+          'res' => "Actualización de datos fallia"
+        ],
+        'code' => 400
+      ];
+    } catch (PDOException $e) {
+      return [
+        'data' => [
+          'res' => "Error de consulta: " . $e->getMessage()
+        ],
+        'code' => 400
+      ];
+    }
+  }
+
   protected function GetOne($id)
   {
     $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
@@ -392,22 +426,6 @@ class cls_Auth extends cls_db
           'code' => 400
         ];
       }
-    } catch (PDOException $e) {
-      return [
-        'data' => [
-          'res' => "Error de consulta: " . $e->getMessage()
-        ],
-        'code' => 400
-      ];
-    }
-  }
-
-  protected function confirmRespuesta(){
-    try{
-      $sql = $this->db->prepare("SELECT * FROM respuestas_user WHERE des_respuesta = ? AND user_id_respuesta = ? AND pregunta_id_respuesta = ?");
-      $sql->execute([$this->des_respuesta, $this->id, $this->id_pregunta]);
-
-      if($sql->rowCount() > 0) return true; else return false;
     } catch (PDOException $e) {
       return [
         'data' => [

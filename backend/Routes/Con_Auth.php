@@ -19,6 +19,10 @@ class Con_Auth extends cls_Auth
     $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
     $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
     $this->modulo = isset($_POST["Modulos"]) ? $_POST["Modulos"] : [];
+
+    $this->id_pregunta = isset($_POST["id_pregunta"]) ? $_POST["id_pregunta"] : null;
+    $this->des_respuesta = isset($_POST["des_respuesta"]) ? $_POST["des_respuesta"] : null;
+
   }
 
   public function login()
@@ -88,8 +92,12 @@ class Con_Auth extends cls_Auth
     $resultado = $this->GetAll();
     Response($resultado, 200);
   }
-  // falta el como se confirmaran las respuestas de seguridad 
 
+  public function actualizar_password(){
+    $resultado = $this->updatePass();
+    Response($resultado['data'], $resultado['code']);
+  }
+  
   // preguntas y respuestas de seguridad
   public function registrar_respuestas()
   {
