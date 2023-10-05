@@ -17,12 +17,13 @@ import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
 
-export const ModalImprimir = (props) => {
+export const ModalDocumento = (props) => {
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
+  const txtImg = useRef();
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -116,16 +117,15 @@ export const ModalImprimir = (props) => {
     });
   };
 
-  const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/sucursal/registrar";
+  const actualizarCertificado = async (id) => {
+    let endpoint = op.conexion + "/medico/SetImg";
+    let bodyF = new FormData();
+    bodyF.append("Imagen", txtImg.current.files[0]); // Utiliza .files[0] para obtener el archivo seleccionado
+
+    bodyF.append("ID", id);
+    console.log(txtImg.current.value);
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
-
-    let bodyF = new FormData();
-
-    bodyF.append("Nombre", txtDescripcion.current.value);
 
     await fetch(endpoint, {
       method: "POST",
@@ -135,12 +135,46 @@ export const ModalImprimir = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
+
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
+          texto: "Operacion Exitosa",
           icono: "exito",
         });
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  const selecionarSucursal = async (id) => {
+    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID=" + id;
+    console.log(endpoint);
+    setActivate(true);
+
+    //setLoading(false);
+
+    let bodyF = new FormData();
+
+    // bodyF.append("Nombre", txtDescripcion.current.value)
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+
+        txtDescripcion.current.value = response.sucursal_nombre;
+        setValues(response);
       })
       .catch((error) =>
         setMensaje({
@@ -157,20 +191,9 @@ export const ModalImprimir = (props) => {
     let minimo = 0;
     let calculo = 0;
 
-    /*  else if( && operacion === 1){
-          setMensaje({
-              mostrar: true,
-              titulo: "Notificación",
-              texto: "Ya existe un usuario con este n° de cedula",
-              icono: "informacion",
-            });
-            sigue = false;
-            txtCedula.current.focus()
-  
-      } */
-
     if (sigue) {
-      actualizarCertificado();
+      actualizarCertificado(props.idLicencia);
+      console.log("Modal" + props.idLicencia);
     }
   };
 
@@ -255,48 +278,6 @@ export const ModalImprimir = (props) => {
     } else return false;
   };
 
-  const selecionarRegistros = async (id) => {
-    let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
-    console.log(endpoint);
-    setActivate(true);
-
-    let bodyF = new FormData();
-
-    //    bodyF.append("ID", id)
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
-
-  const imprimir = (tipo) => (e) => {
-    e.preventDefault();
-
-    if (tipo === 1) {
-      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`);
-    }
-    if (tipo === 2) {
-      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`);
-    }
-    if (tipo === 3) {
-      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`);
-    }
-  };
-
   return (
     <Modal
       {...props}
@@ -308,16 +289,16 @@ export const ModalImprimir = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-
-        if (props.operacion !== 1) {
-          ///  selecionarRegistros(props.idCliente)
-          setValues(props.persona);
-          console.log(props.idCliente);
-        }
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>Tipo De Reporte </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>
+          {operacion === 1
+            ? "Registrar documento"
+            : operacion === 2
+            ? "Subir imagen"
+            : "Subir imagen"}
+        </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -354,36 +335,29 @@ export const ModalImprimir = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-4">
-            <button
-              type="button"
-              onClick={imprimir(1)}
-              class="btn col btn-primary"
-            >
-              RCV
-            </button>
-          </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
-            <button
-              type="button"
-              onClick={imprimir(2)}
-              class="btn col btn-primary"
-            >
-              RCV WEB
-            </button>
-          </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
-            <button
-              type="button"
-              onClick={imprimir(3)}
-              class="btn col btn-primary"
-            >
-              Carnet R.C.V
-            </button>
+          <div class="input-group input-group-sm mb-3 col-md-12">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Seleccione un documento:{" "}
+            </span>
+            <input
+              type="file"
+              name="Imagen" // Asegúrate de que el atributo name sea "Imagen"
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              ref={txtImg}
+            />
           </div>
         </div>
       </Modal.Body>
       <Modal.Footer>
+        <button
+          className="btn btn-sm btn-success rounded-pill "
+         
+          onClick={onChangeValidar}
+        >
+          <i className="fas fa-check-circle"> Aceptar</i>
+        </button>
         <button
           ref={btnCancela}
           onClick={salir}

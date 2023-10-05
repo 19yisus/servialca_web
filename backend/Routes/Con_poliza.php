@@ -96,7 +96,7 @@ class Con_poliza extends cls_poliza
         $resultado = $this->renovar_poliza();
         if ($resultado['code'] == 200) {
             $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-            $this->Edit();
+            // $this->Edit();
         }
         Response($resultado['data'], $resultado['code']);
     }

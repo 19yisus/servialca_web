@@ -7,7 +7,7 @@ import { Mensaje } from "../components/mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
 /*import logo from "../../public/mdb/img/mdb-favicon.ico";
-*/import {
+ */ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -27,6 +27,7 @@ import { ModalRcv } from "../components/administracion/modalRcv";
 import { ModalImprimir } from "../components/administracion/modalImprimir";
 import { ModalLicencia } from "../components/administracion/modalLicencia";
 import { ModalConsultarPoliza } from "../components/administracion/modalConsultarPoliza";
+import { ModalRenovarPoliza } from "../components/administracion/modalRenovar";
 import { formatMoneda, validaMonto, formatoMonto } from "../util/varios";
 function Inicio2() {
   var op = require("../modulos/datos");
@@ -177,7 +178,7 @@ function Inicio2() {
   const [mostrar3, setMostrar3] = useState(false);
   const [mostrar4, setMostrar4] = useState(false);
   const [mostrar5, setMostrar5] = useState(false);
-
+  const [mostrar6, setMostrar6] = useState(false);
   const [idCliente, setIdCliente] = useState();
 
   const [filterFn, setFilterFn] = useState({
@@ -323,6 +324,10 @@ function Inicio2() {
     if (op === 1) {
       setMostrar5(true);
     }
+
+    if (op === 3){
+      setMostrar6(true);
+    }
   };
   const gestionarRcv = (opcion) => (e) => {
     e.preventDefault();
@@ -339,7 +344,7 @@ function Inicio2() {
 
   const imprimirCertificado = (id) => {
     setIdCliente(id);
-    console.log(id)
+    console.log(id);
     setMostrar2(false);
     setMostrar3(true);
   };
@@ -376,7 +381,13 @@ function Inicio2() {
         }}
         idCliente={idCliente}
       />
-
+      <ModalRenovarPoliza
+        show={mostrar6}
+        onHideCancela={() => {
+          setMostrar6(false);
+        }}
+        idCliente={idCliente}
+      />
       {
         <ModalLicencia
           show={mostrar4}

@@ -58,29 +58,15 @@ abstract class cls_poliza extends cls_db
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
         WHERE poliza_if = ?");
-
-		$sql->execute([
-			$this->fechaInicio,
-			$this->fechaVencimiento,
-			$this->debitoCredito,
-			$this->id
-		]);
-
-		if ($sql->rowCount() > 0) {
-			return [
-				'data' => [
-					'res' => "Renovación exitosa"
-				],
-				'code' => 200
-			];
-		} else {
-			return [
-				'data' => [
-					'res' => "Ocurrión un error en la renovación"
-				],
-				'code' => 400
-			];
-		}
+		if (
+			$sql->execute([
+				$this->fechaInicio,
+				$this->fechaVencimiento,
+				$this->debitoCredito,
+				$this->id
+			])
+		)
+			;
 	}
 
 	protected function Vencer($id)
@@ -334,7 +320,7 @@ abstract class cls_poliza extends cls_db
 			if (!$this->db->inTransaction()) {
 				$this->db->beginTransaction();
 			}
-
+			
 
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
@@ -425,7 +411,7 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->cobertura;
 	}
-
+	
 	protected function RegistrarPoliza()
 	{
 		$sql = $this->db->prepare("SELECT * FROM poliza WHERE cliente_id = ? AND vehiculo_id = ?");
@@ -551,8 +537,7 @@ abstract class cls_poliza extends cls_db
 			return false;
 		return $this->vehiculo;
 	}
-	protected function SearchbyContrato()
-	{
+	protected function SearchbyContrato(){
 		$sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_nombre = ?");
 		$sql->execute([$this->tipoContrato]);
 		$resultado = $sql->fetch(PDO::FETCH_ASSOC);

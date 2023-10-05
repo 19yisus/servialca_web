@@ -191,7 +191,8 @@ export const ModalRcv = (props) => {
     bodyF.append("fechaVencimiento", txtHasta.current.value);
     bodyF.append("tipoContrato", TxtTipoContrato.current.value);
     bodyF.append("Estado", cmbEstado.current.value);
-
+    bodyF.append("Usuario",txtAcesor.current.value);
+    bodyF.append("Sucursal",cmbSucursal.current.value);
     //Contratante
     bodyF.append(
       "Cedula",
@@ -653,8 +654,8 @@ export const ModalRcv = (props) => {
     peso,
     capTotal
   ) => {
-    setMostrar8(false)
-   
+    setMostrar8(false);
+
     txtPlaca.current.value = placa;
     txtPuesto.current.value = puesto;
     txtUso.current.value = uso;
@@ -671,7 +672,7 @@ export const ModalRcv = (props) => {
     setMostrar(false);
   };
   const seleccionarTitular = (nombre, apellido, cedula, nacionalidad) => {
-    setMostrar9(false)
+    setMostrar9(false);
     cmbNacionalidadTitular.current.value = nacionalidad + "-";
     txtCedulatTitular.current.value = cedula;
     txtNombreTitular.current.value = nombre;
@@ -1023,6 +1024,7 @@ export const ModalRcv = (props) => {
                     type="date"
                     className="form-control"
                     ref={txtDesde}
+                    disabled
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaSistema.format("YYYY-MM-DD")}
@@ -1039,6 +1041,7 @@ export const ModalRcv = (props) => {
                     type="date"
                     className="form-control"
                     ref={txtHasta}
+                    disabled
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaHasta.format("YYYY-MM-DD")}

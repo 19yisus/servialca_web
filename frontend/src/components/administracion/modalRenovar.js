@@ -22,7 +22,7 @@ export const ModalRenovarPoliza = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
+  const ID = useRef();
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -44,7 +44,7 @@ export const ModalRenovarPoliza = (props) => {
 
   const txtFechaNaci = useRef();
   const txtApellido = useRef();
-
+  const [idContrato, setIdContrato] = useState();
   const [values, setValues] = useState({
     ced: "",
     nombre: "",
@@ -123,7 +123,7 @@ export const ModalRenovarPoliza = (props) => {
   };
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/poliza/renovar";
     console.log(endpoint);
     setActivate(true);
 
@@ -131,21 +131,11 @@ export const ModalRenovarPoliza = (props) => {
 
     let bodyF = new FormData();
 
-    bodyF.append(
-      "Nombre",
-      cmbNacionalidad.current.value + txtNombre.current.value
-    );
-    bodyF.append("Apellido", txtApellido.current.value);
-    bodyF.append("Cedula", txtCedula.current.value);
-    bodyF.append("fechaNacimiento", txtFechaNaci.current.value);
-    bodyF.append("Edad", txtEdad.current.value);
-    bodyF.append("tipoSangre", txtTipoSangre.current.value);
-    bodyF.append("Lente", cmbLentes.current.value);
+    bodyF.append("ID",ID.current.value);
     bodyF.append("metodoPago", cmbPago.current.value);
     bodyF.append("Referencia", txtReferencia.current.value);
-    bodyF.append("cantidadDolar", txtDolar.current.value);
-    bodyF.append("Telefono", null);
-    bodyF.append("Direccion", null);
+    bodyF.append("cantidadDolar",txtBs.current.value );
+    bodyF.append("Monto",txtDolar.current.value);
 
     await fetch(endpoint, {
       method: "POST",
@@ -162,6 +152,7 @@ export const ModalRenovarPoliza = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
+        setIdContrato(response.id);
       })
       .catch((error) =>
         setMensaje({
@@ -235,7 +226,7 @@ export const ModalRenovarPoliza = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela();
+    props.onHideCancela(idContrato);
   };
 
   function soloLetras(event) {
@@ -276,6 +267,50 @@ export const ModalRenovarPoliza = (props) => {
     } else return false;
   };
 
+  const selecionarRegistros = async (id) => {
+    let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
+    console.log(endpoint);
+    setActivate(true);
+    let bodyF = new FormData();
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        ID.current.value = response[0].poliza_id;
+        txtNContrato.current.value =
+          response[0].poliza_id + "-" + response[0].poliza_renovacion;
+        txtNombre.current.value = response[0].cliente_nombre;
+        txtCedula.current.value = response[0].cliente_cedula;
+        txtPlaca.current.value = response[0].vehiculo_placa;
+        // Obtén la fecha actual
+        var fechaActual = new Date();
+
+        // Asigna la fecha actual a txtDesde
+        txtDesde.current.value = fechaActual.toISOString().slice(0, 10);
+
+        // Calcula la fecha de hoy + 1 año
+        var fechaHasta = new Date(fechaActual);
+        fechaHasta.setFullYear(fechaHasta.getFullYear() + 1);
+
+        // Asigna la fecha de hoy + 1 año a txtHasta
+        txtHasta.current.value = fechaHasta.toISOString().slice(0, 10);
+
+        setActivate(false);
+        console.log(response[0]);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   return (
     <Modal
       {...props}
@@ -288,10 +323,7 @@ export const ModalRenovarPoliza = (props) => {
       onShow={() => {
         setOperacion(props.operacion);
 
-        if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
-        }
+        selecionarRegistros(props.idCliente);
       }}
     >
       <Modal.Header className="bg-danger">
@@ -346,6 +378,11 @@ export const ModalRenovarPoliza = (props) => {
               >
                 N° De Contrato:
               </span>
+              <input 
+                type="hidden"
+                ref={ID}
+                disabled
+              />
               <input
                 type="text"
                 class="form-control bg-transparent border-0 "
@@ -378,17 +415,6 @@ export const ModalRenovarPoliza = (props) => {
               >
                 Cédula:
               </span>
-              <select
-                disabled
-                class="form-select  bg-transparent border-0"
-                ref={cmbNacionalidad}
-                aria-label="Default select example"
-              >
-                <option value="V-">V-</option>
-                <option value="E-">E-</option>
-                <option value="J-">J-</option>
-                <option value="G-">G-</option>
-              </select>
               <input
                 type="text"
                 class="form-control bg-transparent border-0 "
@@ -424,6 +450,7 @@ export const ModalRenovarPoliza = (props) => {
               class="form-control "
               aria-label="Sizing example input"
               ref={txtDesde}
+              disabled
               aria-describedby="inputGroup-sizing-sm"
             />
           </div>
@@ -496,8 +523,7 @@ export const ModalRenovarPoliza = (props) => {
       <Modal.Footer>
         <button
           className="btn btn-sm btn-success rounded-pill col-md-2"
-          disabled={props.operacion === 4 ? true : false}
-          onClick={onChangeValidar}
+          onClick={actualizarCertificado}
         >
           <i className="fas fa-check-circle"> Aceptar</i>
         </button>
