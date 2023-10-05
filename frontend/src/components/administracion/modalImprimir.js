@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -23,7 +23,6 @@ export const ModalImprimir = (props) => {
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
-
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -33,14 +32,12 @@ export const ModalImprimir = (props) => {
   const cmbNacionalidad = useRef();
 
   const txtDatosPastor = useRef();
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtBs = useRef();
   const txtDolar = useRef();
 
   const txtFechaNaci = useRef();
   const txtDescripcion = useRef();
-
-
 
   const [values, setValues] = useState({
     ced: "",
@@ -73,14 +70,10 @@ export const ModalImprimir = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -98,7 +91,6 @@ export const ModalImprimir = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
-
 
   const salir = () => {
     props.onHideCancela();
@@ -124,28 +116,25 @@ export const ModalImprimir = (props) => {
     });
   };
 
-
-
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/sucursal/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-    bodyF.append("Nombre", txtDescripcion.current.value)
+    bodyF.append("Nombre", txtDescripcion.current.value);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
@@ -153,13 +142,15 @@ export const ModalImprimir = (props) => {
           icono: "exito",
         });
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -182,8 +173,6 @@ export const ModalImprimir = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -208,33 +197,32 @@ export const ModalImprimir = (props) => {
     });
   };
 
-
-
-
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtDescripcion.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
-
-  }
+    props.onHideCancela();
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
 
@@ -268,51 +256,46 @@ export const ModalImprimir = (props) => {
   };
 
   const selecionarRegistros = async (id) => {
-    let endpoint = op.conexion + "/poliza/ConsultarUno?ID="+id;
-    console.log(endpoint)
-    setActivate(true)
+    let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
+    console.log(endpoint);
+    setActivate(true);
 
+    let bodyF = new FormData();
 
-
-   
-
-    let bodyF = new FormData()
-
-//    bodyF.append("ID", id)
-
+    //    bodyF.append("ID", id)
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
-    
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const imprimir = (tipo) => (e) => {
     e.preventDefault();
 
-    if(tipo === 1 ){
-      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`)
-    } if(tipo === 2 ){
-      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`)
-    } if(tipo === 3 ){
-      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`)
+    if (tipo === 1) {
+      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`);
     }
-  }
+    if (tipo === 2) {
+      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`);
+    }
+    if (tipo === 3) {
+      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`);
+    }
+  };
 
   return (
     <Modal
@@ -327,15 +310,14 @@ export const ModalImprimir = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-        ///  selecionarRegistros(props.idCliente)
+          ///  selecionarRegistros(props.idCliente)
           setValues(props.persona);
           console.log(props.idCliente);
         }
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>
-        Tipo De Reporte      </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>Tipo De Reporte </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -350,39 +332,58 @@ export const ModalImprimir = (props) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoClientes
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={seleccionarCliente}
-
         />
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <div className="col-md-12 row mx-auto">
-          
-         
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <button type="button" onClick={imprimir(1)} class="btn col btn-primary">RCV</button>   
+            <button
+              type="button"
+              onClick={imprimir(1)}
+              class="btn col btn-primary"
+            >
+              RCV
+            </button>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <button type="button" onClick={imprimir(2)} class="btn col btn-primary">RCV WEB</button>   
+            <button
+              type="button"
+              onClick={imprimir(2)}
+              class="btn col btn-primary"
+            >
+              RCV WEB
+            </button>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <button type="button" onClick={imprimir(3)} class="btn col btn-primary">Carnet R.C.V</button>   
+            <button
+              type="button"
+              onClick={imprimir(3)}
+              class="btn col btn-primary"
+            >
+              Carnet R.C.V
+            </button>
           </div>
-          
-
-
         </div>
       </Modal.Body>
       <Modal.Footer>
-        
         <button
           ref={btnCancela}
           onClick={salir}

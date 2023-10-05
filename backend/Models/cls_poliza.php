@@ -8,31 +8,28 @@ require_once("cls_db.php");
 abstract class cls_poliza extends cls_db
 {
 	protected $id, $sucursal, $usuario,
-	// Contratante 
-	$nombre, $apellido, $cedula, $fechaNacimiento, $telefono, $correo, $direccion,
-	// Titular 
-	$nombreTitular, $apellidoTitular, $cedulaTitular,
-	// Vehiculo
-	$placa, $puesto, $ano, $serialMotor, $serialCarroceria, $peso, $capacidad,
-	// Vehiculo extra
-	$color, $modelo, $marca, $uso, $clase, $tipo,
-	// Contrato
-	$fechaInicio, $fechaVencimiento, $tipoContrato,
-	$tipoTransporte, $estado,
-	$danoCosas, $danoPersonas, $fianza, $asistencia, $apov,
-	$muerte, $invalidez, $medico, $grua,
-	// Pago
-	$metodoPago, $referencia, $cantidadDolar, $monto,
-	// ID
-	$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
-	$idColor, $idModelo, $idMarca,
-	// Medico
-	$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
+		// Contratante 
+		$nombre, $apellido, $cedula, $fechaNacimiento, $telefono, $correo, $direccion,
+		// Titular 
+		$nombreTitular, $apellidoTitular, $cedulaTitular,
+		// Vehiculo
+		$placa, $puesto, $ano, $serialMotor, $serialCarroceria, $peso, $capacidad,
+		// Vehiculo extra
+		$color, $modelo, $marca, $uso, $clase, $tipo,
+		// Contrato
+		$fechaInicio, $fechaVencimiento, $tipoContrato,
+		$tipoTransporte, $estado,
+		$danoCosas, $danoPersonas, $fianza, $asistencia, $apov,
+		$muerte, $invalidez, $medico, $grua,
+		// Pago
+		$metodoPago, $referencia, $cantidadDolar, $monto,
+		// ID
+		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
+		$idColor, $idModelo, $idMarca,
+		// Medico
+		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
 
-
-
-
-	protected function renovarRCV()
+	protected function renovar_poliza()
 	{
 		if (empty($this->fechaInicio)) {
 			$this->fechaInicio = date("Y-m-d");
@@ -41,21 +38,35 @@ abstract class cls_poliza extends cls_db
 			$fechaInicioObj = new DateTime($this->fechaInicio);
 			$fechaInicioObj->modify('+1 year');
 			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
+		} else {
+
+			$fechaVenicimiento = strtotime($this->fechaVencimiento);
+			$fechaActual = strtotime(date("Y-m-d"));
+
+			if ($fechaActual > $fechaVenicimiento) {
+				return [
+					'data' => [
+						'res' => "No es posible renovar, aun no se vence el contrato"
+					],
+					'code' => 400
+				];
+			}
 		}
 		$sql = $this->db->prepare("UPDATE poliza SET
         poliza_fechaInicio = ?,
         poliza_fechaVencimiento = ?,
-        poliza_renovacion = poliza_renovacion+1
-        WHERE poliza_id = ?");
+        poliza_renovacion = poliza_renovacion+1,
+        debitoCredito =?
+        WHERE poliza_if = ?");
 		if (
 			$sql->execute([
 				$this->fechaInicio,
 				$this->fechaVencimiento,
+				$this->debitoCredito,
 				$this->id
 			])
 		)
 			;
-
 	}
 
 	protected function Vencer($id)
@@ -211,8 +222,6 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 			$this->SearchbyContrato();
-			$this->SearchByUsuario();
-			$this->SearchBySucursal();
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
 			$this->generarQR($this->id);
@@ -244,11 +253,11 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
-	protected function Edit($idCliente, $idTitular, $idVehiculo)
+	protected function Edit()
 	{
 		try {
 			$this->db->beginTransaction();
-			$result = $this->editarCliente($idCliente);
+			$result = $this->editarCliente($this->cliente);
 			if (!$result) {
 				$this->db->rollback();
 				return [
@@ -258,7 +267,7 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-			$result = $this->editarTitular($idTitular);
+			$result = $this->editarTitular($this->idTitular);
 			if (!$result) {
 				$this->db->rollback();
 				return [
@@ -268,7 +277,7 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-			$result = $this->editarVehiculo($idVehiculo);
+			$result = $this->editarVehiculo($this->vehiculo);
 			if (!$result) {
 				$this->db->rollback();
 				return [
@@ -311,7 +320,7 @@ abstract class cls_poliza extends cls_db
 			if (!$this->db->inTransaction()) {
 				$this->db->beginTransaction();
 			}
-
+			
 
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
@@ -402,27 +411,16 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->cobertura;
 	}
-
+	
 	protected function RegistrarPoliza()
 	{
 		$sql = $this->db->prepare("SELECT * FROM poliza WHERE cliente_id = ? AND vehiculo_id = ?");
 		if ($sql->execute([$this->cliente, $this->vehiculo])) {
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 			if (!isset($resultado[0])) {
-				$sql = $this->db->prepare("INSERT INTO poliza(
-					cliente_id, 
-					titular_id, 
-					vehiculo_id, 
-					poliza_fechaInicio, 
-					poliza_fechaVencimiento,
-					tipoContrato_id, 
-					estado_id,
-					usuario_id,
-					sucursal_id,
-					cobertura_id,
-					poliza_renovacion,
-					debitoCredito ) 
-				VALUES(?,?,?,?,?,?,?,?,?,?,0,?)");
+				$sql = $this->db->prepare("INSERT INTO poliza(cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento,
+				tipoContrato_id, estado_id,cobertura_id,poliza_renovacion,debitoCredito ) 
+				VALUES(?,?,?,?,?,?,?,?,0,?)");
 				$result = $sql->execute([
 					$this->cliente,
 					$this->idTitular,
@@ -431,8 +429,6 @@ abstract class cls_poliza extends cls_db
 					$this->fechaVencimiento,
 					$this->tipoContrato,
 					$this->estado,
-					$this->usuario,
-					$this->sucursal,
 					$this->cobertura,
 					$this->debitoCredito
 				]);
@@ -474,7 +470,6 @@ abstract class cls_poliza extends cls_db
 			])
 		) {
 			$this->debitoCredito = $this->db->lastInsertId();
-
 		}
 		return $this->debitoCredito;
 	}
@@ -542,30 +537,12 @@ abstract class cls_poliza extends cls_db
 			return false;
 		return $this->vehiculo;
 	}
-	protected function SearchbyContrato()
-	{
+	protected function SearchbyContrato(){
 		$sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_nombre = ?");
 		$sql->execute([$this->tipoContrato]);
 		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		$this->tipoContrato = $resultado["contrato_id"];
 	}
-
-	protected function SearchByUsuario()
-	{
-		$sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_nombre = ?");
-		$sql->execute([$this->usuario]);
-		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		$this->usuario = $resultado["usuario_id"];
-	}
-
-	protected function SearchBySucursal()
-	{
-		$sql = $this->db->prepare("SELECT * FROM sucursal WHERE sucursal_nombre = ?");
-		$sql->execute([$this->sucursal]);
-		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		$this->sucursal = $resultado["sucursal_id"];
-	}
-
 	protected function SearchByCliente()
 	{
 		$sql = $this->db->prepare("SELECT * FROM cliente WHERE cliente_cedula = ?");
@@ -648,7 +625,6 @@ abstract class cls_poliza extends cls_db
 				$sql->execute([$this->color]);
 				$this->idColor = $this->db->lastInsertId();
 			}
-
 		} else
 			false;
 		return $this->idColor;
@@ -950,6 +926,4 @@ abstract class cls_poliza extends cls_db
 		$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
 		return $dato;
 	}
-
-
 }

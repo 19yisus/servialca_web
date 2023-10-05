@@ -466,7 +466,7 @@ function TablaContratosRealizados() {
                     >
                       <i className="fa fa-eye"></i>{" "}
                     </button>
-                  </TableCell>ñ
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
