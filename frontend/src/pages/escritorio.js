@@ -28,6 +28,7 @@ import TablaReportes from "../components/reportes/resportes";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
+import TablaDocumento from "../components/administracion/tablaDocumento";
 import Panel from "./panel";
 
 function MenuImpuestoPP(props) {
@@ -269,7 +270,7 @@ function MenuImpuestoPP(props) {
                           </a>
                         )}
                          <a
-                            href="/"
+                            href="/documento"
                             className="list-group-item list-group-item-action py-2 ripple"
                           >
                             <i class="fas fas-fw me-1 fa-file-signature"></i>
@@ -545,6 +546,7 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
               <AuthRoute exact path="/reportes" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
+              <AuthRoute exact patg="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
             </div>
           </div>
