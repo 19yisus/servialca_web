@@ -13,4 +13,9 @@ class Con_panel extends cls_panel
     $resultado = $this->GetAll();
     Response($resultado, 200);
   }
+
+  public function Guardar(){
+    $resultado = $this->Save($_POST);
+    Response($resultado['data'], $resultado['code']);
+  }
 }

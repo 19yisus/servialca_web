@@ -81,7 +81,7 @@ export const ModalRenovarPoliza = (props) => {
 
   const [operacion, setOperacion] = useState(0);
 
-  /*********************************************** FUNCINES DE VALIDACION***********************************************************/
+  /*********************************************** FUNCIONES DE VALIDACION***********************************************************/
 
   const handleInputNumChange = (event) => {
     event.preventDefault();
@@ -97,6 +97,11 @@ export const ModalRenovarPoliza = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
+
+  const handleInputChange = (event) => {
+    event.preventDefault();
+    console.log(event)
+  }
 
   const salir = () => {
     props.onHideCancela();
@@ -493,6 +498,7 @@ export const ModalRenovarPoliza = (props) => {
               ref={txtReferencia}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={handleInputChange}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">

@@ -15,4 +15,22 @@ abstract class cls_panel extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+
+	protected function Save($datos)
+	{
+
+		if (isset($datos)) {
+			$sqlc = $this->db->query("SELECT * FROM pagina_web WHERE 1");
+			// $resultado = $sqlc->fetchAll(PDO::FETCH_ASSOC);
+			if ($sqlc->rowCount() == 0) {
+				$sql2 = $this->db->prepare("INSERT INTO pagina_web(text_home, text_about, text_mision, text_vision, text_ubicacion, text_correo, text_telefono, text_fax) VALUES(?,?,?,?,?,?,?,?)");
+			} else {
+				$sql2 = $this->db->prepare("UPDATE pagina_web SET text_home =?, text_about = ?, text_mision =?, text_vision =?, text_ubicacion =?, text_correo =?, text_telefono =?, text_fax=? WHERE 1");
+			}
+
+			$sql2->execute([$datos['text_home'], $datos['text_about'], $datos['text_mision'], $datos['text_vision'], $datos['text_ubicacion'], $datos['text_correo'], $datos['text_telefono'], $datos['text_fax']]);
+		}
+
+		return 1;
+	}
 }
