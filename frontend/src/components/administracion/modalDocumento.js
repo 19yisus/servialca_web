@@ -353,7 +353,7 @@ export const ModalDocumento = (props) => {
       <Modal.Footer>
         <button
           className="btn btn-sm btn-success rounded-pill "
-          disabled={props.operacion === 1 ? true : false}
+         
           onClick={onChangeValidar}
         >
           <i className="fas fa-check-circle"> Aceptar</i>
