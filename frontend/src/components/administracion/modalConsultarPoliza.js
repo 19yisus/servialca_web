@@ -290,7 +290,7 @@ export const ModalConsultarPoliza = (props) => {
 
 
         setActivate(false)
-        console.log(response[0])
+        console.log(response)
         txtNContrato.current.value = response[0].poliza_id;
         txtFechaEmision.current.value = moment(response[0].poliza_fechaInicio).format('YYYY-MM-DD');
         txtFechaVencimiento.current.value = moment(response[0].poliza_fechaVencimiento).format('YYYY-MM-DD');

@@ -4,9 +4,10 @@ import { useForm } from "../util/hooks";
 import axios from "axios";
 import { MensajeAlert, MensajeMinimal } from "../components/Alerta";
 import { Loader, Dimmer, Label } from "semantic-ui-react";
-import { GestionarClave } from "../components/componentesIglesia/configuracion/cambiarClavePersonal";
 import md5 from "md5";
 import { Mensaje } from '../components/mensajes'
+import { GestionarPreguntas } from "../components/seguridad/preguntasSeguridad";
+import { GestionarClave } from "../components/seguridad/cambiarClavePersonal";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -417,7 +418,7 @@ autoComplete="off"
                 <div class="d-grid">
                   <button class="btn rounded-pill btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
                   <div class="text-center">
-                    <a class="small" href="#">Forgot password?</a>
+                    <a class="small" type="button" onClick={()=>{setMostrar(true)}}>Recuperar Contraseña</a>
                   </div>
                 </div>
 
@@ -429,6 +430,8 @@ autoComplete="off"
     </div>
   </div>
 </div>
+
+
 
     </div>
   );

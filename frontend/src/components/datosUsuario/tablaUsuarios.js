@@ -224,6 +224,7 @@ console.log(endpoint)
       operacion={operacion} 
       show={mostrar}
       onHideCancela={()=>{setMostrar(false)}}
+      render={selecionarRegistros}
       id={idUser}
       />
     

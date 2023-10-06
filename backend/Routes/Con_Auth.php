@@ -19,6 +19,8 @@ class Con_Auth extends cls_Auth
     $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
     $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
     $this->modulo = isset($_POST["Modulos"]) ? $_POST["Modulos"] : [];
+    $this->permiso = isset($_POST["Permiso"]) ? $_POST["Permiso"] : null;
+
 
     $this->id_pregunta = isset($_POST["id_pregunta"]) ? $_POST["id_pregunta"] : null;
     $this->des_respuesta = isset($_POST["des_respuesta"]) ? $_POST["des_respuesta"] : null;
@@ -79,6 +81,12 @@ class Con_Auth extends cls_Auth
   {
     $resultado = $this->Delete();
     Response($resultado['data'], $resultado['code']);
+  }
+  
+  public function ConsultarByUsuario()
+  {
+    $resultado = $this->GetOneByUser($_GET['usuario']);
+    Response($resultado, 200);
   }
 
   public function ConsultarUno()
