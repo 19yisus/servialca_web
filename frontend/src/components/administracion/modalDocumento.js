@@ -118,11 +118,10 @@ export const ModalDocumento = (props) => {
   };
 
   const actualizarCertificado = async (id) => {
-    let endpoint = op.conexion + "/medico/SetImg";
+    let endpoint = op.conexion + "/documento/SetImg";
     let bodyF = new FormData();
     bodyF.append("Imagen", txtImg.current.files[0]); // Utiliza .files[0] para obtener el archivo seleccionado
-
-    bodyF.append("ID", id);
+    bodyF.append("Nombre", txtNombre.current.value);
     console.log(txtImg.current.value);
     console.log(endpoint);
     setActivate(true);
@@ -333,7 +332,21 @@ export const ModalDocumento = (props) => {
                 });
           }}
         />
-
+        <div className="col-md-12 row mx-auto">
+          <div class="input-group input-group-sm mb-3 col-md-12">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Nombre del documento:{" "}
+            </span>
+            <input
+              type="text"
+              name="Imagen" // Asegúrate de que el atributo name sea "Imagen"
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              ref={txtNombre}
+            />
+          </div>
+        </div>
         <div className="col-md-12 row mx-auto">
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -353,7 +366,6 @@ export const ModalDocumento = (props) => {
       <Modal.Footer>
         <button
           className="btn btn-sm btn-success rounded-pill "
-         
           onClick={onChangeValidar}
         >
           <i className="fas fa-check-circle"> Aceptar</i>

@@ -24,4 +24,6 @@ class Con_reporte
     public function reporteLicencia(){
         include("Con_reporteLicencia.php");
     }
+
+   
 }

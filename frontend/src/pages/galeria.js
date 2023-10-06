@@ -182,7 +182,6 @@ function Galeria() {
     		<button class="navbar-light navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExplore" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
     		<span class="navbar-toggler-icon"></span>
     		</button>
-    	
     		</nav>
     	</div>
     </div>

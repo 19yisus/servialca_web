@@ -37,6 +37,12 @@ function TablaDocumento() {
       backgroundColor: "#e70101bf",
       color: "white",
     },
+    {
+      label: "Imprimir",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
   ];
 
   const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
@@ -227,7 +233,10 @@ function TablaDocumento() {
     setMostrar(true);
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
-
+  const imprimir = (id) => (e) => {
+    e.preventDefault();
+    window.open(`${op.conexion}/${id}`);
+  };
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setMostrar(true);
@@ -313,13 +322,29 @@ function TablaDocumento() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.documentos_id}
+                    {item.documento_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.documentos_nombre}
+                    {item.documento_nombre}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <button
+                      onClick={imprimir(item.documento_ruta)}
+                      className="btn btn-sm mx-1 btn-info rounded-circle"
+                    >
+                      <i className="fas fa-print"></i>{" "}
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}

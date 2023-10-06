@@ -15,6 +15,19 @@ function Response($data, $code)
   return false;
 }
 
+function ResponseFile($data)
+{
+  // Configura las cabeceras para indicar que es un archivo para descargar
+  header('Content-Description: File Transfer');
+  header('Content-Type: application/octet-stream');
+  header('Content-Disposition: attachment; filename="' . basename($data) . '"');
+  header('Expires: 0');
+  header('Cache-Control: must-revalidate');
+  header('Pragma: public');
+  header('Content-Length: ' . filesize($data));
+  readfile($data);
+}
+
 class Api
 {
 
@@ -72,7 +85,25 @@ class Api
         Response("No existe la clase requerida", 400);
       }
     } else {
-      Response("No existe el recurso requerido", 400);
+      if ($peticion[0] == "media") {
+        $file_content_route1 = "./fotosCliente/" . $peticion[1];
+        $file_content_route2 = "./video/" . $peticion[1];
+        $file_content_route3 = "./documentos/" . $peticion[1];
+        $file_content_route4 = "./Img/" . $peticion[1];
+        if (file_exists($file_content_route1)) {
+          ResponseFile($file_content_route1);
+          exit;
+        } else if (file_exists($file_content_route2)) {
+          ResponseFile($file_content_route2);
+          exit;
+        } else if (file_exists($file_content_route3)) {
+          ResponseFile($file_content_route3);
+          exit;
+        } else if (file_exists($file_content_route4)) {
+          ResponseFile($file_content_route4);
+          exit;
+        }
+      } else Response("No existe el recurso requerido", 400);
     }
   }
 }

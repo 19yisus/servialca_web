@@ -546,7 +546,7 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
               <AuthRoute exact path="/reportes" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
-              <AuthRoute exact patg="/documento" component={TablaDocumento} />
+              <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
             </div>
           </div>

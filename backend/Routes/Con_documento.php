@@ -24,11 +24,9 @@ class Con_documento extends cls_documento
             $rutaDestino = "documentos/" . $imagenNombreOriginal;
             // Mueve el archivo temporal a la ubicación deseada
             if (move_uploaded_file($imagenRutaTemporal, $rutaDestino)) {
-                $resultado = $this->SaveImg($rutaDestino);
+                $resultado = $this->SaveImg($_POST["Nombre"],$rutaDestino);
                 Response($resultado, 200);
             }
         }
     }
 }
-
-?>
