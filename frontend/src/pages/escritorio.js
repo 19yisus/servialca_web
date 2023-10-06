@@ -269,13 +269,13 @@ function MenuImpuestoPP(props) {
                             <span>Listado de Morosos</span>
                           </a>
                         )}
-                         <a
-                            href="/documento"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-file-signature"></i>
-                            <span>Documentos</span>
-                          </a>
+                        <a
+                          href="/documento"
+                          className="list-group-item list-group-item-action py-2 ripple"
+                        >
+                          <i class="fas fas-fw me-1 fa-file-signature"></i>
+                          <span>Documentos</span>
+                        </a>
                       </div>
                     </div>
                   </div>
