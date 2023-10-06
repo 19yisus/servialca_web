@@ -131,10 +131,11 @@ export const ModalSucursal = (props) => {
     let bodyF = new FormData()
 
 
-    if(operacion === 1){
+    if (operacion === 1) {
       endpoint = op.conexion + "/sucursal/registrar";
       bodyF.append("Nombre", txtDescripcion.current.value)
-    } else if(operacion === 2){
+
+    } else if (operacion === 2) {
       endpoint = op.conexion + "/sucursal/actualizar";
       bodyF.append("Nombre", txtDescripcion.current.value)
       bodyF.append("ID", values.sucursal_id)
@@ -144,9 +145,10 @@ export const ModalSucursal = (props) => {
       bodyF.append("ID", values.sucursal_id)
 
     }
+    bodyF.append("token", token);
     console.log(endpoint)
     setActivate(true)
-    
+
 
     await fetch(endpoint, {
       method: "POST",
@@ -176,7 +178,8 @@ export const ModalSucursal = (props) => {
   };
 
   const selecionarSucursal = async (id) => {
-    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID="+id;
+    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID=" + id;
+    
     console.log(endpoint)
     setActivate(true)
 
@@ -186,7 +189,8 @@ export const ModalSucursal = (props) => {
 
     let bodyF = new FormData()
 
-   // bodyF.append("Nombre", txtDescripcion.current.value)
+    bodyF.append("token", token);
+    // bodyF.append("Nombre", txtDescripcion.current.value)
 
     await fetch(endpoint, {
       method: "POST",
@@ -198,8 +202,8 @@ export const ModalSucursal = (props) => {
         setActivate(false)
         console.log(response)
 
-       txtDescripcion.current.value = response.sucursal_nombre;
-       setValues(response);
+        txtDescripcion.current.value = response.sucursal_nombre;
+        setValues(response);
 
 
 
@@ -282,7 +286,7 @@ export const ModalSucursal = (props) => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
     props.render()
     props.onHideCancela();
-    
+
 
   }
 
@@ -334,7 +338,7 @@ export const ModalSucursal = (props) => {
 
         if (props.operacion !== 1) {
           selecionarSucursal(props.idSucursal)
-          
+
         }
       }}
     >
@@ -371,19 +375,19 @@ export const ModalSucursal = (props) => {
           }} />
 
         <div className="col-md-12 row mx-auto">
-          
-         
+
+
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Nombre De La Sucursal:</span>
-            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false :true} style={{height:40}} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false : true} style={{ height: 40 }} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
 
 
           <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">Dirección:</span>
-            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false :true} style={{height:40}} class="form-control" ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <textarea type="textarea" disabled={operacion === 1 || operacion === 2 ? false : true} style={{ height: 40 }} class="form-control" ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
-          
+
 
 
         </div>

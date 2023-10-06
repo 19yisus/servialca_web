@@ -154,15 +154,37 @@ export const ModalUsuarios = (props) => {
 
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/Auth/registrar";
+    let endpoint;
+    if(operacion===1){
+      endpoint = op.conexion + "/Auth/registrar";
+    } else if(operacion===2){
+      endpoint = op.conexion + "/Auth/actualizar";
+
+    }else if(operacion===3){
+      endpoint = op.conexion + "/Auth/eliminar";
+
+    }
     console.log(endpoint)
     setActivate(true)
 
+   let chk = check.current.checked ? '1' : '0';
+   let chk1 = check1.current.checked ? '1' : '0';
+   let chk2 = check2.current.checked ? '1' : '0'; 
+   let chk3 = check3.current.checked ? '1' : '0'; 
+   let chk4 = check4.current.checked ? '1' : '0'; 
+   let chk5 = check5.current.checked ? '1' : '0'; 
+   let chk6 = check6.current.checked ? '1' : '0'; 
+   let chk7 = check7.current.checked ? '1' : '0'; 
+   let chk8 = check8.current.checked ? '1' : '0'; 
+   let chk9 = check9.current.checked ? '1' : '0';
+   let permiso = chk+chk1+chk2+chk3+chk4+chk5+chk6+chk7+chk8+chk9;
 
 
     //setLoading(false);
 
+    
     let bodyF = new FormData()
+    bodyF.append("ID", props.id)
 
     bodyF.append("Usuario", txtUsuario.current.value)
     bodyF.append("Nombre", txtNombre.current.value)
@@ -173,6 +195,8 @@ export const ModalUsuarios = (props) => {
     bodyF.append("Correo", txtCorreo.current.value)
     bodyF.append("Rol", txtRol.current.value)
     bodyF.append("Sucursal", txtSucursal.current.value)
+    bodyF.append("Permiso", permiso)
+
 
 
 
@@ -186,6 +210,8 @@ export const ModalUsuarios = (props) => {
 
         setActivate(false)
         console.log(response)
+        console.log(permiso)
+
 
         setMensaje({
           mostrar: true,
@@ -208,8 +234,7 @@ export const ModalUsuarios = (props) => {
 
   const onChangeValidar = () => {
     let sigue = true;
-    let minimo = 0;
-    let calculo = 0;
+  
 
     /*  else if( && operacion === 1){
           setMensaje({
@@ -228,40 +253,6 @@ export const ModalUsuarios = (props) => {
     }
   };
 
-
-
-  const blanquear = () => {
-    setValues({
-      ced: "",
-      nombre: "",
-      apellido: "",
-      fecha_nac: "",
-      bas_agua: 1,
-
-      status: 1,
-      bas_espirit: 1,
-      cod_iglesia: "",
-      sexo: "M",
-      fecha_baus: "",
-      nacionalidad: "V",
-      direccion: "",
-      telefono: "",
-      celular: "",
-      estadocivil: 0,
-      correo: "",
-      tiposangre: "",
-    });
-  };
-
-
-
-
-  const checkrte = (e) => {
-    var textV = "which" in e ? e.which : e.keyCode,
-      char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
   const seleccionarCliente = (nombre, apellido, cedula) => {
 
     console.log(nombre, apellido, cedula)
@@ -274,43 +265,11 @@ export const ModalUsuarios = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+    props.render()
     props.onHideCancela()
 
   }
 
-  function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
-      event.returnValue = false;
-  }
-
-  const handleInputMontoChange = (event) => {
-    validaMonto(event);
-    if (event.which === 13 || typeof event.which === "undefined") {
-      if (
-        event.target.value === "" ||
-        parseFloat(
-          event.target.value.trim().replace(".", "").replace(",", ".")
-        ) === 0.0
-      ) {
-        event.target.value = "0,00";
-      }
-      event.target.value = formatoMonto(event.target.value);
-      let char1 = event.target.value.substring(0, 1);
-      let char2 = event.target.value.substring(1, 2);
-      if (char1 === "0" && char2 !== ",") {
-        event.target.value = event.target.value.substring(
-          1,
-          event.target.value.legth
-        );
-      }
-    } else if (event.which === 46) {
-      return false;
-    } else if (event.which >= 48 && event.which <= 57) {
-      return true;
-    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
-      return true;
-    } else return false;
-  };
 
   const selecionarUsuario = async (id) => {
     let endpoint = op.conexion + "/Auth/ConsultarUno?ID=" + id;
@@ -351,6 +310,18 @@ export const ModalUsuarios = (props) => {
         txtCorreo.current.value = response.usuario_correo
         txtRol.current.value = response.roles_id
         txtSucursal.current.value = response.sucursal_id
+
+        check.current.checked = response.permisos ? response.permisos.substring(0,1) === '1' ? true : false : false;
+        check1.current.checked = response.permisos ? response.permisos.substring(1,2) === '1' ? true : false : false;
+        check2.current.checked = response.permisos ? response.permisos.substring(2,3) === '1' ? true : false : false;
+        check3.current.checked = response.permisos ? response.permisos.substring(3,4) === '1' ? true : false : false;
+        check4.current.checked = response.permisos ? response.permisos.substring(4,5) === '1' ? true : false : false;
+        check5.current.checked = response.permisos ? response.permisos.substring(5,6) === '1' ? true : false : false;
+        check6.current.checked = response.permisos ? response.permisos.substring(6,7) === '1' ? true : false : false;
+        check7.current.checked = response.permisos ? response.permisos.substring(7,8) === '1' ? true : false : false;
+        check8.current.checked = response.permisos ? response.permisos.substring(8,9) === '1' ? true : false : false;
+        check9.current.checked = response.permisos ? response.permisos.substring(9,10) === '1' ? true : false : false;
+
 
 
       })

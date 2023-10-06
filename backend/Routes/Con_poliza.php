@@ -93,11 +93,8 @@ class Con_poliza extends cls_poliza
     }
     public function renovar()
     {
+        $this->debitoCredito(1,'renovacion');
         $resultado = $this->renovar_poliza();
-        if ($resultado['code'] == 200) {
-            $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-            // $this->Edit();
-        }
         Response($resultado['data'], $resultado['code']);
     }
 

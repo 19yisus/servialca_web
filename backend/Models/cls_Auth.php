@@ -158,8 +158,9 @@ class cls_Auth extends cls_db
           usuario_clave,
           roles_id,
           sucursal_id,
-          usuario_estatus
-      )VALUES(?,?,?,?,?,?,?,?,?,?,1)");
+          usuario_estatus,
+          permisos
+      )VALUES(?,?,?,?,?,?,?,?,?,?,1,?)");
       $sql->execute([
         $this->usuario,
         $this->nombre,
@@ -170,7 +171,8 @@ class cls_Auth extends cls_db
         $this->correo,
         $clave,
         $this->rol,
-        $this->sucursal
+        $this->sucursal,
+        $this->permiso
       ]);
       $this->id = $this->db->lastInsertId();
       if ($sql->rowCount() > 0)
@@ -215,7 +217,8 @@ class cls_Auth extends cls_db
       usuario_apellido = ?,
       usuario_telefono = ?,
       usuario_direccion = ?,
-      usuario_correo = ?
+      usuario_correo = ?,
+      permisos = ?
       WHERE usuario_id = ?");
       if (
         $sql->execute([
@@ -225,7 +228,9 @@ class cls_Auth extends cls_db
           $this->telefono,
           $this->direccion,
           $this->correo,
-          $this->id
+          $this->permiso,
+          $this->id,
+
         ])
       ) {
         return [
@@ -321,6 +326,19 @@ class cls_Auth extends cls_db
     return $resultado;
   }
 
+  protected function GetOneByUser($user)
+  {
+    $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
+      INNER JOIN roles ON roles.roles_id = usuario.roles_id
+      INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_usuario = ?");
+
+    if ($sql->execute([$user]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
+    return $resultado;
+  }
+  
   private function GetDuplicados()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
@@ -469,7 +487,10 @@ class cls_Auth extends cls_db
 
   protected function getPreguntasFromUser(){
     try{
-      $sql = $this->db->query("SELECT preguntas_user.* FROM preguntas_user INNER JOIN respuestas_user ON respuestas_user.pregunta_id_respuesta = preguntas_user.id_pregunta WHERE respuesta_user.user_id = $this->id");
+      $sql = $this->db->query("SELECT preguntas_user.*,respuestas_user.* FROM usuario
+        INNER JOIN respuestas_user ON respuestas_user.user_id_respuesta = usuario.usuario_id
+        INNER JOIN preguntas_user ON preguntas_user.id_pregunta = respuestas_user.pregunta_id_respuesta  
+        WHERE usuario.usuario_usuario = '$this->usuario'");
 
       if($sql->rowCount() > 0){
         return [

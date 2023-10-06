@@ -7,18 +7,18 @@ import {
   formatMoneda,
   validaMonto,
   formatoMonto,
-} from "../../../util/varios";
+} from "../../util/varios";
 
 import axios from "axios";
 import moment from "moment";
-import { Mensaje } from "../../mensajes";
+import { Mensaje } from "../mensajes";
 
 const md5 = require("md5");
 
 export const GestionarClave = (props) => {
   /*  variables de estados */
 
-  let op = require("../../../modulos/datos");
+  let op = require("../../modulos/datos");
 
   const login = JSON.parse(localStorage.getItem("login"));
   const idusuario = JSON.parse(localStorage.getItem("idusuario"));
@@ -142,44 +142,44 @@ export const GestionarClave = (props) => {
       });
   };
 
-  const datisPersona = (login) => {
-    let campos = "idusuario,login,correo";
-    let nomtab = "usuarios";
-    let nomid = "login";
+  const datisPersona  = async (login) => {
+    let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
+    console.log(endpoint)
+    setActivate(true)
 
-    let endpoint = `${op.conexion}/api/consulta/modeli?campos=${campos}&id=${login.toLowerCase()}&nomtab=${nomtab}&nomid=${nomid}`;
-    setActivate(true);
 
-    axios
-      .get(endpoint, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
+
+    //setLoading(false);
+
+    console.log(login)
+    let bodyF = new FormData()
+
+    bodyF.append("Usuario", login.toUpperCase())
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+        console.log(response.lista_preguntas)
+
+setRecuperar('0')
+        setActivate(false)
+        setValues(response.lista_preguntas)
+
+
+
+
+       
       })
-      .then(function (response) {
-        if (response.status === 200) {
-          if (response.data !== "") {
-            setCorreo(response.data);
-            seleccionarPreguntas(response.data.idusuario);
-            console.log(response.data);
-            setPreguntas(true);
-          } else {
-            setMensaje({
-              mostrar: true,
-              titulo: "Notificación",
-              texto: "No existe este usuario",
-              icono: "informacion",
-            });
-            setPreguntas(false);
-          }
-        }
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
 
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
-      });
   };
+
+
 
 
 
@@ -219,7 +219,7 @@ export const GestionarClave = (props) => {
   const onChangevalidar = () => {
     let sigue = true;
     setValidarClave(0);
-    console.log(recuperar)
+   
     if(recuperar === '1'){
       if (txtP1.current.value === "") {
         setMensaje({
@@ -415,7 +415,7 @@ export const GestionarClave = (props) => {
           setPreguntas(false);
         } else {
           const idusuario = JSON.parse(localStorage.getItem("idusuario"));
-          seleccionarPreguntas(idusuario);
+        //  seleccionarPreguntas(idusuario);
           setBoton(false);
         }
       }}
@@ -449,7 +449,7 @@ export const GestionarClave = (props) => {
           }}
         />
         <div>
-          {props.llamado !== 1 ? (
+         
             <div className="mb-2">
               <label for="exampleInputEmail1" className="form-label">
                 Ingrese usuario
@@ -462,10 +462,8 @@ export const GestionarClave = (props) => {
                 onBlur={validarPastor}
               />
             </div>
-          ) : (
-            <h3 className="text-center">Bienvenido {login.toUpperCase()} </h3>
-          )}
-          {values.idusuario ? (
+          
+          {values[0] ? (
             <div style={{visibility:recuperar === '1' || recuperar === '2' ? 'collapse' : 'visible'}} className="col-md-12 row mx-auto border rounded p-2 py-2">
               <div className="form-check mx-auto col-md-10 mb-2 px-2">
                 <input
@@ -510,7 +508,7 @@ export const GestionarClave = (props) => {
             <div>
               <div className="mb-2">
                 <label for="exampleInputEmail1" className="form-label">
-                  {values.pregunta1}
+                  {values[0].des_pregunta}
                 </label>
                 <input
                   type="text"
@@ -522,7 +520,7 @@ export const GestionarClave = (props) => {
 
               <div className="mb-2">
                 <label for="exampleInputEmail1" className="form-label">
-                  {values.pregunta2}
+                  {values[1].des_pregunta}
                 </label>
                 <input
                   type="text"
@@ -541,28 +539,13 @@ export const GestionarClave = (props) => {
               <button
                 style={{ visibility: mostrarBoton }}
                 type="button"
-                onClick={enviarCorreo}
+               // onClick={enviarCorreo}
                 ref={btnEnviar}
                 className="btn btn-primary btn-sm rounded-pill my-2 mx-auto col-md-11"
               >
                 enviar código de validación
               </button>
-              {mostrarBoton === "collapse" ? (
-
-                <div className="mb-2 px-0 mt-2">
-                  <label for="exampleInputEmail1" className="form-label">
-                   Código de Verificación
-                  </label>
-                  <input
-                    type="text"
-                    disabled={boton}
-                    ref={txtCodVeri}
-                    className="form-control form-control-sm"
-                  />
-                </div>
-              ) : (
-                ""
-              )}
+          
             </div>
           ) : (
             ""

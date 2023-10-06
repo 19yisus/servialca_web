@@ -57,16 +57,29 @@ abstract class cls_poliza extends cls_db
         poliza_fechaVencimiento = ?,
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
-        WHERE poliza_if = ?");
-		if (
-			$sql->execute([
-				$this->fechaInicio,
-				$this->fechaVencimiento,
-				$this->debitoCredito,
-				$this->id
-			])
-		)
-			;
+        WHERE poliza_id = ?");
+		$sql->execute([
+			$this->fechaInicio,
+			$this->fechaVencimiento,
+			$this->debitoCredito,
+			$this->id
+		]);
+		
+		if($sql->rowCount() > 0){
+			return [
+				'data' => [
+					'res' => "Contrato renovado"
+				],
+				'code' => 200
+			];
+		}else{
+			return [
+				'data' => [
+					'res' => "Hubo un problema en renovacion"
+				],
+				'code' => 400
+			];
+		}
 	}
 
 	protected function Vencer($id)
@@ -699,7 +712,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
-        WHERE poliza_id = $id");
+        WHERE poliza.poliza_id = $id");
 		if ($sql->execute()) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		} else {

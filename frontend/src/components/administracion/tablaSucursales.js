@@ -182,6 +182,8 @@ function TablaSursales() {
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/sucursal/ConsultarTodos";
+    let bodyF = new FormData()
+    bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
 

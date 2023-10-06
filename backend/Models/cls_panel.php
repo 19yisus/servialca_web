@@ -15,4 +15,34 @@ abstract class cls_panel extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+
+	public function SaveImg($datos){
+		if($datos['name'] != ""){
+			$name = str_ireplace(".PNG","",$datos['name']);
+			$tag = $datos['tag'];
+			$ruta = str_replace(" ","_",$datos['name']);
+			$this->buscar_y_desactivar($tag);
+			$sql = $this->db->prepare("INSERT INTO file_contents(nombre_img, tag, ruta_img, upload_date, estatus_img) VALUES(?,?,?,NOW(),1)");
+			$sql->execute([$name, $tag, $ruta]);
+		}
+        
+        if(isset($datos)){
+            $sqlc = $this->db->query("SELECT * FROM pagina_web WHERE 1");
+            // $resultado = $sqlc->fetchAll(PDO::FETCH_ASSOC);
+            if($sqlc->rowCount() == 0){
+                $sql2 = $this->db->prepare("INSERT INTO pagina_web(text_home, text_about, text_mision, text_vision, text_ubicacion, text_correo, text_telefono, text_fax) VALUES(?,?,?,?,?,?,?,?)");
+            }else{
+                $sql2 = $this->db->prepare("UPDATE pagina_web SET text_home =?, text_about = ?, text_mision =?, text_vision =?, text_ubicacion =?, text_correo =?, text_telefono =?, text_fax=? WHERE 1");
+            }
+            
+            $sql2->execute([$datos['text_home'],$datos['text_about'],$datos['text_mision'],$datos['text_vision'],$datos['text_ubicacion'],$datos['text_correo'],$datos['text_telefono'],$datos['text_fax']]);
+        }
+
+        return 1;
+
+    }
+
+    private function buscar_y_desactivar($tag){
+        $this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
+    }
 }
