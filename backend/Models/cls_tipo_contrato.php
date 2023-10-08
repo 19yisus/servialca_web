@@ -15,6 +15,14 @@ abstract class cls_tipo_contrato extends cls_db
   protected function Save()
   {
     try {
+      if (empty($this->nombre)) {
+        return [
+          "data" => [
+            "res" => "El nombre del contrato no puede estar vacío"
+          ],
+          "code" => 400
+        ];
+      }
       $result = $this->SearchByNombre($this->nombre);
       if (isset($result[0])) {
         return [

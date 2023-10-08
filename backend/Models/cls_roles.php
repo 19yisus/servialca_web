@@ -3,7 +3,7 @@ require_once("cls_db.php");
 
 abstract class cls_roles extends cls_db
 {
-	protected $id, $nombre, $estatus;
+	protected $id, $nombre, $comision, $estatus;
 
 	public function __construct()
 	{
@@ -13,6 +13,15 @@ abstract class cls_roles extends cls_db
 	protected function Save()
 	{
 		try {
+			if (empty($this->nombre)) {
+				return [
+					"data" => [
+						"res" => "El nombre del rol no puede estar vacío",
+						"code" => 400
+					],
+					"code" => 400
+				];
+			}
 			$result = $this->SearchByNombre($this->nombre);
 			if (isset($result[0])) {
 				return [
@@ -22,8 +31,8 @@ abstract class cls_roles extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO roles(roles_nombre,roles_estatus) VALUES(?,1)");
-			$sql->execute([$this->nombre]);
+			$sql = $this->db->prepare("INSERT INTO roles(roles_nombre,roles_comision,roles_estatus) VALUES(?,?,1)");
+			$sql->execute([$this->nombre, $this->comision]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0) return [
 				"data" => [

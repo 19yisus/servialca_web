@@ -29,7 +29,9 @@ import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
 import TablaDocumento from "../components/administracion/tablaDocumento";
+import TablaGastos from "../components/gastosPersonales/tablaGastos";
 import Panel from "./panel";
+import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
@@ -423,7 +425,7 @@ function MenuImpuestoPP(props) {
                           <span>Ingresos y Egresos</span>
                         </a>
                         <a
-                          href="/"
+                          href="/gastosPersonales"
                           className="list-group-item list-group-item-action py-2 ripple"
                         >
                           <i class="fas fa-money-check-alt fa-fw me-1"></i>
@@ -473,7 +475,7 @@ function MenuImpuestoPP(props) {
                   <span>Panel</span>
                 </a>
                 <a
-                  href="/"
+                  href="/listaPrecios"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i class="fas fa-birthday-cake  fa-fw me-1 "></i>
@@ -548,6 +550,12 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
+              <AuthRoute exact path="/listaPrecios" component={TablaPrecio}/>
+              <AuthRoute
+                exact
+                path="/gastosPersonales"
+                component={TablaGastos}
+              />
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -23,7 +23,6 @@ export const ModalLicencia = (props) => {
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
-
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -34,7 +33,7 @@ export const ModalLicencia = (props) => {
   const cmbTelefono = useRef();
   const txtTelefono = useRef();
   const txtDatosPastor = useRef();
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtTotal = useRef();
   const txtDolar = useRef();
   const cmbLentes = useRef();
@@ -46,10 +45,6 @@ export const ModalLicencia = (props) => {
   const check2 = useRef();
   const check3 = useRef();
   const check4 = useRef();
-
-
-
-
 
   const [values, setValues] = useState({
     ced: "",
@@ -82,14 +77,10 @@ export const ModalLicencia = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -107,7 +98,6 @@ export const ModalLicencia = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
-
 
   const salir = () => {
     props.onHideCancela();
@@ -133,43 +123,39 @@ export const ModalLicencia = (props) => {
     });
   };
 
-
-
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/poliza/registrarCertificado";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-    bodyF.append("Nombre", cmbNacionalidad.current.value + txtNombre.current.value)
-    bodyF.append("Apellido", txtApellido.current.value)
-    bodyF.append("Cedula", txtCedula.current.value)
-    bodyF.append("fechaNacimiento", txtCorreo.current.value)
-    bodyF.append("Edad", txtEdad.current.value)
-    bodyF.append("tipoSangre", txtTipoSangre.current.value)
-    bodyF.append("Lente", cmbTipoLicencia.current.value)
-    bodyF.append("metodoPago", cmbPago.current.value)
-    bodyF.append("Referencia", txtReferencia.current.value)
-    bodyF.append("cantidadDolar", txtDolar.current.value)
-    bodyF.append("Telefono", null)
-    bodyF.append("Direccion", null)
-
-
+    bodyF.append(
+      "Nombre",
+      cmbNacionalidad.current.value + txtNombre.current.value
+    );
+    bodyF.append("Apellido", txtApellido.current.value);
+    bodyF.append("Cedula", txtCedula.current.value);
+    bodyF.append("fechaNacimiento", txtCorreo.current.value);
+    bodyF.append("Edad", txtEdad.current.value);
+    bodyF.append("tipoSangre", txtTipoSangre.current.value);
+    bodyF.append("Lente", cmbTipoLicencia.current.value);
+    bodyF.append("metodoPago", cmbPago.current.value);
+    bodyF.append("Referencia", txtReferencia.current.value);
+    bodyF.append("cantidadDolar", txtDolar.current.value);
+    bodyF.append("Telefono", null);
+    bodyF.append("Direccion", null);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
 
         setMensaje({
           mostrar: true,
@@ -177,18 +163,16 @@ export const ModalLicencia = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-
-
-
-
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -211,8 +195,6 @@ export const ModalLicencia = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -237,9 +219,6 @@ export const ModalLicencia = (props) => {
     });
   };
 
-
-
-
   /*const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
@@ -247,29 +226,26 @@ export const ModalLicencia = (props) => {
     if (!regex.test(char)) e.preventDefault(); return false;
   }*/
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
-
-  }
+    props.onHideCancela();
+  };
 
   const actualizarValores = (tipoLicenciaValue, abonoValue) => {
     let totalValue = 0;
     let restanteValue = 0;
 
-    if (tipoLicenciaValue === '0' || tipoLicenciaValue === '1') {
-      totalValue = 20.00;
-    } else if (tipoLicenciaValue === '2' || tipoLicenciaValue === '3') {
-      totalValue = 25.00;
+    if (tipoLicenciaValue === "0" || tipoLicenciaValue === "1") {
+      totalValue = 20.0;
+    } else if (tipoLicenciaValue === "2" || tipoLicenciaValue === "3") {
+      totalValue = 25.0;
     }
 
     restanteValue = (totalValue - abonoValue).toFixed(2);
@@ -285,11 +261,32 @@ export const ModalLicencia = (props) => {
     actualizarValores(selectedValue, abonoValue);
   };
 
-
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
+
+  const handleChange = (maxValue) => (e) => {
+    const inputValue = e.target.value;
+    // Verificar si la longitud del valor ingresado supera el valor máximo
+    if (isNaN(inputValue)) {
+      if (inputValue.length > maxValue && e.key !== "Backspace") {
+        e.preventDefault(); // Evitar que se escriba el valor excedente
+      }
+    } else {
+      if (
+        inputValue.length >= maxValue &&
+        e.key !== "Backspace" &&
+        e.key !== " "
+      ) {
+        e.preventDefault(); // Evitar que se escriba el valor excedente
+      }
+    }
+  };
 
   const handleInputMontoChange = (event) => {
     validaMonto(event);
@@ -339,9 +336,7 @@ export const ModalLicencia = (props) => {
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>
-          Registrar Licencia
-        </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>Registrar Licencia</Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -356,69 +351,149 @@ export const ModalLicencia = (props) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoClientes
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={seleccionarCliente}
-
         />
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <div className="col-md-12 row mx-auto">
           <div class="input-group input-group-sm mb-3 col-md-5">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Cedula:</span>
-            <select class="form-select col-md-3" ref={cmbNacionalidad} aria-label="Default select example">
-
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Cedula:
+            </span>
+            <select
+              class="form-select col-md-3"
+              ref={cmbNacionalidad}
+              aria-label="Default select example"
+            >
               <option value="V-">V-</option>
               <option value="E-">E-</option>
               <option value="J-">J-</option>
               <option value="G-">G-</option>
-
             </select>
-            <input type="text" class="form-control" ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-            <button type="button" class="btn btn-success" onClick={() => { setMostrar(true) }}><i class="fa fa-search"></i></button>
+            <input
+              onKeyDown={handleChange(9)}
+              type="text"
+              class="form-control"
+              ref={txtCedula}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <button
+              type="button"
+              class="btn btn-success"
+              onClick={() => {
+                setMostrar(true);
+              }}
+            >
+              <i class="fa fa-search"></i>
+            </button>
           </div>
           <div class=" col-md-7"></div>
           <div class="input-group input-group-sm mb-3 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Nombres:</span>
-            <input type="text" class="form-control" onChange={soloLetras} ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Nombres:
+            </span>
+            <input
+              onKeyDown={handleChange(25)}
+              type="text"
+              class="form-control"
+              onChange={soloLetras}
+              ref={txtNombre}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Apellidos:</span>
-            <input type="text" class="form-control" ref={txtApellido} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Apellidos:
+            </span>
+            <input
+              onKeyDown={handleChange(25)}
+              type="text"
+              class="form-control"
+              ref={txtApellido}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Correo:</span>
-            <input type="text" class="form-control" ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Correo:
+            </span>
+            <input
+              onKeyDown={handleChange(25)}
+              type="text"
+              class="form-control"
+              ref={txtCorreo}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Telefono</span>
-            <select class="form-select col-md-3" ref={cmbTelefono} aria-label="Default select example">
-
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Telefono
+            </span>
+            <select
+              class="form-select col-md-3"
+              ref={cmbTelefono}
+              aria-label="Default select example"
+            >
               <option value="0414-">0414</option>
               <option value="0424-">0424</option>
               <option value="0416-">0416</option>
               <option value="0426-">0426</option>
               <option value="0412-">0412</option>
-
-
-
             </select>
-            <input type="text" class="form-control" ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputNumChange} />
+            <input
+              type="text"
+              onKeyDown={handleChange(8)}
+              class="form-control"
+              ref={txtTelefono}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onChange={handleInputNumChange}
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de Sangre:</span>
-            <input type="text" class="form-control" ref={txtTipoSangre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Tipo de Sangre:
+            </span>
+            <input
+              onKeyDown={handleChange(4)}
+              type="text"
+              class="form-control"
+              ref={txtTipoSangre}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Tipo De Licencia:</span>
-            <select class="form-select" ref={cmbTipoLicencia} aria-label="Default select example" onChange={handleTipoLicenciaChange}>
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Tipo De Licencia:
+            </span>
+            <select
+              class="form-select"
+              ref={cmbTipoLicencia}
+              aria-label="Default select example"
+              onChange={handleTipoLicenciaChange}
+            >
               <option value=" ">Seleccionar</option>
               <option value="0">Licencia de 2da</option>
               <option value="1">Licencia de 3da</option>
@@ -428,40 +503,68 @@ export const ModalLicencia = (props) => {
           </div>
           <div className="col-md-4 mx-auto row">
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check1} type="checkbox" value="" id="flexCheckDefault" />
-              <label class="form-check-label my-auto" >
-                2da
-              </label>
+              <input
+                class="form-check-input my-auto"
+                ref={check1}
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label my-auto">2da</label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check2} type="checkbox" value="" id="flexCheckDefault" />
-              <label class="form-check-label my-auto" >
-                3ra
-              </label>
+              <input
+                class="form-check-input my-auto"
+                ref={check2}
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label my-auto">3ra</label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check3} type="checkbox" value="" id="flexCheckDefault" />
-              <label class="form-check-label my-auto" >
-                4ta
-              </label>
+              <input
+                class="form-check-input my-auto"
+                ref={check3}
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label my-auto">4ta</label>
             </div>
             <div class="form-check col my-auto">
-              <input class="form-check-input my-auto" ref={check4} type="checkbox" value="" id="flexCheckDefault" />
-              <label class="form-check-label my-auto" >
-                5ta
-              </label>
+              <input
+                class="form-check-input my-auto"
+                ref={check4}
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label my-auto">5ta</label>
             </div>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Usa lentes:</span>
-            <select class="form-select" ref={cmbLentes} aria-label="Default select example">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Usa lentes:
+            </span>
+            <select
+              class="form-select"
+              ref={cmbLentes}
+              aria-label="Default select example"
+            >
               <option value="0">No</option>
               <option value="1">Si</option>
             </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Forma de Pago:</span>
-            <select class="form-select" ref={cmbPago} aria-label="Default select example" >
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Forma de Pago:
+            </span>
+            <select
+              class="form-select"
+              ref={cmbPago}
+              aria-label="Default select example"
+            >
               <option value="0">Pago Movil</option>
               <option value="1">Efectivo</option>
               <option value="2">Transferencia</option>
@@ -469,25 +572,59 @@ export const ModalLicencia = (props) => {
             </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Referencia:</span>
-            <input type="text" class="form-control" ref={txtReferencia} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Referencia:
+            </span>
+            <input
+              onKeyDown={handleChange(4)}
+              type="text"
+              class="form-control"
+              ref={txtReferencia}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Total:</span>
-            <input type="text" class="form-control text-right" ref={txtTotal} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled onChange={handleInputMontoChange} />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Total:
+            </span>
+            <input
+              type="text"
+              class="form-control text-right"
+              ref={txtTotal}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+              onChange={handleInputMontoChange}
+            />
           </div>
           <div class=" col-md-2"></div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Abono:</span>
-            <input type="text" class="form-control text-right" ref={txtAbono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleTipoLicenciaChange} />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Abono:
+            </span>
+            <input
+              type="text"
+              class="form-control text-right"
+              ref={txtAbono}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onChange={handleTipoLicenciaChange}
+            />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Restante:</span>
-            <input type="text" class="form-control text-right" ref={txtRestante} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onChange={handleInputMontoChange} />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Restante:
+            </span>
+            <input
+              type="text"
+              class="form-control text-right"
+              ref={txtRestante}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onChange={handleInputMontoChange}
+            />
           </div>
-
-
-
         </div>
       </Modal.Body>
       <Modal.Footer>

@@ -8,6 +8,7 @@ class Con_roles extends cls_roles
     parent::__construct();
     $this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
     $this->nombre = isset($_POST["Nombre"]) ? $_POST["Nombre"] : null;
+    $this->comision = isset($_POST["Comision"]) ? $_POST["Comision"] : null;
     $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
   }
 

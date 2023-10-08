@@ -1,6 +1,6 @@
 <?php
 
-if(!class_exists('cls_db')) require_once("cls_db.php");
+if (!class_exists('cls_db')) require_once("cls_db.php");
 
 abstract class cls_transporte extends cls_db
 {
@@ -14,6 +14,15 @@ abstract class cls_transporte extends cls_db
 	protected function Save()
 	{
 		try {
+			if (empty($this->nombre)) {
+				return [
+					"data" => [
+						"res" => "El nombre de la linea de transporte no puede estar vacío",
+						"code" => 400
+					],
+					"code" => 400
+				];
+			}
 			$result = $this->SearchByNombre($this->nombre);
 			if (isset($result[0])) {
 				return [

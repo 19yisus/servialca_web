@@ -15,6 +15,15 @@ abstract class cls_tipo_vehiculo extends cls_db
   protected function Save()
   {
     try {
+      if (empty($this->nombre)) {
+        return [
+          "data" => [
+            "res" => "El nombre del tipo del vehículo no puede estar vacío",
+            "code" => 400
+          ],
+          "code" => 400
+        ];
+      }
       $result = $this->SearchByNombre($this->nombre);
       if (isset($result[0])) {
         return [
@@ -32,8 +41,9 @@ abstract class cls_tipo_vehiculo extends cls_db
 
       $sql = $this->db->prepare("INSERT INTO tipovehiculo(        
         tipoVehiculo_nombre,
+        sucursal_id,
         tipoVehiculo_estatus
-        )  VALUES(?,1)");
+        )  VALUES(?,1,1)");
       if (
         $sql->execute([$this->nombre])
       ) {
@@ -207,11 +217,11 @@ abstract class cls_tipo_vehiculo extends cls_db
         "code" => 400
       ];
     }
-
   }
 
-  protected function SearchByID($id){
-    
+  protected function SearchByID($id)
+  {
+
     $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*  FROM precio 
     INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = tipoVehiculo_id
     INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
@@ -222,5 +232,4 @@ abstract class cls_tipo_vehiculo extends cls_db
       $resultado = [];
     return $resultado;
   }
-
 }

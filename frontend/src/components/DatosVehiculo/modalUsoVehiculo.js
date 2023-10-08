@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -23,7 +23,6 @@ export const ModalUsoVehiculo = (props) => {
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
-
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -33,14 +32,12 @@ export const ModalUsoVehiculo = (props) => {
   const cmbNacionalidad = useRef();
 
   const txtDatosPastor = useRef();
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtBs = useRef();
   const txtDolar = useRef();
 
   const txtFechaNaci = useRef();
   const txtDescripcion = useRef();
-
-
 
   const [values, setValues] = useState({
     ced: "",
@@ -73,14 +70,10 @@ export const ModalUsoVehiculo = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -98,7 +91,6 @@ export const ModalUsoVehiculo = (props) => {
       return true;
     } else return false; //alert(e.which);
   };
-
 
   const salir = () => {
     props.onHideCancela();
@@ -124,57 +116,56 @@ export const ModalUsoVehiculo = (props) => {
     });
   };
 
-
-
   const actualizarCertificado = async () => {
     let endpoint;
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-
-    if(operacion === 1){
+    if (operacion === 1) {
       endpoint = op.conexion + "/usoVehiculo/registrar";
-      bodyF.append("Nombre", txtDescripcion.current.value)
-    } else if(operacion === 2){
+      bodyF.append("Nombre", txtDescripcion.current.value);
+    } else if (operacion === 2) {
       endpoint = op.conexion + "/usoVehiculo/actualizar";
-      bodyF.append("Nombre", txtDescripcion.current.value)
-      bodyF.append("ID", values.usoVehiculo_id)
+      bodyF.append("Nombre", txtDescripcion.current.value);
+      bodyF.append("ID", values.usoVehiculo_id);
     } else {
       endpoint = op.conexion + "/usoVehiculo/eliminar";
-      bodyF.append("Nombre", txtDescripcion.current.value)
-      bodyF.append("ID", values.usoVehiculo_id)
-
+      bodyF.append("Nombre", txtDescripcion.current.value);
+      bodyF.append("ID", values.usoVehiculo_id);
     }
-
-
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
+      })
+      .catch((error) =>
         setMensaje({
           mostrar: true,
-          titulo: "Exito.",
-          texto: "Operacion Exitosa",
-          icono: "exito",
-        });
-
-
-
-
-      })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -197,8 +188,6 @@ export const ModalUsoVehiculo = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -223,37 +212,52 @@ export const ModalUsoVehiculo = (props) => {
     });
   };
 
-
-
-
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtDescripcion.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.render()
-    props.onHideCancela()
-
-  }
+    props.render();
+    props.onHideCancela();
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
-
+  const handleChange = (maxValue) => (e) => {
+    const inputValue = e.target.value;
+    // Verificar si la longitud del valor ingresado supera el valor máximo
+    if (isNaN(inputValue)) {
+      if (inputValue.length > maxValue && e.key !== "Backspace") {
+        e.preventDefault(); // Evitar que se escriba el valor excedente
+      }
+    } else {
+      if (
+        inputValue.length >= maxValue &&
+        e.key !== "Backspace" &&
+        e.key !== " "
+      ) {
+        e.preventDefault(); // Evitar que se escriba el valor excedente
+      }
+    }
+  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -284,38 +288,36 @@ export const ModalUsoVehiculo = (props) => {
   };
 
   const selecionarUso = async (id) => {
-    let endpoint = op.conexion + "/usoVehiculo/ConsultarUno?ID="+id;
-    console.log(endpoint)
-    setActivate(true)
-
-
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarUno?ID=" + id;
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-   // bodyF.append("Nombre", txtDescripcion.current.value)
+    // bodyF.append("Nombre", txtDescripcion.current.value)
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
 
-
-        setActivate(false)
-        console.log(response)
-
-       txtDescripcion.current.value = response.usoVehiculo_nombre;
-       setValues(response);
-
-
-
+        txtDescripcion.current.value = response.usoVehiculo_nombre;
+        setValues(response);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   return (
@@ -331,14 +333,17 @@ export const ModalUsoVehiculo = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          selecionarUso(props.idUso)
-          
+          selecionarUso(props.idUso);
         }
       }}
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          {operacion === 1 ? 'Registrar Uso de Vehiculo' : operacion === 2 ? 'Editar Uso de Vehiculo' : 'Eliminar Uso de Vehiculo'}
+          {operacion === 1
+            ? "Registrar Uso de Vehiculo"
+            : operacion === 2
+            ? "Editar Uso de Vehiculo"
+            : "Eliminar Uso de Vehiculo"}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -354,30 +359,45 @@ export const ModalUsoVehiculo = (props) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoClientes
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={seleccionarCliente}
-
         />
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <div className="col-md-12 row mx-auto">
-
-
           <div class="input-group input-group-sm mb-3 col-md-12">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Descripción:</span>
-            <textarea type="textarea" disabled={operacion === 1 ? false : operacion === 2 ? false : true} style={{ height: 40 }} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Nombre:
+            </span>
+            <textarea
+              onKeyDown={handleChange(25)}
+              type="textarea"
+              disabled={
+                operacion === 1 ? false : operacion === 2 ? false : true
+              }
+              style={{ height: 40 }}
+              class="form-control"
+              ref={txtDescripcion}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
           </div>
-
-
-
         </div>
       </Modal.Body>
       <Modal.Footer>

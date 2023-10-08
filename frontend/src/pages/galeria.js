@@ -1,12 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
-import logo from '../imagenes/logo1.png';
-
+import logo from "../imagenes/logo1.png";
 
 function Galeria() {
- 
-
-	var op = require("../modulos/datos");
-
+  var op = require("../modulos/datos");
 
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
@@ -16,9 +12,7 @@ function Galeria() {
     icono: "",
   });
 
-  
-
-  const [operacion , setOperacion ] = useState();
+  const [operacion, setOperacion] = useState();
   const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
@@ -31,7 +25,11 @@ function Galeria() {
   const [totalact, setTotalact] = useState(0.0);
   const [idRol, setIdRol] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
 
   const [records, setRecords] = useState([
     {
@@ -60,7 +58,6 @@ function Galeria() {
     },
   };
 
-
   const labels = [
     "Lunes",
     "Martes",
@@ -82,14 +79,7 @@ function Galeria() {
     ],
   };
 
-
-
-
-
-
-
-
-  console.log('estas en menu')
+  console.log("estas en menu");
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTodos";
@@ -100,7 +90,7 @@ function Galeria() {
 
     let bodyF = new FormData();
 
-   // bodyF.append("ID", user_id);
+    // bodyF.append("ID", user_id);
 
     await fetch(endpoint, {
       method: "POST",
@@ -122,20 +112,13 @@ function Galeria() {
       );
   };
 
-
   useEffect(() => {
     selecionarRegistros();
-   
-
   }, []);
 
-
-
-
- 
   return (
     <div className="col-md-12 mx-auto">
- <nav class="navbar navbar-expand-lg  fixed-top">
+      <nav class="navbar navbar-expand-lg  fixed-top">
         <div class="container-fluid bg-danger ">
           <a class="navbar-brand py-2" href="#">
             <img src={logo} className="logo-navbar" alt="MDN" />
@@ -181,47 +164,55 @@ function Galeria() {
             </div>
           </div>
         </div>
-      </nav>   
-    <main role="col-md-12">
-        
-    
-    <section class="mt-4 mb-5">
-    <div class="container mb-4">
-    	<h1 class="font-weight-bold title">Explore</h1>
-    	<div class="row">
-    		<nav class="navbar navbar-expand-lg navbar-light bg-white pl-2 pr-2">
-    		<button class="navbar-light navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExplore" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
-    		<span class="navbar-toggler-icon"></span>
-    		</button>
-    	
-    		</nav>
-    	</div>
-    </div>
-    <div class="container-fluid">
-    	<div class="row">
-    		<div class="card-columns">
-			{records.map((item, index) => (
-    			<div class="card card-pin">
-    				<img class="card-img" src={op.conexion+'/Img/'+item.nombre_img} alt="Card image"/>
-    				<div class="overlay">
-    					
-    					<div class="more">
-    						<a href="post.html">
-    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
-    					</div>
-    				</div>
-    			</div>
-    			
-    		    ))}
-    		
-    		</div>
-    	</div>
-    </div>
-    </section>
-        
-    </main>
-
-
+      </nav>
+      <main role="col-md-12">
+        <section class="mt-4 mb-5">
+          <div class="container mb-4">
+            <h1 class="font-weight-bold title">Explore</h1>
+            <div class="row">
+              <nav class="navbar navbar-expand-lg navbar-light bg-white pl-2 pr-2">
+                <button
+                  class="navbar-light navbar-toggler"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#navbarsExplore"
+                  aria-controls="navbarsDefault"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              </nav>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="card-columns">
+                {records.map((item, index) => (
+                  <div class="card card-pin">
+                    <img
+                      class="card-img"
+                      src={op.conexion + "/Img/" + item.ruta_img}
+                      alt="Card image"
+                    />
+                    <div class="overlay">
+                      <div class="more">
+                        <a href="post.html">
+                          <i
+                            class="fa fa-arrow-circle-o-right"
+                            aria-hidden="true"
+                          ></i>{" "}
+                          More{" "}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

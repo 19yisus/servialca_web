@@ -1,15 +1,15 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-import { ModalRoles, ModalTransporte } from "./modalRoles";
 
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
-function TablaRoles() {
+function TablaGastos() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -31,13 +31,7 @@ function TablaRoles() {
       color: "white",
     },
     {
-      label: "Nombre",
-      textAlign: "center",
-      backgroundColor: "#e70101bf",
-      color: "white",
-    },
-    {
-      label: "Comisión",
+      label: "Descripción",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -59,8 +53,8 @@ function TablaRoles() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
+  const [idUso, setIdUso] = useState();
   const [operacion, setOperacion] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
   const [totalp, setTotalp] = useState(0.0);
@@ -70,7 +64,7 @@ function TablaRoles() {
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
   const [totalact, setTotalact] = useState(0.0);
-  const [idRol, setIdRol] = useState(0.0);
+  const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -129,19 +123,14 @@ function TablaRoles() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/roles/ConsultarTodos";
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData();
-
-    bodyF.append("ID", user_id);
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF,
     })
       .then((res) => res.json())
       .then((response) => {
@@ -159,6 +148,62 @@ function TablaRoles() {
       );
   };
 
+  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  const txtDolar = useRef();
+  const txtBs = useRef();
+
+  const calcular = () => {
+    const cantidadDolares = parseFloat(txtDolar.current.value);
+    const precio = parseFloat(BCV);
+
+    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
+      const total = cantidadDolares * precio;
+      txtBs.current.value = total.toFixed(2).replace(".", ",");
+    } else {
+      txtBs.current.value = "0,00";
+    }
+  };
+  const calcular2 = () => {
+    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
+    const cantidadBs = parseFloat(cantidadBsStr);
+    const precioDolar = parseFloat(BCV);
+
+    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
+      const totalDolares = cantidadBs / precioDolar;
+      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
+    } else {
+      txtDolar.current.value = "0,00";
+    }
+  };
+  const handleInputMontoChange = (event) => {
+    validaMonto(event);
+    if (event.which === 13 || typeof event.which === "undefined") {
+      if (
+        event.target.value === "" ||
+        parseFloat(
+          event.target.value.trim().replace(".", "").replace(",", ".")
+        ) === 0.0
+      ) {
+        event.target.value = "0,00";
+      }
+      event.target.value = formatoMonto(event.target.value);
+      let char1 = event.target.value.substring(0, 1);
+      let char2 = event.target.value.substring(1, 2);
+      if (char1 === "0" && char2 !== ",") {
+        event.target.value = event.target.value.substring(
+          1,
+          event.target.value.legth
+        );
+      }
+    } else if (event.which === 46) {
+      return false;
+    } else if (event.which >= 48 && event.which <= 57) {
+      return true;
+    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
+      return true;
+    } else return false;
+  };
+
   const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
@@ -167,11 +212,11 @@ function TablaRoles() {
         else
           return items.filter((x) => {
             if (
-              (x.roles_id !== null
-                ? String(x.roles_id).includes(target.value)
+              (x.usoVehiculo_id !== null
+                ? String(x.usoVehiculo_id).includes(target.value)
                 : 0) ||
-              (x.roles_nombre !== null
-                ? x.roles_nombre
+              (x.usoVehiculo_nombre !== null
+                ? x.usoVehiculo_nombre
                     .toLowerCase()
                     .includes(target.value.toLowerCase())
                 : "")
@@ -196,25 +241,47 @@ function TablaRoles() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setMostrar(true);
-    setIdRol(id);
     setOperacion(op);
+    setMostrar(true);
+    setIdUso(id);
   };
   return (
     <div className="col-md-12 mx-auto p-2">
-      <ModalRoles
-        operacion={operacion}
-        show={mostrar}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-        render={selecionarRegistros}
-        idRol={idRol}
-      />
-
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Listas de roles</h2>
+          <h2 className=" col-5 text-light">Gastos personales</h2>
+          <div class="input-group input-group-sm col-md-4 my-auto">
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular $:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              onChange={calcular}
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              placeholder="$"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular BS:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent text-light text-right"
+              ref={txtBs}
+              onChange={calcular2}
+              aria-label="Sizing example input"
+              placeholder="BS"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -248,25 +315,21 @@ function TablaRoles() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.roles_id}
+                    {item.usoVehiculo_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.roles_nombre}
+                    {item.usoVehiculo_nombre}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.roles_comision}
-                  </TableCell>
-                  <TableCell
-                    className="align-baseline"
-                    style={{ textAlign: "center", alignItems: "center" }}
-                  >
-                    {parseInt(item.roles_estatus) === 1 ? "ACTIVO" : "INACTIVO"}
+                    {parseInt(item.usoVehiculo_estatus) === 1
+                      ? "ACTIVO"
+                      : "INACTIVO"}
                   </TableCell>
 
                   <TableCell
@@ -278,13 +341,13 @@ function TablaRoles() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.roles_id)}
+                      onClick={gestionarBanco(2, item.usoVehiculo_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(3, item.roles_id)}
+                      onClick={gestionarBanco(3, item.usoVehiculo_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
                       <i className="fa fa-trash"></i>{" "}
@@ -313,4 +376,4 @@ function TablaRoles() {
   );
 }
 
-export default TablaRoles;
+export default TablaGastos;

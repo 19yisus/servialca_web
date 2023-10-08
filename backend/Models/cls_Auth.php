@@ -76,7 +76,7 @@ class cls_Auth extends cls_db
           'data' => [
             'res' => "Login exitoso",
             'usuario' => [
-              'username' => $dato["usuario_nombre"] . " " . $dato["usuario_apellido"],
+              'username' => $dato["usuario_usuario"],
               'user_id' => $dato["usuario_id"],
               'permisos' => $lista,
               'rol' => $dato["roles_id"],

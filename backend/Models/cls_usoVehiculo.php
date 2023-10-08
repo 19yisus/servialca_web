@@ -13,6 +13,16 @@ abstract class cls_usoVehiculo extends cls_db
 	protected function Save()
 	{
 		try {
+
+			if (empty($this->nombre)) {
+				return [
+					"data" => [
+						"res" => "El nombre del uso del vehículo no puede estar vacío",
+						"code" => 400
+					],
+					"code" => 400
+				];
+			}
 			$result = $this->SearchByNombre($this->nombre);
 			if (isset($result[0])) {
 				return [
@@ -141,7 +151,7 @@ abstract class cls_usoVehiculo extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM usovehiculo ORDER BY usoVehiculo_id ASC");
+		$sql = $this->db->prepare("SELECT * FROM usovehiculo ORDER BY usoVehiculo_id DESC");
 		if ($sql->execute())
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else

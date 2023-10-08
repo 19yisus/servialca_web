@@ -76,7 +76,7 @@ class Api
       if (class_exists($cls_name)) {
         $cls = new $cls_name();
         if (method_exists($cls, $metodo_peticion)) {
-          // $this->AuthToken($peticion);
+          $this->AuthToken($peticion);
           $cls->$metodo_peticion();
         } else {
           Response("No existe el metodo requerido", 400);
