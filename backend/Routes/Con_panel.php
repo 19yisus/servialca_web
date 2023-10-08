@@ -16,6 +16,7 @@ class Con_panel extends cls_panel
 
   public function Guardar(){
     $resultado = $this->Save($_POST);
+    // fsdfsdf
     Response($resultado['data'], $resultado['code']);
   }
 }
