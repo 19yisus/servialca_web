@@ -27,8 +27,9 @@ abstract class cls_poliza extends cls_db
 		$vehiculo, $cliente, $precioDolar, $debitoCredito, $cobertura, $idTitular,
 		$idColor, $idModelo, $idMarca,
 		// Medico
-		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente;
-
+		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente,
+		//Licencia
+		$correoLicencia, $licencia, $licenciaRestante, $montoTotal, $abonado, $restante;
 	protected function renovar_poliza()
 	{
 		if (empty($this->fechaInicio)) {
@@ -366,6 +367,8 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$this->SearchByUsuario();
+			$this->SearchBySucursal();
 			$result = $this->debitoCredito($tipoIngreso, $motivo);
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -406,6 +409,112 @@ abstract class cls_poliza extends cls_db
 				],
 				'code' => 400
 			];
+		}
+	}
+
+	protected function SaveLicencia($dolar, $tipoIngreso, $motivo)
+	{
+		try {
+			// $result = $this->SecurityMedico();
+			// if ($result) {
+			// 	return $result;
+			// }
+			// if (!$this->db->inTransaction()) {
+			// 	$this->db->beginTransaction();
+			// }
+
+
+			$result = $this->SearchByCliente();
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->precioDolar($dolar);
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$this->SearchByUsuario();
+			$this->SearchBySucursal();
+			$result = $this->debitoCredito($tipoIngreso, $motivo);
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
+			$result = $this->RegistrarLicenciaConducir();
+			$this->id = $this->db->lastInsertId();
+			if ($result) {
+				$this->db->commit();
+				$this->saveMedicoExecuted = true; // Marcar la función como ejecutada
+				return [
+					'data' => [
+						'res' => "Registro exitoso",
+						"code" => 200,
+						"id" => $this->id
+					],
+					'code' => 200
+				];
+			}
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Registro fallido"
+				],
+				'code' => 400
+			];
+		} catch (PDOException $e) {
+			return [
+				'data' => [
+					'res' => "Error de consulta: " . $e->getMessage()
+				],
+				'code' => 400
+			];
+		}
+	}
+
+
+	protected function RegistrarLicenciaConducir()
+	{
+		$sql = $this->db->prepare("INSERT INTO licencia(
+			cliente_id,
+			licencia_correo,
+			licencia_sangre,
+			licencia_licencia,
+			licencia_montoTotal,
+			licencia_abonado,
+			licencia_restante
+		)values(?,?,?,?,?,?,?)");
+		if (
+			$sql->execute([
+				$this->cliente,
+				$this->correoLicencia,
+				$this->sangre,
+				$this->licencia,
+				$this->montoTotal,
+				$this->abonado,
+				$this->restante
+			])
+		) {
+			return $this->db->lastInsertId();
 		}
 	}
 

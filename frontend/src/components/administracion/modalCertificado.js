@@ -141,7 +141,7 @@ export const ModalCertificadoMedico = (props) => {
     bodyF.append("cantidadDolar", txtDolar.current.value);
     bodyF.append("Telefono", null);
     bodyF.append("Direccion", null);
-
+    bodyF.append("precioDolar",dolarbcv.toFixed(2))
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

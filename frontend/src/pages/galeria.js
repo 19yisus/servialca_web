@@ -192,7 +192,7 @@ function Galeria() {
                   <div class="card card-pin">
                     <img
                       class="card-img"
-                      src={op.conexion + "/Img/" + item.ruta_img}
+                      src={op.conexion + "/ImgPanel/" + item.ruta_img}
                       alt="Card image"
                     />
                     <div class="overlay">

@@ -22,7 +22,9 @@ export const ModalLicencia = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
+  const dolarbcv = JSON.parse(localStorage.getItem("dolarbcv"));
+  const user = JSON.parse(localStorage.getItem("username"));
+  const sucursal = JSON.parse(localStorage.getItem("sucursal"));
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -124,30 +126,25 @@ export const ModalLicencia = (props) => {
   };
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint = op.conexion + "/poliza/registrarLicencia";
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
-
     let bodyF = new FormData();
-
-    bodyF.append(
-      "Nombre",
-      cmbNacionalidad.current.value + txtNombre.current.value
-    );
-    bodyF.append("Apellido", txtApellido.current.value);
-    bodyF.append("Cedula", txtCedula.current.value);
-    bodyF.append("fechaNacimiento", txtCorreo.current.value);
-    bodyF.append("Edad", txtEdad.current.value);
-    bodyF.append("tipoSangre", txtTipoSangre.current.value);
-    bodyF.append("Lente", cmbTipoLicencia.current.value);
-    bodyF.append("metodoPago", cmbPago.current.value);
-    bodyF.append("Referencia", txtReferencia.current.value);
-    bodyF.append("cantidadDolar", txtDolar.current.value);
-    bodyF.append("Telefono", null);
-    bodyF.append("Direccion", null);
-
+    bodyF.append("precioDolar",dolarbcv);
+    bodyF.append("Nombre", txtNombre.current.value);
+    bodyF.append("Apellido",txtApellido.current.value);
+    bodyF.append("Cedula",cmbNacionalidad.current.value + txtCedula.current.value);
+    bodyF.append("Telefono",cmbTelefono.current.value + txtTelefono.current.value);
+    bodyF.append("Sangre",txtTipoSangre.current.value);
+    bodyF.append("correoLicencia",txtCorreo.current.value);
+    bodyF.append("Licencia",cmbTipoLicencia.current.value);
+    bodyF.append("licenciaRestante", "");
+    bodyF.append("montoTotal",txtTotal.current.value);
+    bodyF.append("Abonado",txtAbono.current.value);
+    bodyF.append("Restante",txtRestante.current.value);
+    bodyF.append("cantidadDolar", txtTotal.current.value)
+    bodyF.append("Usuario", user);
+    bodyF.append("Sucursal", sucursal);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

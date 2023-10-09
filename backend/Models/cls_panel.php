@@ -34,12 +34,12 @@ abstract class cls_panel extends cls_db
 			$sqlc = $this->db->query("SELECT * FROM pagina_web WHERE 1");
 			// $resultado = $sqlc->fetchAll(PDO::FETCH_ASSOC);
 			if ($sqlc->rowCount() == 0) {
-				$sql2 = $this->db->prepare("INSERT INTO pagina_web(text_home, text_about, text_mision, text_vision, text_ubicacion, text_correo, text_telefono, text_fax) VALUES(?,?,?,?,?,?,?,?)");
+				$sql2 = $this->db->prepare("INSERT INTO pagina_web(text_home,text_about,text_mision,text_visiom,text_ubicacion,text_correo,text_telefono, text_fax) VALUES(?,?,?,?,?,?,?,?)");
 			} else {
-				$sql2 = $this->db->prepare("UPDATE pagina_web SET text_home =?, text_about = ?, text_mision =?, text_vision =?, text_ubicacion =?, text_correo =?, text_telefono =?, text_fax=? WHERE 1");
+				$sql2 = $this->db->prepare("UPDATE pagina_web SET text_home =?, text_about=?, text_mision=?, text_vision=?, text_ubicacion=?, text_correo=?, text_telefono =?, text_fax=? WHERE 1");
 			}
 
-			$sql2->execute([$datos['text_home'], $datos['text_about'], $datos['text_mision'], $datos['text_vision'], $datos['text_ubicacion'], $datos['text_correo'], $datos['text_telefono'], $datos['text_fax']]);
+			$sql2->execute([$datos['text_home'], $datos["text_about"], $datos["text_mision"], $datos["text_vision"], $datos["text_ubicacion"], $datos["text_correo"], $datos["text_telefono"], $datos["text_banner"]]);
 		}
 
 		return 1;
@@ -48,5 +48,21 @@ abstract class cls_panel extends cls_db
 	private function buscar_y_desactivar($tag)
 	{
 		$this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
+	}
+	public function getImg($tag)
+	{
+
+		if ($tag == 'home') $tag = 'home_1';
+		else if ($tag == 'about') $tag = 'about_1';
+		else if ($tag == 'banner') $tag = 'img_banner';
+		else {
+			$sql = $this->db->query("SELECT * FROM file_contents WHERE tag = '$tag' AND estatus_img = 1");
+			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+			return $resultado;
+		}
+
+		$sql = $this->db->query("SELECT * FROM file_contents WHERE tag = '$tag' AND estatus_img = 1");
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $resultado;
 	}
 }
