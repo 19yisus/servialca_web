@@ -28,8 +28,5 @@ class Con_panel extends cls_panel
         $i++;
       }
     }
-    $this->reg_file_info($_POST, $img_files_name);  
   }
-
-  
 }
