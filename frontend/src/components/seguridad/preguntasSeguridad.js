@@ -7,18 +7,18 @@ import {
   formatMoneda,
   validaMonto,
   formatoMonto,
-} from "../../../util/varios";
+} from "../../util/varios";
 
 import axios from "axios";
 import moment from "moment";
-import { Mensaje } from "../../mensajes";
+import { Mensaje } from "../mensajes";
 
 const md5 = require("md5");
 
 export const GestionarPreguntas = (props) => {
   /*  variables de estados */
 
-  let op = require("../../../modulos/datos");
+  let op = require("../../modulos/datos");
 
   const login = JSON.parse(localStorage.getItem("login"));
   const idusuario = JSON.parse(localStorage.getItem("idusuario"));

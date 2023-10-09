@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
@@ -7,10 +8,8 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
-import { ModalSucursal } from "./modalSucursal";
-import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
-function TablaSursales() {
+function TablaGastos() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -54,8 +53,8 @@ function TablaSursales() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
+  const [idUso, setIdUso] = useState();
+  const [operacion, setOperacion] = useState();
   const [nCuenta, setNCuenta] = useState();
   const [total, setTotal] = useState(0.0);
   const [totalp, setTotalp] = useState(0.0);
@@ -64,8 +63,8 @@ function TablaSursales() {
   const [presupuesto, setPresupuesto] = useState(0.0);
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
-  const [idSucursal, setIdSucursal] = useState(0.0);
-  const [operacion, setOperacion] = useState(0.0);
+  const [totalact, setTotalact] = useState(0.0);
+  const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -86,63 +85,6 @@ function TablaSursales() {
       total: "",
     },
   ]);
-
-  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
-  const txtDolar = useRef();
-  const txtBs = useRef();
-
-  const calcular = () => {
-    const cantidadDolares = parseFloat(txtDolar.current.value);
-    const precio = parseFloat(BCV);
-
-    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
-      const total = cantidadDolares * precio;
-      txtBs.current.value = total.toFixed(2).replace(".", ",");
-    } else {
-      txtBs.current.value = "0,00";
-    }
-  };
-  const calcular2 = () => {
-    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
-    const cantidadBs = parseFloat(cantidadBsStr);
-    const precioDolar = parseFloat(BCV);
-
-    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
-      const totalDolares = cantidadBs / precioDolar;
-      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
-    } else {
-      txtDolar.current.value = "0,00";
-    }
-  };
-
-  const handleInputMontoChange = (event) => {
-    validaMonto(event);
-    if (event.which === 13 || typeof event.which === "undefined") {
-      if (
-        event.target.value === "" ||
-        parseFloat(
-          event.target.value.trim().replace(".", "").replace(",", ".")
-        ) === 0.0
-      ) {
-        event.target.value = "0,00";
-      }
-      event.target.value = formatoMonto(event.target.value);
-      let char1 = event.target.value.substring(0, 1);
-      let char2 = event.target.value.substring(1, 2);
-      if (char1 === "0" && char2 !== ",") {
-        event.target.value = event.target.value.substring(
-          1,
-          event.target.value.legth
-        );
-      }
-    } else if (event.which === 46) {
-      return false;
-    } else if (event.which >= 48 && event.which <= 57) {
-      return true;
-    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
-      return true;
-    } else return false;
-  };
 
   const options = {
     responsive: true,
@@ -181,9 +123,7 @@ function TablaSursales() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-    let bodyF = new FormData()
-    bodyF.append("token", token);
+    let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
@@ -208,6 +148,62 @@ function TablaSursales() {
       );
   };
 
+  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  const txtDolar = useRef();
+  const txtBs = useRef();
+
+  const calcular = () => {
+    const cantidadDolares = parseFloat(txtDolar.current.value);
+    const precio = parseFloat(BCV);
+
+    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
+      const total = cantidadDolares * precio;
+      txtBs.current.value = total.toFixed(2).replace(".", ",");
+    } else {
+      txtBs.current.value = "0,00";
+    }
+  };
+  const calcular2 = () => {
+    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
+    const cantidadBs = parseFloat(cantidadBsStr);
+    const precioDolar = parseFloat(BCV);
+
+    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
+      const totalDolares = cantidadBs / precioDolar;
+      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
+    } else {
+      txtDolar.current.value = "0,00";
+    }
+  };
+  const handleInputMontoChange = (event) => {
+    validaMonto(event);
+    if (event.which === 13 || typeof event.which === "undefined") {
+      if (
+        event.target.value === "" ||
+        parseFloat(
+          event.target.value.trim().replace(".", "").replace(",", ".")
+        ) === 0.0
+      ) {
+        event.target.value = "0,00";
+      }
+      event.target.value = formatoMonto(event.target.value);
+      let char1 = event.target.value.substring(0, 1);
+      let char2 = event.target.value.substring(1, 2);
+      if (char1 === "0" && char2 !== ",") {
+        event.target.value = event.target.value.substring(
+          1,
+          event.target.value.legth
+        );
+      }
+    } else if (event.which === 46) {
+      return false;
+    } else if (event.which >= 48 && event.which <= 57) {
+      return true;
+    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
+      return true;
+    } else return false;
+  };
+
   const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
@@ -216,11 +212,11 @@ function TablaSursales() {
         else
           return items.filter((x) => {
             if (
-              (x.sucursal_id !== null
-                ? String(x.sucursal_id).includes(target.value)
+              (x.usoVehiculo_id !== null
+                ? String(x.usoVehiculo_id).includes(target.value)
                 : 0) ||
-              (x.sucursal_nombre !== null
-                ? x.sucursal_nombre
+              (x.usoVehiculo_nombre !== null
+                ? x.usoVehiculo_nombre
                     .toLowerCase()
                     .includes(target.value.toLowerCase())
                 : "")
@@ -245,25 +241,15 @@ function TablaSursales() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setMostrar(true);
     setOperacion(op);
-    setIdSucursal(id);
+    setMostrar(true);
+    setIdUso(id);
   };
   return (
     <div className="col-md-12 mx-auto p-2">
-      <ModalSucursal
-        show={mostrar}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-        operacion={operacion}
-        idSucursal={idSucursal}
-        render={selecionarRegistros}
-      />
-
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Lista De Sucursales</h2>
+          <h2 className=" col-5 text-light">Gastos personales</h2>
           <div class="input-group input-group-sm col-md-4 my-auto">
             <span
               class="input-group-text bg-transparent border-0 fw-bold text-light"
@@ -329,19 +315,19 @@ function TablaSursales() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_id}
+                    {item.usoVehiculo_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.usoVehiculo_nombre}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.sucursal_estatus) === 1
+                    {parseInt(item.usoVehiculo_estatus) === 1
                       ? "ACTIVO"
                       : "INACTIVO"}
                   </TableCell>
@@ -355,13 +341,13 @@ function TablaSursales() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.sucursal_id)}
+                      onClick={gestionarBanco(2, item.usoVehiculo_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(3, item.sucursal_id)}
+                      onClick={gestionarBanco(3, item.usoVehiculo_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
                       <i className="fa fa-trash"></i>{" "}
@@ -390,4 +376,4 @@ function TablaSursales() {
   );
 }
 
-export default TablaSursales;
+export default TablaGastos;

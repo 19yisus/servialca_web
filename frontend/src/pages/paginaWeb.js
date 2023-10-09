@@ -4,7 +4,6 @@ import { useForm } from "../util/hooks";
 import axios from "axios";
 import { MensajeAlert, MensajeMinimal } from "../components/Alerta";
 import { Loader, Dimmer, Label } from "semantic-ui-react";
-import { GestionarClave } from "../components/componentesIglesia/configuracion/cambiarClavePersonal";
 import md5 from "md5";
 import { Mensaje } from '../components/mensajes'
 import logo from '../imagenes/logo1.png'

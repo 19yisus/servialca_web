@@ -7,10 +7,9 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
-import { ModalSucursal } from "./modalSucursal";
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
-function TablaSursales() {
+function TablaPrecio() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -32,20 +31,20 @@ function TablaSursales() {
       color: "white",
     },
     {
-      label: "Descripción",
+      label: "Nombre",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
     {
-      label: "Estatus",
+      label: "Precio $",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
 
     {
-      label: "Opciones",
+      label: "Precio Bs",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -54,19 +53,10 @@ function TablaSursales() {
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
-  const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
-  const [totaltipo, setTotaltipo] = useState(0.0);
-  const [presupuesto, setPresupuesto] = useState(0.0);
-  const [totalrc, setTotalrc] = useState(0.0);
-  const [totalavi, setTotalavi] = useState(0.0);
   const [idSucursal, setIdSucursal] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -87,7 +77,7 @@ function TablaSursales() {
     },
   ]);
 
-  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  var BCV = JSON.parse(localStorage.getItem("dolarbcv"));
   const txtDolar = useRef();
   const txtBs = useRef();
 
@@ -114,7 +104,6 @@ function TablaSursales() {
       txtDolar.current.value = "0,00";
     }
   };
-
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -180,17 +169,23 @@ function TablaSursales() {
   const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
     useTable(records, headCells, filterFn);
 
+  const imprimir = (id, desde, hasta) => (e) => {
+    e.preventDefault();
+    window.open(
+      `${op.conexion}/reporte/reporteIngresoEgreso?Nombre=${id}&Desde=${desde}&Hasta=${hasta}`
+    );
+  };
+
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-    let bodyF = new FormData()
-    bodyF.append("token", token);
+    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
+    let bodyF = new FormData();
+    
 
     await fetch(endpoint, {
       method: "POST",
+      body: bodyF,
     })
       .then((res) => res.json())
       .then((response) => {
@@ -216,13 +211,18 @@ function TablaSursales() {
         else
           return items.filter((x) => {
             if (
-              (x.sucursal_id !== null
-                ? String(x.sucursal_id).includes(target.value)
+              (x.tipoVehiculo_id !== null
+                ? String(x.tipoVehiculo_id).includes(target.value)
                 : 0) ||
-              (x.sucursal_nombre !== null
-                ? x.sucursal_nombre
+              (x.tipoVehiculo_nombre !== null
+                ? x.tipoVehiculo_nombre
                     .toLowerCase()
                     .includes(target.value.toLowerCase())
+                : "") ||
+                (x.precio_monto != null
+                  ? x.precio_monto
+                  .toLowerCase()
+                  .includes(target.value.toLowerCase())
                 : "")
             ) {
               return x;
@@ -234,8 +234,10 @@ function TablaSursales() {
 
   console.log("estas en menu");
 
+ 
   useEffect(() => {
     selecionarRegistros();
+    
   }, []);
 
   const regPre = () => {
@@ -251,19 +253,9 @@ function TablaSursales() {
   };
   return (
     <div className="col-md-12 mx-auto p-2">
-      <ModalSucursal
-        show={mostrar}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-        operacion={operacion}
-        idSucursal={idSucursal}
-        render={selecionarRegistros}
-      />
-
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Lista De Sucursales</h2>
+          <h2 className=" col-5 text-light">Lista De Precios</h2>
           <div class="input-group input-group-sm col-md-4 my-auto">
             <span
               class="input-group-text bg-transparent border-0 fw-bold text-light"
@@ -309,15 +301,6 @@ function TablaSursales() {
             onChange={handleSearch}
             placeholder="Buscar"
           />
-
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              onClick={gestionarBanco(1, "")}
-              className="btn btn-sm btn-primary rounded-circle"
-            >
-              <i className="fas fa-plus"></i>{" "}
-            </button>
-          </div>
         </div>
         <TblContainer>
           <TblHead />
@@ -329,43 +312,25 @@ function TablaSursales() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_id}
+                    {item.tipoVehiculo_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.tipoVehiculo_nombre}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.sucursal_estatus) === 1
-                      ? "ACTIVO"
-                      : "INACTIVO"}
+                    {item.precio_monto + " $"}
                   </TableCell>
-
                   <TableCell
                     className="align-baseline"
-                    style={{
-                      textAlign: "center",
-                      alignItems: "center",
-                      width: 130,
-                    }}
+                    style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    <button
-                      onClick={gestionarBanco(2, item.sucursal_id)}
-                      className="btn btn-sm mx-1 btn-warning rounded-circle"
-                    >
-                      <i className="fa fa-edit"></i>{" "}
-                    </button>
-                    <button
-                      onClick={gestionarBanco(3, item.sucursal_id)}
-                      className="btn btn-sm mx-1 btn-danger rounded-circle"
-                    >
-                      <i className="fa fa-trash"></i>{" "}
-                    </button>
+                   {(item.precio_monto * BCV).toFixed(2)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -390,4 +355,4 @@ function TablaSursales() {
   );
 }
 
-export default TablaSursales;
+export default TablaPrecio;

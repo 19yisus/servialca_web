@@ -4,9 +4,10 @@ import { useForm } from "../util/hooks";
 import axios from "axios";
 import { MensajeAlert, MensajeMinimal } from "../components/Alerta";
 import { Loader, Dimmer, Label } from "semantic-ui-react";
-import { GestionarClave } from "../components/componentesIglesia/configuracion/cambiarClavePersonal";
 import md5 from "md5";
-import { Mensaje } from '../components/mensajes'
+import { Mensaje } from "../components/mensajes";
+import { GestionarPreguntas } from "../components/seguridad/preguntasSeguridad";
+import { GestionarClave } from "../components/seguridad/cambiarClavePersonal";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -19,14 +20,17 @@ function Login(props) {
   const [token, setToken] = useState();
   const [idzona, setIdZona] = useState();
   const [mostrar, setMostrar] = useState(false);
-  const [mensaje, setMensaje] = useState({ mostrar: false, titulo: '', texto: '', icono: '' });
+  const [mensaje, setMensaje] = useState({
+    mostrar: false,
+    titulo: "",
+    texto: "",
+    icono: "",
+  });
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
     username: "mfigueroa",
     password: "+11078879*",
   });
-
-
 
   useEffect(() => {
     context.logout();
@@ -34,8 +38,6 @@ function Login(props) {
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
-
-
 
   const bloquearUsuario = () => {
     let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
@@ -49,12 +51,11 @@ function Login(props) {
       .post(endpoint, body, {
         headers: {
           "x-access-token": `${token}`,
-
         },
       })
       .then(function (response) {
         if (response.status === 200) {
-          setBloquear(1)
+          setBloquear(1);
           setMensaje({
             mostrar: true,
             titulo: "Notificación",
@@ -71,7 +72,7 @@ function Login(props) {
           titulo: "Error",
           texto:
             error.response.data.message ===
-              "llave duplicada viola restricción de unicidad «persona_pkey»"
+            "llave duplicada viola restricción de unicidad «persona_pkey»"
               ? "ya existe una persona con esa cedula"
               : error.response.data.message,
           icono: "error",
@@ -82,7 +83,7 @@ function Login(props) {
   const sinIgn = async () => {
     let endpoint = op.conexion + "/Auth/login";
     console.log(endpoint);
-    setActivate(true)
+    setActivate(true);
     var login = values.username;
     var passwd = values.password;
 
@@ -93,41 +94,58 @@ function Login(props) {
 
     setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-    bodyF.append("Usuario", login)
-    bodyF.append("Clave", passwd)
+    bodyF.append("Usuario", login);
+    bodyF.append("Clave", passwd);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response =>{
-     
-        
-        context.login(response.data.token)
-       
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        context.login(response.data.token);
+
         // window.location.href = '/inicio'
         const fecha = new Date();
         localStorage.setItem("fechasistema", JSON.stringify(fecha));
-     
-       localStorage.setItem("rol", JSON.stringify(response.data.usuario[0].rol));
-       localStorage.setItem("user_id", JSON.stringify(response.data.usuario[0].user_id));
-       localStorage.setItem("username", JSON.stringify(response.data.usuario[0].username));
-       localStorage.setItem("permisos", JSON.stringify(response.data.usuario[0].permisos));
-       localStorage.setItem("idsucursal", JSON.stringify(response.data.usuario[1].id));
-       localStorage.setItem("sucursal", JSON.stringify(response.data.usuario[1].name));
-       setActivate(false)
-       window.location.href = "/inicio";
 
-
-
+        localStorage.setItem(
+          "rol",
+          JSON.stringify(response.data.usuario[0].rol)
+        );
+        localStorage.setItem(
+          "user_id",
+          JSON.stringify(response.data.usuario[0].user_id)
+        );
+        localStorage.setItem(
+          "username",
+          JSON.stringify(response.data.usuario[0].username)
+        );
+        localStorage.setItem(
+          "permisos",
+          JSON.stringify(response.data.usuario[0].permisos)
+        );
+        localStorage.setItem(
+          "idsucursal",
+          JSON.stringify(response.data.usuario[1].id)
+        );
+        localStorage.setItem(
+          "sucursal",
+          JSON.stringify(response.data.usuario[1].name)
+        );
+        setActivate(false);
+        window.location.href = "/inicio";
       })
-      .catch(error =>  
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
-
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
 
     // axios
     //   .post(endpoint, body, {
@@ -157,7 +175,7 @@ function Login(props) {
     //          "idusuario",
     //          JSON.stringify(response.data.idusuario)
     //        );
-    //       
+    //
     //        localStorage.setItem(
     //          "codigo",
     //          JSON.stringify(response.data.codigo)
@@ -167,7 +185,6 @@ function Login(props) {
     //          JSON.stringify(response.data.permiso)
     //        );
     //        localStorage.setItem("post", JSON.stringify(response.data));
-
 
     //      }*/
     //       console.log(response.data);
@@ -184,7 +201,7 @@ function Login(props) {
   function loginUserCallback() {
     setLoading(true);
     sinIgn();
-    console.log('listo')
+    console.log("listo");
   }
 
   return (
@@ -199,12 +216,13 @@ function Login(props) {
       <Mensaje
         mensaje={mensaje}
         onHide={() => {
-          parseInt(bloquear) === 3 ? bloquearUsuario() :
-            setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+          parseInt(bloquear) === 3
+            ? bloquearUsuario()
+            : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
         }}
       />
 
-     {/*} <div>
+      {/*} <div>
         <nav
           className="navbar navbar-expand-lg navbar-dark d-none d-lg-block"
           style={{ zIndex: 2000 }}
@@ -362,74 +380,93 @@ function Login(props) {
         </footer>
       </div>*/}
       <div class="container-fluid ps-md-0">
-      <Dimmer active={loading} inverted>
-                      <Loader inverted>cargando...</Loader>
-                    </Dimmer>
-  <div class="row g-0">
-    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
+        <Dimmer active={loading} inverted>
+          <Loader inverted>cargando...</Loader>
+        </Dimmer>
+        <div class="row g-0">
+          <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
+            <video controls>
+              <source
+                src="./servialca.mp4"
+                width="100%"
+                height="100%"
+                loop
+                autoplay
+                controls
+                type="video/mp4"
+              />
+              Tu navegador no soporta la reproducción de video.
+            </video>
+          </div>
+          <div class="col-md-8 col-lg-6">
+            <div class="login d-flex align-items-center ">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-9 col-lg-8 mx-auto">
+                    <div
+                      className=" img-fluid mx-auto logo-login"
+                      style={{ height: 120, width: 280 }}
+                    ></div>
 
+                    <h3 class="login-heading text-center fw-bold mb-4">
+                      {" "}
+                      Sistema de Servial C.A
+                    </h3>
 
-    <video controls>
-        <source src="./servialca.mp4" width="100%" height="100%" loop autoplay controls type="video/mp4" />
-        Tu navegador no soporta la reproducción de video.
-      </video>
+                    <form onSubmit={onSubmit}>
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          required
+                          autoComplete="off"
+                          name="username"
+                          value={values.username}
+                          onChange={onChange}
+                        />
+                        <label for="floatingInput">Usuario</label>
+                      </div>
+                      <div class="form-floating mb-3">
+                        <input
+                          type="password"
+                          class="form-control text-uppercase"
+                          required
+                          autoComplete="off"
+                          name="password"
+                          value={values.password}
+                          onChange={onChange}
+                          maxLength={10}
+                        />
+                        <label for="floatingPassword">Contraseña</label>
+                      </div>
 
-    </div>
-    <div class="col-md-8 col-lg-6">
-   
-      <div class="login d-flex align-items-center ">
-        
-        <div class="container">
-          <div class="row">
-            <div class="col-md-9 col-lg-8 mx-auto">
-              
-            
-                      <div
-                        className=" img-fluid mx-auto logo-login"
-                        style={{ height: 120, width: 280}}
-                      ></div>
-                    
-                   
-              <h3 class="login-heading text-center fw-bold mb-4"> Sistema de Servial C.A</h3>
-
-            
-              <form  onSubmit={onSubmit}>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control"  required
-autoComplete="off"
-                        name="username"
-                        value={values.username}
-                        onChange={onChange}/>
-                  <label for="floatingInput">Usuario</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control text-uppercase"  required
- autoComplete="off"
-                        name="password"
-                        value={values.password}
-                        onChange={onChange}
-                        maxLength={10}/>
-                  <label for="floatingPassword">Contraseña</label>
-                </div>
-
-                
-
-                <div class="d-grid">
-                  <button class="btn rounded-pill btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Ingresar</button>
-                  <div class="text-center">
-                    <a class="small" href="#">Forgot password?</a>
+                      <div class="d-grid">
+                        <button
+                          class="btn rounded-pill btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
+                          type="submit"
+                        >
+                          Ingresar
+                        </button>
+                        <div class="text-center">
+                          <a
+                            class="small"
+                            type="button"
+                            onClick={() => {
+                              setMostrar(true);
+                            }}
+                          >
+                            Recuperar Contraseña
+                          </a>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
-
-              </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
     </div>
   );
 }

@@ -16,9 +16,23 @@ abstract class cls_panel extends cls_db
 		return $resultado;
 	}
 
-	protected function Save($datos)
+	protected function reg_file_info($datos, $file_names)
 	{
 
+		foreach ($file_names as $item) {
+			if ($item['name'] != "") {
+				$name = str_ireplace(".PNG", "", $item['name']);
+				$tag = $item['tag'];
+				$ruta = str_replace(" ", "_", $item['name']);
+				$this->buscar_y_desactivar($tag);
+				$sql = $this->db->prepare("INSERT INTO file_contents(nombre_img, tag, ruta_img, upload_date, estatus_img) VALUES(?,?,?,NOW(),1)");
+				$sql->execute([$name, $tag, $ruta]);
+			}
+		}
+  }
+  
+	protected function Save($datos)
+	{
 		if (isset($datos)) {
 			$sqlc = $this->db->query("SELECT * FROM pagina_web WHERE 1");
 			// $resultado = $sqlc->fetchAll(PDO::FETCH_ASSOC);
@@ -32,5 +46,10 @@ abstract class cls_panel extends cls_db
 		}
 
 		return 1;
+	}
+  
+	private function buscar_y_desactivar($tag)
+	{
+		$this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
 	}
 }

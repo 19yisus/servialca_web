@@ -76,7 +76,13 @@ class Con_poliza extends cls_poliza
 
     public function registrar()
     {
-        $resultado = $this->Save(10.00, 0, "RCV");
+
+        $resultado = $this->Save($_POST["precioDolar"], 1, "RCV");
+        Response($resultado['data'], $resultado['code']);
+    }
+    public function registrarCertificado()
+    {
+        $resultado = $this->SaveMedico($_POST["precioDolar"], 1, "Medico");
         Response($resultado['data'], $resultado['code']);
     }
 
@@ -86,18 +92,12 @@ class Con_poliza extends cls_poliza
         Response($resultado['data'], $resultado['code']);
     }
 
-    public function registrarCertificado()
-    {
-        $resultado = $this->SaveMedico(3, 0, "Medico");
-        Response($resultado['data'], $resultado['code']);
-    }
+
+
     public function renovar()
     {
+        $this->debitoCredito(1, 'renovacion');
         $resultado = $this->renovar_poliza();
-        if ($resultado['code'] == 200) {
-            $this->debitoCredito($_POST["tipoIngreso"], $_POST["Moivo"]);
-            // $this->Edit();
-        }
         Response($resultado['data'], $resultado['code']);
     }
 

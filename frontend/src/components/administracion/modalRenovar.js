@@ -159,14 +159,15 @@ export const ModalRenovarPoliza = (props) => {
         });
         setIdContrato(response.id);
       })
-      .catch((error) =>
+      .catch((error) =>{
+        console.log(error)
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
           texto: error.res,
           icono: "informacion",
         })
-      );
+      });
   };
 
   const onChangeValidar = () => {

@@ -57,16 +57,29 @@ abstract class cls_poliza extends cls_db
         poliza_fechaVencimiento = ?,
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
-        WHERE poliza_if = ?");
-		if (
-			$sql->execute([
-				$this->fechaInicio,
-				$this->fechaVencimiento,
-				$this->debitoCredito,
-				$this->id
-			])
-		)
-			;
+        WHERE poliza_id = ?");
+		$sql->execute([
+			$this->fechaInicio,
+			$this->fechaVencimiento,
+			$this->debitoCredito,
+			$this->id
+		]);
+
+		if ($sql->rowCount() > 0) {
+			return [
+				'data' => [
+					'res' => "Contrato renovado"
+				],
+				'code' => 200
+			];
+		} else {
+			return [
+				'data' => [
+					'res' => "Hubo un problema en renovacion"
+				],
+				'code' => 400
+			];
+		}
 	}
 
 	protected function Vencer($id)
@@ -110,8 +123,10 @@ abstract class cls_poliza extends cls_db
 	protected function Save($dolar, $tipoIngreso, $motivo)
 	{
 		try {
-			// INICIACMOS LA TRANSACCIÓN, TODO LO QUE SE EJECUTE APARTIR DE AHORA, ES PARTE DE LA TRANSACCIÓN
-			// TODO CON EL OBJETO $THIS->DB;
+			$result = $this->Security();
+			if ($result) {
+				return $result;
+			}
 			$this->db->beginTransaction();
 			$result = $this->SearchByColor();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
@@ -222,6 +237,8 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 			$this->SearchbyContrato();
+			$this->SearchByUsuario();
+			$this->SearchBySucursal();
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
 			$this->generarQR($this->id);
@@ -231,6 +248,7 @@ abstract class cls_poliza extends cls_db
 				return [
 					'data' => [
 						'res' => "Registro exitoso",
+						"code" => "200",
 						'id' => $this->id // Agregar el ID en la respuesta
 					],
 					'code' => 200
@@ -317,10 +335,14 @@ abstract class cls_poliza extends cls_db
 	protected function SaveMedico($dolar, $tipoIngreso, $motivo)
 	{
 		try {
+			$result = $this->SecurityMedico();
+			if ($result) {
+				return $result;
+			}
 			if (!$this->db->inTransaction()) {
 				$this->db->beginTransaction();
 			}
-			
+
 
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
@@ -364,6 +386,7 @@ abstract class cls_poliza extends cls_db
 				return [
 					'data' => [
 						'res' => "Registro exitoso",
+						"code" => 200,
 						"id" => $this->id
 					],
 					'code' => 200
@@ -411,7 +434,7 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->cobertura;
 	}
-	
+
 	protected function RegistrarPoliza()
 	{
 		$sql = $this->db->prepare("SELECT * FROM poliza WHERE cliente_id = ? AND vehiculo_id = ?");
@@ -419,8 +442,8 @@ abstract class cls_poliza extends cls_db
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 			if (!isset($resultado[0])) {
 				$sql = $this->db->prepare("INSERT INTO poliza(cliente_id, titular_id, vehiculo_id, poliza_fechaInicio, poliza_fechaVencimiento,
-				tipoContrato_id, estado_id,cobertura_id,poliza_renovacion,debitoCredito ) 
-				VALUES(?,?,?,?,?,?,?,?,0,?)");
+				tipoContrato_id, estado_id,usuario_id,sucursal_id,cobertura_id,poliza_renovacion,debitoCredito ) 
+				VALUES(?,?,?,?,?,?,?,?,?,?,0,?)");
 				$result = $sql->execute([
 					$this->cliente,
 					$this->idTitular,
@@ -429,6 +452,8 @@ abstract class cls_poliza extends cls_db
 					$this->fechaVencimiento,
 					$this->tipoContrato,
 					$this->estado,
+					$this->usuario,
+					$this->sucursal,
 					$this->cobertura,
 					$this->debitoCredito
 				]);
@@ -537,7 +562,8 @@ abstract class cls_poliza extends cls_db
 			return false;
 		return $this->vehiculo;
 	}
-	protected function SearchbyContrato(){
+	protected function SearchbyContrato()
+	{
 		$sql = $this->db->prepare("SELECT * FROM tipocontrato WHERE contrato_nombre = ?");
 		$sql->execute([$this->tipoContrato]);
 		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
@@ -653,6 +679,32 @@ abstract class cls_poliza extends cls_db
 		return $this->idTitular;
 	}
 
+	protected function SearchByUsuario()
+	{
+		$sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
+		if ($sql->execute([$this->usuario])) {
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				$this->usuario = $resultado["usuario_id"];
+			}
+		}
+		return $this->usuario;
+	}
+
+	protected function SearchBySucursal()
+	{
+		$sql = $this->db->prepare("SELECT * FROM sucursal WHERE sucursal_nombre = ?");
+		if ($sql->execute([$this->sucursal])) {
+			$rowCount = $sql->rowCount();
+			if ($rowCount > 0) {
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				$this->sucursal = $resultado["sucursal_id"];
+			}
+		}
+		return $this->sucursal;
+	}
+
 	protected function GetAll($id)
 	{
 		if ($id == 57) {
@@ -699,7 +751,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
-        WHERE poliza_id = $id");
+        WHERE poliza.poliza_id = $id");
 		if ($sql->execute()) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		} else {
@@ -925,5 +977,219 @@ abstract class cls_poliza extends cls_db
 		$sql->execute([$desde, $hasta]);
 		$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
 		return $dato;
+	}
+
+	protected function Security()
+	{
+		//Contrato
+		if (empty($this->tipoContrato)) {
+			return [
+				"data" => [
+					"res" => "El tipo de contrato no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		// Contratante
+		if (empty($this->nombre)) {
+			return [
+				"data" => [
+					"res" => "El nombre del contratante no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->apellido)) {
+			return [
+				"data" => [
+					"res" => "El apellido del contratante no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->cedula)) {
+			return [
+				"data" => [
+					"res" => "La cédula del contratante no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->direccion)) {
+			return [
+				"data" => [
+					"res" => "La dirección del contratante no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+
+		//Titular
+		if (empty($this->cedulaTitular)) {
+			return [
+				"data" => [
+					"res" => "La cédula del titular no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->nombreTitular)) {
+			return [
+				"data" => [
+					"res" => "El nombre del titular no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->apellidoTitular)) {
+			return [
+				"data" => [
+					"res" => "El apellido del titular no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+
+		//Vehiculo
+		if (empty($this->placa)) {
+			return [
+				"data" => [
+					"res" => "La placa del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->puesto)) {
+			return [
+				"data" => [
+					"res" => "La cantidad de puestos del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->ano)) {
+			return [
+				"data" => [
+					"res" => "El año del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->serialMotor)) {
+			return [
+				"data" => [
+					"res" => "El serial del motor no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->serialCarroceria)) {
+			return [
+				"data" => [
+					"res" => "El serial de carroceria no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->color)) {
+			return [
+				"data" => [
+					"res" => "El color del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->modelo)) {
+			return [
+				"data" => [
+					"res" => "El modelo del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->marca)) {
+			return [
+				"data" => [
+					"res" => "La marca del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->uso)) {
+			return [
+				"data" => [
+					"res" => "El uso del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->clase)) {
+			return [
+				"data" => [
+					"res" => "La clase del vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->tipo)) {
+			return [
+				"data" => [
+					"res" => "El tipo de vehiculo no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
+	}
+
+	protected function SecurityMedico()
+	{
+		if (empty($this->cedula)) {
+			return [
+				"data" => [
+					"res" => "La cédula no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->nombre)) {
+			return [
+				"data" => [
+					"res" => "El nombre no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->apellido)) {
+			return [
+				"data" => [
+					"res" => "El apellido no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->fechaNacimiento)) {
+			return [
+				"data" => [
+					"res" => "La fecha de nacimiento no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->edad)) {
+			return [
+				"data" => [
+					"res" => "La edad no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->sangre)) {
+			return [
+				"data" => [
+					"res" => "El tipo de sangre no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
 	}
 }

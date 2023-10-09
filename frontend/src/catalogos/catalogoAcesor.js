@@ -38,6 +38,7 @@ const CatalogoAcesor = props => {
     const headCells = [
         { id: 'Cedula', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-code'> Codigo</i>, textAlign: 'center', fontFamily: 'georgia' },
         { id: 'Nombre', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Nombre</i>, textAlign: 'center', fontFamily: 'georgia' },
+        { id: 'Apellido', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Apellido</i>, textAlign: 'center', fontFamily: 'georgia' },
    
     ]
 
@@ -180,6 +181,7 @@ const CatalogoAcesor = props => {
                                     <TableRow key={item.idclaseminas} style={{ padding: "0" }} onClick={seleccionarClase(index)}>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_id}</TableCell>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_nombre}</TableCell>
+                                        <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_apellido}</TableCell>
                                  
                                     </TableRow>
 

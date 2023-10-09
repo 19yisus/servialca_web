@@ -21,7 +21,7 @@ import axios from "axios";
 import useTable from "../components/useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
-import { GestionarPreguntas } from "../components/componentesIglesia/configuracion/preguntasSeguridad";
+
 import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
 import { ModalRcv } from "../components/administracion/modalRcv";
 import { ModalImprimir } from "../components/administracion/modalImprimir";
@@ -29,6 +29,7 @@ import { ModalLicencia } from "../components/administracion/modalLicencia";
 import { ModalConsultarPoliza } from "../components/administracion/modalConsultarPoliza";
 import { ModalRenovarPoliza } from "../components/administracion/modalRenovar";
 import { formatMoneda, validaMonto, formatoMonto } from "../util/varios";
+
 function Inicio2() {
   var op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");

@@ -13,25 +13,43 @@ abstract class cls_claseVehiculo extends cls_db
 	protected function Save()
 	{
 		try {
-			$result = $this->SearchByNombre($this->nombre);
-			if (isset($result[0])) {
+			if (empty($this->nombre)) {
 				return [
 					"data" => [
-						"res" => "Este nombre de clase vehiuclo ($this->nombre) ya existe"
+						"res" => "El nombre de la clase de vehículo no puede estar vacío",
+						"code" => 400
 					],
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO clasevehiculo(clase_nombre,clase_estatus) VALUES(?,1)");
+
+			$result = $this->SearchByNombre($this->nombre);
+
+			if (isset($result[0])) {
+				return [
+					"data" => [
+						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe"
+						
+					],
+					"code" => 400
+				];
+			}
+
+			$sql = $this->db->prepare("INSERT INTO clasevehiculo(clase_nombre, clase_estatus) VALUES(?, 1)");
 			$sql->execute([$this->nombre]);
+
 			$this->id = $this->db->lastInsertId();
-			if ($sql->rowCount() > 0)
+
+			if ($sql->rowCount() > 0) {
 				return [
 					"data" => [
 						"res" => "Registro exitoso"
+						
 					],
 					"code" => 200
 				];
+			}
+
 			return [
 				"data" => [
 					"res" => "El registro ha fallado"
@@ -47,6 +65,7 @@ abstract class cls_claseVehiculo extends cls_db
 			];
 		}
 	}
+
 
 	protected function update()
 	{
@@ -141,7 +160,7 @@ abstract class cls_claseVehiculo extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo ORDER BY clase_id ASC");
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo ORDER BY clase_id DESC");
 		if ($sql->execute())
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else

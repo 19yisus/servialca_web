@@ -58,4 +58,3 @@ abstract class cls_medico extends cls_db
         }    
     }
 }
-?>
