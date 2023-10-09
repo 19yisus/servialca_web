@@ -29,7 +29,10 @@ abstract class cls_panel extends cls_db
 				$sql->execute([$name, $tag, $ruta]);
 			}
 		}
-
+  }
+  
+	protected function Save($datos)
+	{
 		if (isset($datos)) {
 			$sqlc = $this->db->query("SELECT * FROM pagina_web WHERE 1");
 			// $resultado = $sqlc->fetchAll(PDO::FETCH_ASSOC);
@@ -44,7 +47,7 @@ abstract class cls_panel extends cls_db
 
 		return 1;
 	}
-
+  
 	private function buscar_y_desactivar($tag)
 	{
 		$this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
