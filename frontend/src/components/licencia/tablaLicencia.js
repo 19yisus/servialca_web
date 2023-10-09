@@ -437,12 +437,7 @@ function TablaLicencia() {
                     >
                       <i className="fas fa-print"></i>
                     </button>
-                    <button
-                      onClick={gestionarBanco(3, item.licencia_id)}
-                      className="btn btn-sm mx-1 btn-danger rounded-circle"
-                    >
-                      <i className="fa fa-trash"></i>{" "}
-                    </button>
+                    
                   </TableCell>
                 </TableRow>
               ))}

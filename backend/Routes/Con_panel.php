@@ -18,24 +18,15 @@ class Con_panel extends cls_panel
   {
     $img_files_name = [];
     $i = 0;
-
-    if (isset($_FILES["carrusel_1"])) {
-      $item = $_FILES["carrusel_1"];
-
-      if ($item["tmp_name"] != "") {
-        $tmp_name = $item["tmp_name"];
+    foreach ($_FILES as $fieldName => $fileInfo) {
+      if ($fileInfo["tmp_name"] != "") {
+        $tmp_name = $fileInfo["tmp_name"];
         $fechaHoraActual = date("YmdHis");
-        $name = $fechaHoraActual . "_(" . $i . ")_" . basename($item["name"]);
-        move_uploaded_file($tmp_name, "Img/$name");
-        array_push($img_files_name, ["name" => $name, "tag" => "carrusel_1"]);
-        $this->reg_file_info($_POST, $img_files_name);
+        $name = $fechaHoraActual . "_(" . $i . ")_" . basename($fileInfo["name"]);
+        move_uploaded_file($tmp_name, "ImgPanel/$name");
+        array_push($img_files_name, ["name" => $name, "tag" => $fieldName]);
         $i++;
       }
     }
-  }
-  public function Guardar(){
-    $resultado = $this->Save($_POST);
-    // fsdfsdf
-    Response($resultado['data'], $resultado['code']);
   }
 }

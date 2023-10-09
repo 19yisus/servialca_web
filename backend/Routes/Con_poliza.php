@@ -68,10 +68,17 @@ class Con_poliza extends cls_poliza
         $this->edad = isset($_POST["Edad"]) ? $_POST["Edad"] : null;
         $this->sangre = isset($_POST["tipoSangre"]) ? $_POST["tipoSangre"] : null;
         $this->lente = isset($_POST["Lente"]) ? $_POST["Lente"] : null;
-
         $this->cliente = isset($_POST["idCliente"]) ? $_POST["idCliente"] : null;
         $this->idTitular = isset($_POST["idTitular"]) ? $_POST["idTitular"] : null;
         $this->vehiculo = isset($_POST["idVehiculo"]) ? $_POST["idVehiculo"] : null;
+
+        //Licencia
+        $this->correoLicencia = isset($_POST["correoLicencia"]) ? $_POST["correoLicencia"] : null;
+        $this->licencia = isset($_POST["Licencia"]) ? $_POST["Licencia"] : null;
+        $this->licenciaRestante = isset($_POST["licenciaRestante"]) ? $_POST["licenciaRestante"] : null;
+        $this->montoTotal = isset($_POST["montoTotal"]) ? $_POST["montoTotal"] : null;
+        $this->abonado = isset($_POST["Abonado"]) ? $_POST["Abonado"] : null;
+        $this->restante = isset($_POST["Restante"]) ? $_POST["Restante"] : null;
     }
 
     public function registrar()
@@ -86,13 +93,16 @@ class Con_poliza extends cls_poliza
         Response($resultado['data'], $resultado['code']);
     }
 
+    public function registrarLicencia(){
+        $resultado = $this->SaveLicencia($_POST["precioDolar"],1, "Licencia");
+        Response($resultado["data"], $resultado["code"]);
+    }
+
     public function editar()
     {
         $resultado = $this->Edit();
         Response($resultado['data'], $resultado['code']);
     }
-
-
 
     public function renovar()
     {

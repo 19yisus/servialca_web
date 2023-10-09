@@ -21,10 +21,22 @@ function Panel() {
 
   console.log(user_id);
 
-  const carrusel_1 = useState(); 
-  const [carrusel_2, setCarrusel2] = useState();
-  const [carrusel_3, setCarrusel3] = useState();
-
+  const carrusel_1 = useState();
+  const carrusel_2 = useState();
+  const carrusel_3 = useState();
+  const img_home = useState();
+  const text_home = useState();
+  const img_about = useState();
+  const text_about = useState();
+  const text_mision = useState();
+  const text_vision = useState();
+  const text_ubicacion = useState();
+  const text_correo = useState();
+  const text_telefono = useState();
+  const text_banner = useState();
+  const img_banner = useState();
+  const img_login = useState();
+  const text_fax = useState;
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [operacion, setOperacion] = useState();
@@ -132,9 +144,21 @@ function Panel() {
 
     let bodyF = new FormData();
 
-   bodyF.append("carrusel_1", carrusel_1.current.files[0]);
-
-
+    bodyF.append("carrusel_1", carrusel_1.current.files[0]);
+    bodyF.append("carrusel_2", carrusel_2.current.files[0]);
+    bodyF.append("carrusel_3", carrusel_3.current.files[0]);
+    bodyF.append("text_home", text_home.current.value);
+    bodyF.append("text_about", text_about.current.value);
+    bodyF.append("text_mision", text_mision.current.value);
+    bodyF.append("text_vision", text_vision.current.value);
+    bodyF.append("text_ubicacion", text_ubicacion.current.value);
+    bodyF.append("text_correo", text_correo.current.value);
+    bodyF.append("text_telefono", text_telefono.current.value);
+    bodyF.append("img_home", img_home.current.files[0]);
+    bodyF.append("img_about", img_about.current.files[0]);
+    bodyF.append("text_banner", text_banner.current.value);
+    bodyF.append("img_banner", img_banner.current.files[0]);
+    bodyF.append("img_login", img_login.current.files[0]);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -224,6 +248,7 @@ function Panel() {
                   type="file"
                   style={{ height: "170px", width: "100%" }}
                   id="img_home"
+                  ref={img_home}
                   name="home_1"
                   class="form-control bg-transparent border "
                 />
@@ -232,6 +257,7 @@ function Panel() {
               <div class="col-md-8">
                 <textarea
                   name="text_home"
+                  ref={text_home}
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   placeholder="Agregar una descripción"
@@ -249,6 +275,7 @@ function Panel() {
                   type="file"
                   style={{ height: "170px", width: "100%" }}
                   id="img_about"
+                  ref={img_about}
                   name="about_1"
                   class="form-control bg-transparent border "
                 />
@@ -257,6 +284,7 @@ function Panel() {
               <div class="col-md-8">
                 <textarea
                   name="text_about"
+                  ref={text_about}
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   placeholder="Agregar una descripción"
@@ -275,6 +303,7 @@ function Panel() {
                 </label>
                 <textarea
                   name="text_mision"
+                  ref={text_mision}
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
@@ -289,6 +318,7 @@ function Panel() {
                 </label>
                 <textarea
                   name="text_vision"
+                  ref={text_vision}
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
@@ -306,54 +336,73 @@ function Panel() {
                 <input
                   type="input"
                   name="text_ubicacion"
+                  ref={text_ubicacion}
                   class="form-control"
                 />
               </div>
               <div class="mb-2 col-md-6">
                 <label class="form-label">Correo Electronico</label>
-                <input type="email" name="text_correo" class="form-control" />
+                <input
+                  type="email"
+                  ref={text_correo}
+                  name="text_correo"
+                  class="form-control"
+                />
               </div>
               <div class="mb-2 col-md-6">
                 <label class="form-label">Telefono</label>
-                <input type="input" name="text_telefono" class="form-control" />
+                <input
+                  type="input"
+                  ref={text_telefono}
+                  name="text_telefono"
+                  class="form-control"
+                />
               </div>
-              <div class="mb-2 col-md-6">
+              {/* <div class="mb-2 col-md-6">
                 <label class="form-label">Fax</label>
                 <input type="input" name="text_fax" class="form-control" />
-              </div>
-              <div class="mb-2 col-md-12">
+              </div> */}
+              <div class="mb-2 col-md-6">
                 <label class="form-label">Banner de Texto</label>
-                <input type="text" name="text_banner" class="form-control" />
-              </div>
-            </fieldset>
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
-              <div class="col-md-12 mb-2">
-                <label class="fw-bold w-auto ">Banner</label>
-              </div>
-
-              <div class="col-md-4 px-0 mx-auto mb-3">
                 <input
-                  type="file"
-                  style={{ height: "170px", width: "100%" }}
-                  id="img_banner"
-                  name="img_banner"
-                  class="form-control bg-transparent border "
+                  type="text"
+                  ref={text_banner}
+                  name="text_banner"
+                  class="form-control"
                 />
               </div>
             </fieldset>
+            {
+              <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+                <div class="col-md-12 mb-2">
+                  <label class="fw-bold w-auto ">Banner</label>
+                </div>
+
+                <div class="col-md-4 px-0 mx-auto mb-3">
+                  <input
+                    type="file"
+                    style={{ height: "170px", width: "100%" }}
+                    ref={img_banner}
+                    id="img_banner"
+                    name="img_banner"
+                    class="form-control bg-transparent border "
+                  />
+                </div>
+              </fieldset>
+            }
 
             <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
               <div class="col-md-12 ">
                 <label class="fw-bold w-auto">Login</label>
               </div>
               <div class="col-md-12">
-                <textarea
-                  class="form-control"
-                  name="text_login"
-                  id="exampleFormControlTextarea1"
-                  placeholder="Agregar una descripción"
-                  rows="6"
-                ></textarea>
+                <input
+                  type="file"
+                  style={{ height: "170px", width: "100%" }}
+                  ref={img_login}
+                  name="img_banner"
+                  class="form-control bg-transparent border "
+                />
               </div>
             </fieldset>
 
