@@ -6,7 +6,7 @@ class cls_Auth extends cls_db
 {
   protected $id, $usuario, $nombre, $apellido, $cedula, $telefono, $direccion, $correo, $clave, $rol, $sucursal, $estatus, $modulo;
 
-  protected $id_pregunta, $id_respuesta, $des_respuesta;
+  protected $id_pregunta, $id_respuesta, $des_respuesta, $permiso;
 
   public function __construct()
   {

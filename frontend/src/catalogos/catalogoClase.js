@@ -206,7 +206,7 @@ const CatalogoClase = (props) => {
                         verticalAlign: "middle",
                       }}
                     >
-                      {item.clase_id}
+                      {item.claseVehiculo_id}
                     </TableCell>
                     <TableCell
                       style={{

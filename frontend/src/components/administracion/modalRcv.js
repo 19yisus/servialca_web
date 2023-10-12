@@ -287,17 +287,34 @@ export const ModalRcv = (props) => {
       );
   };
 
+  const selecionarPrecio = async () => {
+    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("Contrato", TxtTipoContrato.current.value);
+    bodyF.append("Tipo", cmbTipo.current.value);
+    bodyF.append("Sucursal", cmbSucursal.current.value);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log("tipo contrato");
+        setTipoContrato(response);
+        console.log(response);
+        txtDolar.current.value(response.precio_monto)
+      })
+      .catch((error) => console.log("Precio: Falta uno de los parametros"));
+  };
+
   const selecionarTipoContrato = async () => {
     let endpoint = op.conexion + "/tipo_contrato/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
-
     let bodyF = new FormData();
-
     // bodyF.append("ID", user_id)
-
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -982,6 +999,7 @@ export const ModalRcv = (props) => {
           </li>
           <li class="nav-item" role="presentation">
             <a
+              onClick={(e) => selecionarPrecio(e)}
               class="nav-link"
               id="ex1-tab-3"
               data-mdb-toggle="tab"

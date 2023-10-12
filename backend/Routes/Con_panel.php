@@ -14,6 +14,17 @@ class Con_panel extends cls_panel
     Response($resultado, 200);
   }
 
+  public function ConsultarTodosWeb()
+  {
+    $resultado = $this->GetAllWeb();
+    Response($resultado, 200);
+  }
+
+  public function ConsultarTag(){
+    $resultado = $this->getImg($_POST["tag"]);
+    Response($resultado,200);
+  }
+
   public function SetAndSaveImages()
   {
     $img_files_name = [];
@@ -28,5 +39,6 @@ class Con_panel extends cls_panel
         $i++;
       }
     }
+    $this->Save($_POST);
   }
 }

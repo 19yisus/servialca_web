@@ -8,10 +8,15 @@ abstract class cls_grafica extends cls_db
         parent::__construct();
     }
 
-    public function Consultar_Diario()
+    public function Consultar_Diario($desde, $hasta)
     {
-        $desde = "2023-09-01";
-        $hasta = "2023-09-30";
+        if (!$desde) {
+            $desde = date("Y-m-d");
+        }
+
+        if (!$hasta) {
+            $hasta = date("Y-m-d");
+        }
         $sql = $this->db->prepare("SELECT debitocredito.*, usuario.*, sucursal.* FROM debitocredito
         LEFT JOIN usuario ON usuario.usuario_id = debitocredito.usuario_id
         LEFT JOIN sucursal ON sucursal.sucursal_id = debitocredito.sucursal_id
@@ -32,49 +37,43 @@ abstract class cls_grafica extends cls_db
         $year = date('Y');
         $fechaInicio = $year . '-01-01';
         $fechaFin = $year . '-12-31';
-        $sql = $this->db->prepare("SELECT MONTH(nota_fecha) AS mes, SUM(nota_monto) AS suma_monto FROM debitocredito WHERE nota_fecha BETWEEN ? AND ? GROUP BY MONTH(nota_fecha)");
+        $sql = $this->db->prepare("SELECT MONTH(nota_fecha) AS mes, COUNT(*) AS cantidad FROM debitocredito WHERE nota_fecha BETWEEN ? AND ? GROUP BY mes");
         if ($sql->execute([$fechaInicio, $fechaFin])) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-            // Array para almacenar la suma de montos de cada mes
-            $sumaMontosPorMes = array_fill(1, 12, 0); // Inicializar con ceros
+            // Array para almacenar la cantidad de registros por mes
+            $cantidadRegistrosPorMes = array_fill(1, 12, 0); // Inicializar con ceros
             $totalDatos = 0;
+            // Obtener nombres de los meses
+            $nombresMeses = [
+                1 => "Enero",
+                2 => "Febrero",
+                3 => "Marzo",
+                4 => "Abril",
+                5 => "Mayo",
+                6 => "Junio",
+                7 => "Julio",
+                8 => "Agosto",
+                9 => "Septiembre",
+                10 => "Octubre",
+                11 => "Noviembre",
+                12 => "Diciembre"
+            ];
             foreach ($resultado as $fila) {
                 $mes = $fila['mes'];
-                $sumaMonto = $fila['suma_monto'];
-                $sumaMontosPorMes[$mes] = $sumaMonto;
-                $totalDatos += $sumaMonto;
+                $cantidad = $fila['cantidad'];
+                $cantidadRegistrosPorMes[$mes] = $cantidad;
+                $totalDatos += $cantidad;
             }
-            $enero = $sumaMontosPorMes[1];
-            $febrero = $sumaMontosPorMes[2];
-            $marzo = $sumaMontosPorMes[3];
-            $abril = $sumaMontosPorMes[4];
-            $mayo = $sumaMontosPorMes[5];
-            $junio = $sumaMontosPorMes[6];
-            $julio = $sumaMontosPorMes[7];
-            $agosto = $sumaMontosPorMes[8];
-            $septiembre = $sumaMontosPorMes[9];
-            $octubre = $sumaMontosPorMes[10];
-            $noviembre = $sumaMontosPorMes[11];
-            $diciembre = $sumaMontosPorMes[12];
-            $meses = [
-                "enero" => $enero,
-                "febrero" => $febrero,
-                "marzo" => $marzo,
-                "abril" => $abril,
-                "mayo" => $mayo,
-                "junio" => $junio,
-                "julio" => $julio,
-                "agosto" => $agosto,
-                "septiembre" => $septiembre,
-                "octubre" => $octubre,
-                "noviembre" => $noviembre,
-                "diciembre" => $diciembre,
-                "monto" => $totalDatos
-            ];
+
+            // Crear un arreglo con los nombres de los meses y la cantidad de registros
+            $meses = [];
+            foreach ($nombresMeses as $mesNumero => $nombreMes) {
+                $meses[$nombreMes] = $cantidadRegistrosPorMes[$mesNumero];
+            }
+
             return $meses;
         } else {
             $resultado = [];
         }
     }
-
 }
