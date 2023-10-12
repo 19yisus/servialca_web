@@ -15,7 +15,7 @@ function PaginaWeb(props) {
   const [loading, setLoading] = useState(false);
 
   let op = require("../modulos/datos");
-  const [bloquear, setBloquear] = useState(0);
+  const [values, setValues] = useState(0);
   const context = useContext(AuthContext);
   const [activate, setActivate] = useState(false);
 
@@ -29,58 +29,46 @@ function PaginaWeb(props) {
     icono: "",
   });
 
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "mfigueroa",
-    password: "+11078879*",
-  });
+
+
+  const selecionarRegistros = async () => {
+    let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
+    console.log(endpoint);
+    setActivate(true);
+
+    //setLoading(false);
+
+    let bodyF = new FormData();
+
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setValues(response[0])
+       
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
 
   useEffect(() => {
-    context.logout();
+    selecionarRegistros();
   }, []);
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
-
-  const bloquearUsuario = () => {
-    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
-    let body;
-
-    body = {
-      usuario: values.username.toLowerCase(),
-    };
-
-    axios
-      .post(endpoint, body, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
-      })
-      .then(function (response) {
-        if (response.status === 200) {
-          setBloquear(1);
-          setMensaje({
-            mostrar: true,
-            titulo: "Notificación",
-            texto: "Por Razones de Seguridad su usuario a sido bloqueado",
-            icono: "informacion",
-          });
-        }
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
-        setMensaje({
-          mostrar: true,
-          titulo: "Error",
-          texto:
-            error.response.data.message ===
-            "llave duplicada viola restricción de unicidad «persona_pkey»"
-              ? "ya existe una persona con esa cedula"
-              : error.response.data.message,
-          icono: "error",
-        });
-      });
-  };
 
   const sinIgn = async () => {
     let endpoint = op.conexion + "/Auth/login";
@@ -239,18 +227,7 @@ function PaginaWeb(props) {
         </figure>
       </div>
       <div class="col-md-12 mx-auto" id="home">
-        <div class="col-md-12 mx-auto row py-5" id="homediv">
-          <div class="col-md-12 mx-auto text-center mt-5 py-4">
-            <h1 class="fw-bold text-center text-servial">
-              - <i class="fas fa-home"></i> Home -
-            </h1>
-          </div>
-
-          <div class="col-md-5 mx-auto"></div>
-          <div class="col-md-7 mx-auto text-center">
-            aqui si le pone el texto de quienes son son y todo eso
-          </div>
-        </div>
+        
         <Fade left>
           <div class="col-md-12 mx-auto" id="home">
             <div class="col-md-12 mx-auto row py-5"  id="homediv">
@@ -263,7 +240,7 @@ function PaginaWeb(props) {
                 
               </div>
               <div class="col-md-7 mx-auto text-center">
-                aqui si le pone el texto de quienes son son y todo eso
+              {values.text_home}
               </div>
 
             </div>
@@ -286,7 +263,7 @@ function PaginaWeb(props) {
               </div>
               <div class="col-md-12 mx-auto row py-5" >
                 <div class="col-md-6 mx-auto text-center">
-                  aqui si le pone el texto de quienes son son y todo eso
+                {values.text_about}
                 </div>
 
                 <div class="col-md-6 mx-auto py-4">
@@ -330,19 +307,20 @@ function PaginaWeb(props) {
                   <ul class="fa-ul" >
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-home"></i></h5>
-                      <h5 class="ms-2">Acarigua</h5>
+                      <h5 class="ms-2">                {values.text_ubicacion}
+</h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
-                      <h5 class="ms-2">acarigua@example.com</h5>
+                      <h5 class="ms-2"> {values.text_correo}</h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-phone"></i></h5>
-                      <h5 class="ms-2">+ 00 000 000 00</h5>
+                      <h5 class="ms-2"> {values.text_telefono}</h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-print"></i></h5>
-                      <h5 class="ms-2">+ 00 000 000 00</h5>
+                      <h5 class="ms-2"> {values.text_fax}</h5>
                     </li>
                   </ul>
                 </div>
@@ -359,21 +337,26 @@ function PaginaWeb(props) {
             
             <div class="col-md-12 mx-auto row py-5" >
               <div class="col-md-6 mx-auto py-4">
-              <div class="col-md-12 mx-auto row py-5" >
+              <div class="col-md-12 mx-auto text-center row py-5" >
 
               <div class="col-md-12 mx-auto text-center">
                 <h1 class="fw-bold text-center text-servial" >- Vision -
                 </h1>
               </div>
+          
+              <h5 class="ms-2 mt-3"> {values.text_vision}</h5>
               </div>
               </div>
               <div class="col-md-6 mx-auto py-4">
-              <div class="col-md-12 mx-auto row py-5">
+              <div class="col-md-12 mx-auto text-center row py-5">
 
                 <div class="col-md-12 mx-auto text-center">
                   <h1 class="fw-bold text-center text-servial" >- Mision -
                   </h1>
                 </div>
+             
+              <h5 class="ms-2 mt-3"> {values.text_mision}</h5>
+
                 </div>
               </div>
               

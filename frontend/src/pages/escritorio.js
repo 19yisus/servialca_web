@@ -32,6 +32,7 @@ import TablaDocumento from "../components/administracion/tablaDocumento";
 import TablaGastos from "../components/gastosPersonales/tablaGastos";
 import Panel from "./panel";
 import TablaPrecio from "../components/listaPrecios/tablaPrecios";
+import TablaLicencias from "../components/administracion/tablaLicencia";
 
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
@@ -278,6 +279,15 @@ function MenuImpuestoPP(props) {
                           <i class="fas fas-fw me-1 fa-file-signature"></i>
                           <span>Documentos</span>
                         </a>
+                      
+                          <a
+                            href="/licencias"
+                            className="list-group-item list-group-item-action py-2 ripple"
+                          >
+                            <i class="fas fas-fw me-1 fa-clipboard-list"></i>
+                            <span>Licencias</span>
+                          </a>
+                     
                       </div>
                     </div>
                   </div>
@@ -551,6 +561,8 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
               <AuthRoute exact path="/listaPrecios" component={TablaPrecio}/>
+              <AuthRoute exact path="/licencias" component={TablaLicencias}/>
+
               <AuthRoute
                 exact
                 path="/gastosPersonales"

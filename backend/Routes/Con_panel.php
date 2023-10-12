@@ -14,6 +14,12 @@ class Con_panel extends cls_panel
     Response($resultado, 200);
   }
 
+  public function ConsultarTodosTexts()
+  {
+    $resultado = $this->GetAllText();
+    Response($resultado, 200);
+  }
+
   public function SetAndSaveImages()
   {
     $img_files_name = [];
