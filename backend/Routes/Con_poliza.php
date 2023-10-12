@@ -74,6 +74,7 @@ class Con_poliza extends cls_poliza
 
         //Licencia
         $this->correoLicencia = isset($_POST["correoLicencia"]) ? $_POST["correoLicencia"] : null;
+        $this->sangre = isset($_POST["Sangre"]) ? $_POST["Sangre"] : null;
         $this->licencia = isset($_POST["Licencia"]) ? $_POST["Licencia"] : null;
         $this->licenciaRestante = isset($_POST["licenciaRestante"]) ? $_POST["licenciaRestante"] : null;
         $this->montoTotal = isset($_POST["montoTotal"]) ? $_POST["montoTotal"] : null;

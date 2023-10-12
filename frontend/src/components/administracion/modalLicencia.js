@@ -228,11 +228,14 @@ export const ModalLicencia = (props) => {
       regex = /[a-z]/ig;
     if (!regex.test(char)) e.preventDefault(); return false;
   }*/
-  const seleccionarCliente = (nombre, apellido, cedula) => {
+  const seleccionarCliente = (nombre, apellido, cedula, nacionalidad, Correo, Codigo, telefono) => {
     console.log(nombre, apellido, cedula);
+    cmbNacionalidad.current.value = nacionalidad + "-";
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
+    cmbTelefono.current.value = Codigo + "-";
+    txtTelefono.current.value = telefono;
     setMostrar(false);
   };
 

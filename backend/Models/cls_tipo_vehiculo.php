@@ -5,7 +5,7 @@ if (!class_exists('cls_db'))
 
 abstract class cls_tipo_vehiculo extends cls_db
 {
-  protected $id, $nombre, $precio, $idContrato, $estatus;
+  protected $id, $nombre, $precio, $idContrato, $estatus, $sucursal;
 
   public function __construct()
   {
@@ -24,7 +24,7 @@ abstract class cls_tipo_vehiculo extends cls_db
           "code" => 400
         ];
       }
-      $result = $this->SearchByNombre($this->nombre);
+      $result = $this->SearchByNombre();
       if (isset($result[0])) {
         return [
           "data" => [
@@ -41,9 +41,8 @@ abstract class cls_tipo_vehiculo extends cls_db
 
       $sql = $this->db->prepare("INSERT INTO tipovehiculo(        
         tipoVehiculo_nombre,
-        sucursal_id,
         tipoVehiculo_estatus
-        )  VALUES(?,1,1)");
+        )  VALUES(?,1)");
       if (
         $sql->execute([$this->nombre])
       ) {
@@ -160,7 +159,7 @@ abstract class cls_tipo_vehiculo extends cls_db
     return $resultado;
   }
 
-  protected function SearchByNombre($nombre)
+  protected function SearchByNombre()
   {
     $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre = ?");
     if ($sql->execute([$this->nombre]))
@@ -169,7 +168,15 @@ abstract class cls_tipo_vehiculo extends cls_db
       $resultado = [];
     return $resultado;
   }
-
+  protected function SearchBySucursal()
+  {
+    $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre = ?");
+    if ($sql->execute([$this->sucursal]))
+      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else
+      $resultado = [];
+    return $resultado;
+  }
   protected function GetAll()
   {
     $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*, precio.* FROM precio 
@@ -191,8 +198,9 @@ abstract class cls_tipo_vehiculo extends cls_db
           $this->$key = str_replace(',', '.', $value);
         }
       }
-      $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, precio_monto)VALUES(?,?,?)");
-      if ($sql->execute([$this->id, $this->idContrato, $this->precio])) {
+      $this->SearchBySucursal();
+      $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, sucursal_id, precio_monto)VALUES(?,?,?,?)");
+      if ($sql->execute([$this->id, $this->idContrato, $this->sucursal, $this->precio])) {
         $this->id = $this->db->lastInsertId();
       }
       if ($sql->rowCount() > 0)
@@ -230,6 +238,23 @@ abstract class cls_tipo_vehiculo extends cls_db
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     else
       $resultado = [];
+    return $resultado;
+  }
+
+  protected function SearchByPrecio($contrato, $tipo, $sucursal)
+  {
+    $sql = $this->db->prepare("SELECT precio.* FROM precio 
+    JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
+    JOIN tipovehiculo ON tipoVehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
+    JOIN sucursal ON sucursal.sucursal_id = precio.sucursal_id 
+    WHERE tipocontrato.contrato_nombre = ? 
+    AND tipovehiculo.tipoVehiculo_nombre = ?
+    AND sucursal.sucursal_nombre = ?");
+    if ($sql->execute([$contrato, $tipo, $sucursal])) {
+      $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $resultado = [];
+    }
     return $resultado;
   }
 }
