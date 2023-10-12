@@ -80,6 +80,16 @@ export const ModalRcv = (props) => {
   const txtBs = useRef();
   const txtDolar = useRef();
 
+  //otros
+  const txtNContrato = useRef();
+  const txtTipoContrato = useRef();
+  const txtFechaEmision = useRef();
+  const txtFechaVencimiento = useRef();
+  const txtDireccion = useRef();
+  const txtPuestos = useRef();
+  const txtAnio = useRef();
+  const txtTipoVehiculo = useRef();
+  const txtCapTone = useRef();
   const [vehiculo, setVehiculo] = useState();
   const [tipoContrato, setTipoContrato] = useState([]);
   const [estados, setEstados] = useState();
@@ -182,8 +192,15 @@ export const ModalRcv = (props) => {
   };
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrar";
-    console.log(endpoint);
+    
+    let endpoint = '';
+
+    if(operacion === 1){
+      endpoint = op.conexion + "/poliza/registrar";
+    } else if(operacion === 2) {
+      endpoint = op.conexion + "/poliza/editar";
+    }
+
     setActivate(true);
 
     //setLoading(false);
@@ -258,7 +275,6 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
         if (response.code == 200) {
           setMensaje({
             mostrar: true,
@@ -311,7 +327,6 @@ export const ModalRcv = (props) => {
 
   const selecionarTipoContrato = async () => {
     let endpoint = op.conexion + "/tipo_contrato/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
     let bodyF = new FormData();
     // bodyF.append("ID", user_id)
@@ -322,9 +337,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("tipo contrato");
         setTipoContrato(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -338,7 +351,6 @@ export const ModalRcv = (props) => {
 
   const selecionarEstado = async () => {
     let endpoint = op.conexion + "/estado/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -354,10 +366,8 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("esyado");
 
         setEstados(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -371,7 +381,6 @@ export const ModalRcv = (props) => {
 
   const selecionarAcesor = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -387,9 +396,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("acesor");
         setAcesor(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -403,7 +410,6 @@ export const ModalRcv = (props) => {
 
   const selecionarSucursal = async () => {
     let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -419,9 +425,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("sucursal");
         setSucursal(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -435,7 +439,6 @@ export const ModalRcv = (props) => {
 
   const selecionarTransporte = async () => {
     let endpoint = op.conexion + "/transporte/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -451,9 +454,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("transporte");
         setTransporte(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -467,7 +468,6 @@ export const ModalRcv = (props) => {
 
   const selecionarUso = async () => {
     let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -483,9 +483,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("uso");
         setUso(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -499,7 +497,6 @@ export const ModalRcv = (props) => {
 
   const selecionarClase = async () => {
     let endpoint = op.conexion + "/claseVehiculo/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -515,9 +512,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("clase");
         setClase(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -531,7 +526,6 @@ export const ModalRcv = (props) => {
 
   const selecionarVehiculo = async () => {
     let endpoint = op.conexion + "/vehiculo/ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -547,9 +541,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("Vehiculo");
         setVehiculo(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -563,7 +555,6 @@ export const ModalRcv = (props) => {
 
   const selecionarTipo = async () => {
     let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
-    console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
@@ -579,9 +570,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log("tipo");
         setTipo(response);
-        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -831,6 +820,74 @@ export const ModalRcv = (props) => {
     );
   };
 
+  const selecionarRegistros = async (id) => {
+    let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
+    setActivate(true)
+
+    let bodyF = new FormData()
+
+    //    bodyF.append("ID", id)
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+
+        setActivate(false)
+        console.log(response[0])
+        txtTipoContrato.current.value = response[0].contrato_nombre
+        txtDesde.current.value = moment(response[0].poliza_fechaInicio).format('YYYY-MM-DD');
+        txtHasta.current.value = moment(response[0].poliza_fechaVencimiento).format('YYYY-MM-DD');
+        cmbNacionalidad.current.value = response[0].cliente_cedula.substring(0,2)
+        txtCedula.current.value = response[0].cliente_cedula.substring(2,response[0].cliente_cedula.length)
+        txtFechaNaci.current.value = moment(response[0].cliente_fechaNacimiento).format('YYYY-MM-DD')
+        txtNombre.current.value = response[0].cliente_nombre;
+        txtApellido.current.value = response[0].cliente_nombre;
+        cmbTelefono.current.value = response[0].cliente_telefono.substring(0,6);
+        txtTelefono.current.value = response[0].cliente_telefono.substring(6, response[0].cliente_telefono.length);
+        txtCorreo.current.value = response[0].cliente_correo;
+        txtDireccion.current.value = response[0].cliente_direccion;
+        cmbEstado.current.value =  response[0].estado_id;
+        txtAcesor.current.value = response[0].usuario_nombre;
+        cmbSucursal.current.value = props.poliza.sucursal_nombre;
+        txtLinea.current.value = '';
+       
+        cmbNacionalidadTitular.current.value = response[0].titular_cedula.substring(0,2)
+        txtCedulatTitular.current.value = response[0].titular_cedula.substring(2,response[0].cliente_cedula.length)
+        txtNombreTitular.current.value = response[0].cliente_nombre;
+        txtApellidoTitular.current.value = response[0].cliente_nombre;
+       
+        txtPlaca.current.value = response[0].vehiculo_placa;
+        txtPuestos.current.value = response[0].vehiculo_puesto;
+        txtUso.current.value = response[0].usoVehiculo_nombre;
+        txtAnio.current.value= response[0].vehiculo_año;
+        txtSerMotor.current.value = response[0].vehiculo_serialMotor;
+        txtClase.current.value = response[0].clase_nombre;
+        txtColor.current.value = response[0].color_nombre;
+        txtSerCarroceria.current.value = response[0].vehiculo_serialCarroceria;
+        txtTipoVehiculo.current.value = response[0].tipoVehiculo_nombre;
+        txtPeso.current.value = formatMoneda(response[0].vehiculo_peso.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+        txtCapTone.current.value = formatMoneda(response[0].vehiculo_capTon.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+        txtModelo.current.value = response[0].modelo_nombre
+        txtMarca.current.value = response[0].marca_nombre
+
+
+
+
+
+
+
+
+
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <Modal
       {...props}
@@ -841,6 +898,12 @@ export const ModalRcv = (props) => {
       backdrop="static"
       keyboard={false}
       onShow={() => {
+      
+        setOperacion(props.operacion)
+        if (props.operacion === 2) {
+        selecionarRegistros(props.idCliente)
+
+        }
         setOperacion(props.operacion);
         selecionarClase();
         selecionarTipoContrato();
@@ -849,15 +912,11 @@ export const ModalRcv = (props) => {
         selecionarSucursal();
         selecionarTransporte();
         selecionarUso();
-        selecionarTipo();
-        if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
-        }
+        selecionarTipo(); 
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>Registro de RCV</Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>{operacion === 1 ? 'Registro de RCV': 'Editar de RCV'} </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -1264,7 +1323,7 @@ export const ModalRcv = (props) => {
                       ref={txtAcesor}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
-                      value={user}
+                      defaultValue={operacion === 1 ? user : ''}
                     />
                     {idUser === 57 ? (
                       <button
@@ -1286,7 +1345,8 @@ export const ModalRcv = (props) => {
                     </span>
 
                     <input
-                      value={suc}
+                   
+                      defaultValue={suc === 1 ? user : ''}
                       disabled
                       type="text"
                       class="form-control"

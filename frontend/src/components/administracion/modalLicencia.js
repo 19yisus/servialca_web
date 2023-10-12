@@ -126,7 +126,13 @@ export const ModalLicencia = (props) => {
   };
 
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarLicencia";
+    let endpoint = ''
+    if(props.operacion === 2){
+      //aqui pon la ruta de editar
+      endpoint = op.conexion + "/poliza/registrarLicencia";
+    }else {
+      endpoint = op.conexion + "/poliza/registrarLicencia";
+    }
     console.log(endpoint);
     setActivate(true);
     let bodyF = new FormData();
@@ -336,7 +342,7 @@ export const ModalLicencia = (props) => {
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>Registrar Licencia</Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>{props.operacion === 2 ? 'Editar Licencia' :'Registrar Licencia'}</Modal.Title>
         <button
           ref={btnCancela}
           className="btn"

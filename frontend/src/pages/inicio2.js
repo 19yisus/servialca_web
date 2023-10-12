@@ -162,18 +162,9 @@ function Inicio2() {
   const { user } = useContext(AuthContext);
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
-  const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
-  const [totaltipo, setTotaltipo] = useState(0.0);
-  const [presupuesto, setPresupuesto] = useState(0.0);
-  const [totalrc, setTotalrc] = useState(0.0);
-  const [totalavi, setTotalavi] = useState(0.0);
-  const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [poliza, setPoliza] = useState();
+
+  const [operacion, setOperacion] = useState();
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
   const [mostrar3, setMostrar3] = useState(false);
@@ -322,13 +313,24 @@ function Inicio2() {
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setIdCliente(id);
+    setOperacion(op)
     if (op === 1) {
       setMostrar5(true);
-    }
-
-    if (op === 3){
+    } else  if (op === 3){
       setMostrar6(true);
     }
+
+
+    if (op === 2){
+      setMostrar2(true)
+    setIdCliente(id.poliza_id);
+    setPoliza(id)
+
+    } else {
+      setIdCliente(id);
+
+    }
+
   };
   const gestionarRcv = (opcion) => (e) => {
     e.preventDefault();
@@ -361,11 +363,15 @@ function Inicio2() {
       />
 
       <ModalRcv
+      operacion={operacion}
         show={mostrar2}
         onHideCancela={() => {
           setMostrar2(false);
         }}
         onHideCancela2={imprimirCertificado}
+        idCliente={idCliente}
+        poliza={poliza}
+
       />
 
       <ModalImprimir
@@ -389,7 +395,7 @@ function Inicio2() {
         }}
         idCliente={idCliente}
       />
-      {
+      
         <ModalLicencia
           show={mostrar4}
           onHideCancela={() => {
@@ -397,7 +403,7 @@ function Inicio2() {
           }}
           idCliente={idCliente}
         />
-      }
+      
 
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
@@ -539,7 +545,7 @@ function Inicio2() {
                       <i className="fas fa-eye"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(2, item.poliza_id)}
+                      onClick={gestionarBanco(2, item)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}

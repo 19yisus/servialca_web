@@ -15,6 +15,11 @@ abstract class cls_panel extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+  
+	protected function GetAllText()
+	{
+		$sql = $this->db->prepare("SELECT * FROM  pagina_web");
+  }
 	public function GetAllWeb()
 	{
 		$sql = $this->db->prepare("SELECT * FROM pagina_web");
@@ -22,6 +27,7 @@ abstract class cls_panel extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+
 	protected function reg_file_info($datos, $file_names)
 	{
 
