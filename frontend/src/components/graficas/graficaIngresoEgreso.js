@@ -93,21 +93,26 @@ function GraficosIngresos() {
 
   const txtDate1 = useRef();
   const txtDate2 = useRef();
-
+  const [rcv, setRcv] = useState();
+  const [renovacion, setRenovacion] = useState();
+  const [seguro, setSeguro] = useState();
+  const [licencia, setLicencia] = useState();
+  const [egreso, setEgreso] = useState();
+  const [otroIngreso, setOtroIngreso] = useState();
+  const [enero, setEnero] = useState();
+  const [febrero, setFebrero] = useState();
+  const [marzo, setMarzo] = useState();
+  const [abril, setAbril] = useState();
+  const [mayo, setMayo] = useState();
+  const [junio, setJunio] = useState();
+  const [julio, setJulio] = useState();
+  const [agosto, setAgosto] = useState();
+  const [septiembre, setSeptiembre] = useState();
+  const [octubre, setOctubre] = useState();
+  const [noviembre, setNoviembre] = useState();
+  const [diciembre, setDiciembre] = useState();
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
-  const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
-  const [totaltipo, setTotaltipo] = useState(0.0);
-  const [presupuesto, setPresupuesto] = useState(0.0);
-  const [totalrc, setTotalrc] = useState(0.0);
-  const [totalavi, setTotalavi] = useState(0.0);
-  const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -150,7 +155,20 @@ function GraficosIngresos() {
     datasets: [
       {
         label: "Miembros",
-        data: [12, 4, 34, 54, 7, 12, 78],
+        data: [
+          enero,
+          febrero,
+          marzo,
+          abril,
+          mayo,
+          junio,
+          julio,
+          agosto,
+          septiembre,
+          octubre,
+          noviembre,
+          diciembre,
+          ],
         backgroundColor: "rgb(149, 187, 227)",
       },
     ],
@@ -161,14 +179,14 @@ function GraficosIngresos() {
       "RCV",
       "Certificado medico",
       "Renovación",
-      "Abonos",
+      "Licencias",
       "Egresos",
-      "Orange",
+      "Otros ingresos",
     ],
     datasets: [
       {
         label: "# of Votes",
-        data: [1, 1, 1, 1, 1, 1],
+        data: [rcv, seguro, renovacion, licencia, egreso, otroIngreso],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -193,6 +211,66 @@ function GraficosIngresos() {
   const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
     useTable(records, headCells, filterFn);
 
+  const selecionarRegistros = async (e) => {
+    let endpoint = op.conexion + "/grafica/Diario";
+    console.log(endpoint);
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("Desde", txtDate1.current.value);
+    bodyF.append("Hasta", txtDate2.current.value);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setRecords(response);
+        // Inicializamos variables para las sumas
+        let sumaRcv = 0;
+        let sumaRenovacion = 0;
+        let sumaSeguro = 0;
+        let sumaEgreso = 0;
+        let otroIngreso = 0;
+        let sumaLicencia = 0;
+        // Iteramos sobre los objetos en el array response
+        response.forEach((item) => {
+          if (item.nota_motivo === "RCV") {
+            sumaRcv++;
+          } else if (item.nota_motivo === "Renovación") {
+            sumaRenovacion++;
+          } else if (item.nota_motivo === "Seguro") {
+            sumaSeguro++;
+          } else if (item.nota_IngresoEgreso === 0) {
+            sumaEgreso++;
+          } else if (item.nota_motivo === "Licencia") {
+            sumaLicencia++;
+          } else {
+            otroIngreso++;
+          }
+        });
+
+        // Asignamos las sumas a las variables de estado correspondientes
+        setRcv(sumaRcv);
+        setRenovacion(sumaRenovacion);
+        setSeguro(sumaSeguro);
+        setEgreso(sumaEgreso);
+        setOtroIngreso(otroIngreso);
+        setLicencia(sumaLicencia);
+        console.log("Suma de RCV: " + sumaRcv);
+        console.log("Suma de renovacion: " + sumaRenovacion);
+        console.log("Suma de seguro: " + sumaSeguro);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   const selecionarRegistrosAnual = async (e) => {
     let endpoint = op.conexion + "/grafica/Anual";
     console.log(endpoint);
@@ -205,8 +283,18 @@ function GraficosIngresos() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-        setRecords(response);
+        setEnero(response.Enero);
+        setFebrero(response.Febrero);
+        setMarzo(response.Marzo);
+        setAbril(response.Abril);
+        setMayo(response.Mayo);
+        setJunio(response.Junio);
+        setJulio(response.Julio);
+        setAgosto(response.Agosto);
+        setSeptiembre(response.Septiembre);
+        setOctubre(response.Octubre);
+        setNoviembre(response.Noviembre);
+        setDiciembre(response.Diciembre);
       })
       .catch((error) =>
         setMensaje({
@@ -217,30 +305,13 @@ function GraficosIngresos() {
         })
       );
   };
-
-  const selecionarRegistros = async (e) => {
-    let endpoint = op.conexion + "/grafica/Diario";
-    console.log(endpoint);
-    setActivate(true);
-    let bodyF = new FormData();
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-        setRecords(response);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
+  const obtenerFechaHoy = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    txtDate1.current.value = `${year}-${month}-${day}`;
+    txtDate2.current.value = `${year}-${month}-${day}`;
   };
 
   const handleSearch = (e) => {
@@ -271,8 +342,9 @@ function GraficosIngresos() {
   console.log("estas en menu");
 
   useEffect(() => {
+    obtenerFechaHoy();
     selecionarRegistros();
-    
+    selecionarRegistrosAnual();
   }, []);
 
   const regPre = () => {
@@ -302,7 +374,7 @@ function GraficosIngresos() {
             placeholder="Buscar"
           />
 
-          <div className="col-4 mb-4">
+          <div className="col-5 mb-4">
             <div class="input-group flex-nowrap">
               <span class="input-group-text" id="addon-wrapping">
                 Desde:

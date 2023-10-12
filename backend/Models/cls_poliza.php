@@ -419,9 +419,9 @@ abstract class cls_poliza extends cls_db
 			// if ($result) {
 			// 	return $result;
 			// }
-			// if (!$this->db->inTransaction()) {
-			// 	$this->db->beginTransaction();
-			// }
+			if (!$this->db->inTransaction()) {
+				$this->db->beginTransaction();
+			}
 
 
 			$result = $this->SearchByCliente();
@@ -857,7 +857,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
         INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
         INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
-        INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
+        INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
         WHERE poliza.poliza_id = $id");

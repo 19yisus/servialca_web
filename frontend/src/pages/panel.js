@@ -159,6 +159,7 @@ function Panel() {
     bodyF.append("text_banner", text_banner.current.value);
     bodyF.append("img_banner", img_banner.current.files[0]);
     bodyF.append("img_login", img_login.current.files[0]);
+    bodyF.append("text_banner", text_banner.current.value);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
