@@ -65,82 +65,39 @@ export const GestionarClave = (props) => {
     props.onHideCancela();
   };
 
-  const updatepass = () => {
-    let endpoint = `${op.conexion}/api/usuario/updateclave`;
+  const updatepass = async () => {
+    let endpoint = op.conexion + "/Auth/login";
+    console.log(endpoint);
     setActivate(true);
-    let body = {
-      pass: md5(txtR1.current.value.trim()),
-      id: values.idusuario,
-    };
+  
 
-    axios
-      .post(endpoint, body, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
+
+    let bodyF = new FormData();
+
+    bodyF.append("ID", values[0].user_id_respuesta);
+    bodyF.append("Clave", txtR1.current.value);
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+    
+      
       })
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log(operacion);
-          setMensaje({
-            mostrar: true,
-            titulo: "Exito.",
-            texto: "Clave Actualizadas",
-            icono: "exito",
-          });
-        }
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
+      .catch((error) =>
         setMensaje({
           mostrar: true,
-          titulo: "Error",
-          texto:
-            error.response.data.message ===
-            "llave duplicada viola restricción de unicidad «persona_pkey»"
-              ? "ya existe una persona con esa cedula"
-              : error.response.data.message,
-          icono: "error",
-        });
-      });
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+
+   
   };
 
-  const seleccionarPreguntas = (cedula) => {
-    let campos = "*";
-    let nomtab = "preguntaseguridad";
-    let nomid = "idusuario";
-
-    let endpoint = `${op.conexion}/api/consulta/modeli?campos=${campos}&id=${cedula}&nomtab=${nomtab}&nomid=${nomid}`;
-    setActivate(true);
-
-    axios
-      .get(endpoint, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
-      })
-      .then(function (response) {
-        if (response.status == 200) {
-          if (response.data !== "") {
-            setValues(response.data);
-            console.log(response.data)
-          } else {
-            setMensaje({
-              mostrar: true,
-              titulo: "Notificación",
-              texto: "Este Usuario No posee preguntas de seguridad",
-              icono: "informacion",
-            });
-          }
-        }
-
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
-      });
-  };
 
   const datisPersona  = async (login) => {
     let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
@@ -163,11 +120,15 @@ export const GestionarClave = (props) => {
     }).then(res => res.json())
       .then(response => {
         console.log(response.lista_preguntas)
+       
 
 setRecuperar('0')
         setActivate(false)
         setValues(response.lista_preguntas)
-
+        if(validarClave === 1){
+          setValidarClave(0)
+          txtR1.current.value = ''
+        }
 
 
 
@@ -244,15 +205,13 @@ setRecuperar('0')
   
       if (sigue) {
         setActivate(true);
-  
+  console.log(values[0].des_respuesta.toLowerCase(),values[1].des_respuesta.toLowerCase())
         if (
-          txtP1.current.value.trim() === values.respuesta1.trim() &&
-          txtP1.current.value.trim() === values.respuesta1.trim()
+          txtP1.current.value.toLowerCase().trim() === values[0].des_respuesta.toLowerCase().trim() &&
+          txtP2.current.value.toLowerCase().trim() === values[1].des_respuesta.toLowerCase().trim()
         ) {
           setValidarClave(1);
-        } else if (txtP1.current.value === "" || txtP2.current.value === "") {
-          setValidarClave(0);
-        } else {
+        }  else {
           setValidarClave(0);
           setMensaje({
             mostrar: true,
