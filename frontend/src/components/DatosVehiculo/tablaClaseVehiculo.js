@@ -326,7 +326,7 @@ function TablaClaseVehiculo() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.clase_id}
+                    {item.claseVehiculo_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"

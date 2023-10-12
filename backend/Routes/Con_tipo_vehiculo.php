@@ -11,6 +11,7 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 		$this->precio = isset($_POST["precio"]) ? $_POST["precio"] : null;
 		$this->idContrato = isset($_POST["idContrato"]) ? $_POST["idContrato"] : null;
 		$this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
+		$this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
 	}
 
 	public function registrar()
@@ -52,6 +53,12 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 	public function ConsultarTipoVehiculo()
 	{
 		$resultado = $this->SearchByID($_GET["ID"]);
+		Response($resultado, 200);
+	}
+
+	public function ConsultarPrecio()
+	{
+		$resultado = $this->SearchByPrecio($_POST["Contrato"], $_POST["Tipo"], $_POST["Sucursal"]);
 		Response($resultado, 200);
 	}
 }

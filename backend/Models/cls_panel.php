@@ -15,7 +15,13 @@ abstract class cls_panel extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
-
+	public function GetAllWeb()
+	{
+		$sql = $this->db->prepare("SELECT * FROM pagina_web");
+		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		else $resultado = [];
+		return $resultado;
+	}
 	protected function reg_file_info($datos, $file_names)
 	{
 
@@ -29,8 +35,8 @@ abstract class cls_panel extends cls_db
 				$sql->execute([$name, $tag, $ruta]);
 			}
 		}
-  }
-  
+	}
+
 	protected function Save($datos)
 	{
 		if (isset($datos)) {
@@ -47,7 +53,7 @@ abstract class cls_panel extends cls_db
 
 		return 1;
 	}
-  
+
 	private function buscar_y_desactivar($tag)
 	{
 		$this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
@@ -59,9 +65,14 @@ abstract class cls_panel extends cls_db
 		else if ($tag == 'about') $tag = 'about_1';
 		else if ($tag == 'banner') $tag = 'img_banner';
 		else {
-			$sql = $this->db->query("SELECT * FROM file_contents WHERE tag = '$tag' AND estatus_img = 1");
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-			return $resultado;
+			$array_img = [];
+			for ($i = 1; $i < 4; $i++) {
+				$tag = "carrusel_" . $i;
+				$sql = $this->db->query("SELECT * FROM file_contents WHERE tag = '$tag' AND estatus_img = 1");
+				$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+				array_push($array_img, $resultado);
+			}
+			return $array_img;
 		}
 
 		$sql = $this->db->query("SELECT * FROM file_contents WHERE tag = '$tag' AND estatus_img = 1");

@@ -56,6 +56,12 @@ function TablaLicencia() {
       color: "white",
     },
     {
+      label: "Télefono",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Tipo de sangre",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -386,6 +392,12 @@ function TablaLicencia() {
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
                     {item.licencia_correo}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.cliente_telefono}
                   </TableCell>
                   <TableCell
                     className="align-baseline"

@@ -90,6 +90,7 @@ class Api
         $file_content_route2 = "./video/" . $peticion[1];
         $file_content_route3 = "./documentos/" . $peticion[1];
         $file_content_route4 = "./Img/" . $peticion[1];
+        $file_content_route5 = "./ImgPanel" . $peticion[1];
         if (file_exists($file_content_route1)) {
           ResponseFile($file_content_route1);
           exit;
@@ -101,6 +102,9 @@ class Api
           exit;
         } else if (file_exists($file_content_route4)) {
           ResponseFile($file_content_route4);
+          exit;
+        } else if (file_exists($file_content_route5)) {
+          ResponseFile($file_content_route5);
           exit;
         }
       } else Response("No existe el recurso requerido", 400);
