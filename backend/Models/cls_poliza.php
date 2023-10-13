@@ -845,7 +845,7 @@ abstract class cls_poliza extends cls_db
 	public function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT poliza.*,vehiculo.*, titular.*, cliente.*, marca.*, modelo.*, usovehiculo.*, color.*,tipovehiculo.*, usuario.*, clasevehiculo.*, 
-        tipocontrato.*, usovehiculo.*,coberturas.*,debitocredito.* 
+        tipocontrato.*, usovehiculo.*,coberturas.*,debitocredito.*, sucursal.* 
         FROM poliza 
         INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
         INNER JOIN titular ON titular.titular_id = poliza.titular_id
@@ -860,6 +860,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+		INNER JOIN sucursal on sucursal.sucursal_id = poliza.sucursal_id
         WHERE poliza.poliza_id = $id");
 		if ($sql->execute()) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

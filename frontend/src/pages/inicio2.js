@@ -319,16 +319,12 @@ function Inicio2() {
     } else  if (op === 3){
       setMostrar6(true);
     }
-
-
     if (op === 2){
       setMostrar2(true)
     setIdCliente(id.poliza_id);
     setPoliza(id)
-
     } else {
       setIdCliente(id);
-
     }
 
   };

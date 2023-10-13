@@ -7,6 +7,21 @@ abstract class cls_medico extends cls_db
     {
         parent::__construct();
     }
+    protected function GetOne($id)
+    {
+        $sql = $this->db->prepare("SELECT medico.*, cliente.*, debitocredito.* FROM medico
+        INNER JOIN cliente ON cliente.cliente_id = medico.cliente_id
+        INNER JOIN debitocredito ON debitocredito.nota_id = medico.debitoCredito_id
+        WHERE medico_id =?;
+        ");
+        if ($sql->execute([$id])) {
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $resultado = [];
+        }
+
+        return $resultado;
+    }
 
     protected function GetAll()
     {
@@ -31,30 +46,30 @@ abstract class cls_medico extends cls_db
         return $resultado;
     }
 
-    public function SaveImg($ruta){
-       try{
-        $sql = $this->db->prepare("UPDATE medico set medico_foto = ?");
-        $sql->execute([$ruta]);
-        if ($sql->rowCount()>0) return[
-            "data" => [
-                "res" => "Imagen guardada"
-            ],
-            "code" => 200
-        ];
-        return [
-            "data" => [
-                "res" => "La imagen no pudo ser guardada"
-            ],
-            "code" => 400
-        ];
-        
-    }catch (PDOException $e) {
-        return [
-            "data" => [
-                'res' => "Error de consulta: " . $e->getMessage()
-            ],
-            "code" => 400
-        ];
-        }    
+    public function SaveImg($ruta)
+    {
+        try {
+            $sql = $this->db->prepare("UPDATE medico set medico_foto = ?");
+            $sql->execute([$ruta]);
+            if ($sql->rowCount() > 0) return [
+                "data" => [
+                    "res" => "Imagen guardada"
+                ],
+                "code" => 200
+            ];
+            return [
+                "data" => [
+                    "res" => "La imagen no pudo ser guardada"
+                ],
+                "code" => 400
+            ];
+        } catch (PDOException $e) {
+            return [
+                "data" => [
+                    'res' => "Error de consulta: " . $e->getMessage()
+                ],
+                "code" => 400
+            ];
+        }
     }
 }

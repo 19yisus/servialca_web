@@ -14,6 +14,11 @@ class Con_medico extends cls_medico
         Response($resultado, 200);
     }
 
+    public function ConsultarUno(){
+        $resultado = $this->GetOne($_POST["ID"]);
+        Response($resultado, 200);
+    }
+
     public function SetImg()
     {
         // Verifica que se haya enviado un archivo

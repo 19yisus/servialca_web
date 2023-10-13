@@ -32,7 +32,14 @@ function PaginaWeb(props) {
     icono: "",
   });
 
+<<<<<<< HEAD
+  const { onChange, onSubmit } = useForm(loginUserCallback, {
+    username: "mfigueroa",
+    password: "+11078879*",
+  });
+=======
   
+>>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
   const [records, setRecords] = useState([
     {
       idproducto: "",
@@ -47,6 +54,13 @@ function PaginaWeb(props) {
     },
   ]);
 
+<<<<<<< HEAD
+  // const selecionarRegistros = async () => {
+  //   let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
+  //   console.log(endpoint);
+  //   setActivate(true);
+
+=======
   const selecionarRegistrosTexts = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
     console.log(endpoint);
@@ -71,6 +85,7 @@ function PaginaWeb(props) {
         })
       );
   };
+>>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
     setActivate(true);
@@ -128,7 +143,40 @@ function PaginaWeb(props) {
     selecionarRegistrosWeb();
     selecionarRegistrosTexts();
   }, []);
+<<<<<<< HEAD
+  const bloquearUsuario = async () => {
+    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
+    let body;
+  
+    let bodyF = new FormData();
+  
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setValues(response[0]);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+  
+
+  useEffect(() => {
+    selecionarRegistros();
+  }, []);
+=======
  
+>>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
@@ -299,7 +347,11 @@ function PaginaWeb(props) {
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
             <img src={banner1} style={{ width: "100%" }} class=" img-fluid" />
+<<<<<<< HEAD
+          </div>*/} 
+=======
           </div>
+>>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
         </Fade> 
         <Fade left>
           <div class="col-md-12 mx-auto py-5" id="quienes">
@@ -374,7 +426,7 @@ function PaginaWeb(props) {
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-home"></i></h5>
                       <h5 class="ms-2">                {values.text_ubicacion}
-</h5>
+                     </h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
@@ -396,7 +448,7 @@ function PaginaWeb(props) {
             </div>
           </div>
         </Fade>
-        <Fade left>
+        {/* <Fade left>
           <div class="row  col-md-12 mt-5 mb-5" id="misionvision">
             <div class="col-md-12 mx-auto row py-5">
               <div class="col-md-6 mx-auto py-4">
@@ -424,9 +476,13 @@ function PaginaWeb(props) {
              
             </div>
           </div>
+<<<<<<< HEAD
+        </Fade> */}
+=======
           </div>
 
         </Fade>
+>>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2">
             <div class="slide-track d-flex justify-content-end">
@@ -524,4 +580,4 @@ function PaginaWeb(props) {
   );
 }
 
-export default PaginaWeb;
+export default PaginaWeb
