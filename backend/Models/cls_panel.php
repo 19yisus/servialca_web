@@ -19,6 +19,9 @@ abstract class cls_panel extends cls_db
 	protected function GetAllText()
 	{
 		$sql = $this->db->prepare("SELECT * FROM  pagina_web");
+		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		else $resultado = [];
+		return $resultado;
   }
 	public function GetAllWeb()
 	{
