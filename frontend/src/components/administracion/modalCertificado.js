@@ -116,7 +116,41 @@ export const ModalCertificadoMedico = (props) => {
       tiposangre: "",
     });
   };
-
+  const seleccionarRegistros = async (id) => {
+    let endpoint = op.conexion + "/medico/ConsultarUno";
+    console.log(endpoint);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        var cedula = response[0].cliente_cedula.split("-");
+        cmbNacionalidad.current.value = cedula[0] + "-";
+        txtCedula.current.value = cedula[1];
+        txtNombre.current.value = response[0].cliente_nombre;
+        txtApellido.current.value = response[0].cliente_apellido;
+        txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
+        txtEdad.current.value = response[0].medico_edad;
+        txtTipoSangre.current.value = response[0].medico_tipoSangre;
+        cmbLentes.current.value = response[0].medico_lente;
+        // cmbPago.current.value;
+        // txtReferencia.current.value;
+        // txtDolar.current.value;
+        // txtBs.current.value;
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/poliza/registrarCertificado";
     console.log(endpoint);
@@ -141,7 +175,7 @@ export const ModalCertificadoMedico = (props) => {
     bodyF.append("cantidadDolar", txtDolar.current.value);
     bodyF.append("Telefono", null);
     bodyF.append("Direccion", null);
-    bodyF.append("precioDolar",dolarbcv.toFixed(2))
+    bodyF.append("precioDolar", dolarbcv.toFixed(2));
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -333,10 +367,8 @@ export const ModalCertificadoMedico = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-
-        if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+        if (props.operacion) {
+          seleccionarRegistros(props.idLicencia);
         }
       }}
     >

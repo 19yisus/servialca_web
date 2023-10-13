@@ -6,6 +6,14 @@ class Con_poliza extends cls_poliza
     public function __construct()
     {
         parent::__construct();
+        //ID
+        $this->cliente = isset($_POST["idCliente"]) ? $_POST["idCliente"] : null;
+        $this->idTitular = isset($_POST["idTitular"]) ? $_POST["idTitular"] : null;
+        $this->vehiculo = isset($_POST["idVehiculo"]) ? $_POST["idVehiculo"] : null;
+        $this->debitoCredito = isset($_POST["idCobertura"]) ? $_POST["idCobertura"] : null;
+        $this->idColor;
+        $this->idModelo;
+        $this->idMarca;
         $this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
         $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
         $this->usuario = isset($_POST["Usuario"]) ? $_POST["Usuario"] : null;

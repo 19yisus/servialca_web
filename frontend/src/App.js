@@ -10,7 +10,6 @@ import { AuthContext } from "../src/context/auth";
 import PaginaWeb from "./pages/paginaWeb";
 import Galeria from "./pages/galeria";
 
-
 function App(props) {
   const { user, logout } = useContext(AuthContext);
 
@@ -42,10 +41,9 @@ function App(props) {
 
   function startIdleTimer() {
     currSeconds++;
-   /*  console.log(currSeconds); */
+    /*  console.log(currSeconds); */
 
-     if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
-     
+    if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
         icono: "error",
@@ -55,17 +53,14 @@ function App(props) {
     }
 
     if (currSeconds === 190 && pathname !== "/login" && pathname !== "/") {
-        window.location.href = "/login"; 
+      window.location.href = "/login";
       setMensaje({
         mostrar: false,
         icono: "",
         titulo: "",
         texto: "",
       });
-      
-     
-    } 
-
+    }
   }
 
   return (
@@ -83,33 +78,28 @@ function App(props) {
             texto: "",
           });
         }}
-      />{ pathname === "/" || pathname === "/galeria" ? 
-      <Router>
-     
-      <Route exact path="/" component={PaginaWeb} />
-      <Route exact path="/galeria" component={Galeria} />
+      />
+      {pathname === "/" || pathname === "/galeria" ? (
+        <Router>
+           <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={PaginaWeb} /> 
+          <Route exact path="/galeria" component={Galeria} />
+        </Router>
+      ) : (
+        <AuthProvider>
+          <Router>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/" component={PaginaWeb} /> 
+            <Route exact path="/galeria" component={Galeria} />
 
-
-     
-    </Router>
-
-    : 
-    <AuthProvider>
-    <Router>
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/" component={PaginaWeb} />
-      <Route exact path="/galeria" component={Galeria} />
-
-
-      {pathname !== "/" && pathname !== "/login" && (
-        <div>
-          <MenuImpuestoPP />
-        </div>
+            {pathname !== "/" && pathname !== "/login" && (
+              <div>
+                <MenuImpuestoPP />
+              </div>
+            )}
+          </Router>
+        </AuthProvider>
       )}
-    </Router>
-  </AuthProvider>
-      }
-     
 
       {/* }
        */}

@@ -32,7 +32,7 @@ function PaginaWeb(props) {
     icono: "",
   });
 
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+  const { onChange, onSubmit } = useForm(loginUserCallback, {
     username: "mfigueroa",
     password: "+11078879*",
   });
@@ -50,10 +50,10 @@ function PaginaWeb(props) {
     },
   ]);
 
-  const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
-    console.log(endpoint);
-    setActivate(true);
+  // const selecionarRegistros = async () => {
+  //   let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
+  //   console.log(endpoint);
+  //   setActivate(true);
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
@@ -111,14 +111,12 @@ function PaginaWeb(props) {
     selecionarRegistros();
     selecionarRegistrosWeb();
   }, []);
-  const bloquearUsuario = () => {
+  const bloquearUsuario = async () => {
     let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
     let body;
-
+  
     let bodyF = new FormData();
-
-
-
+  
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -127,8 +125,7 @@ function PaginaWeb(props) {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        setValues(response[0])
-       
+        setValues(response[0]);
       })
       .catch((error) =>
         setMensaje({
@@ -139,6 +136,7 @@ function PaginaWeb(props) {
         })
       );
   };
+  
 
   useEffect(() => {
     selecionarRegistros();
@@ -325,8 +323,8 @@ function PaginaWeb(props) {
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
             <img src={banner1} style={{ width: "100%" }} class=" img-fluid" />
-          </div>
-        </Fade> */}
+          </div>*/} 
+        </Fade> 
         <Fade left>
           <div class="col-md-12 mx-auto py-5" id="quienes">
             <div class="row col-md-12 mx-auto" id="quienesdiv">
@@ -400,7 +398,7 @@ function PaginaWeb(props) {
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-home"></i></h5>
                       <h5 class="ms-2">                {values.text_ubicacion}
-</h5>
+                     </h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
@@ -442,7 +440,7 @@ function PaginaWeb(props) {
             </div>
           </div>
         </Fade>
-        <Fade left>
+        {/* <Fade left>
           <div class="row  col-md-12 mt-5 mb-5" id="misionvision">
             <div class="col-md-12 mx-auto row py-5">
               <div class="col-md-6 mx-auto py-4">
@@ -480,7 +478,7 @@ function PaginaWeb(props) {
               </div>
             </div>
           </div>
-        </Fade>
+        </Fade> */}
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2">
             <div class="slide-track d-flex justify-content-end">
@@ -578,4 +576,4 @@ function PaginaWeb(props) {
   );
 }
 
-export default PaginaWeb;
+export default PaginaWeb

@@ -192,12 +192,10 @@ export const ModalRcv = (props) => {
   };
 
   const actualizarCertificado = async () => {
-    
-    let endpoint = '';
-
-    if(operacion === 1){
+    let endpoint = "";
+    if (operacion === 1) {
       endpoint = op.conexion + "/poliza/registrar";
-    } else if(operacion === 2) {
+    } else if (operacion === 2) {
       endpoint = op.conexion + "/poliza/editar";
     }
 
@@ -320,7 +318,7 @@ export const ModalRcv = (props) => {
         console.log("tipo contrato");
         setTipoContrato(response);
         console.log(response);
-        txtDolar.current.value(response.precio_monto)
+        txtDolar.current.value(response.precio_monto);
       })
       .catch((error) => console.log("Precio: Falta uno de los parametros"));
   };
@@ -524,34 +522,7 @@ export const ModalRcv = (props) => {
       );
   };
 
-  const selecionarVehiculo = async () => {
-    let endpoint = op.conexion + "/vehiculo/ConsultarTodos";
-    setActivate(true);
-
-    //setLoading(false);
-
-    let bodyF = new FormData();
-
-    // bodyF.append("ID", user_id)
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        setVehiculo(response);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
+ 
 
   const selecionarTipo = async () => {
     let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
@@ -822,70 +793,69 @@ export const ModalRcv = (props) => {
 
   const selecionarRegistros = async (id) => {
     let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
-    setActivate(true)
-
-    let bodyF = new FormData()
-
+    setActivate(true);
+    let bodyF = new FormData();
     //    bodyF.append("ID", id)
-
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-        setActivate(false)
-        console.log(response[0])
-        txtTipoContrato.current.value = response[0].contrato_nombre
-        txtDesde.current.value = moment(response[0].poliza_fechaInicio).format('YYYY-MM-DD');
-        txtHasta.current.value = moment(response[0].poliza_fechaVencimiento).format('YYYY-MM-DD');
-        cmbNacionalidad.current.value = response[0].cliente_cedula.substring(0,2)
-        txtCedula.current.value = response[0].cliente_cedula.substring(2,response[0].cliente_cedula.length)
-        txtFechaNaci.current.value = moment(response[0].cliente_fechaNacimiento).format('YYYY-MM-DD')
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        TxtTipoContrato.current.value = response[0].contrato_nombre;
+        txtDesde.current.value = response[0].poliza_fechaInicio;
+        txtHasta.current.value = response[0].poliza_fechaVencimiento;
+        var cedula = response[0].cliente_cedula.split("-");
+        cmbNacionalidad.current.value = cedula[0] + "-";
+        txtCedula.current.value = cedula[1];
         txtNombre.current.value = response[0].cliente_nombre;
-        txtApellido.current.value = response[0].cliente_nombre;
-        cmbTelefono.current.value = response[0].cliente_telefono.substring(0,6);
-        txtTelefono.current.value = response[0].cliente_telefono.substring(6, response[0].cliente_telefono.length);
+        txtApellido.current.value = response[0].cliente_apellido;
+        txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
+        var telefono = response[0].cliente_telefono.split("-");
+        cmbTelefono.current.value = telefono[0] + "-";
+        txtTelefono.current.value = telefono[1];
         txtCorreo.current.value = response[0].cliente_correo;
-        txtDireccion.current.value = response[0].cliente_direccion;
-        cmbEstado.current.value =  response[0].estado_id;
+        txtDirec.current.value = response[0].cliente_direccion;
+        if (!response[0].estado_nombre){
+          cmbEstado.current.value = "Portuguesa"
+        }else{
+          cmbEstado.current.value = response[0].estado_nombre;          
+        }
         txtAcesor.current.value = response[0].usuario_nombre;
-        cmbSucursal.current.value = props.poliza.sucursal_nombre;
-        txtLinea.current.value = '';
-       
-        cmbNacionalidadTitular.current.value = response[0].titular_cedula.substring(0,2)
-        txtCedulatTitular.current.value = response[0].titular_cedula.substring(2,response[0].cliente_cedula.length)
-        txtNombreTitular.current.value = response[0].cliente_nombre;
-        txtApellidoTitular.current.value = response[0].cliente_nombre;
-       
+        cmbSucursal.current.value = response[0].sucursal_nombre;
+        if (!response[0].linea_nombre){
+          txtLinea.current.value = "";
+        }else{
+          txtLinea.current.value = response[0].linea_nombre;
+        }
+        var cedulaTitular = response[0].titular_cedula.split("-");
+        cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
+        txtCedulatTitular.current.value = cedulaTitular[1];
+        txtNombreTitular.current.value = response[0].titular_nombre;
+        txtApellidoTitular.current.value = response[0].titular_apellido;
         txtPlaca.current.value = response[0].vehiculo_placa;
-        txtPuestos.current.value = response[0].vehiculo_puesto;
+        txtPuesto.current.value = response[0].vehiculo_puesto;
         txtUso.current.value = response[0].usoVehiculo_nombre;
-        txtAnio.current.value= response[0].vehiculo_año;
+        txtAño.current.value = response[0].vehiculo_año;
         txtSerMotor.current.value = response[0].vehiculo_serialMotor;
         txtClase.current.value = response[0].clase_nombre;
         txtColor.current.value = response[0].color_nombre;
         txtSerCarroceria.current.value = response[0].vehiculo_serialCarroceria;
-        txtTipoVehiculo.current.value = response[0].tipoVehiculo_nombre;
-        txtPeso.current.value = formatMoneda(response[0].vehiculo_peso.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-        txtCapTone.current.value = formatMoneda(response[0].vehiculo_capTon.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-        txtModelo.current.value = response[0].modelo_nombre
-        txtMarca.current.value = response[0].marca_nombre
-
-
-
-
-
-
-
-
-
+        cmbTipo.current.value = response[0].tipoVehiculo_nombre;
+        txtModelo.current.value = response[0].modelo_nombre;
+        txtMarca.current.value = response[0].marca_nombre;
+        txtPeso.current.value = response[0].vehiculo_peso;
+        txtCapTon.current.value = response[0].vehiculo_capTon;
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   return (
@@ -898,11 +868,9 @@ export const ModalRcv = (props) => {
       backdrop="static"
       keyboard={false}
       onShow={() => {
-      
-        setOperacion(props.operacion)
+        setOperacion(props.operacion);
         if (props.operacion === 2) {
-        selecionarRegistros(props.idCliente)
-
+          selecionarRegistros(props.idCliente);
         }
         setOperacion(props.operacion);
         selecionarClase();
@@ -912,11 +880,13 @@ export const ModalRcv = (props) => {
         selecionarSucursal();
         selecionarTransporte();
         selecionarUso();
-        selecionarTipo(); 
+        selecionarTipo();
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>{operacion === 1 ? 'Registro de RCV': 'Editar de RCV'} </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>
+          {operacion === 1 ? "Registro de RCV" : "Editar de RCV"}{" "}
+        </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -1323,7 +1293,7 @@ export const ModalRcv = (props) => {
                       ref={txtAcesor}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
-                      defaultValue={operacion === 1 ? user : ''}
+                      defaultValue={operacion === 1 ? user : ""}
                     />
                     {idUser === 57 ? (
                       <button
@@ -1345,8 +1315,7 @@ export const ModalRcv = (props) => {
                     </span>
 
                     <input
-                   
-                      defaultValue={suc === 1 ? user : ''}
+                      defaultValue={suc === 1 ? user : ""}
                       disabled
                       type="text"
                       class="form-control"

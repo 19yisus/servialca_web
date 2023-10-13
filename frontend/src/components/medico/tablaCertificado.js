@@ -8,14 +8,16 @@ import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { ModalImgLicencia } from "./modalCertificado";
-
+import { ModalCertificadoMedico } from "../administracion/modalCertificado";
 function TablaCertificado() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
   const [mostrar4, setMostrar4] = useState(false);
+  const [mostrar5, setMostrar5] = useState(false);
   const [activate, setActivate] = useState(false);
   const [idLicencia, setIdLicencia] = useState();
+  const [operacion, setOperacion] = useState();
   const [mensaje, setMensaje] = useState({
     mostrar: false,
     titulo: "",
@@ -81,7 +83,7 @@ function TablaCertificado() {
       color: "white",
     },
   ];
-
+  
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [cuentas, setCuentas] = useState();
@@ -232,14 +234,28 @@ function TablaCertificado() {
 
     window.open(`${op.conexion}/reporte/reporteMedico?ID=${id}`);
   };
-  const gestionarBanco = (id) => (e) => {
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setIdLicencia(id);
-    setMostrar4(true);
-    console.log(id);
+    setOperacion(op);
+    if (op === 2) {
+      setIdLicencia(id);
+      setMostrar4(true);
+      console.log(id);
+    } else {
+      setMostrar5(true);
+      setIdLicencia(id);
+    }
   };
   return (
     <div className="col-md-12 mx-auto p-2">
+      <ModalCertificadoMedico
+        operacion={operacion}
+        show={mostrar5}
+        idLicencia={idLicencia}
+        onHideCancela={() => {
+          setMostrar5(false);
+        }}
+      />
       <ModalImgLicencia
         show={mostrar4}
         idLicencia={idLicencia}
@@ -335,13 +351,13 @@ function TablaCertificado() {
                       <i className="fas fa-print"></i>
                     </button>
                     <button
-                      onClick={gestionarBanco(item.idcuentabancaria)}
+                      onClick={gestionarBanco(3, item.medico_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(item.medico_id)}
+                      onClick={gestionarBanco(2, item.medico_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
                       <i className="fas fa-camera"></i>
