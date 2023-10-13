@@ -32,10 +32,7 @@ function PaginaWeb(props) {
     icono: "",
   });
 
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "mfigueroa",
-    password: "+11078879*",
-  });
+  
   const [records, setRecords] = useState([
     {
       idproducto: "",
@@ -50,11 +47,30 @@ function PaginaWeb(props) {
     },
   ]);
 
-  const selecionarRegistros = async () => {
+  const selecionarRegistrosTexts = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
     console.log(endpoint);
     setActivate(true);
-
+    await fetch(endpoint, {
+      method: "POST",
+      
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setValues(response[0])
+       
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
     setActivate(true);
@@ -110,39 +126,9 @@ function PaginaWeb(props) {
     context.logout();
     selecionarRegistros();
     selecionarRegistrosWeb();
+    selecionarRegistrosTexts();
   }, []);
-  const bloquearUsuario = () => {
-    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
-    let body;
-
-    let bodyF = new FormData();
-
-
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-        setValues(response[0])
-       
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
-
-  useEffect(() => {
-    selecionarRegistros();
-  }, []);
+ 
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
@@ -293,20 +279,8 @@ function PaginaWeb(props) {
 
       <div class="col-md-12 mx-auto" id="home">
         
-        <Fade left>
-        <div class="col-md-12 mx-auto row py-5" id="homediv">
-          <div class="col-md-12 mx-auto text-center mt-5 py-4">
-            <h1 class="fw-bold text-center text-servial">
-              - <i class="fas fa-home"></i> Home -
-            </h1>
-          </div>
-
-          <div class="col-md-5 mx-auto"></div>
-          <div class="col-md-7 mx-auto text-center">
-           <span></span>
-          </div>
-        </div>
-        {/* <Fade left>
+      
+         <Fade left>
           <div class="col-md-12 mx-auto" id="home">
             <div class="col-md-12 mx-auto row py-5" id="homediv">
               <div class="col-md-12 mx-auto text-center mt-5 py-4">
@@ -326,7 +300,7 @@ function PaginaWeb(props) {
           <div class="col-md-12 mx-auto px-0">
             <img src={banner1} style={{ width: "100%" }} class=" img-fluid" />
           </div>
-        </Fade> */}
+        </Fade> 
         <Fade left>
           <div class="col-md-12 mx-auto py-5" id="quienes">
             <div class="row col-md-12 mx-auto" id="quienesdiv">
@@ -413,29 +387,9 @@ function PaginaWeb(props) {
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-print"></i></h5>
                       <h5 class="ms-2"> {values.text_fax}</h5>
-                      <h5 class="fa-li">
-                        <i class="fas fa-home"></i>
-                      </h5>
-                      <h5 class="ms-2">Acarigua</h5>
+                    
                     </li>
-                    <li class="mb-3">
-                      <h5 class="fa-li">
-                        <i class="fas fa-envelope"></i>
-                      </h5>
-                      <h5 class="ms-2">acarigua@example.com</h5>
-                    </li>
-                    <li class="mb-3">
-                      <h5 class="fa-li">
-                        <i class="fas fa-phone"></i>
-                      </h5>
-                      <h5 class="ms-2">+ 00 000 000 00</h5>
-                    </li>
-                    <li class="mb-3">
-                      <h5 class="fa-li">
-                        <i class="fas fa-print"></i>
-                      </h5>
-                      <h5 class="ms-2">+ 00 000 000 00</h5>
-                    </li>
+                  
                   </ul>
                 </div>
               </div>
@@ -465,21 +419,13 @@ function PaginaWeb(props) {
                 </div>
              
               <h5 class="ms-2 mt-3"> {values.text_mision}</h5>
-                <div class="col-md-12 mx-auto row py-5">
-                  <div class="col-md-12 mx-auto text-center">
-                    <h1 class="fw-bold text-center text-servial">- Vision -</h1>
-                  </div>
-                </div>
+              
               </div>
-              <div class="col-md-6 mx-auto py-4">
-                <div class="col-md-12 mx-auto row py-5">
-                  <div class="col-md-12 mx-auto text-center">
-                    <h1 class="fw-bold text-center text-servial">- Mision -</h1>
-                  </div>
-                </div>
-              </div>
+             
             </div>
           </div>
+          </div>
+
         </Fade>
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2">
