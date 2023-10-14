@@ -10,6 +10,7 @@ import logo from "../imagenes/logo1.png";
 import banner1 from "../imagenes/banner1.jpeg";
 import Fade from "react-reveal/Fade";
 
+
 function PaginaWeb(props) {
   const [loading, setLoading] = useState(false);
 
@@ -38,18 +39,33 @@ function PaginaWeb(props) {
   });
   
   const [records, setRecords] = useState([
-    {
-      idproducto: "",
-      codigo: "",
-      cantidad: "",
-      producto: "",
-      precio: "",
-      iva: "",
-      motoiva: "",
-      descuento: "",
-      total: "",
-    },
+   
   ]);
+
+  const selecionarRegistrosTexts = async () => {
+    let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
+    console.log(endpoint);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setValues(response[0])
+       
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
@@ -65,7 +81,36 @@ function PaginaWeb(props) {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        setRecords(response);
+       console.log(response);
+        let carrusel_1 = '';
+        let carrusel_2 = '';
+        let carrusel_3 = '';
+
+        console.log('aqui')
+       
+        for(let i = 0; i < response.length; i++){
+
+          if(response[i].tag && response[i].tag.toString() === "carrusel_1" ){
+            carrusel_1 = response[i].ruta_img;
+          } else if(response[i].tag && response[i].tag.toString() === "carrusel_2" ){
+            carrusel_2 = response[i].ruta_img;
+          } else if(response[i].tag && response[i].tag.toString() === "carrusel_3" ){
+            carrusel_3 = response[i].ruta_img;
+          }
+
+        }
+
+        console.log('aqui2')
+
+        setRecords({
+          carrusel_1:carrusel_1,
+          carrusel_2:carrusel_2,
+          carrusel_3:carrusel_3
+          
+        });
+
+  console.log(records)
+  console.log('aqui3')
       })
       .catch((error) =>
         setMensaje({
@@ -90,8 +135,10 @@ function PaginaWeb(props) {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-        setRecords(response);
+      
+
+
+
       })
       .catch((error) =>
         setMensaje({
@@ -270,7 +317,7 @@ function PaginaWeb(props) {
           </div>
         </div>
       </nav>
-      <div id="slider">
+  {   /* <div id="slider">
         <figure>
           {records.slice(0, 3).map((item, index) => (
             <img
@@ -279,6 +326,36 @@ function PaginaWeb(props) {
               alt=""
             />
           ))}
+        </figure>
+      </div>*/}
+
+<div id="slider">
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_1}
+              alt=""
+            />
+       
+        </figure>
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_2}
+              alt=""
+            />
+       
+        </figure>
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_3}
+              alt=""
+            />
+       
         </figure>
       </div>
 
@@ -379,7 +456,7 @@ function PaginaWeb(props) {
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-home"></i></h5>
                       <h5 class="ms-2">                {values.text_ubicacion}
-                     </h5>
+</h5>
                     </li>
                     <li class="mb-3">
                       <h5 class="fa-li"><i class="fas fa-envelope"></i></h5>
@@ -401,7 +478,7 @@ function PaginaWeb(props) {
             </div>
           </div>
         </Fade>
-        {/* <Fade left>
+        <Fade left>
           <div class="row  col-md-12 mt-5 mb-5" id="misionvision">
             <div class="col-md-12 mx-auto row py-5">
               <div class="col-md-6 mx-auto py-4">
@@ -527,4 +604,4 @@ function PaginaWeb(props) {
   );
 }
 
-export default PaginaWeb
+export default PaginaWeb;

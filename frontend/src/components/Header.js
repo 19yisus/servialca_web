@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { ModalConfigurarUsuarios } from "./configuracion/configurarUsuario";
 
 function Header(props) {
 //  const { user, logout } = useContext(AuthContext);
@@ -41,48 +42,7 @@ function Header(props) {
       </div>
 
       <div className="col-5 d-flex justify-content-end ">
-        {/* <label className="text-dark fw-bold mx-4 ">
-          {" "}
-          <i className="fas fa-user me-2" />
-        
-          {usuario}
-        </label> */}
-
-        {/* <div class="btn-group dropstart">
-          <button
-            type="button"
-            class="btn bg-transparent fw-bold shadow-0 dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="fas fa-ellipsis"></i>
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a
-                type="button"
-                onClick={() => {
-                  setMostrar(true);
-                }}
-                className="text-dark fw-bold mx-4 "
-              >
-                Preguntas de Seguridad
-              </a>
-            </li>
-            <li>
-              <a
-                type="button"
-                onClick={() => {
-                  setMostrar(true);
-                }}
-                className="text-dark fw-bold mx-4 "
-              >
-                Cambiar Clave
-              </a>
-            </li>
-          </ul>
-        </div> */}
-
+       
         
 
         <div class=" dropstart">
@@ -91,13 +51,13 @@ function Header(props) {
   </button>
   <ul class="dropdown-menu">
   <li>
-              <a class="dropdown-item" type="button" onClick={()=>{setMostrar(true)}}>
+              <a class="dropdown-item" type="button">
                Preguntas de Seguridad
               </a>
             </li>
             <li>
-              <a class="dropdown-item" type="button" onClick={()=>{setMostrarClave(true)}}>
-                Cambio de Clave
+              <a class="dropdown-item" type="button" onClick={()=>{setMostrar(true)}}>
+              Configuracion de Ususario
               </a>
             </li>
   </ul>
@@ -113,6 +73,10 @@ function Header(props) {
         </div>
       </div>
 
+<ModalConfigurarUsuarios
+show={mostrar}
+onHideCancela={()=>{setMostrar(false)}}
+/>
      
     </nav>
   );
