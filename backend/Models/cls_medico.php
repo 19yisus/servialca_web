@@ -3,10 +3,132 @@ require_once("cls_db.php");
 
 abstract class cls_medico extends cls_db
 {
+    protected $cliente, $medico, $cedula, $nombre, $apellido,
+        $fechaNacimiento, $telefono, $correo, $edad, $sangre, $lente,
+        $cobertura, $refrencia, $metodo;
     public function __construct()
     {
         parent::__construct();
     }
+
+    protected function Edit()
+    {
+        try {
+            $this->db->beginTransaction();
+            $result = $this->editarCliente($this->cliente);
+            if (!$result) {
+                $this->db->rollback();
+                return [
+                    'data' => [
+                        'res' => "Ocurrión un error en la transacción"
+                    ],
+                    'code' => 400
+                ];
+            }
+            $result = $this->editarMedico($this->medico);
+            if (!$result) {
+                $this->db->rollback();
+                return [
+                    'data' => [
+                        'res' => "Ocurrión un error en la transacción"
+                    ],
+                    'code' => 400
+                ];
+            }
+            $result = $this->editarDebito($this->cobertura);
+            if (!$result) {
+                $this->db->rollback();
+                return [
+                    'data' => [
+                        'res' => "Ocurrión un error en la transacción"
+                    ],
+                    'code' => 400
+                ];
+            }
+            if ($result) {
+                $this->db->commit();
+                return [
+                    'data' => [
+                        'res' => "Registro exitoso"
+                    ],
+                    'code' => 200
+                ];
+            }
+            $this->db->rollback();
+            return [
+                'data' => [
+                    'res' => "Registro fallida"
+                ],
+                'code' => 400
+            ];
+        } catch (PDOException $e) {
+            return [
+                "data" => [
+                    'res' => "Error de consulta: " . $e->getMessage()
+                ],
+                "code" => 400
+            ];
+        }
+    }
+
+    protected function editarDebito($id)
+    {
+        $sql = $this->db->prepare("UPDATE debitocredito SET
+        	nota_tipoPago = ?,
+            nota_referencia = ?
+        WHERE nota_id = ?");
+        if (
+            $sql->execute([
+                $this->metodo,
+                $this->refrencia,
+                $id
+            ])
+        ) {
+            return true;
+        } else
+            return false;
+    }
+
+    protected function editarCliente($id)
+    {
+        $sql = $this->db->prepare("UPDATE cliente SET
+        cliente_cedula = ?,
+        cliente_nombre = ?,
+        cliente_apellido =?,
+        cliente_fechaNacimiento = ?
+        WHERE cliente_id = ?");
+        if (
+            $sql->execute([
+                $this->cedula,
+                $this->nombre,
+                $this->apellido,
+                $this->fechaNacimiento,
+                $id
+            ])
+        ) {
+            return true;
+        } else
+            return false;
+    }
+    protected function editarMedico($id)
+    {
+        $sql = $this->db->prepare("UPDATE medico SET
+            medico_edad = ?,
+            medico_tipoSangre = ?,
+            medico_lente = ?
+            WHERE medico_id = ?");
+        if ($sql->execute([
+            $this->edad,
+            $this->sangre,
+            $this->lente,
+            $id
+        ])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected function GetOne($id)
     {
         $sql = $this->db->prepare("SELECT medico.*, cliente.*, debitocredito.* FROM medico

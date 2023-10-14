@@ -26,9 +26,10 @@ class Con_panel extends cls_panel
     Response($resultado, 200);
   }
 
-  public function ConsultarTag(){
+  public function ConsultarTag()
+  {
     $resultado = $this->getImg($_POST["tag"]);
-    Response($resultado,200);
+    Response($resultado, 200);
   }
 
   public function SetAndSaveImages()
@@ -42,6 +43,7 @@ class Con_panel extends cls_panel
         $name = $fechaHoraActual . "_(" . $i . ")_" . basename($fileInfo["name"]);
         move_uploaded_file($tmp_name, "ImgPanel/$name");
         array_push($img_files_name, ["name" => $name, "tag" => $fieldName]);
+        $this->reg_file_info($_POST, $img_files_name);
         $i++;
       }
     }

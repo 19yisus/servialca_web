@@ -32,14 +32,11 @@ function PaginaWeb(props) {
     icono: "",
   });
 
-<<<<<<< HEAD
   const { onChange, onSubmit } = useForm(loginUserCallback, {
     username: "mfigueroa",
     password: "+11078879*",
   });
-=======
   
->>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
   const [records, setRecords] = useState([
     {
       idproducto: "",
@@ -54,38 +51,6 @@ function PaginaWeb(props) {
     },
   ]);
 
-<<<<<<< HEAD
-  // const selecionarRegistros = async () => {
-  //   let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
-  //   console.log(endpoint);
-  //   setActivate(true);
-
-=======
-  const selecionarRegistrosTexts = async () => {
-    let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
-    console.log(endpoint);
-    setActivate(true);
-    await fetch(endpoint, {
-      method: "POST",
-      
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-        setValues(response[0])
-       
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
->>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
     setActivate(true);
@@ -141,9 +106,8 @@ function PaginaWeb(props) {
     context.logout();
     selecionarRegistros();
     selecionarRegistrosWeb();
-    selecionarRegistrosTexts();
+    // selecionarRegistrosTexts();
   }, []);
-<<<<<<< HEAD
   const bloquearUsuario = async () => {
     let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
     let body;
@@ -169,14 +133,7 @@ function PaginaWeb(props) {
         })
       );
   };
-  
 
-  useEffect(() => {
-    selecionarRegistros();
-  }, []);
-=======
- 
->>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
@@ -347,11 +304,7 @@ function PaginaWeb(props) {
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
             <img src={banner1} style={{ width: "100%" }} class=" img-fluid" />
-<<<<<<< HEAD
-          </div>*/} 
-=======
           </div>
->>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
         </Fade> 
         <Fade left>
           <div class="col-md-12 mx-auto py-5" id="quienes">
@@ -476,13 +429,7 @@ function PaginaWeb(props) {
              
             </div>
           </div>
-<<<<<<< HEAD
         </Fade> */}
-=======
-          </div>
-
-        </Fade>
->>>>>>> e91df503f4d930b2417d77c8602bfc3a3995e0d3
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2">
             <div class="slide-track d-flex justify-content-end">
