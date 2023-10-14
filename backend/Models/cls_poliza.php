@@ -974,7 +974,7 @@ abstract class cls_poliza extends cls_db
         medico_fechaVencimiento, 
         medico_tipoSangre, 
         medico_lente,
-		debitoCredito_id )
+		debitoCredito_id)
         VALUES(?, ?, ?, ?,?, ?,?)");
 		if (
 			$sql->execute([

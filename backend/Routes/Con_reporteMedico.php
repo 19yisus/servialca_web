@@ -129,7 +129,6 @@ setlocale(LC_ALL, "es_VE.UTF8");
 $Pdf = new clsFpdf();
 class MiCliente extends cls_medico
 {
-
 }
 $a = new MiCliente();
 $datos = $a->Reporte($_GET["ID"]);
@@ -141,12 +140,10 @@ if ($datos == null) {
 
     $Pdf->AddPage('P');
     $Pdf->SetFont("arial", "", 12);
-    if ($datos[0]["medico_foto"])
+    if (isset ($datos[0]["medico_foto"])) {
         $Pdf->Image($datos[0]["medico_foto"], 55, 162, 18, 22);
-    //    $ip=$_GET['ip'];
-    //    $cedula=$_GET['cedula'];
-    //    $nombres=$_GET['nombres'];
-    //    $result=$DB->Getone(Query(8,array($ip,$cedula,$nombres)));
+    }
+
     $Pdf->SetTextColor(000);
     $Pdf->SetFillColor(255, 255, 255);
     $Pdf->SetFont('Arial', 'B', 10);

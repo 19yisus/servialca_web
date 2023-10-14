@@ -22,7 +22,9 @@ export const ModalCertificadoMedico = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
+  const idCliente = useRef();
+  const idMedico = useRef();
+  const idCobertura = useRef();
   const txtEdad = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
@@ -128,6 +130,9 @@ export const ModalCertificadoMedico = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
+        idCliente.current.value = response[0].cliente_id;
+        idMedico.current.value = response[0].medico_id;
+        idCobertura.current.value = response[0].nota_id;
         var cedula = response[0].cliente_cedula.split("-");
         cmbNacionalidad.current.value = cedula[0] + "-";
         txtCedula.current.value = cedula[1];
@@ -137,10 +142,8 @@ export const ModalCertificadoMedico = (props) => {
         txtEdad.current.value = response[0].medico_edad;
         txtTipoSangre.current.value = response[0].medico_tipoSangre;
         cmbLentes.current.value = response[0].medico_lente;
-        // cmbPago.current.value;
-        // txtReferencia.current.value;
-        // txtDolar.current.value;
-        // txtBs.current.value;
+        cmbPago.current.value = response[0].nota_tipoPago;
+        txtReferencia.current.value = response[0].nota_referencia;
       })
       .catch((error) =>
         setMensaje({
@@ -152,20 +155,25 @@ export const ModalCertificadoMedico = (props) => {
       );
   };
   const actualizarCertificado = async () => {
-    let endpoint = op.conexion + "/poliza/registrarCertificado";
+    let endpoint;
+    if (operacion === 3) {
+      endpoint = op.conexion + "/medico/Editar";
+    } else {
+      endpoint = op.conexion + "/poliza/registrarCertificado";
+    }
+
     console.log(endpoint);
     setActivate(true);
 
     //setLoading(false);
 
     let bodyF = new FormData();
-
-    bodyF.append(
-      "Nombre",
-      cmbNacionalidad.current.value + txtNombre.current.value
-    );
+    bodyF.append("idCliente", idCliente.current.value);
+    bodyF.append("idMedico", idMedico.current.value);
+    bodyF.append("idCobertura", idCobertura.current.value);
+    bodyF.append("Nombre",txtNombre.current.value);
     bodyF.append("Apellido", txtApellido.current.value);
-    bodyF.append("Cedula", txtCedula.current.value);
+    bodyF.append("Cedula",cmbNacionalidad.current.value + txtCedula.current.value);
     bodyF.append("fechaNacimiento", txtFechaNaci.current.value);
     bodyF.append("Edad", txtEdad.current.value);
     bodyF.append("tipoSangre", txtTipoSangre.current.value);
@@ -191,7 +199,11 @@ export const ModalCertificadoMedico = (props) => {
             texto: response.res,
             icono: "exito",
           });
-          window.open(`${op.conexion}/reporte/reporteMedico?ID=${response.id}`);
+          if (operacion != 3) {
+            window.open(
+              `${op.conexion}/reporte/reporteMedico?ID=${response.id}`
+            );
+          }
         }
         if (response.code == 400) {
           setMensaje({
@@ -416,6 +428,9 @@ export const ModalCertificadoMedico = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
+            <input type="hidden" ref={idCliente}/>
+            <input type="hidden" ref={idMedico}/>
+            <input type="hidden" ref={idCobertura}/>
             <select
               class="form-select col-md-3"
               ref={cmbNacionalidad}

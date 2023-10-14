@@ -153,38 +153,7 @@ export const ModalImgLicencia = (props) => {
       );
   };
 
-  const selecionarSucursal = async (id) => {
-    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID=" + id;
-    console.log(endpoint);
-    setActivate(true);
-
-    //setLoading(false);
-
-    let bodyF = new FormData();
-
-    // bodyF.append("Nombre", txtDescripcion.current.value)
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-
-        txtDescripcion.current.value = response.sucursal_nombre;
-        setValues(response);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
+  
 
   const onChangeValidar = () => {
     let sigue = true;

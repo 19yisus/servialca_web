@@ -33,6 +33,10 @@ function PaginaWeb(props) {
     icono: "",
   });
 
+  const { onChange, onSubmit } = useForm(loginUserCallback, {
+    username: "mfigueroa",
+    password: "+11078879*",
+  });
   
   const [records, setRecords] = useState([
    
@@ -62,6 +66,7 @@ function PaginaWeb(props) {
         })
       );
   };
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
     setActivate(true);
@@ -147,10 +152,35 @@ function PaginaWeb(props) {
   useEffect(() => {
     context.logout();
     selecionarRegistros();
-   // selecionarRegistrosWeb();
-    selecionarRegistrosTexts();
+    selecionarRegistrosWeb();
+    // selecionarRegistrosTexts();
   }, []);
- 
+  const bloquearUsuario = async () => {
+    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
+    let body;
+  
+    let bodyF = new FormData();
+  
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setValues(response[0]);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
@@ -476,9 +506,7 @@ function PaginaWeb(props) {
              
             </div>
           </div>
-          </div>
-
-        </Fade>
+        </Fade> */}
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
           <div class="slider2">
             <div class="slide-track d-flex justify-content-end">
