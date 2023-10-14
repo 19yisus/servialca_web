@@ -10,6 +10,7 @@ import logo from "../imagenes/logo1.png";
 import banner1 from "../imagenes/banner1.jpeg";
 import Fade from "react-reveal/Fade";
 
+
 function PaginaWeb(props) {
   const [loading, setLoading] = useState(false);
 
@@ -34,17 +35,7 @@ function PaginaWeb(props) {
 
   
   const [records, setRecords] = useState([
-    {
-      idproducto: "",
-      codigo: "",
-      cantidad: "",
-      producto: "",
-      precio: "",
-      iva: "",
-      motoiva: "",
-      descuento: "",
-      total: "",
-    },
+   
   ]);
 
   const selecionarRegistrosTexts = async () => {
@@ -85,7 +76,36 @@ function PaginaWeb(props) {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        setRecords(response);
+       console.log(response);
+        let carrusel_1 = '';
+        let carrusel_2 = '';
+        let carrusel_3 = '';
+
+        console.log('aqui')
+       
+        for(let i = 0; i < response.length; i++){
+
+          if(response[i].tag && response[i].tag.toString() === "carrusel_1" ){
+            carrusel_1 = response[i].ruta_img;
+          } else if(response[i].tag && response[i].tag.toString() === "carrusel_2" ){
+            carrusel_2 = response[i].ruta_img;
+          } else if(response[i].tag && response[i].tag.toString() === "carrusel_3" ){
+            carrusel_3 = response[i].ruta_img;
+          }
+
+        }
+
+        console.log('aqui2')
+
+        setRecords({
+          carrusel_1:carrusel_1,
+          carrusel_2:carrusel_2,
+          carrusel_3:carrusel_3
+          
+        });
+
+  console.log(records)
+  console.log('aqui3')
       })
       .catch((error) =>
         setMensaje({
@@ -110,8 +130,10 @@ function PaginaWeb(props) {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-        setRecords(response);
+      
+
+
+
       })
       .catch((error) =>
         setMensaje({
@@ -125,7 +147,7 @@ function PaginaWeb(props) {
   useEffect(() => {
     context.logout();
     selecionarRegistros();
-    selecionarRegistrosWeb();
+   // selecionarRegistrosWeb();
     selecionarRegistrosTexts();
   }, []);
  
@@ -265,7 +287,7 @@ function PaginaWeb(props) {
           </div>
         </div>
       </nav>
-      <div id="slider">
+  {   /* <div id="slider">
         <figure>
           {records.slice(0, 3).map((item, index) => (
             <img
@@ -274,6 +296,36 @@ function PaginaWeb(props) {
               alt=""
             />
           ))}
+        </figure>
+      </div>*/}
+
+<div id="slider">
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_1}
+              alt=""
+            />
+       
+        </figure>
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_2}
+              alt=""
+            />
+       
+        </figure>
+        <figure>
+         
+            <img
+             
+              src={op.conexion + "/ImgPanel/" + records.carrusel_3}
+              alt=""
+            />
+       
         </figure>
       </div>
 
