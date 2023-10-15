@@ -9,11 +9,9 @@ class Con_poliza extends cls_poliza
         //ID
         $this->cliente = isset($_POST["idCliente"]) ? $_POST["idCliente"] : null;
         $this->idTitular = isset($_POST["idTitular"]) ? $_POST["idTitular"] : null;
+        $this->idColor = isset($_POST["idColor"]) ? $_POST["idColor"] : null;
         $this->vehiculo = isset($_POST["idVehiculo"]) ? $_POST["idVehiculo"] : null;
         $this->debitoCredito = isset($_POST["idCobertura"]) ? $_POST["idCobertura"] : null;
-        $this->idColor;
-        $this->idModelo;
-        $this->idMarca;
         $this->id = isset($_POST["ID"]) ? $_POST["ID"] : null;
         $this->sucursal = isset($_POST["Sucursal"]) ? $_POST["Sucursal"] : null;
         $this->usuario = isset($_POST["Usuario"]) ? $_POST["Usuario"] : null;
@@ -102,8 +100,9 @@ class Con_poliza extends cls_poliza
         Response($resultado['data'], $resultado['code']);
     }
 
-    public function registrarLicencia(){
-        $resultado = $this->SaveLicencia($_POST["precioDolar"],1, "Licencia");
+    public function registrarLicencia()
+    {
+        $resultado = $this->SaveLicencia($_POST["precioDolar"], 1, "Licencia");
         Response($resultado["data"], $resultado["code"]);
     }
 

@@ -25,7 +25,9 @@ export const ModalLicencia = (props) => {
   const dolarbcv = JSON.parse(localStorage.getItem("dolarbcv"));
   const user = JSON.parse(localStorage.getItem("username"));
   const sucursal = JSON.parse(localStorage.getItem("sucursal"));
-  const txtEdad = useRef();
+  const ID = useRef();
+  const idCliente = useRef();
+  const idCobertura = useRef();
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
   const txtCedula = useRef();
@@ -34,7 +36,6 @@ export const ModalLicencia = (props) => {
   const cmbNacionalidad = useRef();
   const cmbTelefono = useRef();
   const txtTelefono = useRef();
-  const txtDatosPastor = useRef();
   const txtReferencia = useRef();
   const txtTotal = useRef();
   const txtDolar = useRef();
@@ -54,7 +55,6 @@ export const ModalLicencia = (props) => {
     apellido: "",
     fecha_nac: "",
     bas_agua: 1,
-
     status: 1,
     bas_espirit: 1,
     cod_iglesia: "",
@@ -124,31 +124,84 @@ export const ModalLicencia = (props) => {
       tiposangre: "",
     });
   };
-
+  const seleccionarRegistros = async (id) => {
+    let endpoint = op.conexion + "/licencia/ConsultarUno";
+    console.log(endpoint);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        ID.current.value = response[0].licencia_id;
+        idCliente.current.value = response[0].cliente_id;
+        idCobertura.current.value = response[0].nota_id;
+        var cedula = response[0].cliente_cedula.split("-");
+        cmbNacionalidad.current.value = cedula[0] + "-";
+        txtCedula.current.value = cedula[1];
+        txtNombre.current.value = response[0].cliente_nombre;
+        txtApellido.current.value = response[0].cliente_apellido;
+        txtCorreo.current.value = response[0].licencia_correo;
+        var telefono = response[0].cliente_telefono.split("-");
+        cmbTelefono.current.value = telefono[0] + "-";
+        txtTelefono.current.value = telefono[1];
+        txtTipoSangre.current.value = response[0].licencia_sangre;
+        cmbTipoLicencia.current.value = response[0].licencia_licencia;
+        cmbLentes.current.value = response[0].licencia_lente;
+        cmbPago.current.value = response[0].nota_tipoPago;
+        txtReferencia.current.value = response[0].nota_referencia;
+        txtTotal.current.value = response[0].licencia_montoTotal;
+        txtAbono.current.value = response[0].licencia_abonado;
+        txtRestante.current.value = response[0].licencia_restante;
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const actualizarCertificado = async () => {
-    let endpoint = ''
-    if(props.operacion === 2){
-      //aqui pon la ruta de editar
-      endpoint = op.conexion + "/poliza/registrarLicencia";
-    }else {
+    let endpoint = "";
+    if (props.operacion === 2) {
+      endpoint = op.conexion + "/licencia/Editar";
+    } else {
       endpoint = op.conexion + "/poliza/registrarLicencia";
     }
     console.log(endpoint);
     setActivate(true);
     let bodyF = new FormData();
-    bodyF.append("precioDolar",dolarbcv);
+    bodyF.append("ID", ID.current.value);
+    bodyF.append("idCliente", idCliente.current.value);
+    bodyF.append("Cobertura", idCobertura.current.value);
+    bodyF.append("precioDolar", dolarbcv);
     bodyF.append("Nombre", txtNombre.current.value);
-    bodyF.append("Apellido",txtApellido.current.value);
-    bodyF.append("Cedula",cmbNacionalidad.current.value + txtCedula.current.value);
-    bodyF.append("Telefono",cmbTelefono.current.value + txtTelefono.current.value);
-    bodyF.append("Sangre",txtTipoSangre.current.value);
-    bodyF.append("correoLicencia",txtCorreo.current.value);
-    bodyF.append("Licencia",cmbTipoLicencia.current.value);
+    bodyF.append("Apellido", txtApellido.current.value);
+    bodyF.append(
+      "Cedula",
+      cmbNacionalidad.current.value + txtCedula.current.value
+    );
+    bodyF.append(
+      "Telefono",
+      cmbTelefono.current.value + txtTelefono.current.value
+    );
+    bodyF.append("Sangre", txtTipoSangre.current.value);
+    bodyF.append("Correo", txtCorreo.current.value);
+    bodyF.append("correoLicencia", txtCorreo.current.value);
+    bodyF.append("Licencia", cmbTipoLicencia.current.value);
     bodyF.append("licenciaRestante", "");
-    bodyF.append("montoTotal",txtTotal.current.value);
-    bodyF.append("Abonado",txtAbono.current.value);
-    bodyF.append("Restante",txtRestante.current.value);
-    bodyF.append("cantidadDolar", txtTotal.current.value)
+    bodyF.append("montoTotal", txtTotal.current.value);
+    bodyF.append("Abonado", txtAbono.current.value);
+    bodyF.append("Restante", txtRestante.current.value);
+    bodyF.append("cantidadDolar", txtTotal.current.value);
+    bodyF.append("metodoPago", cmbPago.current.value);
+    bodyF.append("Referencia", txtReferencia.current.value);
+    bodyF.append("Lente", cmbLentes.current.value);
     bodyF.append("Usuario", user);
     bodyF.append("Sucursal", sucursal);
     await fetch(endpoint, {
@@ -228,7 +281,15 @@ export const ModalLicencia = (props) => {
       regex = /[a-z]/ig;
     if (!regex.test(char)) e.preventDefault(); return false;
   }*/
-  const seleccionarCliente = (nombre, apellido, cedula, nacionalidad, Correo, Codigo, telefono) => {
+  const seleccionarCliente = (
+    nombre,
+    apellido,
+    cedula,
+    nacionalidad,
+    Correo,
+    Codigo,
+    telefono
+  ) => {
     console.log(nombre, apellido, cedula);
     cmbNacionalidad.current.value = nacionalidad + "-";
     txtCedula.current.value = cedula;
@@ -335,14 +396,15 @@ export const ModalLicencia = (props) => {
       onShow={() => {
         setOperacion(props.operacion);
 
-        if (props.operacion !== 1) {
-          setValues(props.persona);
-          console.log(props.persona);
+        if (props.operacion) {
+          seleccionarRegistros(props.idLicencia);
         }
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>{props.operacion === 2 ? 'Editar Licencia' :'Registrar Licencia'}</Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>
+          {props.operacion === 2 ? "Editar Licencia" : "Registrar Licencia"}
+        </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -383,6 +445,9 @@ export const ModalLicencia = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
+            <input type="hidden" ref={idCobertura} />
+            <input type="hidden" ref={idCliente} />
+            <input type="hidden" ref={ID} />
             <select
               class="form-select col-md-3"
               ref={cmbNacionalidad}

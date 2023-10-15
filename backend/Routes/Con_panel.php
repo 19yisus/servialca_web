@@ -40,7 +40,7 @@ class Con_panel extends cls_panel
       if ($fileInfo["tmp_name"] != "") {
         $tmp_name = $fileInfo["tmp_name"];
         $fechaHoraActual = date("YmdHis");
-        $name = $fechaHoraActual . "_(" . $i . ")_" . basename($fileInfo["name"]);
+        $name = $fechaHoraActual . "(" . $i . ")" . basename($fileInfo["name"]);
         move_uploaded_file($tmp_name, "ImgPanel/$name");
         array_push($img_files_name, ["name" => $name, "tag" => $fieldName]);
         $this->reg_file_info($_POST, $img_files_name);

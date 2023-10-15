@@ -21,7 +21,6 @@ import axios from "axios";
 import useTable from "../components/useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
-
 import { ModalCertificadoMedico } from "../components/administracion/modalCertificado";
 import { ModalRcv } from "../components/administracion/modalRcv";
 import { ModalImprimir } from "../components/administracion/modalImprimir";
@@ -313,28 +312,29 @@ function Inicio2() {
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setIdCliente(id);
-    setOperacion(op)
+    setOperacion(op);
     if (op === 1) {
       setMostrar5(true);
-    } else  if (op === 3){
-      setMostrar6(true);
     }
-    if (op === 2){
-      setMostrar2(true)
-    setIdCliente(id.poliza_id);
-    setPoliza(id)
-    } else {
+    if (op === 2) {
+      setMostrar2(true);
       setIdCliente(id);
+      setPoliza(id);
     }
-
+    if (op === 3) {
+      setMostrar2(true);
+      setIdCliente(id);
+      setPoliza(id);
+    }
   };
   const gestionarRcv = (opcion) => (e) => {
     e.preventDefault();
     console.log(opcion);
 
-    if (opcion === 1) {
+    if (opcion === 2) {
       setMostrar(true);
-    } else if (opcion === 2) {
+    } else if (opcion === 1) {
+      setOperacion(1);
       setMostrar2(true);
     } else {
       setMostrar4(true);
@@ -359,7 +359,7 @@ function Inicio2() {
       />
 
       <ModalRcv
-      operacion={operacion}
+        operacion={operacion}
         show={mostrar2}
         onHideCancela={() => {
           setMostrar2(false);
@@ -367,7 +367,6 @@ function Inicio2() {
         onHideCancela2={imprimirCertificado}
         idCliente={idCliente}
         poliza={poliza}
-
       />
 
       <ModalImprimir
@@ -391,15 +390,14 @@ function Inicio2() {
         }}
         idCliente={idCliente}
       />
-      
-        <ModalLicencia
-          show={mostrar4}
-          onHideCancela={() => {
-            setMostrar4(false);
-          }}
-          idCliente={idCliente}
-        />
-      
+
+      <ModalLicencia
+        show={mostrar4}
+        onHideCancela={() => {
+          setMostrar4(false);
+        }}
+        idCliente={idCliente}
+      />
 
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
@@ -462,14 +460,14 @@ function Inicio2() {
             <button
               type="button"
               class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(1)}
+              onClick={gestionarRcv(2)}
             >
               <i class="fa fa-plus"></i> Certificado Medico
             </button>
             <button
               type="button"
               class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(2)}
+              onClick={gestionarRcv(1)}
             >
               <i class="fa fa-plus"></i> Crear RCV
             </button>
@@ -541,7 +539,7 @@ function Inicio2() {
                       <i className="fas fa-eye"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(2, item)}
+                      onClick={gestionarBanco(2, item.poliza_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}

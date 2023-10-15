@@ -9,12 +9,12 @@ import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
-
+import { ModalLicencia } from "../administracion/modalLicencia";
 function TablaLicencia() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const [idLicencia, setIdLicencia] = useState();
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -111,7 +111,6 @@ function TablaLicencia() {
   const [presupuesto, setPresupuesto] = useState(0.0);
   const [totalrc, setTotalrc] = useState(0.0);
   const [totalavi, setTotalavi] = useState(0.0);
-  const [idSucursal, setIdSucursal] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({
@@ -295,10 +294,18 @@ function TablaLicencia() {
     e.preventDefault();
     setMostrar(true);
     setOperacion(op);
-    setIdSucursal(id);
+    setIdLicencia(id);
   };
   return (
     <div className="col-md-12 mx-auto p-2">
+      <ModalLicencia
+        operacion={operacion}
+        show={mostrar}
+        idLicencia={idLicencia}
+        onHideCancela={() => {
+          setMostrar(false);
+        }}
+      />
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
           <h2 className=" col-5 text-light">Licencia</h2>
@@ -449,7 +456,6 @@ function TablaLicencia() {
                     >
                       <i className="fas fa-print"></i>
                     </button>
-                    
                   </TableCell>
                 </TableRow>
               ))}
