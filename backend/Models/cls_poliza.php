@@ -186,9 +186,46 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-
+			$result = $this->SearchByUso();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->SearchByClase();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->SearchByTipo();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
 			$result = $this->SearchByVehiculo();
-
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
 			$result = $this->precioDolar($dolar);
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -287,6 +324,81 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 			$result = $this->editarTitular($this->idTitular);
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->SearchByColor();
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
+			$result = $this->SearchByMarca();
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+
+			$result = $this->SearchByModelo();
+			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
+			$result = $this->SearchByUso();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			}
+			$result = $this->SearchByClase();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			}
+			$result = $this->SearchByTipo();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			}
+			$result = $this->editarDebito($this->debitoCredito);
 			if (!$result) {
 				$this->db->rollback();
 				return [
@@ -626,7 +738,31 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->precioDolar;
 	}
+	protected function SearchByUso()
+	{
+		$sql = $this->db->prepare("SELECT * FROM usoVehiculo 
+		WHERE usoVehiculo_nombre = ?");
+		$sql->execute([$this->uso]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $this->uso = $resultado["usoVehiculo_id"];
+	}
 
+	protected function SearchByClase()
+	{
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo 
+		WHERE clase_nombre = ?");
+		$sql->execute([$this->clase]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $this->clase = $resultado["claseVehiculo_id"];
+	}
+	protected function SearchByTipo()
+	{
+		$sql = $this->db->prepare("SELECT * FROM tipovehiculo
+		WHERE tipoVehiculo_nombre = ?");
+		$sql->execute([$this->tipo]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $this->tipo = $resultado["tipoVehiculo_id"];
+	}
 	protected function SearchByVehiculo()
 	{
 		$sql = $this->db->prepare("SELECT * FROM vehiculo WHERE vehiculo_placa = ?");
@@ -869,9 +1005,21 @@ abstract class cls_poliza extends cls_db
 		}
 		return $resultado;
 	}
-
-
-
+	protected function editarDebito($id)
+	{
+		$sql = $this->db->prepare("UPDATE debitocredito SET
+		nota_referencia = ?,
+		nota_tipoPago = ?,
+		nota_monto =? 
+		WHERE nota_id = ?");
+		$sql->execute([
+			$this->referencia,
+			$this->metodoPago,
+			$this->cantidadDolar,
+			$id
+		]);
+		return true;
+	}
 	// Editar
 	protected function editarVehiculo($id)
 	{
@@ -899,9 +1047,9 @@ abstract class cls_poliza extends cls_db
 				$this->serialCarroceria,
 				$this->peso,
 				$this->capacidad,
-				$this->color,
-				$this->modelo,
-				$this->marca,
+				$this->idColor,
+				$this->idModelo,
+				$this->idMarca,
 				$this->uso,
 				$this->clase,
 				$this->tipo,

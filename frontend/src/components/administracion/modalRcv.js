@@ -36,6 +36,15 @@ export const ModalRcv = (props) => {
   const idUser = JSON.parse(localStorage.getItem("user_id"));
   const suc = JSON.parse(localStorage.getItem("sucursal"));
   const [value, setValue] = useState("");
+  //ID
+  const idPoliza = useRef();
+  const idCliente = useRef();
+  const idTitular = useRef();
+  const idVehiculo = useRef();
+  // const idColor = useRef();
+  // const idMarca = useRef();
+  // const idModelo = useRef();
+  const idCobertura = useRef();
   //Contrato
   const TxtTipoContrato = useRef();
   const txtDesde = useRef();
@@ -193,10 +202,12 @@ export const ModalRcv = (props) => {
 
   const actualizarCertificado = async () => {
     let endpoint = "";
-    if (operacion === 1) {
-      endpoint = op.conexion + "/poliza/registrar";
-    } else if (operacion === 2) {
+    if (operacion === 2) {
       endpoint = op.conexion + "/poliza/editar";
+    } else if (operacion === 3) {
+      endpoint = op.conexion + "poliza/renovar";
+    } else {
+      endpoint = op.conexion + "/poliza/registrar";
     }
 
     setActivate(true);
@@ -204,6 +215,11 @@ export const ModalRcv = (props) => {
     //setLoading(false);
 
     let bodyF = new FormData();
+    //ID
+    bodyF.append("idCliente", idCliente.current.value);
+    bodyF.append("idTitular", idTitular.current.value);
+    bodyF.append("idVehiculo", idVehiculo.current.value);
+    bodyF.append("idCobertura", idCobertura.current.value);
     //Contrato
     bodyF.append("fechaInicio", txtDesde.current.value);
     bodyF.append("fechaVencimiento", txtHasta.current.value);
@@ -522,8 +538,6 @@ export const ModalRcv = (props) => {
       );
   };
 
- 
-
   const selecionarTipo = async () => {
     let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
     setActivate(true);
@@ -803,6 +817,10 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
+        idCliente.current.value = response[0].cliente_id;
+        idTitular.current.value = response[0].titular_id;
+        idVehiculo.current.value = response[0].vehiculo_id;
+        idCobertura.current.value = response[0].nota_id;
         TxtTipoContrato.current.value = response[0].contrato_nombre;
         txtDesde.current.value = response[0].poliza_fechaInicio;
         txtHasta.current.value = response[0].poliza_fechaVencimiento;
@@ -817,16 +835,16 @@ export const ModalRcv = (props) => {
         txtTelefono.current.value = telefono[1];
         txtCorreo.current.value = response[0].cliente_correo;
         txtDirec.current.value = response[0].cliente_direccion;
-        if (!response[0].estado_nombre){
-          cmbEstado.current.value = "Portuguesa"
-        }else{
-          cmbEstado.current.value = response[0].estado_nombre;          
+        if (!response[0].estado_nombre) {
+          cmbEstado.current.value = "Portuguesa";
+        } else {
+          cmbEstado.current.value = response[0].estado_nombre;
         }
         txtAcesor.current.value = response[0].usuario_nombre;
         cmbSucursal.current.value = response[0].sucursal_nombre;
-        if (!response[0].linea_nombre){
+        if (!response[0].linea_nombre) {
           txtLinea.current.value = "";
-        }else{
+        } else {
           txtLinea.current.value = response[0].linea_nombre;
         }
         var cedulaTitular = response[0].titular_cedula.split("-");
@@ -869,7 +887,7 @@ export const ModalRcv = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-        if (props.operacion === 2) {
+        if (props.operacion === 2 || props.operacion === 3) {
           selecionarRegistros(props.idCliente);
         }
         setOperacion(props.operacion);
@@ -885,7 +903,15 @@ export const ModalRcv = (props) => {
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          {operacion === 1 ? "Registro de RCV" : "Editar de RCV"}{" "}
+          <Modal.Title style={{ color: "#fff" }}>
+            {operacion === 1
+              ? "Registro de RCV"
+              : operacion === 2
+              ? "Editar de RCV"
+              : operacion === 3
+              ? "Renovar de RCV"
+              : "Registro de RCV"}
+          </Modal.Title>{" "}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -1061,6 +1087,10 @@ export const ModalRcv = (props) => {
                       <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
                     ))}
                   </select>*/}
+                  <input type="hidden" ref={idCliente} />
+                  <input type="hidden" ref={idTitular} />
+                  <input type="hidden" ref={idVehiculo} />
+                  <input type="hidden" ref={idCobertura} />
                   <input
                     disabled
                     type="text"
@@ -1073,7 +1103,11 @@ export const ModalRcv = (props) => {
                     type="button"
                     class="btn btn-success"
                     onClick={() => {
-                      setMostrar1(true);
+                      if (operacion === 3) {
+                        setMostrar1(false);
+                      } else {
+                        setMostrar1(true);
+                      }
                     }}
                   >
                     <i class="fa fa-search"></i>

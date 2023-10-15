@@ -83,7 +83,7 @@ function TablaCertificado() {
       color: "white",
     },
   ];
-  
+
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [cuentas, setCuentas] = useState();
