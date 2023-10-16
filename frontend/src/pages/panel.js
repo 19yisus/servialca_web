@@ -106,7 +106,7 @@ function Panel() {
     ],
   };
 
-  const selecionarRegistros = async () => {
+  {/*const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
@@ -124,6 +124,64 @@ function Panel() {
         setActivate(false);
         console.log(response);
         setRecords(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };*/}
+
+  const selecionarRegistros = async () => {
+    let endpoint = op.conexion + "/panel/ConsultarTag";
+    setActivate(true);
+    //setLoading(false);
+    let bodyF = new FormData();
+    bodyF.append("tag", "carrusel");
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        console.log(response);
+        let carrusel_1 = "";
+        let carrusel_2 = "";
+        let carrusel_3 = "";
+
+        console.log("aqui");
+
+        for (let i = 0; i < response.length; i++) {
+          if (response[i].tag && response[i].tag.toString() === "carrusel_1") {
+            carrusel_1 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "carrusel_2"
+          ) {
+            carrusel_2 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "carrusel_3"
+          ) {
+            carrusel_3 = response[i].ruta_img;
+          }
+        }
+
+        console.log("aqui2");
+
+        setRecords({
+          carrusel_1: carrusel_1,
+          carrusel_2: carrusel_2,
+          carrusel_3: carrusel_3,
+        });
+
+        console.log(records);
+        console.log("aqui3");
       })
       .catch((error) =>
         setMensaje({
@@ -189,6 +247,7 @@ function Panel() {
 
   useEffect(() => {
     selecionarRegistros();
+   // selecionarRegistrosTag();
   }, []);
 
   const onChangeValidar = (e) => {
@@ -214,16 +273,18 @@ function Panel() {
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_1+"')" }}
                   name="carrusel_1"
                   ref={carrusel_1}
                   class="form-control bg-transparent border "
+                  onChange={(e)=>{console.log(e.target.value)}}
+                  
                 />
               </div>
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_2+"')" }}
                   name="carrusel_2"
                   ref={carrusel_2}
                   class="form-control bg-transparent border "
@@ -232,7 +293,7 @@ function Panel() {
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_3+"')" }}
                   name="carrusel_3"
                   ref={carrusel_3}
                   class="form-control bg-transparent border "
