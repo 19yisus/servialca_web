@@ -172,6 +172,8 @@ function Inicio2() {
   const [mostrar5, setMostrar5] = useState(false);
   const [mostrar6, setMostrar6] = useState(false);
   const [mostrar7, setMostrar7] = useState(false);
+  const [opPreguntas, setOpPreguntas] = useState(0);
+
 
   const [idCliente, setIdCliente] = useState();
 
@@ -305,6 +307,7 @@ function Inicio2() {
 
   useEffect(() => {
     selecionarRegistros();
+   // datisPersona();
   }, []);
 
   const regPre = () => {
@@ -351,7 +354,7 @@ function Inicio2() {
     setMostrar3(true);
   };
 
-  const datisPersona  = async (login) => {
+  const datisPersona  = async () => {
     let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
     console.log(endpoint)
     setActivate(true)
@@ -359,11 +362,12 @@ function Inicio2() {
 
 
     //setLoading(false);
-
-    console.log(login)
+    let username = JSON.parse(localStorage.getItem('username'))
+console.log(username)
+ 
     let bodyF = new FormData()
 
-    bodyF.append("Usuario", login.toUpperCase())
+    bodyF.append("Usuario", username.toUpperCase().toString())
 
 
     await fetch(endpoint, {
@@ -371,7 +375,11 @@ function Inicio2() {
       body: bodyF
     }).then(res => res.json())
       .then(response => {
-        console.log(response.lista_preguntas)
+        console.log(response.res)
+        if(response.res === 'No hay registros disponibles'){
+          setMostrar7(true)
+          setOpPreguntas(1)
+        }
         setActivate(false)
        
       })
@@ -386,7 +394,7 @@ function Inicio2() {
 
 <GestionarPreguntas
 show={mostrar7}
-llamado={1}
+llamado={opPreguntas}
 onHideCancela={()=>{setMostrar7(false)}}
 />
 
