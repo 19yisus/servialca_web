@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { ModalConfigurarUsuarios } from "./configuracion/configurarUsuario";
+import { GestionarPreguntas } from "./configuracion/preguntasSeguridad";
 
 function Header(props) {
 //  const { user, logout } = useContext(AuthContext);
   const [mostrar, setMostrar] = useState(false);
+  const [mostrar2, setMostrar2] = useState(false);
+
   const [mostrarClave, setMostrarClave] = useState(false);
 
 
@@ -22,6 +25,8 @@ function Header(props) {
       el.classList.toggle("toggled");
     }
   }
+
+
 
 
 
@@ -51,7 +56,7 @@ function Header(props) {
   </button>
   <ul class="dropdown-menu">
   <li>
-              <a class="dropdown-item" type="button">
+              <a class="dropdown-item" type="button" onClick={()=>{setMostrar2(true)}}>
                Preguntas de Seguridad
               </a>
             </li>
@@ -72,6 +77,12 @@ function Header(props) {
           </button>
         </div>
       </div>
+
+      <GestionarPreguntas
+show={mostrar2}
+llamado={2}
+onHideCancela={()=>{setMostrar2(false)}}
+/>
 
 <ModalConfigurarUsuarios
 show={mostrar}

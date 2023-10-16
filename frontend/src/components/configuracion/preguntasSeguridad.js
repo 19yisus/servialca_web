@@ -20,9 +20,7 @@ export const GestionarPreguntas = (props) => {
 
   let op = require("../../modulos/datos");
 
-  const login = JSON.parse(localStorage.getItem("login"));
-  const idusuario = JSON.parse(localStorage.getItem("idusuario"));
-  /*   const nodemailer = require("nodemailer");               */
+  const login = JSON.parse(localStorage.getItem("username"));
   let token = localStorage.getItem("jwtToken");
 
   const txtP1 = useRef();
@@ -55,7 +53,7 @@ export const GestionarPreguntas = (props) => {
     let endpoint = `${op.conexion}/api/usuario/updateprenguntas`;
     setActivate(true);
     let body = {
-      id: idusuario,
+      
       p1: txtP1.current.value.trim(),
       r1: txtR1.current.value.trim(),
       p2: txtP2.current.value.trim(),
@@ -98,7 +96,7 @@ export const GestionarPreguntas = (props) => {
     let endpoint = `${op.conexion}/api/usuario/inserpreguntas`;
     setActivate(true);
     let body = {
-      id: idusuario,
+     
       p1: txtP1.current.value.trim(),
       r1: txtR1.current.value.trim(),
       p2: txtP2.current.value.trim(),
@@ -135,40 +133,6 @@ export const GestionarPreguntas = (props) => {
               : error.response.data.message,
           icono: "error",
         });
-      });
-  };
-
-  const seleccionarPreguntas = (cedula) => {
-    let campos = "*";
-    let nomtab = "preguntaseguridad";
-    let nomid = "idusuario";
-
-    let endpoint = `${op.conexion}/api/consulta/modeli?campos=${campos}&id=${cedula}&nomtab=${nomtab}&nomid=${nomid}`;
-    setActivate(true);
-
-    axios
-      .get(endpoint, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
-      })
-      .then(function (response) {
-        if (response.status == 200) {
-          if (response.data !== "") {
-           txtP1.current.value = response.data.pregunta1;
-           txtP2.current.value = response.data.pregunta2;
-           txtR1.current.value = response.data.respuesta1;
-           txtR2.current.value = response.data.respuesta2;
-
-
-
-          }
-        }
-
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
       });
   };
 
@@ -231,41 +195,70 @@ export const GestionarPreguntas = (props) => {
     }
   };
 
+  const datisPersona  = async () => {
+    let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+    let username = JSON.parse(localStorage.getItem('username'))
+console.log(username)
+ 
+    let bodyF = new FormData()
+
+    bodyF.append("Usuario", username.toUpperCase().toString())
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+        console.log(response.res)
+      
+        setActivate(false)
+       
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <Modal
       {...props}
       style={{ background: "rgb(28, 27, 23)" }}
-      size="sm"
+      size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       backdrop="static"
       keyboard={false}
       onShow={() => {
-        /* setOperacion(props.operacion) */
-        if (props.llamado !== 1) {
-          
-          setBoton(false);
-        } else {
-          const idusuario = JSON.parse(localStorage.getItem("idusuario"));
-          seleccionarPreguntas(idusuario);
-
-          setBoton(true);
-        }
+         setOperacion(props.llamado) 
+         if(operacion !== 1){
+          datisPersona()
+         }
+      
       }}
     >
       <Modal.Header style={{ backgroundColor: "#019cd5" }}>
         <Modal.Title style={{ color: "#fff" }}>
-          Preguntas de Seguridad
+          {operacion === 1 ? 'Registrar Preguntas de Seguridad' : 'Editar Preguntas de Seguridad' }
         </Modal.Title>
+       {operacion !== 1 ? 
         <button
-          disabled={props.llamado === 1 ? false : true}
-          ref={btnCancela}
-          className="btn"
-          style={{ border: 0, margin: 0, padding: 0, color: "#ffffff" }}
-          onClick={salir}
-        >
-          <i className="far fa-window-close"></i>
-        </button>
+       
+        ref={btnCancela}
+        className="btn"
+        style={{ border: 0, margin: 0, padding: 0, color: "#ffffff" }}
+        onClick={salir}
+      >
+        <i className="far fa-window-close"></i>
+      </button>
+      : ''}
       </Modal.Header>
       <Modal.Body style={{ color: "rgb(106, 115, 123)" }}>
         <Mensaje
@@ -281,76 +274,68 @@ export const GestionarPreguntas = (props) => {
                 });
           }}
         />
-        <div>
+        <div className="col-md-12 row mx-auto">
           <h3 className="text-center">Bienvenido {login} </h3>
 
-          <div class="mb-2">
+          <div class="mb-2 col-md-6">
             <label for="exampleInputEmail1" class="form-label">
               Pregunta N°1
             </label>
             <input
               type="text"
-              disabled={boton}
+             
               ref={txtP1}
               class="form-control form-control-sm"
             />
           </div>
 
-          <div class="mb-2">
+          <div class="mb-2 col-md-6">
             <label for="exampleInputEmail1" class="form-label">
               Respuesta N°1
             </label>
             <input
               type="text"
-              disabled={boton}
+             
               ref={txtR1}
               class="form-control form-control-sm"
             />
-            <div class="mb-2">
+             </div>
+            <div class="mb-2 col-md-6">
               <label for="exampleInputEmail1" class="form-label">
                 Pregunta N°2
               </label>
               <input
                 type="text"
-                disabled={boton}
+               
                 ref={txtP2}
                 class="form-control form-control-sm"
               />
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2 col-md-6">
               <label for="exampleInputEmail1" class="form-label">
                 Respuesta N°2
               </label>
               <input
                 type="text"
-                disabled={boton}
+               
                 ref={txtR2}
                 class="form-control form-control-sm"
               />
             </div>
-          </div>
+
+            {operacion === 1 ? 
+          <span className="text-danger">Debe ingresas sus preguntas de seguridad para ser registradas en caso de desear una recuperacion de clave de usuario en caso de olvido o bloqueo </span> : ''  
+          }
+         
         </div>
       </Modal.Body>
 
       <Modal.Footer>
-        {props.llamado === 1 ? (
-          <button
-            disabled={!boton}
-            onClick={() => {
-              setBoton(false);
-            }}
-            className="btn btn-sm mx-auto btn-warning rounded-pill col-md-6"
-          >
-            <i className="fas fa-window-close"> Modificar</i>
-          </button>
-        ) : (
-          ""
-        )}
-
+        
         <button
-          disabled={boton}
-          className="btn btn-sm mx-auto btn-success rounded-pill col-md-6"
+         
+          className="btn btn-sm mx-auto btn-success rounded-pill col-md-2"
           onClick={onChangevalidar}
         >
           <i className="fas fa-window-close"> Aceptar</i>
