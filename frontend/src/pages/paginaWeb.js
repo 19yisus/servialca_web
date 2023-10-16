@@ -119,35 +119,12 @@ function PaginaWeb(props) {
         })
       );
   };
-  const selecionarRegistrosWeb = async () => {
-    let endpoint = op.conexion + "/panel/ConsultarTodos";
-    setActivate(true);
-    //setLoading(false);
-    let bodyF = new FormData();
-    bodyF.append("tag", "img_home");
-    console.log(endpoint);
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
+ 
   useEffect(() => {
     context.logout();
     selecionarRegistros();
-    selecionarRegistrosWeb();
-    // selecionarRegistrosTexts();
+    //selecionarRegistrosWeb();
+     selecionarRegistrosTexts();
   }, []);
   const bloquearUsuario = async () => {
     let endpoint = `${op.conexion}/api/comun/bloquearusuario`;

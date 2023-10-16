@@ -28,7 +28,7 @@ class Con_panel extends cls_panel
 
   public function ConsultarTag()
   {
-    $resultado = $this->getImg($_POST["tag"]);
+    $resultado = $this->getImg();
     Response($resultado, 200);
   }
 

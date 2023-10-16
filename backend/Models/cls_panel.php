@@ -67,7 +67,7 @@ abstract class cls_panel extends cls_db
 	{
 		$this->db->query("UPDATE file_contents SET estatus_img = 0 WHERE tag = '$tag'");
 	}
-	public function getImg($tag)
+	public function getImg()
 	{
 
 		// if ($tag == 'home') $tag = 'home_1';
@@ -85,7 +85,7 @@ abstract class cls_panel extends cls_db
 		// }
 
 		$sql = $this->db->query("SELECT * FROM file_contents WHERE estatus_img = 1");
-		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		return $resultado;
 	}
 }
