@@ -67,7 +67,6 @@ function PaginaWeb(props) {
     setActivate(true);
     //setLoading(false);
     let bodyF = new FormData();
-    bodyF.append("tag", "carrusel");
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -76,10 +75,13 @@ function PaginaWeb(props) {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        console.log(response);
         let carrusel_1 = "";
         let carrusel_2 = "";
         let carrusel_3 = "";
+        let img_banner = "";
+        let img_login = "";
+        let img_home = "";
+        let img_about = ''
 
         console.log("aqui");
 
@@ -96,6 +98,26 @@ function PaginaWeb(props) {
             response[i].tag.toString() === "carrusel_3"
           ) {
             carrusel_3 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_banner"
+          ) {
+            img_banner = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_login"
+          ) {
+            img_login = response[i].ruta_img;
+          }  else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_home"
+          ) {
+            img_home = response[i].ruta_img;
+          }  else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_about"
+          ) {
+            img_about = response[i].ruta_img;
           }
         }
 
@@ -105,6 +127,10 @@ function PaginaWeb(props) {
           carrusel_1: carrusel_1,
           carrusel_2: carrusel_2,
           carrusel_3: carrusel_3,
+          img_banner:img_banner,
+          img_login:img_login,
+          img_home:img_home,
+          img_about:img_about
         });
 
         console.log(records);
@@ -126,106 +152,14 @@ function PaginaWeb(props) {
     //selecionarRegistrosWeb();
      selecionarRegistrosTexts();
   }, []);
-  const bloquearUsuario = async () => {
-    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
-    let body;
-
-    let bodyF = new FormData();
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-        setValues(response[0]);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
-
+ 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
 
-  const sinIgn = async () => {
-    let endpoint = op.conexion + "/Auth/login";
-    console.log(endpoint);
-    setActivate(true);
-    var login = values.username;
-    var passwd = values.password;
-
-    // let body = {
-    //   Usuario: login,
-    //   Clave: passwd
-    // }
-
-    setLoading(false);
-
-    let bodyF = new FormData();
-
-    bodyF.append("Usuario", login);
-    bodyF.append("Clave", passwd);
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        context.login(response.data.token);
-
-        // window.location.href = '/inicio'
-        const fecha = new Date();
-        localStorage.setItem("fechasistema", JSON.stringify(fecha));
-
-        localStorage.setItem(
-          "rol",
-          JSON.stringify(response.data.usuario[0].rol)
-        );
-        localStorage.setItem(
-          "user_id",
-          JSON.stringify(response.data.usuario[0].user_id)
-        );
-        localStorage.setItem(
-          "username",
-          JSON.stringify(response.data.usuario[0].username)
-        );
-        localStorage.setItem(
-          "permisos",
-          JSON.stringify(response.data.usuario[0].permisos)
-        );
-        localStorage.setItem(
-          "idsucursal",
-          JSON.stringify(response.data.usuario[1].id)
-        );
-        localStorage.setItem(
-          "sucursal",
-          JSON.stringify(response.data.usuario[1].name)
-        );
-        setActivate(false);
-        window.location.href = "/inicio";
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
+  
 
   function loginUserCallback() {
     setLoading(true);
-    sinIgn();
     console.log("listo");
   }
 
@@ -321,14 +255,19 @@ function PaginaWeb(props) {
                 </h1>
               </div>
 
-              <div class="col-md-5 mx-auto"></div>
+              <div class="col-md-5 mx-auto">
+          <img src={op.conexion + "/ImgPanel/" + records.img_home} alt="" />
+
+              </div>
               <div class="col-md-7 mx-auto text-center">{values.text_home}</div>
             </div>
           </div>
         </Fade>
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
-            <img src={banner1} style={{ width: "100%" }} class=" img-fluid" />
+        
+          <img src={op.conexion + "/ImgPanel/" + records.img_banner}  style={{ width: "100%" }} alt="" />
+
           </div>
         </Fade>
         <Fade left>
@@ -347,7 +286,8 @@ function PaginaWeb(props) {
                 </div>
 
                 <div class="col-md-6 mx-auto py-4">
-                  <img src="" alt="" class="img-fluid" srcset="" />
+                <img src={op.conexion + "/ImgPanel/" + records.img_about} alt="" />
+
                 </div>
               </div>
             </div>
