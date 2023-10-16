@@ -152,32 +152,7 @@ function PaginaWeb(props) {
     //selecionarRegistrosWeb();
      selecionarRegistrosTexts();
   }, []);
-  const bloquearUsuario = async () => {
-    let endpoint = `${op.conexion}/api/comun/bloquearusuario`;
-    let body;
-
-    let bodyF = new FormData();
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        console.log(response);
-        setValues(response[0]);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-  };
-
+ 
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
 
