@@ -120,11 +120,11 @@ function PaginaWeb(props) {
       );
   };
   const selecionarRegistrosWeb = async () => {
-    let endpoint = op.conexion + "/panel/GetAllWeb";
+    let endpoint = op.conexion + "/panel/ConsultarTodos";
     setActivate(true);
     //setLoading(false);
     let bodyF = new FormData();
-    bodyF.append("tag", "carrusel");
+    bodyF.append("tag", "img_home");
     console.log(endpoint);
     await fetch(endpoint, {
       method: "POST",
