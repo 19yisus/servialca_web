@@ -28,6 +28,7 @@ import { ModalLicencia } from "../components/administracion/modalLicencia";
 import { ModalConsultarPoliza } from "../components/administracion/modalConsultarPoliza";
 import { ModalRenovarPoliza } from "../components/administracion/modalRenovar";
 import { formatMoneda, validaMonto, formatoMonto } from "../util/varios";
+import { GestionarPreguntas } from "../components/configuracion/preguntasSeguridad";
 
 function Inicio2() {
   var op = require("../modulos/datos");
@@ -170,6 +171,8 @@ function Inicio2() {
   const [mostrar4, setMostrar4] = useState(false);
   const [mostrar5, setMostrar5] = useState(false);
   const [mostrar6, setMostrar6] = useState(false);
+  const [mostrar7, setMostrar7] = useState(false);
+
   const [idCliente, setIdCliente] = useState();
 
   const [filterFn, setFilterFn] = useState({
@@ -348,8 +351,45 @@ function Inicio2() {
     setMostrar3(true);
   };
 
+  const datisPersona  = async (login) => {
+    let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
+    console.log(endpoint)
+    setActivate(true)
+
+
+
+    //setLoading(false);
+
+    console.log(login)
+    let bodyF = new FormData()
+
+    bodyF.append("Usuario", login.toUpperCase())
+
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF
+    }).then(res => res.json())
+      .then(response => {
+        console.log(response.lista_preguntas)
+        setActivate(false)
+       
+      })
+      .catch(error =>
+        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+      )
+
+  };
+
   return (
     <div className="col-md-12 mx-auto p-2">
+
+<GestionarPreguntas
+show={mostrar7}
+llamado={1}
+onHideCancela={()=>{setMostrar7(false)}}
+/>
+
       <ModalCertificadoMedico
         //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra
         show={mostrar}
