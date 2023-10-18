@@ -19,10 +19,10 @@ export const GestionarPreguntas = (props) => {
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
-
+  const id_user = JSON.parse(localStorage.getItem("user_id"));
   const login = JSON.parse(localStorage.getItem("username"));
   let token = localStorage.getItem("jwtToken");
-
+  const id = useRef();
   const txtP1 = useRef();
   const txtP2 = useRef();
   const txtR1 = useRef();
@@ -49,91 +49,69 @@ export const GestionarPreguntas = (props) => {
     props.onHideCancela();
   };
 
-  const updatePreguntas = () => {
-    let endpoint = `${op.conexion}/api/usuario/updateprenguntas`;
+  const consultarPreguntas = async () => {
+    let endpoint = op.conexion + "/Auth/ConsultarPreguntas";
     setActivate(true);
-    let body = {
-      
-      p1: txtP1.current.value.trim(),
-      r1: txtR1.current.value.trim(),
-      p2: txtP2.current.value.trim(),
-      r2: txtR1.current.value.trim(),
-    };
-
-    axios
-      .post(endpoint, body, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
-      })
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log(operacion);
-          setMensaje({
-            mostrar: true,
-            titulo: "Exito.",
-            texto: "Preguntas Actualizadas",
-            icono: "exito",
-          });
-        }
+    let bodyF = new FormData();
+    bodyF.append("Usuario", id_user);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
         setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
-        setMensaje({
-          mostrar: true,
-          titulo: "Error",
-          texto:
-            error.response.data.message ===
-            "llave duplicada viola restricción de unicidad «persona_pkey»"
-              ? "ya existe una persona con esa cedula"
-              : error.response.data.message,
-          icono: "error",
-        });
+        id.current.value = response[0].id_respuesta;
+        txtP1.current.value = response[0].des_pregunta;
+        txtR1.current.value = response[0].des_respuesta;
+        txtP2.current.value = response[1].des_pregunta;
+        txtR2.current.value = response[1].des_respuesta;
       });
   };
-  const insertPreguntas = () => {console.log('hola')
-    let endpoint = `${op.conexion}/api/usuario/inserpreguntas`;
-    setActivate(true);
-    let body = {
-     
-      p1: txtP1.current.value.trim(),
-      r1: txtR1.current.value.trim(),
-      p2: txtP2.current.value.trim(),
-      r2: txtR1.current.value.trim(),
-    };
 
-    axios
-      .post(endpoint, body, {
-        headers: {
-          "x-access-token": `${token}`,
-        },
-      })
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log(operacion);
-          setMensaje({
-            mostrar: true,
-            titulo: "Exito.",
-            texto: "Preguntas Actualizadas",
-            icono: "exito",
-          });
-        }
-        setActivate(false);
-      })
-      .catch(function (error) {
-        setActivate(false);
+  const insertPreguntas = async () => {
+    let endpoint = `${op.conexion}/Auth/savePreguntas`;
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", id.current.value);
+    bodyF.append("Usuario", id_user);
+    bodyF.append("des_pregunta", txtP1.current.value);
+    bodyF.append("des_pregunta", txtP2.current.value);
+    bodyF.append("des_respuesta", txtR1.current.value);
+    bodyF.append("des_respuesta", txtR2.current.value);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: bodyF,
+      });
+
+      const data = await response.json();
+
+      setActivate(false);
+
+      if (data.code === 200) {
         setMensaje({
           mostrar: true,
-          titulo: "Error",
-          texto:
-            error.response.data.message ===
-            "llave duplicada viola restricción de unicidad «persona_pkey»"
-              ? "ya existe una persona con esa cedula"
-              : error.response.data.message,
+          titulo: "Exito.",
+          texto: data.res,
+          icono: "exito",
+        });
+      } else if (data.code === 400) {
+        setMensaje({
+          mostrar: true,
+          titulo: "Error.",
+          texto: data.res,
           icono: "error",
         });
+      }
+    } catch (error) {
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: error.message,
+        icono: "informacion",
       });
+    }
   };
 
   const blanquear = () => {};
@@ -186,45 +164,41 @@ export const GestionarPreguntas = (props) => {
     }
 
     if (sigue) {
-      console.log(props.llamado)
-      if (props.llamado === 1) {
-        updatePreguntas();
-      } else {
-        insertPreguntas();
-      }
+      insertPreguntas();
     }
   };
 
-  const datisPersona  = async () => {
+  const datisPersona = async () => {
     let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
-    let username = JSON.parse(localStorage.getItem('username'))
-console.log(username)
- 
-    let bodyF = new FormData()
+    let username = JSON.parse(localStorage.getItem("username"));
+    console.log(username);
 
-    bodyF.append("Usuario", username.toUpperCase().toString())
+    let bodyF = new FormData();
 
+    bodyF.append("Usuario", username.toUpperCase().toString());
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-        console.log(response.res)
-      
-        setActivate(false)
-       
-      })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response.res);
 
+        setActivate(false);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   return (
@@ -237,28 +211,30 @@ console.log(username)
       backdrop="static"
       keyboard={false}
       onShow={() => {
-         setOperacion(props.llamado) 
-         if(operacion !== 1){
-          datisPersona()
-         }
-      
+        setOperacion(props.llamado);
+        if (operacion === 1) {
+          consultarPreguntas();
+        }
       }}
     >
       <Modal.Header style={{ backgroundColor: "#019cd5" }}>
         <Modal.Title style={{ color: "#fff" }}>
-          {operacion === 1 ? 'Registrar Preguntas de Seguridad' : 'Editar Preguntas de Seguridad' }
+          {operacion === 1
+            ? "Registrar Preguntas de Seguridad"
+            : "Editar Preguntas de Seguridad"}
         </Modal.Title>
-       {operacion !== 1 ? 
-        <button
-       
-        ref={btnCancela}
-        className="btn"
-        style={{ border: 0, margin: 0, padding: 0, color: "#ffffff" }}
-        onClick={salir}
-      >
-        <i className="far fa-window-close"></i>
-      </button>
-      : ''}
+        {operacion !== 1 ? (
+          <button
+            ref={btnCancela}
+            className="btn"
+            style={{ border: 0, margin: 0, padding: 0, color: "#ffffff" }}
+            onClick={salir}
+          >
+            <i className="far fa-window-close"></i>
+          </button>
+        ) : (
+          ""
+        )}
       </Modal.Header>
       <Modal.Body style={{ color: "rgb(106, 115, 123)" }}>
         <Mensaje
@@ -276,14 +252,13 @@ console.log(username)
         />
         <div className="col-md-12 row mx-auto">
           <h3 className="text-center">Bienvenido {login} </h3>
-
+          <input type="hidden" ref={id} />
           <div class="mb-2 col-md-6">
             <label for="exampleInputEmail1" class="form-label">
               Pregunta N°1
             </label>
             <input
               type="text"
-             
               ref={txtP1}
               class="form-control form-control-sm"
             />
@@ -295,46 +270,46 @@ console.log(username)
             </label>
             <input
               type="text"
-             
               ref={txtR1}
               class="form-control form-control-sm"
             />
-             </div>
-            <div class="mb-2 col-md-6">
-              <label for="exampleInputEmail1" class="form-label">
-                Pregunta N°2
-              </label>
-              <input
-                type="text"
-               
-                ref={txtP2}
-                class="form-control form-control-sm"
-              />
-            </div>
+          </div>
+          <div class="mb-2 col-md-6">
+            <label for="exampleInputEmail1" class="form-label">
+              Pregunta N°2
+            </label>
+            <input
+              type="text"
+              ref={txtP2}
+              class="form-control form-control-sm"
+            />
+          </div>
 
-            <div class="mb-2 col-md-6">
-              <label for="exampleInputEmail1" class="form-label">
-                Respuesta N°2
-              </label>
-              <input
-                type="text"
-               
-                ref={txtR2}
-                class="form-control form-control-sm"
-              />
-            </div>
+          <div class="mb-2 col-md-6">
+            <label for="exampleInputEmail1" class="form-label">
+              Respuesta N°2
+            </label>
+            <input
+              type="text"
+              ref={txtR2}
+              class="form-control form-control-sm"
+            />
+          </div>
 
-            {operacion === 1 ? 
-          <span className="text-danger">Debe ingresas sus preguntas de seguridad para ser registradas en caso de desear una recuperacion de clave de usuario en caso de olvido o bloqueo </span> : ''  
-          }
-         
+          {operacion === 1 ? (
+            <span className="text-danger">
+              Debe ingresas sus preguntas de seguridad para ser registradas en
+              caso de desear una recuperacion de clave de usuario en caso de
+              olvido o bloqueo{" "}
+            </span>
+          ) : (
+            ""
+          )}
         </div>
       </Modal.Body>
 
       <Modal.Footer>
-        
         <button
-         
           className="btn btn-sm mx-auto btn-success rounded-pill col-md-2"
           onClick={onChangevalidar}
         >

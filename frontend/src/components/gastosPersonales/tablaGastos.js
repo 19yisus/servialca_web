@@ -8,6 +8,7 @@ import moment from "moment";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
+import { ModalGastos } from "./modalGastos";
 
 function TablaGastos() {
   var op = require("../../modulos/datos");
@@ -31,18 +32,41 @@ function TablaGastos() {
       color: "white",
     },
     {
-      label: "Descripción",
+      label: "Fecha",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
     {
-      label: "Estatus",
+      label: "Hora",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
-
+    {
+      label: "Ingreso/Egreso",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Motivo",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Monto",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Total",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
     {
       label: "Opciones",
       textAlign: "center",
@@ -55,16 +79,7 @@ function TablaGastos() {
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [idUso, setIdUso] = useState();
   const [operacion, setOperacion] = useState();
-  const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
-  const [totaltipo, setTotaltipo] = useState(0.0);
-  const [presupuesto, setPresupuesto] = useState(0.0);
-  const [totalrc, setTotalrc] = useState(0.0);
-  const [totalavi, setTotalavi] = useState(0.0);
-  const [totalact, setTotalact] = useState(0.0);
-  const [totalmenos, setTotalmenos] = useState(0.0);
+  const [idSucursal, setIdSucursal] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -123,7 +138,7 @@ function TablaGastos() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/usoVehiculo/ConsultarTodos";
+    let endpoint = op.conexion + "/gastosPersonales/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
@@ -243,10 +258,19 @@ function TablaGastos() {
     e.preventDefault();
     setOperacion(op);
     setMostrar(true);
-    setIdUso(id);
+    setIdSucursal(id);
   };
   return (
     <div className="col-md-12 mx-auto p-2">
+      <ModalGastos
+        show={mostrar}
+        onHideCancela={() => {
+          setMostrar(false);
+        }}
+        operacion={operacion}
+        idSucursal={idSucursal}
+        render={selecionarRegistros}
+      />
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
           <h2 className=" col-5 text-light">Gastos personales</h2>
@@ -315,23 +339,44 @@ function TablaGastos() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.usoVehiculo_id}
+                    {item.nota_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.usoVehiculo_nombre}
+                    {item.nota_fecha}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.usoVehiculo_estatus) === 1
-                      ? "ACTIVO"
-                      : "INACTIVO"}
+                    {item.nota_hora}
                   </TableCell>
-
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.nota_IngresoEgreso}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.nota_motivo}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.nota_monto}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {}
+                  </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{
