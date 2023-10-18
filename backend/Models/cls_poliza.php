@@ -30,8 +30,13 @@ abstract class cls_poliza extends cls_db
 		$edad, $fechaInicioMedico, $fechaVencimientoMedico, $sangre, $lente,
 		//Licencia
 		$correoLicencia, $licencia, $licenciaRestante, $montoTotal, $abonado, $restante;
-	protected function renovar_poliza()
+
+
+	protected function renovar_poliza($dolar, $tipoIngreso, $motivo)
 	{
+		if (empty($this->fechaNacimiento)) {
+			$this->fechaNacimiento = "0000-00-00";
+		}
 		if (empty($this->fechaInicio)) {
 			$this->fechaInicio = date("Y-m-d");
 		}
@@ -40,10 +45,8 @@ abstract class cls_poliza extends cls_db
 			$fechaInicioObj->modify('+1 year');
 			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
 		} else {
-
 			$fechaVenicimiento = strtotime($this->fechaVencimiento);
 			$fechaActual = strtotime(date("Y-m-d"));
-
 			if ($fechaActual > $fechaVenicimiento) {
 				return [
 					'data' => [
@@ -51,11 +54,41 @@ abstract class cls_poliza extends cls_db
 					],
 					'code' => 400
 				];
+			} else {
 			}
 		}
+		$result = $this->precioDolar($dolar);
+		// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+		if (!$result) {
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Ocurrión un error en la transacción"
+				],
+				'code' => 400
+			];
+		}
+		$result = $this->debitoCredito($tipoIngreso, $motivo);
+		// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
+		if (!$result) {
+			$this->db->rollback();
+			return [
+				'data' => [
+					'res' => "Ocurrión un error en la transacción",
+					"code" => 200
+				],
+				'code' => 400
+			];
+		}
+		$fechaInicio = new DateTime(); // Fecha actual
+		$fechaVencimiento = new DateTime();
+		$fechaVencimiento->add(new DateInterval('P1Y')); // Sumar 1 año
+		// Formatear las fechas en el formato deseado
+		$this->fechaInicio = $fechaInicio->format('Y-m-d');
+		$this->fechaVencimiento = $fechaVencimiento->format('Y-m-d');
 		$sql = $this->db->prepare("UPDATE poliza SET
-        poliza_fechaInicio = ?,
-        poliza_fechaVencimiento = ?,
+		poliza_fechaInicio = ?,
+		poliza_fechaVencimiento = ?,
         poliza_renovacion = poliza_renovacion+1,
         debitoCredito =?
         WHERE poliza_id = ?");
@@ -69,7 +102,9 @@ abstract class cls_poliza extends cls_db
 		if ($sql->rowCount() > 0) {
 			return [
 				'data' => [
-					'res' => "Contrato renovado"
+					'res' => "Contrato renovado",
+					"code" => 200,
+					'id' => $this->id // Agregar el ID en la respuesta
 				],
 				'code' => 200
 			];
@@ -422,7 +457,9 @@ abstract class cls_poliza extends cls_db
 				$this->db->commit();
 				return [
 					'data' => [
-						'res' => "Registro exitoso"
+						'res' => "Contrato editado",
+						"code" => 200,
+						'id' => $this->id // Agregar el ID en la respuesta
 					],
 					'code' => 200
 				];
@@ -527,15 +564,23 @@ abstract class cls_poliza extends cls_db
 	protected function SaveLicencia($dolar, $tipoIngreso, $motivo)
 	{
 		try {
-			// $result = $this->SecurityMedico();
-			// if ($result) {
-			// 	return $result;
-			// }
+			if (empty($this->fechaNacimiento)) {
+				$this->fechaNacimiento = "0000-00-00";
+			}
 			if (!$this->db->inTransaction()) {
 				$this->db->beginTransaction();
 			}
 
-
+			$result = $this->SecurityLicencia();
+			if (!$result) {
+				$this->db->rollback();
+				return [
+					'data' => [
+						'res' => "Ocurrión un error en la transacción"
+					],
+					'code' => 400
+				];
+			}
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -1281,7 +1326,14 @@ abstract class cls_poliza extends cls_db
 				],
 			];
 		}
-
+		if (empty($this->fechaNacimiento)) {
+			return [
+				"data" => [
+					"res" => "La fecha de nacimiento no puede estar vacía",
+					"code" => 400
+				],
+			];
+		}
 		//Titular
 		if (empty($this->cedulaTitular)) {
 			return [
@@ -1397,6 +1449,14 @@ abstract class cls_poliza extends cls_db
 				],
 			];
 		}
+		if (empty($this->montoTotal)) {
+			return [
+				"data" => [
+					"res" => "No has ingresado un monto valido",
+					"code" => 400
+				],
+			];
+		}
 	}
 
 	protected function SecurityMedico()
@@ -1436,7 +1496,7 @@ abstract class cls_poliza extends cls_db
 		if (empty($this->edad)) {
 			return [
 				"data" => [
-					"res" => "La edad no puede estar vacío",
+					"res" => "La edad no puede estar vacío o ser menor a 8",
 					"code" => 400
 				],
 			];
@@ -1445,6 +1505,78 @@ abstract class cls_poliza extends cls_db
 			return [
 				"data" => [
 					"res" => "El tipo de sangre no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+	}
+
+
+	protected function SecurityLicencia()
+	{
+		if (empty($this->cantidadDolar) || $this->cantidadDolar == 0) {
+			return [
+				"data" => [
+					"res" => "El monto total no puede estar vacio",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->cedula)) {
+			return [
+				"data" => [
+					"res" => "La cédula no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->nombre)) {
+			return [
+				"data" => [
+					"res" => "El nombre no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->apellido)) {
+			return [
+				"data" => [
+					"res" => "El apellido no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+
+		if (empty($this->correoLicencia)) {
+			return [
+				"data" => [
+					"res" => "No has seleccionado una licencia",
+					"code" => 400
+				],
+			];
+		}
+		if (empty($this->sangre)) {
+			return [
+				"data" => [
+					"res" => "El tipo de sangre no puede estar vacío",
+					"code" => 400
+				],
+			];
+		}
+
+		if (empty($this->montoTotal)) {
+			return [
+				"data" => [
+					"res" => "El monto total no puede estar vacio",
+					"code" => 400
+				],
+			];
+		}
+
+		if (empty($this->abonado)) {
+			return [
+				"data" => [
+					"res" => "El monto abonado no puede estar vacio",
 					"code" => 400
 				],
 			];

@@ -416,7 +416,15 @@ function TablaLicencia() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.licencia_licencia}
+                    {item.licencia_licencia === "0"
+                      ? "2Da"
+                      : item.licencia_licencia === "1"
+                      ? "3Ra"
+                      : item.licencia_licencia === "2"
+                      ? "4Ta"
+                      : item.licencia_licencia === "3"
+                      ? "5Ta"
+                      : null}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
@@ -428,13 +436,13 @@ function TablaLicencia() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.licencia_abonado}
+                    {item.licencia_abonado + " $"}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.licencia_restante}
+                    {item.licencia_restante + " $"}
                   </TableCell>
                   <TableCell
                     className="align-baseline"

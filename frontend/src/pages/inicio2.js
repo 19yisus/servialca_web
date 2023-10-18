@@ -174,7 +174,6 @@ function Inicio2() {
   const [mostrar7, setMostrar7] = useState(false);
   const [opPreguntas, setOpPreguntas] = useState(0);
 
-
   const [idCliente, setIdCliente] = useState();
 
   const [filterFn, setFilterFn] = useState({
@@ -307,7 +306,7 @@ function Inicio2() {
 
   useEffect(() => {
     selecionarRegistros();
-   // datisPersona();
+    // datisPersona();
   }, []);
 
   const regPre = () => {
@@ -354,49 +353,52 @@ function Inicio2() {
     setMostrar3(true);
   };
 
-  const datisPersona  = async () => {
+  const datisPersona = async () => {
     let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
-    let username = JSON.parse(localStorage.getItem('username'))
-console.log(username)
- 
-    let bodyF = new FormData()
+    let username = JSON.parse(localStorage.getItem("username"));
+    console.log(username);
 
-    bodyF.append("Usuario", username.toUpperCase().toString())
+    let bodyF = new FormData();
 
+    bodyF.append("Usuario", username.toUpperCase().toString());
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-        console.log(response.res)
-        if(response.res === 'No hay registros disponibles'){
-          setMostrar7(true)
-          setOpPreguntas(1)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response.res);
+        if (response.res === "No hay registros disponibles") {
+          setMostrar7(true);
+          setOpPreguntas(1);
         }
-        setActivate(false)
-       
+        setActivate(false);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   return (
     <div className="col-md-12 mx-auto p-2">
-
-<GestionarPreguntas
-show={mostrar7}
-llamado={opPreguntas}
-onHideCancela={()=>{setMostrar7(false)}}
-/>
+      <GestionarPreguntas
+        operacion={1}
+        show={mostrar7}
+        llamado={opPreguntas}
+        onHideCancela={() => {
+          setMostrar7(false);
+        }}
+      />
 
       <ModalCertificadoMedico
         //es show sirve para abrir el modal con setVariable cambias el valor de la variable de estado estado true abre el modal false lo cierra

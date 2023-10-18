@@ -1,4 +1,5 @@
 <?php
+
 require_once("./Models/cls_poliza.php");
 
 class Con_poliza extends cls_poliza
@@ -114,8 +115,7 @@ class Con_poliza extends cls_poliza
 
     public function renovar()
     {
-        $this->debitoCredito(1, 'renovacion');
-        $resultado = $this->renovar_poliza();
+        $resultado = $this->renovar_poliza($_POST["precioDolar"], 1, "Renovación");
         Response($resultado['data'], $resultado['code']);
     }
 

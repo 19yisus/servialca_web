@@ -205,7 +205,7 @@ export const ModalRcv = (props) => {
     if (operacion === 2) {
       endpoint = op.conexion + "/poliza/editar";
     } else if (operacion === 3) {
-      endpoint = op.conexion + "poliza/renovar";
+      endpoint = op.conexion + "/poliza/renovar";
     } else {
       endpoint = op.conexion + "/poliza/registrar";
     }
@@ -216,6 +216,7 @@ export const ModalRcv = (props) => {
 
     let bodyF = new FormData();
     //ID
+    bodyF.append("ID", idPoliza.current.value);
     bodyF.append("idCliente", idCliente.current.value);
     bodyF.append("idTitular", idTitular.current.value);
     bodyF.append("idVehiculo", idVehiculo.current.value);
@@ -817,6 +818,7 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
+        idPoliza.current.value = response[0].poliza_id;
         idCliente.current.value = response[0].cliente_id;
         idTitular.current.value = response[0].titular_id;
         idVehiculo.current.value = response[0].vehiculo_id;
@@ -865,6 +867,10 @@ export const ModalRcv = (props) => {
         txtMarca.current.value = response[0].marca_nombre;
         txtPeso.current.value = response[0].vehiculo_peso;
         txtCapTon.current.value = response[0].vehiculo_capTon;
+        cmbFormaPago.current.value = response[0].nota_tipoPago;
+        txtReferencia.current.value = response[0].nota_referencia;
+        txtDolar.current.value = response[0].nota_monto;
+        txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
       })
       .catch((error) =>
         setMensaje({
@@ -1087,6 +1093,7 @@ export const ModalRcv = (props) => {
                       <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
                     ))}
                   </select>*/}
+                  <input type="hidden" ref={idPoliza} />
                   <input type="hidden" ref={idCliente} />
                   <input type="hidden" ref={idTitular} />
                   <input type="hidden" ref={idVehiculo} />
@@ -1162,6 +1169,7 @@ export const ModalRcv = (props) => {
                     Cedula:
                   </span>
                   <select
+                    disabled={operacion === 3}
                     class="form-select col-md-3"
                     ref={cmbNacionalidad}
                     aria-label="Default select example"
@@ -1174,6 +1182,7 @@ export const ModalRcv = (props) => {
                   <input
                     type="text"
                     class="form-control"
+                    disabled={operacion === 3}
                     ref={txtCedula}
                     onKeyDown={handleChange(9)}
                     aria-label="Sizing example input"
@@ -1196,6 +1205,7 @@ export const ModalRcv = (props) => {
                       Fecha Nacimiento
                     </span>
                     <input
+                      disabled={operacion === 3}
                       type="date"
                       ref={txtFechaNaci}
                       class="form-control"
@@ -1212,6 +1222,7 @@ export const ModalRcv = (props) => {
                     </span>
                     <input
                       type="text"
+                      disabled={operacion === 3}
                       onKeyDown={handleChange(25)}
                       ref={txtNombre}
                       class="form-control "
@@ -1226,6 +1237,7 @@ export const ModalRcv = (props) => {
                       Apellido
                     </span>
                     <input
+                      disabled={operacion === 3}
                       type="text"
                       onKeyDown={handleChange(25)}
                       ref={txtApellido}
@@ -1298,6 +1310,7 @@ export const ModalRcv = (props) => {
                       Estado:{" "}
                     </span>
                     <select
+                      disabled={operacion === 3}
                       class="form-select"
                       ref={cmbEstado}
                       aria-label="Default select example"
@@ -1349,8 +1362,8 @@ export const ModalRcv = (props) => {
                     </span>
 
                     <input
-                      defaultValue={suc === 1 ? user : ""}
                       disabled
+                      defaultValue={suc === 1 ? user : ""}
                       type="text"
                       class="form-control"
                       ref={cmbSucursal}
@@ -1490,6 +1503,7 @@ export const ModalRcv = (props) => {
                     Placa
                   </span>
                   <input
+                    disabled={operacion === 3}
                     type="text"
                     ref={txtPlaca}
                     onKeyDown={handleChange(8)}
@@ -1514,6 +1528,7 @@ export const ModalRcv = (props) => {
                     Puesto
                   </span>
                   <input
+                    disabled={operacion === 3}
                     type="text"
                     onKeyDown={handleChange(2)}
                     ref={txtPuesto}
@@ -1561,6 +1576,7 @@ export const ModalRcv = (props) => {
                     Año
                   </span>
                   <input
+                    disabled={operacion === 3}
                     type="text"
                     class="form-control"
                     onKeyDown={handleChange(4)}
@@ -1640,6 +1656,7 @@ export const ModalRcv = (props) => {
                     Ser. Carroceria
                   </span>
                   <input
+                    disabled={operacion === 3}
                     type="text"
                     class="form-control"
                     onKeyDown={handleChange(18)}
@@ -1693,6 +1710,7 @@ export const ModalRcv = (props) => {
                     Modelo
                   </span>
                   <input
+                    disabled={operacion === 3}
                     onKeyDown={handleChange(15)}
                     type="text"
                     class="form-control"
@@ -1709,6 +1727,7 @@ export const ModalRcv = (props) => {
                     Marca
                   </span>
                   <input
+                    disabled={operacion === 3}
                     onKeyDown={handleChange(15)}
                     type="text"
                     class="form-control"
@@ -1725,6 +1744,7 @@ export const ModalRcv = (props) => {
                     Peso
                   </span>
                   <input
+                    disabled={operacion === 3}
                     onKeyDown={handleChange(10)}
                     type="text"
                     class="form-control"
@@ -1742,6 +1762,7 @@ export const ModalRcv = (props) => {
                     Cap. Ton.
                   </span>
                   <input
+                    disabled={operacion === 3}
                     onKeyDown={handleChange(10)}
                     type="text"
                     class="form-control"
@@ -1801,6 +1822,7 @@ export const ModalRcv = (props) => {
                     Cantidad a pagar en $
                   </span>
                   <input
+                    disabled
                     type="text"
                     class="form-control"
                     name="dolar"
@@ -1817,6 +1839,7 @@ export const ModalRcv = (props) => {
                     Cantidad a pagar en bs
                   </span>
                   <input
+                    disabled
                     type="text"
                     class="form-control"
                     ref={txtBs}
