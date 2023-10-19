@@ -19,19 +19,26 @@ abstract class cls_documento extends cls_db
         return $resultado;
     }
 
-    public function SaveImg($nombre,$ruta)
+    public function SaveImg($nombre, $ruta)
     {
         try {
             $sql = $this->db->prepare("INSERT INTO documentos
             (documento_nombre,documento_ruta,documento_estatus) 
             values (?,?,1)");
-            $sql->execute([$nombre,$ruta]);
-            if ($sql->rowCount() > 0) return [
-                "data" => [
-                    "res" => "Imagen guardada"
-                ],
-                "code" => 200
-            ];
+            $sql->execute([$nombre, $ruta]);
+            if ($sql->rowCount() > 0) {
+                $this->reg_bitacora([
+                    'table_name' => "documentos",
+                    'des' => "subida de documentos ($nombre, en la ruta: $ruta)"
+                ]);
+
+                return [
+                    "data" => [
+                        "res" => "Imagen guardada"
+                    ],
+                    "code" => 200
+                ];
+            }
             return [
                 "data" => [
                     "res" => "La imagen no pudo ser guardada"

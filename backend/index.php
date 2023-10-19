@@ -32,7 +32,7 @@ class Api
 {
 
   private $ruta_actual, $code_error, $code_done, $titleContent, $controlador, $metodo_peticion, $ObjMessage;
-  public $url;
+  public $url, $token;
 
   public function __construct()
   {
@@ -52,8 +52,8 @@ class Api
   {
     if ($peticion[0] != 'Auth') {
       if (isset($_POST['token']) || isset($_GET['token'])) {
-        $token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
-        $resultValido = validateToken($token);
+        $this->token = isset($_POST['token']) ? $_POST['token'] : $_GET['token'];
+        $resultValido = validateToken($this->token);
         if (!$resultValido) {
           // El token no es valido
           Response([
@@ -77,6 +77,12 @@ class Api
         $cls = new $cls_name();
         if (method_exists($cls, $metodo_peticion)) {
           $this->AuthToken($peticion);
+          if(isset($this->token)){
+            $array = decodificarToken($this->token)['data'];
+            $token = (array) $array;
+            $cls->user_id = $token['id'];
+          }
+          
           $cls->$metodo_peticion();
         } else {
           Response("No existe el metodo requerido", 400);

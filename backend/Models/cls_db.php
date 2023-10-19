@@ -8,6 +8,7 @@ abstract class cls_db
 {
   private $username, $password, $host, $dbname, $driver, $charset;
   protected $db;
+  public $user_id;
 
   public function __construct()
   {
@@ -30,11 +31,10 @@ abstract class cls_db
   protected function reg_bitacora($datos_array)
   {
     $descripcion = $datos_array['des'];
-    $id_user = $datos_array['user_id'];
     $table_name = $datos_array['table_name'];
 
-    $sql = "INSERT INTO bitacora(descripcion, tabla_change, hora_fecha, id_usuario)
-        VALUES('$descripcion','$table_name',NOW(),$id_user)";
+    $sql = "INSERT INTO bitacora(descripcion, table_change, hora_fecha, id_usuario)
+        VALUES('$descripcion','$table_name',NOW(),$this->user_id)";
     $this->db->query($sql);
   }
 

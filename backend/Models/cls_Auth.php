@@ -233,6 +233,11 @@ class cls_Auth extends cls_db
 
         ])
       ) {
+
+        $this->reg_bitacora([
+          'table_name' => "usuario",
+          'des' => "Actualización de datos de usuario ($this->usuario, $this->nombre, $this->apellido, $this->telefono, $this->correo, $this->direccion"
+        ]);
         return [
           'data' => [
             'res' => "Actualización de datos exitosa"
@@ -262,6 +267,10 @@ class cls_Auth extends cls_db
     try {
       $sql = $this->db->prepare("UPDATE usuario SET usuario_estatus = ? WHERE usuario_id = ?");
       if ($sql->execute([$this->estatus, $this->id])) {
+        $this->reg_bitacora([
+          'table_name' => "usuario",
+          'des' => "Cambio de estatus del usuario ($this->id)"
+        ]);
         return [
           'data' => [
             'res' => "Usuario desactivado"
@@ -295,7 +304,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 300
         ];
-      } 
+      }
 
       return [
         'data' => [
@@ -338,7 +347,7 @@ class cls_Auth extends cls_db
       $resultado = [];
     return $resultado;
   }
-  
+
   private function GetDuplicados()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
@@ -454,10 +463,11 @@ class cls_Auth extends cls_db
     }
   }
 
-  protected function getPreguntas(){
-    try{
+  protected function getPreguntas()
+  {
+    try {
       $sql = $this->db->query("SELECT * FROM preguntas_user");
-      if($sql->rowCount() > 0){
+      if ($sql->rowCount() > 0) {
         return [
           'data' => [
             'res' => "Consulta exitosa",
@@ -465,7 +475,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 200
         ];
-      }else{
+      } else {
         return [
           'data' => [
             'res' => "No hay registros disponibles",
@@ -484,14 +494,15 @@ class cls_Auth extends cls_db
     }
   }
 
-  protected function getPreguntasFromUser(){
-    try{
+  protected function getPreguntasFromUser()
+  {
+    try {
       $sql = $this->db->query("SELECT preguntas_user.*,respuestas_user.* FROM usuario
         INNER JOIN respuestas_user ON respuestas_user.user_id_respuesta = usuario.usuario_id
         INNER JOIN preguntas_user ON preguntas_user.id_pregunta = respuestas_user.pregunta_id_respuesta  
         WHERE usuario.usuario_usuario = '$this->usuario'");
 
-      if($sql->rowCount() > 0){
+      if ($sql->rowCount() > 0) {
         return [
           'data' => [
             'res' => "Consulta exitosa",
@@ -499,7 +510,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 200
         ];
-      }else{
+      } else {
         return [
           'data' => [
             'res' => "No hay registros disponibles",
@@ -517,5 +528,4 @@ class cls_Auth extends cls_db
       ];
     }
   }
-
 }
