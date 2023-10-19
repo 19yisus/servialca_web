@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "fs": "0.0.1-security",
     "jquery": "^3.6.3",
-    "jwt-decode": "^3.1.2",
+    "jwt-decode": "2.2.0",
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "qrcode": "^1.5.1",
