@@ -29,7 +29,6 @@ abstract class cls_claseVehiculo extends cls_db
 				return [
 					"data" => [
 						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe"
-
 					],
 					"code" => 400
 				];

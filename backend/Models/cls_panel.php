@@ -42,6 +42,10 @@ abstract class cls_panel extends cls_db
 				$this->buscar_y_desactivar($tag);
 				$sql = $this->db->prepare("INSERT INTO file_contents(nombre_img, tag, ruta_img, upload_date, estatus_img) VALUES(?,?,?,NOW(),1)");
 				$sql->execute([$name, $tag, $ruta]);
+				$this->reg_bitacora([
+					'table_name' => "file_contents",
+					'des' => "subida de activos (nombre: $name, tag: $tag"
+				]);
 			}
 		}
 	}
@@ -58,6 +62,11 @@ abstract class cls_panel extends cls_db
 			}
 
 			$sql2->execute([$datos['text_home'], $datos["text_about"], $datos["text_mision"], $datos["text_vision"], $datos["text_ubicacion"], $datos["text_correo"], $datos["text_telefono"], $datos["text_banner"]]);
+			
+			$this->reg_bitacora([
+				'table_name' => "pagina_web",
+				'des' => "Subida de información de la pagina web"
+			]);
 		}
 
 		return 1;

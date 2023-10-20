@@ -51,7 +51,7 @@ abstract class cls_Licencia extends cls_db
       }
       if ($result) {
         $this->db->commit();
-        
+
         return [
           "data" => [
             "res" => "Registro exitoso"
@@ -82,6 +82,10 @@ abstract class cls_Licencia extends cls_db
       $this->montoTotal,
       $id
     ])) {
+      $this->reg_bitacora([
+        'table_name' => "debitocredito",
+        'des' => "Actualización de debito credito (tipo pago: $this->metodo, referencia: $this->referencia, monto: $this->montoTotal)"
+      ]);
       return true;
     } else {
       return false;
@@ -109,6 +113,10 @@ abstract class cls_Licencia extends cls_db
       $this->restante,
       $id
     ])) {
+      $this->reg_bitacora([
+        'table_name' => "licencia",
+        'des' => "Actualización de licencia (correo: $this->correo ,sangre: $this->sangre, lente: $this->lente, licencia: $this->licencia, monto total: $this->montoTotal, abonado: $this->abonado, restante: $this->restante)"
+      ]);
       return true;
     } else {
       return false;
@@ -131,6 +139,11 @@ abstract class cls_Licencia extends cls_db
         $id
       ])
     ) {
+
+      $this->reg_bitacora([
+        'table_name' => "cliente",
+        'des' => "Actualización de cliente (cedula: $this->cedula, nombre: $this->nombre, apellido: $this->apellido, telefono: $this->telefono)"
+      ]);
       return true;
     } else
       return false;

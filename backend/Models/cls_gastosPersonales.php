@@ -38,6 +38,11 @@ abstract class cls_gastosPersonales extends cls_db
                 $this->precioDolar
             ])) {
                 $this->db->commit();
+                
+                $this->reg_bitacora([
+                    'table_name' => "debitocredito",
+                    'des' => "Registro de debitocredito (Ingreso-Egreso: $this->ingresoEgreso, Motivo: $this->motivo, Fecha: $fechaActual, Tipo: $this->tipo, Referencia: $this->referencia, Monto: $this->monto)"
+                ]);
                 return [
                     "data" => [
                         "res" => "Registro exitoso",
@@ -86,6 +91,10 @@ abstract class cls_gastosPersonales extends cls_db
                 $this->id
             ])) {
                 $this->db->commit();
+                $this->reg_bitacora([
+                    'table_name' => "debitocredito",
+                    'des' => "actualización de debitocredito (Id: $this->id, Ingreso-Egreso: $this->ingresoEgreso, Motivo: $this->motivo, Tipo: $this->tipo, Referencia: $this->referencia, Monto: $this->monto)"
+                ]);
                 return [
                     "data" => [
                         "res" => "Actualización exitosa",

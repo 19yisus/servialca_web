@@ -19,7 +19,7 @@ abstract class cls_sucursal extends cls_db
 						"res" => "El nombre de la sucursal no puede estar vacío",
 						"code" => 400
 					],
-					"code" =>400
+					"code" => 400
 				];
 			}
 
@@ -35,12 +35,20 @@ abstract class cls_sucursal extends cls_db
 			$sql = $this->db->prepare("INSERT INTO sucursal(sucursal_nombre,sucursal_estatus) VALUES(?,1)");
 			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
-			if ($sql->rowCount() > 0) return [
-				"data" => [
-					"res" => "Registro exitoso"
-				],
-				"code" => 200
-			];
+			if ($sql->rowCount() > 0) {
+
+				$this->reg_bitacora([
+					'table_name' => "sucursal",
+					'des' => "Registro de sucursal (nombre: $this->nombre)"
+				]);
+
+				return [
+					"data" => [
+						"res" => "Registro exitoso"
+					],
+					"code" => 200
+				];
+			}
 			return [
 				"data" => [
 					"res" => "El registro ha fallado"
@@ -69,9 +77,14 @@ abstract class cls_sucursal extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("UPDATE sucursal SET
-            sucursal_nombre = ? WHERE sucursal_id = ?");
+			$sql = $this->db->prepare("UPDATE sucursal SET sucursal_nombre = ? WHERE sucursal_id = ?");
 			if ($sql->execute([$this->nombre, $this->id])) {
+				
+				$this->reg_bitacora([
+					'table_name' => "sucursal",
+					'des' => "Actualización de sucursal (id sucursal: $this->id, nombre: $this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "Actualización de datos exitosa"
@@ -109,6 +122,12 @@ abstract class cls_sucursal extends cls_db
 		try {
 			$sql = $this->db->prepare("UPDATE sucursal SET sucursal_estatus = ? WHERE sucursal_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
+				
+				$this->reg_bitacora([
+					'table_name' => "sucursal",
+					'des' => "Cambio de estatus de sucursal (id: $this->id)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "sucursal desactivada"

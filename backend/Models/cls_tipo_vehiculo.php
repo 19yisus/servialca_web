@@ -39,13 +39,14 @@ abstract class cls_tipo_vehiculo extends cls_db
         }
       }
 
-      $sql = $this->db->prepare("INSERT INTO tipovehiculo(        
-        tipoVehiculo_nombre,
-        tipoVehiculo_estatus
-        )  VALUES(?,1)");
-      if (
-        $sql->execute([$this->nombre])
-      ) {
+      $sql = $this->db->prepare("INSERT INTO tipovehiculo(tipoVehiculo_nombre, tipoVehiculo_estatus)  VALUES(?,1)");
+      if ($sql->execute([$this->nombre])) {
+
+        $this->reg_bitacora([
+          'table_name' => "tipovehiculo",
+          'des' => "Insert en tipo vehiculo (nombre: $this->nombre)"
+        ]);
+
         $this->id = $this->db->lastInsertId();
       }
       if ($sql->rowCount() > 0)
@@ -93,6 +94,13 @@ abstract class cls_tipo_vehiculo extends cls_db
           $this->id
         ])
       ) {
+
+        $this->reg_bitacora([
+          'table_name' => "tipovehiculo",
+          'des' => "Actualización en tipo vehiculo (id: $this->id, nombre: $this->nombre)"
+        ]);
+
+
         return [
           "data" => [
             "res" => "Actualización de datos exitosa"
@@ -132,6 +140,12 @@ abstract class cls_tipo_vehiculo extends cls_db
     try {
       $sql = $this->db->prepare("UPDATE tipovehiculo SET tipoVehiculo_estatus = ? WHERE tipoVehiculo_id = ?");
       if ($sql->execute([$this->estatus, $this->id])) {
+        
+        $this->reg_bitacora([
+          'table_name' => "tipovehiculo",
+          'des' => "Cambio de estatus de vehiculo (id: $this->id, nombre: $this->nombre)"
+        ]);
+
         return [
           "data" => [
             "res" => "vehiculo desactivado"
@@ -203,7 +217,13 @@ abstract class cls_tipo_vehiculo extends cls_db
       if ($sql->execute([$this->id, $this->idContrato, $this->sucursal, $this->precio])) {
         $this->id = $this->db->lastInsertId();
       }
-      if ($sql->rowCount() > 0)
+      if ($sql->rowCount() > 0){
+        
+        $this->reg_bitacora([
+          'table_name' => "precio",
+          'des' => "Insert en precio (id: $this->id, contrato: $this->idContrato, sucursal: $this->sucursal, precio: $this->precio"
+        ]);
+        
         return [
           "data" => [
             "res" => "Vinculación exitosa",
@@ -211,6 +231,7 @@ abstract class cls_tipo_vehiculo extends cls_db
           ],
           "code" => 200
         ];
+      }
       return [
         "data" => [
           "res" => "El vhiculo ha fallado"
