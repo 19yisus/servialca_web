@@ -455,9 +455,20 @@ function Login(props) {
                               setMostrar(true);
                             }}
                           >
-                            Recuperar Contraseña
+                             <h6>Recuperar Contraseña</h6>
+                            
                           </a>
+                        
                         </div>
+                        <div class="text-center">
+                        <a
+                            class="small"
+                            type="button"
+                           href="/"
+                          >
+                            <h6>Salir al Inicio</h6>
+                          </a>
+                          </div>
                       </div>
                     </form>
                   </div>

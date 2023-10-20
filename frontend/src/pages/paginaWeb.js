@@ -212,10 +212,16 @@ function PaginaWeb(props) {
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="/galeria">
+                  <i class="fas fa-camera"></i> Galeria
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="/login">
                     <i class="fas fa-sign-in-alt"></i> Login
                   </a>
                 </li>
+               
               </ul>
             </div>
           </div>
@@ -256,7 +262,7 @@ function PaginaWeb(props) {
               </div>
 
               <div class="col-md-5 mx-auto">
-          <img src={op.conexion + "/ImgPanel/" + records.img_home} alt="" />
+          <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_home} alt="" />
 
               </div>
               <div class="col-md-7 mx-auto text-center">{values.text_home}</div>
@@ -266,7 +272,7 @@ function PaginaWeb(props) {
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
         
-          <img src={op.conexion + "/ImgPanel/" + records.img_banner}  style={{ width: "100%" }} alt="" />
+          <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_banner}  style={{ width: "100%" }} alt="" />
 
           </div>
         </Fade>
@@ -286,7 +292,7 @@ function PaginaWeb(props) {
                 </div>
 
                 <div class="col-md-6 mx-auto py-4">
-                <img src={op.conexion + "/ImgPanel/" + records.img_about} alt="" />
+                <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_about} alt="" />
 
                 </div>
               </div>

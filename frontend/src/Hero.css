@@ -927,8 +927,8 @@ input:focus {
 
 #scrol {
   overflow: scroll;
-  max-height: 88vh;
-  min-height: 88vh;
+  min-height: 95vh;
+  max-height: 95vh;
   max-width: 100%;
 }
 
@@ -1003,6 +1003,13 @@ cursor: default;
     .dropdown-menu > li:hover > .dropdown-submenu {
     display: block;
     }
+   
+}
+
+@media (max-width: 1250px) {
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -227px;
+  }
 }
 
 /* body {

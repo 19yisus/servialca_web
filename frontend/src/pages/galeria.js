@@ -156,6 +156,11 @@ function Galeria() {
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="/galeria">
+                  <i class="fas fa-camera"></i> Galeria
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="/login">
                     <i class="fas fa-sign-in-alt"></i> Login
                   </a>

@@ -488,7 +488,7 @@ function MenuImpuestoPP(props) {
                   href="/listaPrecios"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
-                  <i class="fas fa-birthday-cake  fa-fw me-1 "></i>
+                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
 
                   <span>Lista de precios</span>
                 </a>

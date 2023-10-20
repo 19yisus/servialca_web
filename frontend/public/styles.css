@@ -350,12 +350,7 @@
   max-width: 100%;
 }
 
-#scrol {
-  overflow: scroll;
-  max-height: 88vh;
-  min-height: 88vh;
-  max-width: 100%;
-}
+
 
 #gg {
   /* max-height: 7vh; */
@@ -1376,12 +1371,6 @@ input:focus {
   max-width: 100%;
 }
 
-#scrol {
-  overflow: scroll;
-  max-height: 88vh;
-  min-height: 88vh;
-  max-width: 100%;
-}
 
 #gg {
   /* max-height: 7vh; */
