@@ -62,12 +62,6 @@ function TablaGastos() {
       color: "white",
     },
     {
-      label: "Total",
-      textAlign: "center",
-      backgroundColor: "#e70101bf",
-      color: "white",
-    },
-    {
       label: "Opciones",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -227,14 +221,19 @@ function TablaGastos() {
         else
           return items.filter((x) => {
             if (
-              (x.usoVehiculo_id !== null
-                ? String(x.usoVehiculo_id).includes(target.value)
+              (x.nota_id !== null
+                ? String(x.nota_id).includes(target.value)
                 : 0) ||
-              (x.usoVehiculo_nombre !== null
-                ? x.usoVehiculo_nombre
+              (x.nota_fecha !== null
+                ? x.nota_fecha
                     .toLowerCase()
                     .includes(target.value.toLowerCase())
-                : "")
+                : "") || 
+                (x.nota_hora != null 
+                  ? x.nota_hora
+                  .toLowerCase()
+                  .includes(target.value.toLowerCase())
+                  : "")
             ) {
               return x;
             }
@@ -249,6 +248,16 @@ function TablaGastos() {
     selecionarRegistros();
   }, []);
 
+  const totalNotaMonto = recordsAfterPagingAndSorting().reduce(
+    (total, item) => {
+      const notaMontoAsNumber = parseFloat(item.nota_monto);
+      return item.nota_IngresoEgreso === 1
+        ? total + notaMontoAsNumber
+        : total - notaMontoAsNumber;
+    },
+    0
+  );
+
   const regPre = () => {
     setMostrar(true);
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
@@ -260,6 +269,7 @@ function TablaGastos() {
     setMostrar(true);
     setIdSucursal(id);
   };
+
   return (
     <div className="col-md-12 mx-auto p-2">
       <ModalGastos
@@ -319,6 +329,17 @@ function TablaGastos() {
             onChange={handleSearch}
             placeholder="Buscar"
           />
+          <input
+            disabled
+            type="text"
+            value={`Total generado este mes: ${
+              totalNotaMonto >= 0 ? `+${totalNotaMonto}` : `${totalNotaMonto}`
+            } $`}
+            className={`col-3 form-control form-control rounded-pill ${
+              totalNotaMonto >= 0 ? "text-success" : "text-danger"
+            }`}
+            style={{ border: "none", background: "white" }}
+          />
 
           <div className="col-3 d-flex justify-content-end">
             <button
@@ -357,8 +378,9 @@ function TablaGastos() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.nota_IngresoEgreso}
+                    {item.nota_IngresoEgreso === 1 ? "Ingreso" : "Egreso"}
                   </TableCell>
+
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
@@ -369,14 +391,16 @@ function TablaGastos() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.nota_monto}
+                    <span
+                      style={{
+                        color: item.nota_IngresoEgreso === 1 ? "green" : "red",
+                      }}
+                    >
+                      {item.nota_IngresoEgreso === 1 ? "+" : "-"}{" "}
+                      {item.nota_monto}
+                    </span>
                   </TableCell>
-                  <TableCell
-                    className="align-baseline"
-                    style={{ textAlign: "center", alignItems: "center" }}
-                  >
-                    {}
-                  </TableCell>
+
                   <TableCell
                     className="align-baseline"
                     style={{
@@ -386,16 +410,10 @@ function TablaGastos() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.usoVehiculo_id)}
+                      onClick={gestionarBanco(2, item.nota_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
-                    </button>
-                    <button
-                      onClick={gestionarBanco(3, item.usoVehiculo_id)}
-                      className="btn btn-sm mx-1 btn-danger rounded-circle"
-                    >
-                      <i className="fa fa-trash"></i>{" "}
                     </button>
                   </TableCell>
                 </TableRow>

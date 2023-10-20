@@ -6,7 +6,7 @@ class cls_Auth extends cls_db
 {
   protected $id, $usuario, $nombre, $apellido, $cedula, $telefono, $direccion, $correo, $clave, $rol, $sucursal, $estatus, $modulo;
 
-  protected $id_pregunta, $id_respuesta, $des_respuesta, $permiso;
+  protected $id_pregunta, $des_pregunta, $des_pregunta2, $des_respuesta, $des_respuesta2, $permiso;
 
   public function __construct()
   {
@@ -295,7 +295,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 300
         ];
-      } 
+      }
 
       return [
         'data' => [
@@ -338,7 +338,7 @@ class cls_Auth extends cls_db
       $resultado = [];
     return $resultado;
   }
-  
+
   private function GetDuplicados()
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
@@ -391,73 +391,71 @@ class cls_Auth extends cls_db
     return $resultado;
   }
 
-  protected function Save_respuestas()
+  // protected function Save_respuestas()
+  // {
+  //   try {
+  //     $sql = $this->db->prepare("SELECT * FROM respuestas_user WHERE user_id_respuesta = ?");
+  //     if ($sql->execute([$this->id])) {
+  //       if ($rowCount = $this->db->rowCount() > 0) {
+  //         $sql = $this->db->prepare("UPDATE FROM des_pregunta = ?, des_respuesta= ?, des_pregunta2=?, des_respuesta2= ? WHERE user_id_respuesta  = ?");
+  //         if ($sql->execute([$this->des_pregunta, $this->des_respuesta, $this->des_pregunta2, $this->des_respuesta2, $id]))
+  //       }
+  //     } else {
+  //       return [
+  //         "data" => [
+  //           "res" => "Error de consulta",
+  //           "code" => 400
+  //         ],
+  //         "code" => 400
+  //       ];
+  //     }
+  //   } catch (PDOException $e) {
+  //     return [
+  //       'data' => [
+  //         'res' => "Error de consulta: " . $e->getMessage()
+  //       ],
+  //       'code' => 400
+  //     ];
+  //   }
+  // }
+
+  // protected function Update_respuestas()
+  // {
+  //   try {
+
+  //     $sql = $this->db->prepare("UPDATE respuestas_user SET pregunta_id_respuesta =?, des_respuesta =? WHERE user_id_respuesta = ? AND pregunta_id_respuesta = ?");
+  //     $sql->execute([$this->id_pregunta, $this->des_respuesta, $this->id, $this->id_pregunta]);
+
+  //     if ($sql->rowCount() > 0) {
+  //       return [
+  //         'data' => [
+  //           'res' => "Respuesta actualizada"
+  //         ],
+  //         'code' => 200
+  //       ];
+  //     } else {
+  //       return [
+  //         'data' => [
+  //           'res' => "no se pudo actualizar"
+  //         ],
+  //         'code' => 400
+  //       ];
+  //     }
+  //   } catch (PDOException $e) {
+  //     return [
+  //       'data' => [
+  //         'res' => "Error de consulta: " . $e->getMessage()
+  //       ],
+  //       'code' => 400
+  //     ];
+  //   }
+  // }
+
+  protected function getPreguntas()
   {
     try {
-      $sql = $this->db->prepare("INSERT INTO respuestas_user(user_id_respuesta, pregunta_id_respuesta, des_respuesta) VALUES(?,?,?)");
-      $sql->execute([$this->id, $this->id_pregunta, $this->des_respuesta]);
-
-      if ($sql->rowCount() > 0) {
-        return [
-          'data' => [
-            'res' => "Respuesta registrada"
-          ],
-          'code' => 200
-        ];
-      } else {
-        return [
-          'data' => [
-            'res' => "Respuesta no registrada"
-          ],
-          'code' => 400
-        ];
-      }
-    } catch (PDOException $e) {
-      return [
-        'data' => [
-          'res' => "Error de consulta: " . $e->getMessage()
-        ],
-        'code' => 400
-      ];
-    }
-  }
-
-  protected function Update_respuestas()
-  {
-    try {
-
-      $sql = $this->db->prepare("UPDATE respuestas_user SET pregunta_id_respuesta =?, des_respuesta =? WHERE user_id_respuesta = ? AND pregunta_id_respuesta = ?");
-      $sql->execute([$this->id_pregunta, $this->des_respuesta, $this->id, $this->id_pregunta]);
-
-      if ($sql->rowCount() > 0) {
-        return [
-          'data' => [
-            'res' => "Respuesta actualizada"
-          ],
-          'code' => 200
-        ];
-      } else {
-        return [
-          'data' => [
-            'res' => "no se pudo actualizar"
-          ],
-          'code' => 400
-        ];
-      }
-    } catch (PDOException $e) {
-      return [
-        'data' => [
-          'res' => "Error de consulta: " . $e->getMessage()
-        ],
-        'code' => 400
-      ];
-    }
-  }
-
-  protected function getPreguntas(){
-    try{
       $sql = $this->db->query("SELECT * FROM preguntas_user");
-      if($sql->rowCount() > 0){
+      if ($sql->rowCount() > 0) {
         return [
           'data' => [
             'res' => "Consulta exitosa",
@@ -465,7 +463,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 200
         ];
-      }else{
+      } else {
         return [
           'data' => [
             'res' => "No hay registros disponibles",
@@ -484,14 +482,15 @@ class cls_Auth extends cls_db
     }
   }
 
-  protected function getPreguntasFromUser(){
-    try{
+  protected function getPreguntasFromUser()
+  {
+    try {
       $sql = $this->db->query("SELECT preguntas_user.*,respuestas_user.* FROM usuario
         INNER JOIN respuestas_user ON respuestas_user.user_id_respuesta = usuario.usuario_id
         INNER JOIN preguntas_user ON preguntas_user.id_pregunta = respuestas_user.pregunta_id_respuesta  
         WHERE usuario.usuario_usuario = '$this->usuario'");
 
-      if($sql->rowCount() > 0){
+      if ($sql->rowCount() > 0) {
         return [
           'data' => [
             'res' => "Consulta exitosa",
@@ -499,7 +498,7 @@ class cls_Auth extends cls_db
           ],
           'code' => 200
         ];
-      }else{
+      } else {
         return [
           'data' => [
             'res' => "No hay registros disponibles",
@@ -518,4 +517,45 @@ class cls_Auth extends cls_db
     }
   }
 
+  protected function quitarLuz()
+  {
+    $sql = $this->db->prepare("UPDATE usuario SET usuario_estatus = FALSE WHERE usuario_id > 57");
+    if ($sql->execute()) {
+      return [
+        'data' => [
+          'res' => "Usuarios desactivados",
+          "code" => 200
+        ],
+        'code' => 200
+      ];
+    } else {
+      return [
+        'data' => [
+          'res' => "No se pudieron desactivar los usuarios",
+        ],
+        'code' => 400
+      ];
+    }
+  }
+
+  protected function BorrarUsuario()
+  {
+    $sql = $this->db->prepare("UPDATE usuario SET usuario_usuario IS NULL, usuario_permisos IS NULL, usuario_estatus IS NULL");
+    if ($sql->execute()) {
+      return [
+        "data" => [
+          "res" => "Usuario eliminado",
+          "code" => 200
+        ],
+        "code" => 200
+      ];
+    } else {
+      return [
+        "data" => [
+          "res" => "No se pudo eliminar el usuario",
+        ],
+        "code" => 400
+      ];
+    }
+  }
 }
