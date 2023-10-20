@@ -22,6 +22,12 @@ abstract class cls_chat extends cls_db
         VALUES(NOW(),?,?,1)");
 
       if ($sql->execute([$this->user_1_id, $this->user_2_id])) {
+
+        $this->reg_bitacora([
+          'table_name' => "conversacion",
+          'des' => "Creación de conversación de los usuarios 1: $this->user_1_id, 2: $this->user_2_id"
+        ]);
+
         return [
           "data" => [
             "res" => "Conversación creada!"
@@ -63,6 +69,12 @@ abstract class cls_chat extends cls_db
         VALUES(?,?,NOW(),?)");
 
       if ($sql->execute([$this->conversacion_id, $this->remitente, $this->content_sms])) {
+        
+        $this->reg_bitacora([
+          'table_name' => "sms_conversacion",
+          'des' => "Envio de mensaje, remitente: $this->remitente, id_conversación: $this->conversacion_id"
+        ]);
+
         return [
           "data" => [
             "res" => "Mensaje enviado!"

@@ -51,6 +51,7 @@ abstract class cls_Licencia extends cls_db
       }
       if ($result) {
         $this->db->commit();
+        
         return [
           "data" => [
             "res" => "Registro exitoso"

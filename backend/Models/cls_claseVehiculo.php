@@ -29,7 +29,7 @@ abstract class cls_claseVehiculo extends cls_db
 				return [
 					"data" => [
 						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe"
-						
+
 					],
 					"code" => 400
 				];
@@ -41,10 +41,15 @@ abstract class cls_claseVehiculo extends cls_db
 			$this->id = $this->db->lastInsertId();
 
 			if ($sql->rowCount() > 0) {
+				$this->reg_bitacora([
+					'table_name' => "clasevehiculo",
+					'des' => "Registro de nueva clase de vehiculo ($this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "Registro exitoso"
-						
+
 					],
 					"code" => 200
 				];
@@ -82,6 +87,11 @@ abstract class cls_claseVehiculo extends cls_db
 			$sql = $this->db->prepare("UPDATE clasevehiculo SET
             clase_nombre = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->nombre, $this->id])) {
+				$this->reg_bitacora([
+					'table_name' => "clasevehiculo",
+					'des' => "Actualización clase de vehiculo ($this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "Actualización de datos exitosa"
@@ -121,6 +131,11 @@ abstract class cls_claseVehiculo extends cls_db
 		try {
 			$sql = $this->db->prepare("UPDATE clasevehiculo SET claseVehiculo_estatus = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
+				$this->reg_bitacora([
+					'table_name' => "clasevehiculo",
+					'des' => "Eliminación clase de vehiculo ($this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "claseVehiculo desactivada"
