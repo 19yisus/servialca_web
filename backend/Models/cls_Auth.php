@@ -459,7 +459,6 @@ class cls_Auth extends cls_db
   //     ];
   //   }
   // }
-
   protected function getPreguntas()
   {
     try {
@@ -546,38 +545,7 @@ class cls_Auth extends cls_db
       ];
     }
   }
-  
-  protected function getPreguntas()
-  {
-    try {
-      $sql = $this->db->query("SELECT * FROM preguntas_user");
-      if ($sql->rowCount() > 0) {
-        return [
-          'data' => [
-            'res' => "Consulta exitosa",
-            'lista_preguntas' => $sql->fetchAll(PDO::FETCH_ASSOC)
-          ],
-          'code' => 200
-        ];
-      } else {
-        return [
-          'data' => [
-            'res' => "No hay registros disponibles",
-            'lista_preguntas' => []
-          ],
-          'code' => 400
-        ];
-      }
-    } catch (PDOException $e) {
-      return [
-        'data' => [
-          'res' => "Error de consulta: " . $e->getMessage()
-        ],
-        'code' => 400
-      ];
-    }
-  }
-    
+      
   protected function BorrarUsuario()
   {
     $sql = $this->db->prepare("UPDATE usuario SET usuario_usuario IS NULL, usuario_permisos IS NULL, usuario_estatus IS NULL");
@@ -597,40 +565,5 @@ class cls_Auth extends cls_db
         "code" => 400
       ];
     }
-  }
-    
-  protected function getPreguntasFromUser()
-  {
-    try {
-      $sql = $this->db->query("SELECT preguntas_user.*,respuestas_user.* FROM usuario
-        INNER JOIN respuestas_user ON respuestas_user.user_id_respuesta = usuario.usuario_id
-        INNER JOIN preguntas_user ON preguntas_user.id_pregunta = respuestas_user.pregunta_id_respuesta  
-        WHERE usuario.usuario_usuario = '$this->usuario'");
-
-      if ($sql->rowCount() > 0) {
-        return [
-          'data' => [
-            'res' => "Consulta exitosa",
-            'lista_preguntas' => $sql->fetchAll(PDO::FETCH_ASSOC)
-          ],
-          'code' => 200
-        ];
-      } else {
-        return [
-          'data' => [
-            'res' => "No hay registros disponibles",
-            'lista_preguntas' => []
-          ],
-          'code' => 400
-        ];
-      }
-    } catch (PDOException $e) {
-      return [
-        'data' => [
-          'res' => "Error de consulta: " . $e->getMessage()
-        ],
-        'code' => 400
-      ];
-    }      
   }
 }
