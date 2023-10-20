@@ -8,7 +8,7 @@ try {
 } catch (error) {
   console.error("Error al decodificar el token:", error);
   // Lógica para cuando hay un error al decodificar el token
-  alert("hola");
+ // alert("hola");
 }
 
 const initialState = {
