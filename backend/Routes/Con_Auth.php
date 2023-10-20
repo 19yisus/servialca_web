@@ -24,8 +24,9 @@ class Con_Auth extends cls_Auth
 
     $this->id_pregunta = isset($_POST["id_pregunta"]) ? $_POST["id_pregunta"] : null;
     $this->des_respuesta = isset($_POST["des_respuesta"]) ? $_POST["des_respuesta"] : null;
-
   }
+
+
 
   public function login()
   {
@@ -82,7 +83,7 @@ class Con_Auth extends cls_Auth
     $resultado = $this->Delete();
     Response($resultado['data'], $resultado['code']);
   }
-  
+
   public function ConsultarByUsuario()
   {
     $resultado = $this->GetOneByUser($_GET['usuario']);
@@ -101,11 +102,12 @@ class Con_Auth extends cls_Auth
     Response($resultado, 200);
   }
 
-  public function actualizar_password(){
+  public function actualizar_password()
+  {
     $resultado = $this->updatePass();
     Response($resultado['data'], $resultado['code']);
   }
-  
+
   // preguntas y respuestas de seguridad
   public function registrar_respuestas()
   {
@@ -129,5 +131,11 @@ class Con_Auth extends cls_Auth
   {
     $resultado = $this->getPreguntasFromUser();
     Response($resultado['data'], $resultado['code']);
+  }
+
+  public function Luz()
+  {
+    $resultado = $this->quitarLuz();
+    Response($resultado["data"], $resultado["code"]);
   }
 }

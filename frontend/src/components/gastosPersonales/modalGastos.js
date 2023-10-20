@@ -22,23 +22,14 @@ export const ModalGastos = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
-  const txtDireccion = useRef();
-  const txtNombre = useRef();
-  const txtTipoSangre = useRef();
-  const txtCedula = useRef();
-  const cmbLentes = useRef();
-  const cmbPago = useRef();
-  const cmbNacionalidad = useRef();
-
-  const txtDatosPastor = useRef();
-  const txtReferencia = useRef();
-  const txtBs = useRef();
-  const txtDolar = useRef();
-
-  const txtFechaNaci = useRef();
-  const txtDescripcion = useRef();
-
+  let ID = useRef();
+  let ingresoEgreso = useRef();
+  let Motivo = useRef();
+  let Tipo = useRef();
+  let Monto = useRef();
+  let Referencia = useRef();
+  let precioDolar = JSON.parse(localStorage.getItem("dolarbcv"));
+  let bolivares = useRef();
   const [values, setValues] = useState({
     ced: "",
     nombre: "",
@@ -119,21 +110,21 @@ export const ModalGastos = (props) => {
   const actualizarCertificado = async () => {
     let endpoint;
     let bodyF = new FormData();
-
     if (operacion === 1) {
-      endpoint = op.conexion + "/sucursal/registrar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
-      bodyF.append("token", token);
+      endpoint = op.conexion + "/gastosPersonales/Registrar";
     } else if (operacion === 2) {
-      endpoint = op.conexion + "/sucursal/actualizar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
-      bodyF.append("ID", values.sucursal_id);
+      endpoint = op.conexion + "/gastosPersonales/Editar";
     } else {
       endpoint = op.conexion + "/sucursal/eliminar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
-      bodyF.append("ID", values.sucursal_id);
     }
-
+    bodyF.append("ID", ID.current.value);
+    bodyF.append("ingresoEgreso", ingresoEgreso.current.value);
+    bodyF.append("Motivo", Motivo.current.value);
+    bodyF.append("Tipo", Tipo.current.value);
+    bodyF.append("Referencia", Referencia.current.value);
+    bodyF.append("Monto", Monto.current.value);
+    bodyF.append("precioDolar", precioDolar);
+    bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
 
@@ -174,17 +165,12 @@ export const ModalGastos = (props) => {
   };
 
   const selecionarSucursal = async (id) => {
-    let endpoint = op.conexion + "/sucursal/ConsultarUno?ID=" + id;
-
+    let endpoint = op.conexion + "/gastosPersonales/ConsultarUno";
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
-
     let bodyF = new FormData();
-
     bodyF.append("token", token);
-    // bodyF.append("Nombre", txtDescripcion.current.value)
+    bodyF.append("ID", id);
 
     await fetch(endpoint, {
       method: "POST",
@@ -193,10 +179,14 @@ export const ModalGastos = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-
-        txtDescripcion.current.value = response.sucursal_nombre;
-        setValues(response);
+        ID.current.value = response[0].nota_id;
+        ingresoEgreso.current.value = response[0].nota_IngresoEgreso;
+        Motivo.current.value = response[0].nota_motivo;
+        Tipo.current.value = response[0].nota_tipoPago;
+        Referencia.current.value = response[0].nota_referencia;
+        Monto.current.value = response[0].nota_monto;
+        bolivares.current.value =
+          response[0].dolar_monto * response[0].nota_monto;
       })
       .catch((error) =>
         setMensaje({
@@ -228,14 +218,6 @@ export const ModalGastos = (props) => {
     if (sigue) {
       actualizarCertificado();
     }
-  };
-
-  const seleccionarCliente = (nombre, apellido, cedula) => {
-    console.log(nombre, apellido, cedula);
-    txtCedula.current.value = cedula;
-    txtDescripcion.current.value = apellido;
-    txtNombre.current.value = nombre;
-    setMostrar(false);
   };
 
   const cerrarModal = () => {
@@ -309,7 +291,6 @@ export const ModalGastos = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-
         if (props.operacion !== 1) {
           selecionarSucursal(props.idSucursal);
         }
@@ -318,10 +299,10 @@ export const ModalGastos = (props) => {
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
           {operacion === 1
-            ? "Registrar Sucursal"
+            ? "Registrar Gastos Personales"
             : operacion === 2
-            ? "Editar Sucrsal"
-            : "Eliminar Sucursal"}
+            ? "Editar Gastos Personales"
+            : "Eliminar Gastos Personales"}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -352,6 +333,7 @@ export const ModalGastos = (props) => {
 
         <div className="col-md-12 row mx-auto">
           <div className="input-group input-group-sm mb-3 col-md-12">
+            <input hidden ref={ID}/>
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Tipo de movimiento:
             </span>
@@ -359,11 +341,12 @@ export const ModalGastos = (props) => {
               onChange={handleChange(25)}
               className="form-select"
               style={{ height: 30 }}
+              ref={ingresoEgreso}
               aria-label="Select Tipo de movimiento"
               aria-describedby="inputGroup-sizing-sm"
             >
-              <option value="option1">Egreso</option>
-              <option value="option2">Ingreso</option>
+              <option value="0">Egreso</option>
+              <option value="1">Ingreso</option>
             </select>
           </div>
           <div className="input-group input-group-sm mb-3 col-md-12">
@@ -371,6 +354,39 @@ export const ModalGastos = (props) => {
               Motivo:
             </span>
             <input
+              ref={Motivo}
+              onKeyDown={handleChange(30)}
+              type="text"
+              style={{ height: 30 }}
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+          </div>
+          <div className="input-group input-group-sm mb-3 col-md-12">
+            <span className="input-group-text" id="inputGroup-sizing-sm">
+              Metodo de pago:
+            </span>
+            <select
+              onChange={handleChange(25)}
+              className="form-select"
+              style={{ height: 30 }}
+              ref={Tipo}
+              aria-label="Select Tipo de movimiento"
+              aria-describedby="inputGroup-sizing-sm"
+            >
+              <option value="0">Pago movil</option>
+              <option value="1">Efectivo</option>
+              <option value="2">Transferencia</option>
+              <option value="3">Punto</option>
+            </select>
+          </div>
+          <div className="input-group input-group-sm mb-3 col-md-12">
+            <span className="input-group-text" id="inputGroup-sizing-sm">
+              Referencia:
+            </span>
+            <input
+              ref={Referencia}
               onKeyDown={handleChange(30)}
               type="text"
               style={{ height: 30 }}
@@ -384,6 +400,7 @@ export const ModalGastos = (props) => {
               Cantidad en $:
             </span>
             <input
+              ref={Monto}
               onKeyDown={handleChange(30)}
               type="text"
               style={{ height: 30 }}
@@ -397,9 +414,9 @@ export const ModalGastos = (props) => {
               Cantidad en Bs:
             </span>
             <input
+              ref={bolivares}
               onKeyDown={handleChange(30)}
               type="text"
-              disabled={operacion === 1 || operacion === 2 ? false : true}
               style={{ height: 30 }}
               className="form-control"
               aria-label="Sizing example input"
