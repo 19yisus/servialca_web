@@ -20,10 +20,12 @@ class Con_Auth extends cls_Auth
     $this->estatus = isset($_POST["Estatus"]) ? $_POST["Estatus"] : null;
     $this->modulo = isset($_POST["Modulos"]) ? $_POST["Modulos"] : [];
     $this->permiso = isset($_POST["Permiso"]) ? $_POST["Permiso"] : null;
-
-
     $this->id_pregunta = isset($_POST["id_pregunta"]) ? $_POST["id_pregunta"] : null;
     $this->des_respuesta = isset($_POST["des_respuesta"]) ? $_POST["des_respuesta"] : null;
+    $this->des_pregunta = isset($_POST["des_pregunta"]) ? $_POST["des_pregunta"] : null;
+    $this->des_pregunta2 = isset($_POST["des_pregunta2"]) ? $_POST["des_pregunta2"] : null;
+    $this->des_respuesta = isset($_POST["des_respuesta"]) ? $_POST["des_respuesta"] : null;
+    $this->des_respuesta2 = isset($_POST["des_respuesta2"]) ? $_POST["des_respuesta2"] : null;
   }
 
 
@@ -101,41 +103,64 @@ class Con_Auth extends cls_Auth
     $resultado = $this->GetAll();
     Response($resultado, 200);
   }
-
-  public function actualizar_password()
-  {
-    $resultado = $this->updatePass();
-    Response($resultado['data'], $resultado['code']);
-  }
-
-  // preguntas y respuestas de seguridad
-  public function registrar_respuestas()
-  {
-    $resultado = $this->Save_respuestas();
-    Response($resultado['data'], $resultado['code']);
-  }
-
-  public function actualizar_respuestas()
-  {
-    $resultado = $this->Update_respuestas();
-    Response($resultado['data'], $resultado['code']);
-  }
-
-  public function get_preguntas()
-  {
-    $resultado = $this->getPreguntas();
-    Response($resultado['data'], $resultado['code']);
-  }
-
-  public function get_preguntas_from_user()
-  {
-    $resultado = $this->getPreguntasFromUser();
-    Response($resultado['data'], $resultado['code']);
-  }
-
   public function Luz()
   {
     $resultado = $this->quitarLuz();
     Response($resultado["data"], $resultado["code"]);
+  }
+
+  public function savePreguntas()
+  {
+    $resultado = $this->Save_respuestas();
+    Response($resultado["data"], $resultado["code"]);
+  }
+
+  public function ConsultarPreguntas()
+  {
+    $resultado = $this->getPreguntasFromUser();
+    Response($resultado, 200);
+  }
+
+  public function EliminarUsuario()
+  {
+    $resultado = $this->DeleteUser();
+    Response($resultado["data"], $resultado["code"]);
+  }
+
+  public function ModificarEstatus()
+  {
+    $resultado = $this->ChangeStatus($_POST["Estatus"]);
+    Response($resultado["data"], $resultado["code"]);
+  }
+
+  // public function actualizar_password()
+  // {
+  //   $resultado = $this->updatePass();
+  //   Response($resultado['data'], $resultado['code']);
+  // }
+
+  // preguntas y respuestas de seguridad
+  // public function registrar_respuestas()
+  // {
+  //   $resultado = $this->Save_respuestas();
+  //   Response($resultado['data'], $resultado['code']);
+  // }
+
+  // public function actualizar_respuestas()
+  // {
+  //   $resultado = $this->Update_respuestas();
+  //   Response($resultado['data'], $resultado['code']);
+  // }
+
+  // public function get_preguntas()
+  // {
+  //   $resultado = $this->getPreguntas();
+  //   Response($resultado['data'], $resultado['code']);
+  // }
+
+  public function get_preguntas_from_user()
+  {
+    $resultado = $this->getPreguntasFromUser();
+    Response($resultado, 200);
   }
 }

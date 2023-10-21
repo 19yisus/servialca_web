@@ -69,8 +69,6 @@ export const GestionarClave = (props) => {
     let endpoint = op.conexion + "/Auth/login";
     console.log(endpoint);
     setActivate(true);
-  
-
 
     let bodyF = new FormData();
 
@@ -82,9 +80,39 @@ export const GestionarClave = (props) => {
       body: bodyF,
     })
       .then((res) => res.json())
+      .then((response) => {})
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  const datisPersona = async (login) => {
+    let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
+    console.log(endpoint);
+    setActivate(true);
+    //setLoading(false);
+    console.log(login);
+    let bodyF = new FormData();
+    bodyF.append("Usuario", login.toUpperCase());
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
       .then((response) => {
-    
-      
+        console.log(response.lista_preguntas);
+        setRecuperar("0");
+        setActivate(false);
+        // setValues(response.lista_preguntas);
+        // if (validarClave === 1) {
+        //   setValidarClave(0);
+        //   txtR1.current.value = "";
+        // }
       })
       .catch((error) =>
         setMensaje({
@@ -94,55 +122,7 @@ export const GestionarClave = (props) => {
           icono: "informacion",
         })
       );
-
-   
   };
-
-
-  const datisPersona  = async (login) => {
-    let endpoint = op.conexion + "/Auth/get_preguntas_from_user";
-    console.log(endpoint)
-    setActivate(true)
-
-
-
-    //setLoading(false);
-
-    console.log(login)
-    let bodyF = new FormData()
-
-    bodyF.append("Usuario", login.toUpperCase())
-
-
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-        console.log(response.lista_preguntas)
-       
-
-setRecuperar('0')
-        setActivate(false)
-        setValues(response.lista_preguntas)
-        if(validarClave === 1){
-          setValidarClave(0)
-          txtR1.current.value = ''
-        }
-
-
-
-       
-      })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
-  };
-
-
-
-
 
   const validarPastor = (event) => {
     event.preventDefault();
@@ -180,8 +160,8 @@ setRecuperar('0')
   const onChangevalidar = () => {
     let sigue = true;
     setValidarClave(0);
-   
-    if(recuperar === '1'){
+
+    if (recuperar === "1") {
       if (txtP1.current.value === "") {
         setMensaje({
           mostrar: true,
@@ -196,22 +176,27 @@ setRecuperar('0')
           mostrar: true,
           titulo: "Notificación",
           texto: "Debe Ingresasr la respuesta de la segunda pregunta",
-  
+
           icono: "informacion",
         });
         txtP2.current.focus();
         sigue = false;
       }
-  
+
       if (sigue) {
         setActivate(true);
-  console.log(values[0].des_respuesta.toLowerCase(),values[1].des_respuesta.toLowerCase())
+        console.log(
+          values[0].des_respuesta.toLowerCase(),
+          values[1].des_respuesta.toLowerCase()
+        );
         if (
-          txtP1.current.value.toLowerCase().trim() === values[0].des_respuesta.toLowerCase().trim() &&
-          txtP2.current.value.toLowerCase().trim() === values[1].des_respuesta.toLowerCase().trim()
+          txtP1.current.value.toLowerCase().trim() ===
+            values[0].des_respuesta.toLowerCase().trim() &&
+          txtP2.current.value.toLowerCase().trim() ===
+            values[1].des_respuesta.toLowerCase().trim()
         ) {
           setValidarClave(1);
-        }  else {
+        } else {
           setValidarClave(0);
           setMensaje({
             mostrar: true,
@@ -222,7 +207,7 @@ setRecuperar('0')
         }
         setActivate(false);
       }
-  
+
       if (validarClave === 1) {
         let sigue2 = true;
         if (txtR1.current.value === "") {
@@ -235,15 +220,13 @@ setRecuperar('0')
           txtR1.current.focus();
           sigue2 = false;
         }
-  
+
         if (sigue2) {
           updatepass();
         }
       }
-    } else if(recuperar === '2') {
-      
-
-      if (mostrarBoton === 'visible') {
+    } else if (recuperar === "2") {
+      if (mostrarBoton === "visible") {
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
@@ -252,11 +235,13 @@ setRecuperar('0')
         });
         btnEnviar.current.focus();
         sigue = false;
-      }else if (txtCodVeri.current.value === "") {
+      } else if (txtCodVeri.current.value === "") {
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
-          texto: "Debe Ingresar el código de verificación enviado a su correo "+ correo.correo,
+          texto:
+            "Debe Ingresar el código de verificación enviado a su correo " +
+            correo.correo,
           icono: "informacion",
         });
         txtCodVeri.current.focus();
@@ -265,13 +250,13 @@ setRecuperar('0')
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
-          texto: "El código ingresado no coincide con el código enviado a su correo",
+          texto:
+            "El código ingresado no coincide con el código enviado a su correo",
           icono: "informacion",
         });
         txtCodVeri.current.focus();
         sigue = false;
-
-      } else if(txtR1.current.value === ''){
+      } else if (txtR1.current.value === "") {
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
@@ -282,13 +267,12 @@ setRecuperar('0')
         sigue = false;
       }
       if (txtCodVeri.current.value.trim() === codigoVerifi) {
-        setValidarClave(1)
-       }
-
-      if(sigue){
-        updatepass();
+        setValidarClave(1);
       }
 
+      if (sigue) {
+        updatepass();
+      }
     } else {
       setMensaje({
         mostrar: true,
@@ -302,15 +286,13 @@ setRecuperar('0')
   const validar = (e) => {
     console.log(e.target.value);
     setRecuperar(e.target.value);
-    if(e.target.value === '2'){
-      setMostrarBoton('visible')
+    if (e.target.value === "2") {
+      setMostrarBoton("visible");
     }
-
   };
 
   const enviarCorreo = () => {
     setMostrarBoton("collapse");
-  
 
     var pass = "";
     var str =
@@ -345,15 +327,14 @@ setRecuperar('0')
       })
       .then(function (response) {
         if (response.status === 200) {
-        
         }
       })
       .catch(function (error) {
-        setMostrarBoton('visible')
+        setMostrarBoton("visible");
         setMensaje({
           mostrar: true,
           titulo: "Error de Conexion",
-          texto: 'No se pudo mandar el código de verificación',
+          texto: "No se pudo mandar el código de verificación",
           icono: "error",
         });
       });
@@ -374,7 +355,7 @@ setRecuperar('0')
           setPreguntas(false);
         } else {
           const idusuario = JSON.parse(localStorage.getItem("idusuario"));
-        //  seleccionarPreguntas(idusuario);
+          //  seleccionarPreguntas(idusuario);
           setBoton(false);
         }
       }}
@@ -408,22 +389,29 @@ setRecuperar('0')
           }}
         />
         <div>
-         
-            <div className="mb-2">
-              <label for="exampleInputEmail1" className="form-label">
-                Ingrese usuario
-              </label>
-              <input
-                type="text"
-                disabled={boton}
-                className="form-control form-control-sm"
-                onKeyUp={validarPastor}
-                onBlur={validarPastor}
-              />
-            </div>
-          
+          <div className="mb-2">
+            <label for="exampleInputEmail1" className="form-label">
+              Ingrese usuario
+            </label>
+            <input
+              type="text"
+              disabled={boton}
+              className="form-control form-control-sm"
+              onKeyUp={validarPastor}
+              onBlur={validarPastor}
+            />
+          </div>
+
           {values[0] ? (
-            <div style={{visibility:recuperar === '1' || recuperar === '2' ? 'collapse' : 'visible'}} className="col-md-12 row mx-auto border rounded p-2 py-2">
+            <div
+              style={{
+                visibility:
+                  recuperar === "1" || recuperar === "2"
+                    ? "collapse"
+                    : "visible",
+              }}
+              className="col-md-12 row mx-auto border rounded p-2 py-2"
+            >
               <div className="form-check mx-auto col-md-10 mb-2 px-2">
                 <input
                   className="form-check-input my-auto"
@@ -498,13 +486,12 @@ setRecuperar('0')
               <button
                 style={{ visibility: mostrarBoton }}
                 type="button"
-               // onClick={enviarCorreo}
+                // onClick={enviarCorreo}
                 ref={btnEnviar}
                 className="btn btn-primary btn-sm rounded-pill my-2 mx-auto col-md-11"
               >
                 enviar código de validación
               </button>
-          
             </div>
           ) : (
             ""
@@ -516,7 +503,7 @@ setRecuperar('0')
                 Nueva Clave
               </label>
               <input
-              maxLength={10}
+                maxLength={10}
                 type="text"
                 ref={txtR1}
                 className="form-control form-control-sm"

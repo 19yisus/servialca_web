@@ -154,7 +154,7 @@ function GraficosIngresos() {
     labels,
     datasets: [
       {
-        label: "Miembros",
+        label: "Movimientos anual",
         data: [
           enero,
           febrero,
@@ -239,7 +239,7 @@ function GraficosIngresos() {
             sumaRcv++;
           } else if (item.nota_motivo === "Renovación") {
             sumaRenovacion++;
-          } else if (item.nota_motivo === "Seguro") {
+          } else if (item.nota_motivo === "Seguro"|| item.nota_motivo === "Medico") {
             sumaSeguro++;
           } else if (item.nota_IngresoEgreso === 0) {
             sumaEgreso++;

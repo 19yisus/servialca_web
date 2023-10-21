@@ -61,11 +61,10 @@ export const GestionarPreguntas = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        id.current.value = response[0].id_respuesta;
         txtP1.current.value = response[0].des_pregunta;
+        txtP2.current.value = response[0].des_pregunta2;
         txtR1.current.value = response[0].des_respuesta;
-        txtP2.current.value = response[1].des_pregunta;
-        txtR2.current.value = response[1].des_respuesta;
+        txtR2.current.value = response[0].des_respuesta2;
       });
   };
 
@@ -73,12 +72,11 @@ export const GestionarPreguntas = (props) => {
     let endpoint = `${op.conexion}/Auth/savePreguntas`;
     setActivate(true);
     let bodyF = new FormData();
-    bodyF.append("ID", id.current.value);
-    bodyF.append("Usuario", id_user);
+    bodyF.append("ID", id_user);
     bodyF.append("des_pregunta", txtP1.current.value);
-    bodyF.append("des_pregunta", txtP2.current.value);
+    bodyF.append("des_pregunta2", txtP2.current.value);
     bodyF.append("des_respuesta", txtR1.current.value);
-    bodyF.append("des_respuesta", txtR2.current.value);
+    bodyF.append("des_respuesta2", txtR2.current.value);
     try {
       const response = await fetch(endpoint, {
         method: "POST",
