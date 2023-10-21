@@ -190,7 +190,7 @@ export const ModalLicencia = (props) => {
       "Telefono",
       cmbTelefono.current.value + txtTelefono.current.value
     );
-    bodyF.append("Sangre", txtTipoSangre.current.value);
+    bodyF.append("tipoSangre", txtTipoSangre.current.value);
     bodyF.append("Correo", txtCorreo.current.value);
     bodyF.append("correoLicencia", txtCorreo.current.value);
     bodyF.append("Licencia", cmbTipoLicencia.current.value);

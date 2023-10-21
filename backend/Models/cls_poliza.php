@@ -571,23 +571,24 @@ abstract class cls_poliza extends cls_db
 				$this->db->beginTransaction();
 			}
 
-			$result = $this->SecurityLicencia();
-			if (!$result) {
-				$this->db->rollback();
-				return [
-					'data' => [
-						'res' => "Ocurrión un error en la transacción"
-					],
-					'code' => 400
-				];
-			}
+			// $result = $this->SecurityLicencia();
+			// if (!$result) {
+			// 	$this->db->rollback();
+			// 	return [
+			// 		'data' => [
+			// 			'res' => "Ocurrión un error en la transacción cliente"
+			// 		],
+			// 		'code' => 400
+			// 	];
+			// }
 			$result = $this->SearchByCliente();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
 				$this->db->rollback();
 				return [
 					'data' => [
-						'res' => "Ocurrión un error en la transacción"
+						'res' => "Ocurrión un error en la transacción",
+						"code" => 400
 					],
 					'code' => 400
 				];
@@ -598,7 +599,8 @@ abstract class cls_poliza extends cls_db
 				$this->db->rollback();
 				return [
 					'data' => [
-						'res' => "Ocurrión un error en la transacción"
+						'res' => "Ocurrión un error en la transacción",
+						"code" => 400
 					],
 					'code' => 400
 				];
@@ -611,7 +613,8 @@ abstract class cls_poliza extends cls_db
 				$this->db->rollback();
 				return [
 					'data' => [
-						'res' => "Ocurrión un error en la transacción"
+						'res' => "Ocurrión un error en la transacción",
+						"code" => 400
 					],
 					'code' => 400
 				];
@@ -634,14 +637,16 @@ abstract class cls_poliza extends cls_db
 			$this->db->rollback();
 			return [
 				'data' => [
-					'res' => "Registro fallido"
+					'res' => "Registro fallido",
+					"code" => 400
 				],
 				'code' => 400
 			];
 		} catch (PDOException $e) {
 			return [
 				'data' => [
-					'res' => "Error de consulta: " . $e->getMessage()
+					'res' => "Error de consulta: " . $e->getMessage(),
+					"code" => 400
 				],
 				'code' => 400
 			];
@@ -655,16 +660,18 @@ abstract class cls_poliza extends cls_db
 			cliente_id,
 			licencia_correo,
 			licencia_sangre,
+			licencia_lente,
 			licencia_licencia,
 			licencia_montoTotal,
 			licencia_abonado,
 			licencia_restante
-		)values(?,?,?,?,?,?,?)");
+		)values(?,?,?,?,?,?,?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
 				$this->correoLicencia,
 				$this->sangre,
+				$this->lente,
 				$this->licencia,
 				$this->montoTotal,
 				$this->abonado,
@@ -1449,7 +1456,7 @@ abstract class cls_poliza extends cls_db
 				],
 			];
 		}
-		if (empty($this->montoTotal)) {
+		if (empty($this->cantidadDolar)) {
 			return [
 				"data" => [
 					"res" => "No has ingresado un monto valido",

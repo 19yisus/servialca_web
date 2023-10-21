@@ -194,6 +194,35 @@ function TablaUsuarios() {
       );
   };
 
+  const deleteUser = async (id) => {
+    let endpoint = op.conexion + "/Auth/EliminarUsuario";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setMensaje({
+          mostrar: true,
+          titulo: "Exito.",
+          texto: "Usuarios desactivados",
+          icono: "exito",
+        });
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
     console.log(endpoint);
@@ -283,8 +312,9 @@ function TablaUsuarios() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-
-    if (op == 2) {
+    if (op == 0) {
+      deleteUser(id);
+    } else if (op == 9) {
       quitarLuz();
     } else {
       setOperacion(op);
@@ -322,7 +352,7 @@ function TablaUsuarios() {
           />
           <div className="col-3 d-flex justify-content-end">
             <button
-              onClick={gestionarBanco(2, "")}
+              onClick={gestionarBanco(9, "")}
               className="btn btn-sm btn-primary"
             >
               <i>Desactivar usuarios</i>{" "}
@@ -413,19 +443,29 @@ function TablaUsuarios() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(4, item.usuario_id)}
-                      className="btn btn-sm mx-1 btn-info rounded-circle"
-                    >
-                      <i className="fas fa-eye"></i>{" "}
-                    </button>
-                    <button
                       onClick={gestionarBanco(2, item.usuario_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(3, item.usuario_id)}
+                      onClick={gestionarBanco(0, item.usuario_id)}
+                      className="btn btn-sm mx-1 btn-danger rounded-circle"
+                    >
+                      {item.usuario_estatus === 1 ? (
+                        <i
+                          className="fa fa-times"
+          
+                        ></i>
+                      ) : (
+                        <i
+                          className="fa fa-check"
+                          style={{ background: "none" }}
+                        ></i>
+                      )}
+                    </button>
+                    <button
+                      onClick={gestionarBanco(5, item.usuario_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
                       <i className="fa fa-trash"></i>{" "}
