@@ -35,13 +35,21 @@ abstract class cls_usoVehiculo extends cls_db
 			$sql = $this->db->prepare("INSERT INTO usovehiculo(usoVehiculo_nombre,usoVehiculo_estatus) VALUES(?,1)");
 			$sql->execute([$this->nombre]);
 			$this->id = $this->db->lastInsertId();
-			if ($sql->rowCount() > 0)
+			if ($sql->rowCount() > 0) {
+
+				$this->reg_bitacora([
+					'table_name' => "usovehiculo",
+					'des' => "Insert en usovehiculo (nombre: $this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "Registro exitoso"
 					],
 					"code" => 200
 				];
+			}
+
 			return [
 				"data" => [
 					"res" => "El registro ha fallado"
@@ -73,6 +81,12 @@ abstract class cls_usoVehiculo extends cls_db
 			$sql = $this->db->prepare("UPDATE usovehiculo SET
             usoVehiculo_nombre = ? WHERE usoVehiculo_id = ?");
 			if ($sql->execute([$this->nombre, $this->id])) {
+
+				$this->reg_bitacora([
+					'table_name' => "usovehiculo",
+					'des' => "Actualización en usovehiculo (id: $this->id, nombre: $this->nombre)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "Actualización de datos exitosa"
@@ -112,6 +126,12 @@ abstract class cls_usoVehiculo extends cls_db
 		try {
 			$sql = $this->db->prepare("UPDATE usovehiculo SET usoVehiculo_estatus = ? WHERE usoVehiculo_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
+
+				$this->reg_bitacora([
+					'table_name' => "usovehiculo",
+					'des' => "Cambio de estatus en usovehiculo (id: $this->id, estatus: $this->estatus)"
+				]);
+
 				return [
 					"data" => [
 						"res" => "usoVehiculo desactivada"
