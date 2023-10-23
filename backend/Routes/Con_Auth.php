@@ -49,7 +49,7 @@ class Con_Auth extends cls_Auth
           ],
           'token' => $token,
           'res' => $resultado['data']['res'],
-          "code" => $resultado["code"][""],
+          "code" => $resultado["code"],
         ],
       ], 200);
       return false;

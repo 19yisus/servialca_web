@@ -2,26 +2,31 @@ import React, { useReducer, createContext } from "react";
 import jwtDecode from "jwt-decode";
 let decodedToken;
 
-try {
-  decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
-  // Lógica para cuando el token se decodifica correctamente
-} catch (error) {
-  console.error("Error al decodificar el token:", error);
-  // Lógica para cuando hay un error al decodificar el token
- // alert("hola");
-}
-
 const initialState = {
   user: null,
 };
 
-if (localStorage.getItem("jwtToken")) {
-  decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
+if (localStorage.hasOwnProperty("jwtToken")) {
+  console.group("tokeeeeeen");
+  console.log(localStorage.getItem("jwtToken"));
+  console.groupEnd();
 
-  if (decodedToken.exp * 1000 < Date.now()) {
-    localStorage.clear();
-  } else {
-    initialState.user = decodedToken;
+  try {
+    decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
+    // Lógica para cuando el token se decodifica correctamente
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+    // Lógica para cuando hay un error al decodificar el token
+    // alert("hola");
+  }
+  if (localStorage.getItem("jwtToken") !== null) {
+    decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
+
+    if (decodedToken.exp * 1000 < Date.now()) {
+      localStorage.clear();
+    } else {
+      initialState.user = decodedToken;
+    }
   }
 }
 

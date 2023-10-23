@@ -21,22 +21,32 @@ class cls_Auth extends cls_db
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
     if (!empty($resultado)) {
-      if ($resultado["usuario_estatus"] == 0)
+      if ($resultado["usuario_estatus"] == 0) {
         return [
           'data' => [
-            'res' => "El usuario está desactivado",
-            "code" => 400
+            'res' => [
+              'text' => "El usuario está desactivado",
+              "code" => 400
+            ] 
           ],
           'code' => 400
         ];
-      if ($resultado["intentos"] == 3)
+        return false;
+      }
+
+      if ($resultado["intentos"] == 3) {
         return [
           "data" => [
-            "data" => "El usuario se encuenta bloqueado",
-            "code" => 400
+            "res" => [
+              'text' => "El usuario se encuenta bloqueado",
+              "code" => 400
+            ],
           ],
           "code" => 400
         ];
+        return false;
+      }
+
       if ($this->clave != $resultado['usuario_clave']) {
         // if (!password_verify($this->clave, $resultado['usuario_clave'])) {
         //   return [
@@ -50,11 +60,14 @@ class cls_Auth extends cls_db
         $sql->execute([$resultado["usuario_id"]]);
         return [
           'data' => [
-            'res' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave'],
-            "code" => 400
+            'res' => [
+              'text' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave'],
+              "code" => 400
+            ] 
           ],
           'code' => 400
         ];
+        return false;
       } else {
         $PasswordUpdate = true;
       }
@@ -86,7 +99,7 @@ class cls_Auth extends cls_db
 
         return [
           'data' => [
-            'res' => "Login exitoso",
+            'res' => ['text' => "Login exitoso", 'code' => 200],
             'usuario' => [
               'username' => $dato["usuario_usuario"],
               'user_id' => $dato["usuario_id"],

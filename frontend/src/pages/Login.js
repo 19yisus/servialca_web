@@ -105,63 +105,68 @@ function Login(props) {
     })
       .then((res) => res.json())
       .then((response) => {
+        console.log(response.data.res.code);
+        console.log(response.data.res.text);
         context.login(response.data.token);
         // window.location.href = '/inicio'
         const fecha = new Date();
         localStorage.setItem("fechasistema", JSON.stringify(fecha));
 
-        localStorage.setItem(
-          "rol",
-          JSON.stringify(response.data.usuario[0].rol)
-        );
-        localStorage.setItem(
-          "user_id",
-          JSON.stringify(response.data.usuario[0].user_id)
-        );
-        localStorage.setItem(
-          "username",
-          JSON.stringify(response.data.usuario[0].username)
-        );
-        localStorage.setItem(
-          "permisos",
-          JSON.stringify(response.data.usuario[0].permisos)
-        );
-        localStorage.setItem(
-          "idsucursal",
-          JSON.stringify(response.data.usuario[1].id)
-        );
-        localStorage.setItem(
-          "sucursal",
-          JSON.stringify(response.data.usuario[1].name)
-        );
         setActivate(false);
-        window.location.href = "/inicio";
-        if (response.code == 200) {
+
+        if (response.data.res.code == 200) {
+          localStorage.setItem(
+            "rol",
+            JSON.stringify(response.data.usuario[0].rol)
+          );
+          localStorage.setItem(
+            "user_id",
+            JSON.stringify(response.data.usuario[0].user_id)
+          );
+          localStorage.setItem(
+            "username",
+            JSON.stringify(response.data.usuario[0].username)
+          );
+          localStorage.setItem(
+            "permisos",
+            JSON.stringify(response.data.usuario[0].permisos)
+          );
+          localStorage.setItem(
+            "idsucursal",
+            JSON.stringify(response.data.usuario[1].id)
+          );
+          localStorage.setItem(
+            "sucursal",
+            JSON.stringify(response.data.usuario[1].name)
+          );
+          
           setMensaje({
             mostrar: true,
             titulo: "Exito.",
-            texto: response.res,
+            texto: response.data.res.text,
             icono: "exito",
           });
+
+          window.location.href = "/inicio";
         }
-        if (response.code == 400) {
+        if (response.data.res.code == 400) {
           setMensaje({
             mostrar: true,
             titulo: "Error.",
-            texto: response.res,
+            texto: response.data.res.text,
             icono: "error",
           });
         }
       })
-
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
+      .catch((error) => {
+        console.error(error);
+        // setMensaje({
+        //   mostrar: true,
+        //   titulo: "Notificación",
+        //   texto: error.res,
+        //   icono: "informacion",
+        // });
+      });
 
     // axios
     //   .post(endpoint, body, {
