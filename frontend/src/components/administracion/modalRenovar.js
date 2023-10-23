@@ -100,8 +100,8 @@ export const ModalRenovarPoliza = (props) => {
 
   const handleInputChange = (event) => {
     event.preventDefault();
-    console.log(event)
-  }
+    console.log(event);
+  };
 
   const salir = () => {
     props.onHideCancela();
@@ -136,73 +136,73 @@ export const ModalRenovarPoliza = (props) => {
 
     let bodyF = new FormData();
 
-    bodyF.append("ID",ID.current.value);
+    bodyF.append("ID", ID.current.value);
     bodyF.append("metodoPago", cmbPago.current.value);
     bodyF.append("Referencia", txtReferencia.current.value);
-    bodyF.append("cantidadDolar",txtBs.current.value );
-    bodyF.append("Monto",txtDolar.current.value);
-    bodyF.append("Sucursal",values.sucursal_id);
-    bodyF.append("Usuario",values.usuario_usuario);
-    bodyF.append("Nombre",values.cliente_nombre);
-    bodyF.append("Apellido",values.cliente_apellido);
-    bodyF.append("Cedula",values.cliente_cedula);
-    bodyF.append("fechaNacimiento",values.cliente_fechaNacimiento);
-    bodyF.append("Telefono",values.cliente_telefono);
-    bodyF.append("Correo",values.cliente_correo);
-    bodyF.append("Direccion",values.cliente_direccion);
-    bodyF.append("cedulaTitular",values.titular_cedula);
-    bodyF.append("nombreTitular",values.titular_nombre);
-    bodyF.append("apellidoTitular",values.titular_apellido);
-    bodyF.append("Ano",values.vehiculo_año);
-    bodyF.append("serialMotor",values.vehiculo_serialMotor);
-    bodyF.append("serialCarroceria",values.vehiculo_serialCarroceria);
+    bodyF.append("cantidadDolar", txtBs.current.value);
+    bodyF.append("Monto", txtDolar.current.value);
+    bodyF.append("Sucursal", values.sucursal_id);
+    bodyF.append("Usuario", values.usuario_usuario);
+    bodyF.append("Nombre", values.cliente_nombre);
+    bodyF.append("Apellido", values.cliente_apellido);
+    bodyF.append("Cedula", values.cliente_cedula);
+    bodyF.append("fechaNacimiento", values.cliente_fechaNacimiento);
+    bodyF.append("Telefono", values.cliente_telefono);
+    bodyF.append("Correo", values.cliente_correo);
+    bodyF.append("Direccion", values.cliente_direccion);
+    bodyF.append("cedulaTitular", values.titular_cedula);
+    bodyF.append("nombreTitular", values.titular_nombre);
+    bodyF.append("apellidoTitular", values.titular_apellido);
+    bodyF.append("Ano", values.vehiculo_año);
+    bodyF.append("serialMotor", values.vehiculo_serialMotor);
+    bodyF.append("serialCarroceria", values.vehiculo_serialCarroceria);
 
-    bodyF.append("Peso",values.vehiculo_peso);
-    bodyF.append("Capacidad",values.vehiculo_capTon);
-    bodyF.append("Color",values.color_nombre);
-    bodyF.append("Modelo",values.modelo_nombre);
-    bodyF.append("Marca",values.marca_nombre);
-    bodyF.append("Uso",values.usoVehiculo_nombre);
-    bodyF.append("Clase",values.clase_nombre);
-    bodyF.append("Tipo",values.tipoVehiculo_nombre);
-       // Contrato
-    bodyF.append("fechaInicio",txtDesde.current.value);
-    bodyF.append("fechaVencimiento",txtHasta.current.value);
-    bodyF.append("tipoContrato",values.contrato_nombre);
-    bodyF.append("Estado",values.estado_id);
-    bodyF.append("danoCosas",values.dañoCosas);
-    bodyF.append("danoPersonas",values.dañoPersonas);
+    bodyF.append("Peso", values.vehiculo_peso);
+    bodyF.append("Capacidad", values.vehiculo_capTon);
+    bodyF.append("Color", values.color_nombre);
+    bodyF.append("Modelo", values.modelo_nombre);
+    bodyF.append("Marca", values.marca_nombre);
+    bodyF.append("Uso", values.usoVehiculo_nombre);
+    bodyF.append("Clase", values.clase_nombre);
+    bodyF.append("Tipo", values.tipoVehiculo_nombre);
+    // Contrato
+    bodyF.append("fechaInicio", txtDesde.current.value);
+    bodyF.append("fechaVencimiento", txtHasta.current.value);
+    bodyF.append("tipoContrato", values.contrato_nombre);
+    bodyF.append("Estado", values.estado_id);
+    bodyF.append("danoCosas", values.dañoCosas);
+    bodyF.append("danoPersonas", values.dañoPersonas);
 
-    bodyF.append("Fianza",values.fianzaCuanti);
-    bodyF.append("Apov",values.apov);
-    bodyF.append("Muerte",values.muerte);
-    bodyF.append("Invalidez",values.invalidez);
-    bodyF.append("Medico",values.gastosMedicos);
-    bodyF.append("Grua",values.grua);
+    bodyF.append("Fianza", values.fianzaCuanti);
+    bodyF.append("Apov", values.apov);
+    bodyF.append("Muerte", values.muerte);
+    bodyF.append("Invalidez", values.invalidez);
+    bodyF.append("Medico", values.gastosMedicos);
+    bodyF.append("Grua", values.grua);
 
-        //Cobertura
-        bodyF.append("danoCosas",values.cobertura_danoCosas);
+    //Cobertura
+    bodyF.append("danoCosas", values.cobertura_danoCosas);
 
-    bodyF.append("danoPersonas",values.cobertura_danoPersonas);
-    bodyF.append("fianza",values.cobertura_fianzaCuanti);
-    bodyF.append("asistencia",values.cobertura_asistenciaLegal);
-    bodyF.append("apov",values.cobertura_apov);
-    bodyF.append("muerte",values.cobertura_muerte);
-    bodyF.append("invalidez",values.cobertura_invalidez);
-    bodyF.append("medico",values.cobertura_gastosMedicos);
-    bodyF.append("grua",values.cobertura_grua);
-    bodyF.append("monto",txtBs.current.value);
-    bodyF.append("metodoPago",cmbPago.current.value);
-    bodyF.append("Referencia",txtReferencia.current.value);
-    bodyF.append("cantidadDolar",txtDolar.current.value);
-    bodyF.append("Edad",18);
-    bodyF.append("tipoSangre",'o+');
-    bodyF.append("Lente",0);
-    bodyF.append("idCliente",values.cliente_id);
-    bodyF.append("idTitular",values.titular_id);
-    bodyF.append("idVehiculo",values.vehiculo_id);
+    bodyF.append("danoPersonas", values.cobertura_danoPersonas);
+    bodyF.append("fianza", values.cobertura_fianzaCuanti);
+    bodyF.append("asistencia", values.cobertura_asistenciaLegal);
+    bodyF.append("apov", values.cobertura_apov);
+    bodyF.append("muerte", values.cobertura_muerte);
+    bodyF.append("invalidez", values.cobertura_invalidez);
+    bodyF.append("medico", values.cobertura_gastosMedicos);
+    bodyF.append("grua", values.cobertura_grua);
+    bodyF.append("monto", txtBs.current.value);
+    bodyF.append("metodoPago", cmbPago.current.value);
+    bodyF.append("Referencia", txtReferencia.current.value);
+    bodyF.append("cantidadDolar", txtDolar.current.value);
+    bodyF.append("Edad", 18);
+    bodyF.append("tipoSangre", "o+");
+    bodyF.append("Lente", 0);
+    bodyF.append("idCliente", values.cliente_id);
+    bodyF.append("idTitular", values.titular_id);
+    bodyF.append("idVehiculo", values.vehiculo_id);
+    bodyF.append("token", token);
 
-  
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -220,14 +220,14 @@ export const ModalRenovarPoliza = (props) => {
         });
         setIdContrato(response.id);
       })
-      .catch((error) =>{
-        console.log(error)
+      .catch((error) => {
+        console.log(error);
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
           texto: error.res,
           icono: "informacion",
-        })
+        });
       });
   };
 
@@ -367,7 +367,7 @@ export const ModalRenovarPoliza = (props) => {
 
         setActivate(false);
         console.log(response[0]);
-        setValues(response[0])
+        setValues(response[0]);
       })
       .catch((error) =>
         setMensaje({
@@ -446,11 +446,7 @@ export const ModalRenovarPoliza = (props) => {
               >
                 N° De Contrato:
               </span>
-              <input 
-                type="hidden"
-                ref={ID}
-                disabled
-              />
+              <input type="hidden" ref={ID} disabled />
               <input
                 type="text"
                 class="form-control bg-transparent border-0 "

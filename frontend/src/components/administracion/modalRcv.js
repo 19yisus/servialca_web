@@ -283,6 +283,7 @@ export const ModalRcv = (props) => {
     bodyF.append("Referencia", txtReferencia.current.value);
     bodyF.append("cantidadDolar", monto);
     bodyF.append("precioDolar", dolarbcv.toFixed(2));
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

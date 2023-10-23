@@ -129,7 +129,7 @@ export const ModalTransporte = (props) => {
     }
 
     bodyF.append("Nombre", txtDescripcion.current.value);
-
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

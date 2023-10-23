@@ -162,6 +162,7 @@ export const ModalUsuarios = (props) => {
     } else if (operacion === 3) {
       endpoint = op.conexion + "/Auth/eliminar";
     }
+    
     console.log(endpoint);
     setActivate(true);
 
@@ -199,7 +200,7 @@ export const ModalUsuarios = (props) => {
     bodyF.append("Rol", txtRol.current.value);
     bodyF.append("Sucursal", txtSucursal.current.value);
     bodyF.append("Permiso", permiso);
-
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

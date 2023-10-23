@@ -182,18 +182,15 @@ export const ModalTipoVehiculo = (props) => {
   const actualizarTiposContratos = async (id) => {
     let endpoint;
     let bodyF = new FormData();
-
     setActivate(true);
-
     for (let i = 0; i < records.length; i++) {
       if (operacion === 1) {
         endpoint = op.conexion + "/tipo_vehiculo/precio";
       }
-
       bodyF.append("ID", id);
       bodyF.append("precio", txtDolar.current.value);
       bodyF.append("idContrato", records[i].contrato_id);
-
+      bodyF.append("token", token);
       await fetch(endpoint, {
         method: "POST",
         body: bodyF,
@@ -231,7 +228,7 @@ export const ModalTipoVehiculo = (props) => {
     }
 
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value);
-
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

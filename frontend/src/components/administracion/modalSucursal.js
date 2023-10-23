@@ -123,7 +123,6 @@ export const ModalSucursal = (props) => {
     if (operacion === 1) {
       endpoint = op.conexion + "/sucursal/registrar";
       bodyF.append("Nombre", txtDescripcion.current.value);
-      bodyF.append("token", token);
     } else if (operacion === 2) {
       endpoint = op.conexion + "/sucursal/actualizar";
       bodyF.append("Nombre", txtDescripcion.current.value);
@@ -133,7 +132,7 @@ export const ModalSucursal = (props) => {
       bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.sucursal_id);
     }
-   
+    bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
 

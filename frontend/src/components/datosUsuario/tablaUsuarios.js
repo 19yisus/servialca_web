@@ -209,7 +209,7 @@ function TablaUsuarios() {
         setMensaje({
           mostrar: true,
           titulo: "Exito.",
-          texto: "Usuarios desactivados",
+          texto: "Usuario Eliminado",
           icono: "exito",
         });
       })
@@ -222,7 +222,41 @@ function TablaUsuarios() {
         })
       );
   };
-
+  const cambiarEstatus = async (id, estatus) => {
+    var variable;
+    if (estatus == 0) {
+      variable = 1;
+    } else {
+      variable = 0;
+    }
+    let endpoint = op.conexion + "/Auth/ModificarEstatus";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    bodyF.append("Estatus", variable);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setMensaje({
+          mostrar: true,
+          titulo: "Exito.",
+          texto: "Estatus Modificado",
+          icono: "exito",
+        });
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
     console.log(endpoint);
@@ -310,12 +344,14 @@ function TablaUsuarios() {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
-  const gestionarBanco = (op, id) => (e) => {
+  const gestionarBanco = (op, id, estatus) => (e) => {
     e.preventDefault();
-    if (op == 0) {
+    if (op == 5) {
       deleteUser(id);
     } else if (op == 9) {
       quitarLuz();
+    } else if (op == 8) {
+      cambiarEstatus(id, estatus);
     } else {
       setOperacion(op);
       setMostrar(true);
@@ -352,7 +388,7 @@ function TablaUsuarios() {
           />
           <div className="col-3 d-flex justify-content-end">
             <button
-              onClick={gestionarBanco(9, "")}
+              onClick={gestionarBanco(9, "", "")}
               className="btn btn-sm btn-primary"
             >
               <i>Desactivar usuarios</i>{" "}
@@ -360,7 +396,7 @@ function TablaUsuarios() {
           </div>
           <div className="col-3 d-flex justify-content-end">
             <button
-              onClick={gestionarBanco(1, "")}
+              onClick={gestionarBanco(1, "", "")}
               className="btn btn-sm btn-primary rounded-circle"
             >
               <i className="fas fa-plus"></i>{" "}
@@ -443,20 +479,21 @@ function TablaUsuarios() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.usuario_id)}
+                      onClick={gestionarBanco(2, item.usuario_id, "")}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(0, item.usuario_id)}
+                      onClick={gestionarBanco(
+                        8,
+                        item.usuario_id,
+                        item.usuario_estatus
+                      )}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
                       {item.usuario_estatus === 1 ? (
-                        <i
-                          className="fa fa-times"
-          
-                        ></i>
+                        <i className="fa fa-times"></i>
                       ) : (
                         <i
                           className="fa fa-check"

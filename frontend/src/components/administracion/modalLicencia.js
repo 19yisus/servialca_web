@@ -204,6 +204,7 @@ export const ModalLicencia = (props) => {
     bodyF.append("Lente", cmbLentes.current.value);
     bodyF.append("Usuario", user);
     bodyF.append("Sucursal", sucursal);
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

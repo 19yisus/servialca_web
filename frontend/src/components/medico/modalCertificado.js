@@ -121,8 +121,8 @@ export const ModalImgLicencia = (props) => {
     let endpoint = op.conexion + "/medico/SetImg";
     let bodyF = new FormData();
     bodyF.append("Imagen", txtImg.current.files[0]); // Utiliza .files[0] para obtener el archivo seleccionado
-
     bodyF.append("ID", id);
+    bodyF.append("token", token);
     console.log(txtImg.current.value);
     console.log(endpoint);
     setActivate(true);

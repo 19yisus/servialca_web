@@ -260,7 +260,7 @@ function TablaRoles() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.roles_comision}
+                    {item.roles_comision + " %"}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
