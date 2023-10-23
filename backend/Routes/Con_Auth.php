@@ -38,9 +38,7 @@ class Con_Auth extends cls_Auth
       ], 400);
       return false;
     }
-
     $resultado = $this->sing_in();
-
     if ($resultado['code'] == 200) {
       $token = createToken($resultado['data']['usuario']['user_id'], $resultado['data']['usuario']['permisos']);
       Response([
@@ -50,7 +48,8 @@ class Con_Auth extends cls_Auth
             $resultado['data']['sucursal']
           ],
           'token' => $token,
-          'res' => $resultado['data']['res']
+          'res' => $resultado['data']['res'],
+          "code" => $resultado["code"][""],
         ],
       ], 200);
       return false;

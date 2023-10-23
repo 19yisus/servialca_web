@@ -24,9 +24,18 @@ class cls_Auth extends cls_db
       if ($resultado["usuario_estatus"] == 0)
         return [
           'data' => [
-            'res' => "El usuario está desactivado"
+            'res' => "El usuario está desactivado",
+            "code" => 400
           ],
           'code' => 400
+        ];
+      if ($resultado["intentos"] == 3)
+        return [
+          "data" => [
+            "data" => "El usuario se encuenta bloqueado",
+            "code" => 400
+          ],
+          "code" => 400
         ];
       if ($this->clave != $resultado['usuario_clave']) {
         // if (!password_verify($this->clave, $resultado['usuario_clave'])) {
@@ -37,9 +46,12 @@ class cls_Auth extends cls_db
         //     'code' => 400
         //   ];
         // }
+        $sql = $this->db->prepare("UPDATE usuario SET intentos = intentos +1 WHERE usuario_id = ?");
+        $sql->execute([$resultado["usuario_id"]]);
         return [
           'data' => [
-            'res' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave']
+            'res' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave'],
+            "code" => 400
           ],
           'code' => 400
         ];
@@ -159,8 +171,9 @@ class cls_Auth extends cls_db
           roles_id,
           sucursal_id,
           usuario_estatus,
-          permisos
-      )VALUES(?,?,?,?,?,?,?,?,?,?,1,?)");
+          permisos,
+          intentos
+      )VALUES(?,?,?,?,?,?,?,?,?,?,1,?,0)");
       $sql->execute([
         $this->usuario,
         $this->nombre,
