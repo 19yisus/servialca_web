@@ -141,6 +141,7 @@ export const ModalTipoContrato = (props) => {
       endpoint = op.conexion + "/tipo_contrato/eliminar";
       bodyF.append("ID", values.contrato_id);
     }
+    bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
 

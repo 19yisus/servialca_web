@@ -122,7 +122,7 @@ export const ModalTransporte = (props) => {
       bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.claseVehiculo_id);
     }
-
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

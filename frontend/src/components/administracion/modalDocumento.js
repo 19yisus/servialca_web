@@ -122,6 +122,7 @@ export const ModalDocumento = (props) => {
     let bodyF = new FormData();
     bodyF.append("Imagen", txtImg.current.files[0]); // Utiliza .files[0] para obtener el archivo seleccionado
     bodyF.append("Nombre", txtNombre.current.value);
+    bodyF.append("token", token);
     console.log(txtImg.current.value);
     console.log(endpoint);
     setActivate(true);

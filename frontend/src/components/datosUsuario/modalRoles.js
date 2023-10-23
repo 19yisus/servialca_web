@@ -136,7 +136,7 @@ export const ModalRoles = (props) => {
       bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.roles_id);
     }
-
+    bodyF.append("Token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,

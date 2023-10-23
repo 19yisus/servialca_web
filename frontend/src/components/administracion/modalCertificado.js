@@ -161,19 +161,19 @@ export const ModalCertificadoMedico = (props) => {
     } else {
       endpoint = op.conexion + "/poliza/registrarCertificado";
     }
-
     console.log(endpoint);
     setActivate(true);
-
     //setLoading(false);
-
     let bodyF = new FormData();
     bodyF.append("idCliente", idCliente.current.value);
     bodyF.append("idMedico", idMedico.current.value);
     bodyF.append("idCobertura", idCobertura.current.value);
-    bodyF.append("Nombre",txtNombre.current.value);
+    bodyF.append("Nombre", txtNombre.current.value);
     bodyF.append("Apellido", txtApellido.current.value);
-    bodyF.append("Cedula",cmbNacionalidad.current.value + txtCedula.current.value);
+    bodyF.append(
+      "Cedula",
+      cmbNacionalidad.current.value + txtCedula.current.value
+    );
     bodyF.append("fechaNacimiento", txtFechaNaci.current.value);
     bodyF.append("Edad", txtEdad.current.value);
     bodyF.append("tipoSangre", txtTipoSangre.current.value);
@@ -184,6 +184,7 @@ export const ModalCertificadoMedico = (props) => {
     bodyF.append("Telefono", null);
     bodyF.append("Direccion", null);
     bodyF.append("precioDolar", dolarbcv.toFixed(2));
+    bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -428,9 +429,9 @@ export const ModalCertificadoMedico = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
-            <input type="hidden" ref={idCliente}/>
-            <input type="hidden" ref={idMedico}/>
-            <input type="hidden" ref={idCobertura}/>
+            <input type="hidden" ref={idCliente} />
+            <input type="hidden" ref={idMedico} />
+            <input type="hidden" ref={idCobertura} />
             <select
               class="form-select col-md-3"
               ref={cmbNacionalidad}
