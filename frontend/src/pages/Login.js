@@ -106,7 +106,6 @@ function Login(props) {
       .then((res) => res.json())
       .then((response) => {
         context.login(response.data.token);
-
         // window.location.href = '/inicio'
         const fecha = new Date();
         localStorage.setItem("fechasistema", JSON.stringify(fecha));
@@ -137,7 +136,24 @@ function Login(props) {
         );
         setActivate(false);
         window.location.href = "/inicio";
+        if (response.code == 200) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        }
       })
+
       .catch((error) =>
         setMensaje({
           mostrar: true,
@@ -455,20 +471,14 @@ function Login(props) {
                               setMostrar(true);
                             }}
                           >
-                             <h6>Recuperar Contraseña</h6>
-                            
+                            <h6>Recuperar Contraseña</h6>
                           </a>
-                        
                         </div>
                         <div class="text-center">
-                        <a
-                            class="small"
-                            type="button"
-                           href="/"
-                          >
+                          <a class="small" type="button" href="/">
                             <h6>Salir al Inicio</h6>
                           </a>
-                          </div>
+                        </div>
                       </div>
                     </form>
                   </div>
