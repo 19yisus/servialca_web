@@ -172,6 +172,14 @@
   position: relative;
 }
 
+.hidden{
+  visibility: collapse;
+}
+
+.visible{
+  visibility: visible;
+}
+
 .user-img2 {
   margin-top: -20px;
   background-color: rgb(255, 255, 255);
@@ -212,6 +220,10 @@
 }
 .forgot {
   padding: 5px 0;
+}
+
+.form-text{
+  color: #eb6666;
 }
 
 .forgot a {

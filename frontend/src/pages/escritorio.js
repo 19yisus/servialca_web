@@ -24,7 +24,7 @@ import TablaCertificado from "../components/medico/tablaCertificado";
 import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
-import TablaReportes from "../components/reportes/reportes|";
+import TablaReportes from "../components/reportes/reportes";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";

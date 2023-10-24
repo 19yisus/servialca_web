@@ -379,6 +379,21 @@ export const ModalRenovarPoliza = (props) => {
       );
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -532,7 +547,8 @@ export const ModalRenovarPoliza = (props) => {
             />
           </div>
           <div class=" col-md-6"></div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Forma de Pago:
             </span>
@@ -546,6 +562,9 @@ export const ModalRenovarPoliza = (props) => {
               <option value="2">Transferencia</option>
               <option value="3">Punto</option>
             </select>
+            </div>
+          <div  class="form-text hidden">h</div>
+
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -558,9 +577,14 @@ export const ModalRenovarPoliza = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
               onChange={handleInputChange}
+              name="ref"
+              onBlur={validarInput}
             />
+          <div id="ref" class="form-text hidden">Debe ingresar referencia valido</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-5">
+          <div class=" mb-1 col-md-5">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cantidad:
             </span>
@@ -582,6 +606,9 @@ export const ModalRenovarPoliza = (props) => {
               placeholder="Dolares"
               onChange={handleInputMontoChange}
             />
+             </div>
+          <div  class="form-text hidden">h</div>
+            
           </div>
         </div>
       </Modal.Body>
