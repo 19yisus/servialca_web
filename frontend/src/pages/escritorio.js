@@ -24,7 +24,7 @@ import TablaCertificado from "../components/medico/tablaCertificado";
 import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
-import TablaReportes from "../components/reportes/resportes";
+import TablaReportes from "../components/reportes/reportes|";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
@@ -455,6 +455,13 @@ function MenuImpuestoPP(props) {
                 </a>
                 <a
                   href="/reportes"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                >
+                  <i className="fas fa-fw me-1 fa-print " />
+                  <span>Lista de vendedores semanal</span>
+                </a>
+                <a
+                  href="/repotes"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i className="fas fa-fw me-1 fa-print " />
