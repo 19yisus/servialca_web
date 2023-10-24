@@ -327,6 +327,21 @@ export const ModalSucursal = (props) => {
     } else return false;
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -388,7 +403,8 @@ export const ModalSucursal = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-12">
+        <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm ">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombre De La Sucursal:
             </span>
@@ -401,10 +417,16 @@ export const ModalSucursal = (props) => {
               ref={txtDescripcion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="nom"
+              onBlur={validarInput}
             />
-          </div>
+             </div>
+            <div id="nom" class="form-text hidden">Debe ingresar nombre de la sucursal</div>
 
-          <div class="input-group input-group-sm mb-3 col-md-12">
+          </div>
+          <div class=" mb-1 col-md-12">
+
+          <div class="input-group input-group-sm ">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Dirección:
             </span>
@@ -417,7 +439,12 @@ export const ModalSucursal = (props) => {
               ref={txtDireccion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ape"
+              onBlur={validarInput}
             />
+          </div>
+          <div id="ape" class="form-text hidden">Debe ingresar dirreción de la sucursal</div>
+
           </div>
         </div>
       </Modal.Body>

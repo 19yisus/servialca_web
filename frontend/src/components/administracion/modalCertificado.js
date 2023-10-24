@@ -369,6 +369,20 @@ export const ModalCertificadoMedico = (props) => {
     } else return false;
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
   return (
     <Modal
       {...props}
@@ -425,7 +439,7 @@ export const ModalCertificadoMedico = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-1 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
@@ -449,6 +463,9 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtCedula}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ced"
+              onBlur={validarInput}
+              
             />
             <button
               type="button"
@@ -459,9 +476,12 @@ export const ModalCertificadoMedico = (props) => {
             >
               <i class="fa fa-search"></i>
             </button>
+            <div id="ced" class="form-text hidden">Debe ingresar un cedula valida longitud(8-9).</div>
+
           </div>
           <div class=" col-md-7"></div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class=" col-md-6 mb-1">
+          <div class="input-group input-group-sm  ">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombres:
             </span>
@@ -473,9 +493,15 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="nom"
+              onBlur={validarInput}
             />
+             </div>
+            <div id="nom" class="form-text hidden">Debe ingresar nombre valido</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class=" col-md-6 mb-1">
+          <div class="input-group input-group-sm ">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Apellidos:
             </span>
@@ -486,9 +512,14 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtApellido}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ape"
+              onBlur={validarInput}
             />
+            </div>
+          <div id="ape" class="form-text hidden">Debe ingresar apellido valido</div>
+        
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class="input-group input-group-sm mb-1 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Fecha de Nacimiento:
             </span>
@@ -499,9 +530,14 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtFechaNaci}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="fecha"
+              onBlur={validarInput}
             />
+          <div id="fecha" class="form-text hidden">Debe ingresar fecha valida</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-2">
+          <div class="mb-1 col-md-2">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Edad:
             </span>
@@ -514,9 +550,14 @@ export const ModalCertificadoMedico = (props) => {
               onChange={handleInputNumChange}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              disabled
             />
+            </div>
+            <div id="nom" class="form-text hidden">ho</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
+          <div class=" col-md-3 mb-1">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo de Sangre:
             </span>
@@ -528,8 +569,12 @@ export const ModalCertificadoMedico = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
+         </div>
+          <div  class="form-text hidden">h</div>
+            
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
+          <div class=" col-md-3 mb-1">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Usa lentes:
             </span>
@@ -542,7 +587,11 @@ export const ModalCertificadoMedico = (props) => {
               <option value="0">No</option>
             </select>
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div  class="form-text hidden">h</div>
+            
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Forma de Pago:
             </span>
@@ -557,7 +606,10 @@ export const ModalCertificadoMedico = (props) => {
               <option value="3">Punto</option>
             </select>
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-3">
+          <div  class="form-text hidden">h</div>
+            
+            </div>
+          <div class="input-group input-group-sm mb-1 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Referencia:
             </span>
@@ -568,9 +620,14 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtReferencia}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ref"
+              onBlur={validarInput}
             />
+          <div id="ref" class="form-text hidden">Debe ingresar referencia valido</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-5">
+          <div class=" col-md-5 mb-1">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cantidad:
             </span>
@@ -597,7 +654,11 @@ export const ModalCertificadoMedico = (props) => {
               onChange={handleInputMontoChange}
               value={(10 * dolarbcv).toFixed(2)}
             />
-          </div>
+            </div>
+
+           <div  class="form-text hidden">h</div>
+            
+            </div>
         </div>
       </Modal.Body>
       <Modal.Footer>
