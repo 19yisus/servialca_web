@@ -462,6 +462,21 @@ export const ModalTipoVehiculoBocono = (props) => {
 
   }
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -515,16 +530,21 @@ export const ModalTipoVehiculoBocono = (props) => {
         <div className="col-md-12 row mx-auto">
 
 
-          <div class="input-group input-group-sm mb-3 col-md-12">
+        <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">Descripción:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
+            <input type="text"  name="nom"
+              onBlur={validarInput} disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
           </div>
+          <div id="nom" class="form-text hidden">Debe ingresar nombre del tipo del vehiculo</div>
 
-          <div class="input-group input-group-sm mb-3 col-md-6">
+</div>
+
+          <div class="input-group input-group-sm mb-1 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en $:</span>
             <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} onBlur={handleInputMontoChange} />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class="input-group input-group-sm mb-1 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">Monto en Bs:</span>
             <input type="text" disabled class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
           </div>
