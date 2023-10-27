@@ -33,6 +33,7 @@ import TablaGastos from "../components/gastosPersonales/tablaGastos";
 import Panel from "./panel";
 import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 import TablaLicencias from "../components/administracion/tablaLicencia";
+import PageChats from "../components/chat/chats";
 
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
@@ -287,6 +288,14 @@ function MenuImpuestoPP(props) {
                             <i class="fas fas-fw me-1 fa-clipboard-list"></i>
                             <span>Licencias</span>
                           </a>
+
+                          <a
+                            href="/chats"
+                            className="list-group-item list-group-item-action py-2 ripple"
+                          >
+                            <i class="fab fa-rocketchat fas-fw me-1"></i>
+                            <span>Chats</span>
+                          </a>
                      
                       </div>
                     </div>
@@ -499,6 +508,7 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
+               
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
@@ -569,6 +579,7 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/panel" component={Panel} />
               <AuthRoute exact path="/listaPrecios" component={TablaPrecio}/>
               <AuthRoute exact path="/licencias" component={TablaLicencias}/>
+              <AuthRoute exact path="/chats" component={PageChats}/>
 
               <AuthRoute
                 exact
