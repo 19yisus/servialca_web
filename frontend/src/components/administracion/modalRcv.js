@@ -630,6 +630,9 @@ export const ModalRcv = (props) => {
     txtTelefono.current.value = telefono;
     txtCorreo.current.value = correo;
     txtDirec.current.value = dir;
+    let item = document.getElementById('ced');
+    item.className -= ' form-text fw-bold visible ';
+    item.className += ' form-text fw-bold hidden ';
     setMostrar(false);
   };
   const seleccionarVehiculo = (
@@ -1180,7 +1183,8 @@ export const ModalRcv = (props) => {
                 >
                   Datos del contratante
                 </legend>
-                <div class="input-group input-group-sm mb-1 co-md-5">
+                <div class=" mb-1 col-md-5">
+                <div class="input-group input-group-sm ">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Cedula:
                   </span>
@@ -1216,6 +1220,7 @@ export const ModalRcv = (props) => {
                   >
                     <i class="fa fa-search"></i>
                   </button>
+                  </div>
             <div id="ced" class="form-text hidden">Debe ingresar un cedula valida longitud(8-9).</div>
 
                 </div>

@@ -329,7 +329,7 @@ function PageChats() {
             <div class="card-footer"></div>
         </div></div>
         <div class="col-md-8 col-xl-9 chat">
-            <div class="card mt-2">
+            <div class="card2 mt-2">
                 <div class="card-header msg_head">
                     <div class="d-flex bd-highlight">
                         <div class="img_cont">
