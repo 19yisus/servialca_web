@@ -280,6 +280,21 @@ export const ModalGastos = (props) => {
     } else return false;
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -332,7 +347,7 @@ export const ModalGastos = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div className="input-group input-group-sm mb-1 col-md-12">
             <input hidden ref={ID}/>
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Tipo de movimiento:
@@ -349,7 +364,8 @@ export const ModalGastos = (props) => {
               <option value="1">Ingreso</option>
             </select>
           </div>
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm">
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Motivo:
             </span>
@@ -361,9 +377,14 @@ export const ModalGastos = (props) => {
               className="form-control"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="motivo"
+              onBlur={validarInput}
             />
+             </div>
+          <div id="motivo" class="form-text hidden">Debe ingresar motivo del movimiento</div>
+
           </div>
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div className="input-group input-group-sm mb-1 col-md-12">
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Metodo de pago:
             </span>
@@ -381,7 +402,8 @@ export const ModalGastos = (props) => {
               <option value="3">Punto</option>
             </select>
           </div>
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm">
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Referencia:
             </span>
@@ -393,9 +415,15 @@ export const ModalGastos = (props) => {
               className="form-control"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ref"
+              onBlur={validarInput}
             />
+             </div>
+          <div id="ref" class="form-text hidden">Debe ingresar referencia del movimiento</div>
+
           </div>
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm">
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Cantidad en $:
             </span>
@@ -407,9 +435,14 @@ export const ModalGastos = (props) => {
               className="form-control"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="cantidad"
+              onBlur={validarInput}
             />
+             </div>
+          <div id="cantidad" class="form-text hidden">Debe ingresar la cantidad del movimiento</div>
+
           </div>
-          <div className="input-group input-group-sm mb-3 col-md-12">
+          <div className="input-group input-group-sm mb-1 col-md-12">
             <span className="input-group-text" id="inputGroup-sizing-sm">
               Cantidad en Bs:
             </span>

@@ -419,6 +419,21 @@ export const ModalUsuarios = (props) => {
       );
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -484,7 +499,8 @@ export const ModalUsuarios = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-4">
+        <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Usuario:
             </span>
@@ -495,11 +511,16 @@ export const ModalUsuarios = (props) => {
               ref={txtUsuario}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="user"
+              onBlur={validarInput}
             />
-          </div>
-          <div class="input-group input-group-sm mb-3 col-md-6"></div>
+             </div>
+          <div id="user" class="form-text hidden">Debe ingresar login de usuario</div>
 
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          </div>
+          <div class="input-group input-group-sm mb-1 col-md-6"></div>
+          <div class=" mb-1 col-md-6">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombre:
             </span>
@@ -510,9 +531,15 @@ export const ModalUsuarios = (props) => {
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="nom"
+              onBlur={validarInput}
             />
+              </div>
+          <div id="nom" class="form-text hidden">Debe ingresar nombre del usuario</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class=" mb-1 col-md-6">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Apellido:
             </span>
@@ -523,9 +550,15 @@ export const ModalUsuarios = (props) => {
               ref={txtApellido}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="ape"
+              onBlur={validarInput}
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div id="ape" class="form-text hidden">Debe ingresar nombre del usuario</div>
+
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
@@ -546,9 +579,15 @@ export const ModalUsuarios = (props) => {
               ref={txtCedula}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+               name="ced"
+              onBlur={validarInput}
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div id="ced" class="form-text hidden">Debe ingresar la cedula del usuario</div>
+
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Telefono:
             </span>
@@ -570,9 +609,15 @@ export const ModalUsuarios = (props) => {
               ref={txtTelefono}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="tlf"
+              onBlur={validarInput}
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div id="tlf" class="form-text hidden">Debe ingresar el telefono del usuario</div>
+
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Dirección:
             </span>
@@ -583,9 +628,15 @@ export const ModalUsuarios = (props) => {
               ref={txtDireccion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="dir"
+              onBlur={validarInput}
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div id="dir" class="form-text hidden">Debe ingresar la dirección del usuario</div>
+
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Correo:
             </span>
@@ -596,9 +647,15 @@ export const ModalUsuarios = (props) => {
               ref={txtCorreo}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+               name="email"
+              onBlur={validarInput}
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
+
+          </div>
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Rol:
             </span>
@@ -616,8 +673,12 @@ export const ModalUsuarios = (props) => {
                   </option>
                 ))}
             </select>
+            </div>
+          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
+          <div class=" mb-1 col-md-4">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Sucursal:
             </span>
@@ -635,6 +696,9 @@ export const ModalUsuarios = (props) => {
                   </option>
                 ))}
             </select>
+            </div>
+          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
+
           </div>
           <div class="row mx-auto col-md-12">
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
