@@ -105,14 +105,11 @@ export const GestionarClave = (props) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response.lista_preguntas);
-        setRecuperar("0");
+        console.log(response);
+        setRecuperar(0);
         setActivate(false);
-        // setValues(response.lista_preguntas);
-        // if (validarClave === 1) {
-        //   setValidarClave(0);
-        //   txtR1.current.value = "";
-        // }
+         setValues(response);
+        
       })
       .catch((error) =>
         setMensaje({
@@ -187,13 +184,13 @@ export const GestionarClave = (props) => {
         setActivate(true);
         console.log(
           values[0].des_respuesta.toLowerCase(),
-          values[1].des_respuesta.toLowerCase()
+          values[0].des_respuesta2.toLowerCase()
         );
         if (
           txtP1.current.value.toLowerCase().trim() ===
             values[0].des_respuesta.toLowerCase().trim() &&
           txtP2.current.value.toLowerCase().trim() ===
-            values[1].des_respuesta.toLowerCase().trim()
+            values[0].des_respuesta2.toLowerCase().trim()
         ) {
           setValidarClave(1);
         } else {
@@ -467,7 +464,7 @@ export const GestionarClave = (props) => {
 
               <div className="mb-2">
                 <label for="exampleInputEmail1" className="form-label">
-                  {values[1].des_pregunta}
+                  {values[0].des_pregunta2}
                 </label>
                 <input
                   type="text"

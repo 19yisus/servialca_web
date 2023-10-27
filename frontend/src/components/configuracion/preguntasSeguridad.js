@@ -20,7 +20,7 @@ export const GestionarPreguntas = (props) => {
 
   let op = require("../../modulos/datos");
   const id_user = JSON.parse(localStorage.getItem("user_id"));
-  const login = JSON.parse(localStorage.getItem("username"));
+  const username = JSON.parse(localStorage.getItem("username"));
   let token = localStorage.getItem("jwtToken");
   const id = useRef();
   const txtP1 = useRef();
@@ -53,7 +53,7 @@ export const GestionarPreguntas = (props) => {
     let endpoint = op.conexion + "/Auth/ConsultarPreguntas";
     setActivate(true);
     let bodyF = new FormData();
-    bodyF.append("Usuario", id_user);
+    bodyF.append("Usuario", username);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -249,7 +249,7 @@ export const GestionarPreguntas = (props) => {
           }}
         />
         <div className="col-md-12 row mx-auto">
-          <h3 className="text-center">Bienvenido {login} </h3>
+          <h3 className="text-center">Bienvenido {username} </h3>
           <input type="hidden" ref={id} />
           <div class="mb-2 col-md-6">
             <label for="exampleInputEmail1" class="form-label">
