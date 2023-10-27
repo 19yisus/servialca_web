@@ -282,6 +282,9 @@ export const ModalCertificadoMedico = (props) => {
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
+    let item = document.getElementById('ced');
+    item.className -= ' form-text fw-bold visible ';
+    item.className += ' form-text fw-bold hidden ';
     setMostrar(false);
   };
 

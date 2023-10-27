@@ -298,6 +298,10 @@ export const ModalLicencia = (props) => {
     txtNombre.current.value = nombre;
     cmbTelefono.current.value = Codigo + "-";
     txtTelefono.current.value = telefono;
+   let item = document.getElementById('ced');
+   item.className -= ' form-text fw-bold visible ';
+   item.className += ' form-text fw-bold hidden ';
+
     setMostrar(false);
   };
 

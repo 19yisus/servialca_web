@@ -1617,7 +1617,7 @@ div#slider figure {
     margin-top: auto;
     margin-bottom: auto;
   }
-  .card{
+  .card2{
     height: 80vh;
     border-radius: 15px !important;
     background-color: rgba(0,0,0,0.4) !important;
@@ -1692,9 +1692,7 @@ background-color: rgba(0,0,0,0.3) !important;
     padding: 5px 10px;
     margin-bottom: 15px !important;
   }
-.active{
-    background-color: rgba(0,0,0,0.3);
-}
+
   .user_img{
     height: 40px;
     width: 40px;
