@@ -125,6 +125,11 @@ const TablaReportes = (props) => {
   const [idcuentabancaria, setIdCuentaBancaria] = useState("");
   const [datos, setDatos] = useState([]);
 
+  const generarReporte = async (e) => {
+    e.preventDefault();
+    window.open(`${op.conexion}/reporte/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`);
+  };
+
   const seleccionaOperacion = (id, op) => (e) => {
     e.preventDefault();
     setOperacion(op);
@@ -241,7 +246,14 @@ const TablaReportes = (props) => {
       setDesabilitar(true);
     }
   };
+  useEffect(() => {
+    // Obtener la fecha actual en el formato "YYYY-MM-DD"
+    const fechaActual = new Date().toISOString().split("T")[0];
 
+    // Establecer la fecha actual en los campos "Desde" y "Hasta"
+    txtDesde.current.value = fechaActual;
+    txtHasta.current.value = fechaActual;
+  }, []);
   const generar = () => {
     let sigue = true;
 
@@ -327,13 +339,15 @@ const TablaReportes = (props) => {
                     onChange={consulta}
                   >
                     <option value=" ">Selecionar</option>
-                    <option value="5">Usuarios</option>
-                    <option value="4">Sucursales</option>
-                    <option value="1">Ingreso</option>
-                    <option value="2">Egreso</option>
-                    <option value="3">Ingreso y Egreso</option>
+                    <option value="RCV">RCV</option>
+                    <option value="Renovación">Renovaciones</option>
+                    <option value="Seguro">Certificados Medicos</option>
+                    <option value="Licencia">Licencias</option>
+                    <option value="1">Ingresos</option>
+                    <option value="0">Egresos</option>
+                    <option value="2">Ingreso y Egreso</option>
                   </select>
-                  <select
+                  {/* <select
                     class="form-select"
                     disabled={desabilitar}
                     aria-label="Default select example"
@@ -347,7 +361,7 @@ const TablaReportes = (props) => {
                           {item.nombre}{" "}
                         </option>
                       ))}
-                  </select>
+                  </select> */}
                 </div>
 
                 <div class="input-group input-group-sm mb-2 col-md-3">
@@ -378,7 +392,7 @@ const TablaReportes = (props) => {
               <div className="col-md-5 mx-auto row">
                 <button
                   type="button"
-                  onClick={generar}
+                  onClick={generarReporte}
                   class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary"
                 >
                   Generear{" "}

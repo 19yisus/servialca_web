@@ -192,6 +192,7 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
+      selecionarRegistros();
   };
 
   const deleteUser = async (id) => {
@@ -221,6 +222,7 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
+      selecionarRegistros();
   };
   const cambiarEstatus = async (id, estatus) => {
     var variable;
@@ -256,6 +258,7 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
+      selecionarRegistros();
   };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";

@@ -1589,4 +1589,39 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
+
+
+	public function reporteGeneral($motivo, $desde, $hasta)
+	{
+		if (is_numeric($motivo)) {
+			if ($motivo == 0 || $motivo == 1 || $motivo == 2) {
+				if ($motivo != 2) {
+					$where = "nota_ingresoEgreso = ?  AND nota_fecha BETWEEN ? AND ?";
+				} else {
+					$where = "nota_fecha BETWEEN ? AND ?"; // Cuando $motivo es 2, no necesitas una condición WHERE
+				}
+			} else {
+				$where = ""; // Trata $where como una cadena vacía en este caso
+			}
+		} else {
+			$where = "nota_motivo = ? AND nota_fecha BETWEEN ? AND ?";
+		}
+
+		$sql = $this->db->prepare("SELECT *, usuario.* 
+    FROM debitocredito 
+    INNER JOIN usuario on usuario.usuario_id = debitocredito.usuario_id
+    WHERE $where");
+		if ($motivo == 2){
+			$a = $sql->execute([$desde, $hasta]);
+		}else{
+			$a = $sql->execute([$motivo, $desde, $hasta]);	
+		}
+		if ($a) {
+			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			$resultado = [];
+		}
+
+		return $resultado;
+	}
 }

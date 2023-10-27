@@ -389,21 +389,6 @@ export const ModalLicencia = (props) => {
     } else return false;
   };
 
-  const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
-    } else {
-      console.log('2')
-
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
-    }
-  }
-
   return (
     <Modal
       {...props}
@@ -461,7 +446,7 @@ export const ModalLicencia = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-1 col-md-5">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Cedula:
             </span>
@@ -480,16 +465,11 @@ export const ModalLicencia = (props) => {
             </select>
             <input
               onKeyDown={handleChange(9)}
-              onChange={handleInputNumChange}
-
               type="text"
               class="form-control"
               ref={txtCedula}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              maxLength={9}
-              name="ced"
-              onBlur={validarInput}
             />
             <button
               type="button"
@@ -500,11 +480,9 @@ export const ModalLicencia = (props) => {
             >
               <i class="fa fa-search"></i>
             </button>
-            <div id="ced" class="form-text hidden">Debe ingresar un cedula valida longitud(8-9).</div>
           </div>
           <div class=" col-md-7"></div>
-          <div class=" col-md-6 mb-1">
-          <div class="input-group input-group-sm  ">
+          <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombres:
             </span>
@@ -516,15 +494,9 @@ export const ModalLicencia = (props) => {
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="nom"
-              onBlur={validarInput}
             />
-            </div>
-            <div id="nom" class="form-text hidden">Debe ingresar nombre valido</div>
-
           </div>
-          <div class=" col-md-6 mb-1">
-          <div class="input-group input-group-sm ">
+          <div class="input-group input-group-sm mb-3 col-md-6">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Apellidos:
             </span>
@@ -535,15 +507,9 @@ export const ModalLicencia = (props) => {
               ref={txtApellido}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="ape"
-              onBlur={validarInput}
             />
           </div>
-          <div id="ape" class="form-text hidden">Debe ingresar apellido valido</div>
-          </div>
-          <div class=" col-md-4 mb-1">
-
-          <div class="input-group input-group-sm ">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Correo:
             </span>
@@ -554,16 +520,9 @@ export const ModalLicencia = (props) => {
               ref={txtCorreo}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="email"
-              onBlur={validarInput}
             />
           </div>
-          <div id="email" class="form-text hidden">Debe ingresar correo valido</div>
-
-          </div>
-          <div class=" col-md-5 mb-1">
-
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Telefono
             </span>
@@ -586,15 +545,9 @@ export const ModalLicencia = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
               onChange={handleInputNumChange}
-              name="tlf"
-              onBlur={validarInput}
             />
-            </div>
-          <div id="tlf" class="form-text hidden">Debe ingresar telefono valido</div>
-
           </div>
-          <div class=" col-md-3 mb-1">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo de Sangre:
             </span>
@@ -606,11 +559,8 @@ export const ModalLicencia = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
-            </div>
-          <div  class="form-text hidden">h</div>
-            
           </div>
-          <div class="input-group input-group-sm mb-1 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo De Licencia:
             </span>
@@ -619,15 +569,13 @@ export const ModalLicencia = (props) => {
               ref={cmbTipoLicencia}
               aria-label="Default select example"
               onChange={handleTipoLicenciaChange}
-           
             >
-            
+              <option value=" ">Seleccionar</option>
               <option value="0">Licencia de 2da</option>
               <option value="1">Licencia de 3da</option>
               <option value="2">Licencia de 4da</option>
               <option value="3">Licencia de 5da</option>
             </select>
-
           </div>
           <div className="col-md-4 mx-auto row">
             <div class="form-check col my-auto">
@@ -671,7 +619,7 @@ export const ModalLicencia = (props) => {
               <label class="form-check-label my-auto">5ta</label>
             </div>
           </div>
-          <div class="input-group input-group-sm mb-1 col-md-3">
+          <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Usa lentes:
             </span>
@@ -684,8 +632,7 @@ export const ModalLicencia = (props) => {
               <option value="1">Si</option>
             </select>
           </div>
-          <div class=" mb-1 col-md-5">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm mb-3 col-md-5">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Forma de Pago:
             </span>
@@ -699,11 +646,8 @@ export const ModalLicencia = (props) => {
               <option value="2">Transferencia</option>
               <option value="3">Punto</option>
             </select>
-            </div>
-          <div  class="form-text hidden">h</div>
-
           </div>
-          <div class="input-group input-group-sm mb-1 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Referencia:
             </span>
@@ -714,14 +658,9 @@ export const ModalLicencia = (props) => {
               ref={txtReferencia}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="ref"
-              onBlur={validarInput}
             />
-          <div id="ref" class="form-text hidden">Debe ingresar referencia valido</div>
-
           </div>
-          <div class=" mb-1 col-md-3">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Total:
             </span>
@@ -734,12 +673,9 @@ export const ModalLicencia = (props) => {
               disabled
               onChange={handleInputMontoChange}
             />
-             </div>
-          <div  class="form-text hidden">h</div>
-            
           </div>
           <div class=" col-md-2"></div>
-          <div class="input-group input-group-sm mb-1 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Abono:
             </span>
@@ -752,7 +688,7 @@ export const ModalLicencia = (props) => {
               onChange={handleTipoLicenciaChange}
             />
           </div>
-          <div class="input-group input-group-sm mb-1 col-md-4">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Restante:
             </span>
