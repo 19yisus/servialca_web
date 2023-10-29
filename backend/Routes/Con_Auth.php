@@ -132,6 +132,12 @@ class Con_Auth extends cls_Auth
     Response($resultado["data"], $resultado["code"]);
   }
 
+  public function ModificarPreguntas()
+  {
+    $resultado = $this->ChangePassword();
+    Response($resultado["data"], $resultado["code"]);
+  }
+
   // public function actualizar_password()
   // {
   //   $resultado = $this->updatePass();

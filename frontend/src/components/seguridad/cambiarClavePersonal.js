@@ -66,7 +66,7 @@ export const GestionarClave = (props) => {
   };
 
   const updatepass = async () => {
-    let endpoint = op.conexion + "/Auth/login";
+    let endpoint = op.conexion + "/Auth/ModificarPreguntas";
     console.log(endpoint);
     setActivate(true);
 
@@ -80,7 +80,17 @@ export const GestionarClave = (props) => {
       body: bodyF,
     })
       .then((res) => res.json())
-      .then((response) => {})
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 200) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
+      })
       .catch((error) =>
         setMensaje({
           mostrar: true,
@@ -108,8 +118,7 @@ export const GestionarClave = (props) => {
         console.log(response);
         setRecuperar(0);
         setActivate(false);
-         setValues(response);
-        
+        setValues(response);
       })
       .catch((error) =>
         setMensaje({

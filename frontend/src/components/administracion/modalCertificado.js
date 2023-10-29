@@ -16,6 +16,7 @@ import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
 import CatalogoClientes from "../../catalogos/catalogoClientes";
+import { event } from "jquery";
 const dolarbcv = JSON.parse(localStorage.getItem("dolarbcv"));
 export const ModalCertificadoMedico = (props) => {
   /*  variables de estados */
@@ -269,6 +270,14 @@ export const ModalCertificadoMedico = (props) => {
       tiposangre: "",
     });
   };
+  const handleTipoSangreChange = (event) => {
+    event.preventDefault();
+    const inputValue = event.target.value;
+    const sanitizedValue = inputValue.replace(/[^a-zA-Z+-]/g, ""); // Mantener solo letras, + y -
+
+    event.target.value = sanitizedValue;
+    // Luego puedes hacer algo con el valor validado, como establecerlo en el estado local.
+  };
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
@@ -282,9 +291,9 @@ export const ModalCertificadoMedico = (props) => {
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
-    let item = document.getElementById('ced');
-    item.className -= ' form-text fw-bold visible ';
-    item.className += ' form-text fw-bold hidden ';
+    let item = document.getElementById("ced");
+    item.className -= " form-text fw-bold visible ";
+    item.className += " form-text fw-bold hidden ";
     setMostrar(false);
   };
 
@@ -293,14 +302,6 @@ export const ModalCertificadoMedico = (props) => {
     props.onHideCancela();
   };
 
-  function soloLetras(event) {
-    if (
-      (event.keyCode != 32 && event.keyCode < 65) ||
-      (event.keyCode > 90 && event.keyCode < 97) ||
-      event.keyCode > 122
-    )
-      event.returnValue = false;
-  }
   function calcularEdad() {
     const fechaNacimiento = new Date(txtFechaNaci.current.value);
     fechaNacimiento.setHours(0, 0, 0, 0);
@@ -452,6 +453,7 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtCedula}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={validaSoloNumero}
             />
             <button
               type="button"
@@ -472,7 +474,7 @@ export const ModalCertificadoMedico = (props) => {
               type="text"
               onKeyDown={handleChange(25)}
               class="form-control"
-              onChange={soloLetras}
+              onChange={validaSoloLetras}
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -487,6 +489,7 @@ export const ModalCertificadoMedico = (props) => {
               type="text"
               class="form-control"
               ref={txtApellido}
+              onChange={validaSoloLetras}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
@@ -514,7 +517,7 @@ export const ModalCertificadoMedico = (props) => {
               value={edad}
               class="form-control text-right"
               ref={txtEdad}
-              onChange={handleInputNumChange}
+              onChange={validaSoloNumero}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
@@ -530,6 +533,7 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtTipoSangre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={handleTipoSangreChange}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
@@ -569,6 +573,7 @@ export const ModalCertificadoMedico = (props) => {
               type="text"
               class="form-control"
               ref={txtReferencia}
+              onChange={validaSoloNumero}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />

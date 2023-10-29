@@ -27,7 +27,7 @@ class cls_Auth extends cls_db
             'res' => [
               'text' => "El usuario está desactivado",
               "code" => 400
-            ] 
+            ]
           ],
           'code' => 400
         ];
@@ -61,9 +61,9 @@ class cls_Auth extends cls_db
         return [
           'data' => [
             'res' => [
-              'text' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave'],
+              'text' => "Su clave es inválida",
               "code" => 400
-            ] 
+            ]
           ],
           'code' => 400
         ];
@@ -557,5 +557,27 @@ class cls_Auth extends cls_db
         "code" => 400
       ];
     }
+  }
+
+  protected function ChangePassword()
+  {
+    $sql = $this->db->prepare("UPDATE usuario SET usuario_clave = ?, intentos = 0 WHERE usuario_id = ?");
+    if ($sql->execute([$this->clave, $this->id])) {
+      return [
+        "data" => [
+          "res" => "Contraseña modificada",
+          "code" => 200
+        ],
+        "code" => 200
+      ];
+    } else {
+      return [
+        "data" => [
+          "res" => "No se pudo modiciar la contraseña",
+          "code" => 400
+        ],
+        "code" => 400
+      ];
+    };
   }
 }

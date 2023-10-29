@@ -281,13 +281,13 @@ function MenuImpuestoPP(props) {
                           <span>Documentos</span>
                         </a>
 
-                        <a
+                        {/* <a
                           href="/licencias"
                           className="list-group-item list-group-item-action py-2 ripple"
                         >
                           <i class="fas fas-fw me-1 fa-clipboard-list"></i>
                           <span>Licencias</span>
-                        </a>
+                        </a> */}
 
                         <a
                           href="/chats"

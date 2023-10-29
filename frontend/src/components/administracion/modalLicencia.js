@@ -85,21 +85,15 @@ export const ModalLicencia = (props) => {
   const [operacion, setOperacion] = useState(0);
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
-
-  const handleInputNumChange = (event) => {
+  const handleTipoSangreChange = (event) => {
     event.preventDefault();
-    validaSoloNumero(event);
-    var valido;
-    if (event.which === 13 || typeof event.which === "undefined") {
-      setValues({ ...values, [event.target.name]: event.target.value });
-    } else if (event.which === 46) {
-      return false;
-    } else if (event.which >= 48 && event.which <= 57) {
-      return true;
-    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
-      return true;
-    } else return false; //alert(e.which);
+    const inputValue = event.target.value;
+    const sanitizedValue = inputValue.replace(/[^a-zA-Z+-]/g, ""); // Mantener solo letras, + y -
+
+    event.target.value = sanitizedValue;
+    // Luego puedes hacer algo con el valor validado, como establecerlo en el estado local.
   };
+
 
   const salir = () => {
     props.onHideCancela();
@@ -298,9 +292,9 @@ export const ModalLicencia = (props) => {
     txtNombre.current.value = nombre;
     cmbTelefono.current.value = Codigo + "-";
     txtTelefono.current.value = telefono;
-   let item = document.getElementById('ced');
-   item.className -= ' form-text fw-bold visible ';
-   item.className += ' form-text fw-bold hidden ';
+    let item = document.getElementById("ced");
+    item.className -= " form-text fw-bold visible ";
+    item.className += " form-text fw-bold hidden ";
 
     setMostrar(false);
   };
@@ -329,7 +323,6 @@ export const ModalLicencia = (props) => {
   const handleTipoLicenciaChange = () => {
     const selectedValue = cmbTipoLicencia.current.value;
     const abonoValue = parseFloat(txtAbono.current.value) || 0; // Convertir a número o 0 si no es un número
-
     actualizarValores(selectedValue, abonoValue);
   };
 
@@ -470,6 +463,7 @@ export const ModalLicencia = (props) => {
               ref={txtCedula}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={validaSoloNumero}
             />
             <button
               type="button"
@@ -490,7 +484,7 @@ export const ModalLicencia = (props) => {
               onKeyDown={handleChange(25)}
               type="text"
               class="form-control"
-              onChange={soloLetras}
+              onChange={validaSoloLetras}
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -505,6 +499,7 @@ export const ModalLicencia = (props) => {
               type="text"
               class="form-control"
               ref={txtApellido}
+              onChange={validaSoloLetras}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
@@ -544,7 +539,7 @@ export const ModalLicencia = (props) => {
               ref={txtTelefono}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              onChange={handleInputNumChange}
+              onChange={validaSoloNumero}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
@@ -558,6 +553,7 @@ export const ModalLicencia = (props) => {
               ref={txtTipoSangre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={handleTipoSangreChange}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
@@ -658,6 +654,7 @@ export const ModalLicencia = (props) => {
               ref={txtReferencia}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={validaSoloNumero}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
@@ -685,7 +682,10 @@ export const ModalLicencia = (props) => {
               ref={txtAbono}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              onChange={handleTipoLicenciaChange}
+              onChange={validaSoloNumero}
+              onKeyUp={handleTipoLicenciaChange}
+              
+            
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
@@ -693,12 +693,14 @@ export const ModalLicencia = (props) => {
               Restante:
             </span>
             <input
+            disabled
               type="text"
               class="form-control text-right"
               ref={txtRestante}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
               onChange={handleInputMontoChange}
+              onKeyDown={validaSoloNumero}
             />
           </div>
         </div>

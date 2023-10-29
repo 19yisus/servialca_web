@@ -38,6 +38,12 @@ function TablaSursales() {
       color: "white",
     },
     {
+      label: "Dirección",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Estatus",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -336,6 +342,12 @@ function TablaSursales() {
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
                     {item.sucursal_nombre}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.sucursal_direccion}
                   </TableCell>
                   <TableCell
                     className="align-baseline"

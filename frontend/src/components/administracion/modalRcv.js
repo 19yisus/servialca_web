@@ -160,21 +160,7 @@ export const ModalRcv = (props) => {
   const [operacion, setOperacion] = useState(0);
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
-
-  const handleInputNumChange = (event) => {
-    event.preventDefault();
-    validaSoloNumero(event);
-    var valido;
-    if (event.which === 13 || typeof event.which === "undefined") {
-      setValues({ ...values, [event.target.name]: event.target.value });
-    } else if (event.which === 46) {
-      return false;
-    } else if (event.which >= 48 && event.which <= 57) {
-      return true;
-    } else if (event.which === 8 || event.which === 0 || event.which === 44) {
-      return true;
-    } else return false; //alert(e.which);
-  };
+ 
 
   const salir = () => {
     props.onHideCancela();
@@ -1191,8 +1177,8 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
-                  name="ced"
-             
+                    name="ced"
+                    onChange={validaSoloNumero}
                   />
                   <button
                     type="button"
@@ -1203,8 +1189,9 @@ export const ModalRcv = (props) => {
                   >
                     <i class="fa fa-search"></i>
                   </button>
-                <div id="ced" class="form-text hidden">Debe ingresar un cedula valida longitud(8-9).</div>
-
+                  <div id="ced" class="form-text hidden">
+                    Debe ingresar un cedula valida longitud(8-9).
+                  </div>
                 </div>
                 <div class="col-md-3"></div>
                 <div class="col-md-4 mb-1">
@@ -1220,213 +1207,214 @@ export const ModalRcv = (props) => {
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       name="fecha"
-                      
                     />
                   </div>
-          <div id="fecha" class="form-text hidden">Debe ingresar fecha valida</div>
-
+                  <div id="fecha" class="form-text hidden">
+                    Debe ingresar fecha valida
+                  </div>
                 </div>
 
-                  <div class="col-md-6">
-                    <div class="input-group input-group-sm mb-2">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Nombre
-                      </span>
-                      <input
-                        type="text"
-                        disabled={operacion === 3}
-                        onKeyDown={handleChange(25)}
-                        ref={txtNombre}
-                        class="form-control "
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
+                <div class="col-md-6">
+                  <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Nombre
+                    </span>
+                    <input
+                      type="text"
+                      disabled={operacion === 3}
+                      onKeyDown={handleChange(25)}
+                      ref={txtNombre}
+                      class="form-control "
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      onChange={validaSoloLetras}
+                    />
                   </div>
-                  <div class="col-md-6">
-                    <div class="input-group input-group-sm mb-2">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Apellido
-                      </span>
-                      <input
-                        disabled={operacion === 3}
-                        type="text"
-                        onKeyDown={handleChange(25)}
-                        ref={txtApellido}
-                        class="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Apellido
+                    </span>
+                    <input
+                      disabled={operacion === 3}
+                      type="text"
+                      onKeyDown={handleChange(25)}
+                      ref={txtApellido}
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      onChange={validaSoloLetras}
+                    />
                   </div>
-                  <div class="col-md-5">
-                    <div class="input-group input-group-sm mb-2">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Telefono
-                      </span>
-                      <select
-                        class="form-select col-md-4"
-                        ref={cmbTelefono}
-                        aria-label="Default select example"
+                </div>
+                <div class="col-md-5">
+                  <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Telefono
+                    </span>
+                    <select
+                      class="form-select col-md-4"
+                      ref={cmbTelefono}
+                      aria-label="Default select example"
+                    >
+                      <option value="0414-">0414</option>
+                      <option value="0424-">0424</option>
+                      <option value="0416-">0416</option>
+                      <option value="0426-">0426</option>
+                      <option value="0412-">0412</option>
+                    </select>
+                    <input
+                      type="text"
+                      class="form-control"
+                      onKeyDown={handleChange(7)}
+                      ref={txtTelefono}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      onChange={validaSoloNumero}
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Correo
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      onKeyDown={handleChange(25)}
+                      ref={txtCorreo}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-2">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Direción
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      onKeyDown={handleChange(30)}
+                      ref={txtDirec}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-2 ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Estado:{" "}
+                    </span>
+                    <select
+                      disabled={operacion === 3}
+                      class="form-select"
+                      ref={cmbEstado}
+                      aria-label="Default select example"
+                    >
+                      {estados &&
+                        estados.map((item, index) => (
+                          <option key={index} value={item.estado_id}>
+                            {" "}
+                            {item.estado_nombre}{" "}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div className="input-group input-group-sm mb-2">
+                    <span
+                      className="input-group-text"
+                      id="inputGroup-sizing-sm"
+                    >
+                      Acesor:{" "}
+                    </span>
+                    <input
+                      disabled
+                      type="text"
+                      className="form-control"
+                      ref={txtAcesor}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      defaultValue={operacion === 1 ? user : ""}
+                    />
+                    {idUser === 57 ? (
+                      <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => {
+                          setMostrar2(true);
+                        }}
                       >
-                        <option value="0414-">0414</option>
-                        <option value="0424-">0424</option>
-                        <option value="0416-">0416</option>
-                        <option value="0426-">0426</option>
-                        <option value="0412-">0412</option>
-                      </select>
-                      <input
-                        type="text"
-                        class="form-control"
-                        onKeyDown={handleChange(7)}
-                        ref={txtTelefono}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                        onChange={handleInputNumChange}
-                      />
-                    </div>
+                        <i className="fa fa-search"></i>
+                      </button>
+                    ) : null}
                   </div>
-                  <div class="col-md-4">
-                    <div class="input-group input-group-sm mb-2">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Correo
-                      </span>
-                      <input
-                        type="text"
-                        class="form-control"
-                        onKeyDown={handleChange(25)}
-                        ref={txtCorreo}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="input-group input-group-sm mb-2">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Direción
-                      </span>
-                      <input
-                        type="text"
-                        class="form-control"
-                        onKeyDown={handleChange(30)}
-                        ref={txtDirec}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="input-group input-group-sm mb-2 ">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Estado:{" "}
-                      </span>
-                      <select
-                        disabled={operacion === 3}
-                        class="form-select"
-                        ref={cmbEstado}
-                        aria-label="Default select example"
-                      >
-                        {estados &&
-                          estados.map((item, index) => (
-                            <option key={index} value={item.estado_id}>
-                              {" "}
-                              {item.estado_nombre}{" "}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div className="input-group input-group-sm mb-2">
-                      <span
-                        className="input-group-text"
-                        id="inputGroup-sizing-sm"
-                      >
-                        Acesor:{" "}
-                      </span>
-                      <input
-                        disabled
-                        type="text"
-                        className="form-control"
-                        ref={txtAcesor}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                        defaultValue={operacion === 1 ? user : ""}
-                      />
-                      {idUser === 57 ? (
-                        <button
-                          type="button"
-                          className="btn btn-success"
-                          onClick={() => {
-                            setMostrar2(true);
-                          }}
-                        >
-                          <i className="fa fa-search"></i>
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="input-group input-group-sm mb-2 ">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Sucursal:{" "}
-                      </span>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-2 ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Sucursal:{" "}
+                    </span>
 
-                      <input
-                        disabled
-                        defaultValue={suc === 1 ? user : ""}
-                        type="text"
-                        class="form-control"
-                        ref={cmbSucursal}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                      {idUser === 57 ? (
-                        <button
-                          type="button"
-                          className="btn btn-success"
-                          onClick={() => {
-                            setMostrar3(true);
-                          }}
-                        >
-                          <i className="fa fa-search"></i>
-                        </button>
-                      ) : null}
-                    </div>
+                    <input
+                      disabled
+                      defaultValue={suc === 1 ? user : ""}
+                      type="text"
+                      class="form-control"
+                      ref={cmbSucursal}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    {idUser === 57 ? (
+                      <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => {
+                          setMostrar3(true);
+                        }}
+                      >
+                        <i className="fa fa-search"></i>
+                      </button>
+                    ) : null}
                   </div>
-                  <div class="col-md-6">
-                    <div class="input-group input-group-sm mb-2 ">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">
-                        Linea de Transporte:{" "}
-                      </span>
-                      {/*<select class="form-select" ref={txtLinea} aria-label="Default select example">
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group input-group-sm mb-2 ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Linea de Transporte:{" "}
+                    </span>
+                    {/*<select class="form-select" ref={txtLinea} aria-label="Default select example">
 
                       {transporte && transporte.map((item, index) => (
                         <option key={index} value={item.transporte_id} > {item.transporte_nombre} </option>
                       ))}
                     </select>*/}
 
-                      <input
-                        disabled
-                        type="text"
-                        class="form-control"
-                        ref={txtLinea}
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                      <button
-                        type="button"
-                        class="btn btn-success"
-                        onClick={() => {
-                          setMostrar4(true);
-                        }}
-                      >
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </div>
+                    <input
+                      disabled
+                      type="text"
+                      class="form-control"
+                      ref={txtLinea}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onClick={() => {
+                        setMostrar4(true);
+                      }}
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
                   </div>
-               
+                </div>
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
                 <legend
@@ -1453,10 +1441,11 @@ export const ModalRcv = (props) => {
                     type="text"
                     class="form-control"
                     onKeyDown={handleChange(9)}
-                    onChange={validarTitular}
+                    onKeyPress={validarTitular}
                     ref={txtCedulatTitular}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={validaSoloNumero}
                   />
                   <button
                     type="button"
@@ -1482,6 +1471,7 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
+                      onChange={validaSoloLetras}
                     />
                   </div>
                 </div>
@@ -1497,6 +1487,7 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
+                      onChange={validaSoloLetras}
                     />
                   </div>
                 </div>
@@ -1548,7 +1539,7 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={handleInputNumChange}
+                    onChange={validaSoloNumero}
                   />
                 </div>
               </div>
@@ -1596,7 +1587,7 @@ export const ModalRcv = (props) => {
                     ref={txtAño}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={handleInputNumChange}
+                    onChange={validaSoloNumero}
                   />
                 </div>
               </div>
@@ -1659,6 +1650,7 @@ export const ModalRcv = (props) => {
                     ref={txtColor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={validaSoloLetras}
                   />
                 </div>
               </div>
@@ -1826,6 +1818,7 @@ export const ModalRcv = (props) => {
                     ref={txtReferencia}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={validaSoloNumero}
                   />
                 </div>
               </div>
