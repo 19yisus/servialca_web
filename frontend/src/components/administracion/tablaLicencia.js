@@ -33,7 +33,13 @@ function TablaLicencias() {
       color: "white",
     },
     {
-      label: "Descripción",
+      label: "Nombre",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Apellido",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -182,7 +188,7 @@ function TablaLicencias() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/sucursal/ConsultarTodos";
+    let endpoint = op.conexion + "/Licencia/ConsultarTodos";
     let bodyF = new FormData()
     bodyF.append("token", token);
     console.log(endpoint);
@@ -332,19 +338,19 @@ function TablaLicencias() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_id}
+                    {item.licencia_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.licencia_nombre}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.sucursal_estatus) === 1
+                    {parseInt(item.licencia_estatus) === 1
                       ? "ACTIVO"
                       : "INACTIVO"}
                   </TableCell>
@@ -358,7 +364,7 @@ function TablaLicencias() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.sucursal_id)}
+                      onClick={gestionarBanco(2, item.licencia_id)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}

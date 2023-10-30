@@ -9,7 +9,7 @@ import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
-function TablaSursales() {
+function ReportesSemanal() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -426,4 +426,4 @@ function TablaSursales() {
   );
 }
 
-export default TablaSursales;
+export default ReportesSemanal;

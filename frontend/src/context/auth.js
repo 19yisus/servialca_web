@@ -1,35 +1,32 @@
 import React, { useReducer, createContext } from "react";
 import jwtDecode from "jwt-decode";
+
+const jwtToken = localStorage.getItem("jwtToken");
 let decodedToken;
 
-localStorage.getItem("jwtToken");
 const initialState = {
   user: null,
 };
 
-if (localStorage.hasOwnProperty("jwtToken")) {
-  console.group("tokeeeeeen");
-  console.log("Funciona porqueria");
-  console.log(localStorage.getItem("jwtToken"));
-  
+if (jwtToken) {
+  console.group("Token");
+  console.log("Token encontrado en localStorage");
+  console.log(jwtToken);
   console.groupEnd();
- 
+
   try {
-    decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
+    decodedToken = jwtDecode(jwtToken);
     // Lógica para cuando el token se decodifica correctamente
   } catch (error) {
-    console.error("Error al decodificar el token: aaaaaa", error);
+    console.error("Error al decodificar el token:", error);
     // Lógica para cuando hay un error al decodificar el token
-    alert("hola");
+    alert("Error de código");
   }
-  if (localStorage.getItem("jwtToken") !== null) {
-    decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
 
-    if (decodedToken.exp * 1000 < Date.now()) {
-      localStorage.clear();
-    } else {
-      initialState.user = decodedToken;
-    }
+  if (decodedToken && decodedToken.exp * 1000 < Date.now()) {
+    localStorage.clear();
+  } else {
+    initialState.user = decodedToken;
   }
 }
 
@@ -58,14 +55,13 @@ function authReducer(state, action) {
 
 function AuthProvider(props) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  console.log(state);
+
   function login(userData) {
     if (userData === null) {
       localStorage.clear();
       dispatch({ type: "LOGOUT" });
     } else {
       localStorage.setItem("jwtToken", userData);
-
       dispatch({
         type: "LOGIN",
         payload: userData,

@@ -25,5 +25,9 @@ class Con_reporte
         include("Con_reporteLicencia.php");
     }
 
+  public function reporteGeneral(){
+    include("Con_reporteGeneral.php");
+  }
+
    
 }

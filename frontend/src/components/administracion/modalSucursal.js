@@ -122,16 +122,15 @@ export const ModalSucursal = (props) => {
 
     if (operacion === 1) {
       endpoint = op.conexion + "/sucursal/registrar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
     } else if (operacion === 2) {
       endpoint = op.conexion + "/sucursal/actualizar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.sucursal_id);
     } else {
       endpoint = op.conexion + "/sucursal/eliminar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.sucursal_id);
     }
+    bodyF.append("Nombre", txtDescripcion.current.value);
+    bodyF.append("Direccion", txtDireccion.current.value);
     bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
@@ -193,8 +192,8 @@ export const ModalSucursal = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-
         txtDescripcion.current.value = response.sucursal_nombre;
+        txtDireccion.current.value = response.sucursal_direccion;
         setValues(response);
       })
       .catch((error) =>
@@ -327,21 +326,6 @@ export const ModalSucursal = (props) => {
     } else return false;
   };
 
-  const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
-    } else {
-      console.log('2')
-
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
-    }
-  }
-
   return (
     <Modal
       {...props}
@@ -403,8 +387,7 @@ export const ModalSucursal = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-        <div class=" mb-1 col-md-12">
-          <div class="input-group input-group-sm ">
+          <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombre De La Sucursal:
             </span>
@@ -417,16 +400,10 @@ export const ModalSucursal = (props) => {
               ref={txtDescripcion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="nom"
-              onBlur={validarInput}
             />
-             </div>
-            <div id="nom" class="form-text hidden">Debe ingresar nombre de la sucursal</div>
-
           </div>
-          <div class=" mb-1 col-md-12">
 
-          <div class="input-group input-group-sm ">
+          <div class="input-group input-group-sm mb-3 col-md-12">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Dirección:
             </span>
@@ -439,12 +416,7 @@ export const ModalSucursal = (props) => {
               ref={txtDireccion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              name="ape"
-              onBlur={validarInput}
             />
-          </div>
-          <div id="ape" class="form-text hidden">Debe ingresar dirreción de la sucursal</div>
-
           </div>
         </div>
       </Modal.Body>

@@ -24,10 +24,11 @@ abstract class cls_usoVehiculo extends cls_db
 				];
 			}
 			$result = $this->SearchByNombre($this->nombre);
-			if (isset($result[0])) {
+			if (isset($result)) {
 				return [
 					"data" => [
-						"res" => "Este nombre de uso vehiculo ($this->nombre) ya existe"
+						"res" => "Este nombre de uso vehiculo ($this->nombre) ya existe",
+						"code" => 400
 					],
 					"code" => 400
 				];
@@ -44,7 +45,8 @@ abstract class cls_usoVehiculo extends cls_db
 
 				return [
 					"data" => [
-						"res" => "Registro exitoso"
+						"res" => "Registro exitoso",
+						"code" => 200
 					],
 					"code" => 200
 				];
@@ -134,7 +136,8 @@ abstract class cls_usoVehiculo extends cls_db
 
 				return [
 					"data" => [
-						"res" => "usoVehiculo desactivada"
+						"res" => "Estatus modificado",
+						"code" => 200
 					],
 					"code" => 200
 				];

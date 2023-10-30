@@ -95,7 +95,7 @@ class Con_poliza extends cls_poliza
     }
     public function registrarCertificado()
     {
-        $resultado = $this->SaveMedico($_POST["precioDolar"], 1, "Medico");
+        $resultado = $this->SaveMedico($_POST["precioDolar"], 1, "Seguro");
         Response($resultado['data'], $resultado['code']);
     }
 

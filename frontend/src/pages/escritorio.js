@@ -33,7 +33,8 @@ import TablaGastos from "../components/gastosPersonales/tablaGastos";
 import Panel from "./panel";
 import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 import TablaLicencias from "../components/administracion/tablaLicencia";
-
+import PageChats from "../components/chat/chats";
+import ReportesSemanal from "../components/reportes/resportes";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -279,15 +280,22 @@ function MenuImpuestoPP(props) {
                           <i class="fas fas-fw me-1 fa-file-signature"></i>
                           <span>Documentos</span>
                         </a>
-                      
-                          <a
-                            href="/licencias"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-clipboard-list"></i>
-                            <span>Licencias</span>
-                          </a>
-                     
+
+                        {/* <a
+                          href="/licencias"
+                          className="list-group-item list-group-item-action py-2 ripple"
+                        >
+                          <i class="fas fas-fw me-1 fa-clipboard-list"></i>
+                          <span>Licencias</span>
+                        </a> */}
+
+                        <a
+                          href="/chats"
+                          className="list-group-item list-group-item-action py-2 ripple"
+                        >
+                          <i class="fab fa-rocketchat fas-fw me-1"></i>
+                          <span>Chats</span>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -454,14 +462,14 @@ function MenuImpuestoPP(props) {
                   <span>Certificado Medico</span>
                 </a>
                 <a
-                  href="/reportes"
+                  href="/reporteSemanal"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i className="fas fa-fw me-1 fa-print " />
                   <span>Lista de vendedores semanal</span>
                 </a>
                 <a
-                  href="/repotes"
+                  href="/reportes"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i className="fas fa-fw me-1 fa-print " />
@@ -499,6 +507,7 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
+
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
@@ -567,8 +576,10 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
-              <AuthRoute exact path="/listaPrecios" component={TablaPrecio}/>
-              <AuthRoute exact path="/licencias" component={TablaLicencias}/>
+              <AuthRoute exact path="/listaPrecios" component={TablaPrecio} />
+              <AuthRoute exact path="/licencias" component={TablaLicencias} />
+              <AuthRoute exact path="/chats" component={PageChats} />
+              <AuthRoute exact path="/reporteSemanal" component={ReportesSemanal}/>
 
               <AuthRoute
                 exact

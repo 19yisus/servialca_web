@@ -38,6 +38,12 @@ function TablaSursales() {
       color: "white",
     },
     {
+      label: "Dirección",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Estatus",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -180,9 +186,48 @@ function TablaSursales() {
   const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
     useTable(records, headCells, filterFn);
 
+  const cambiarEstatus = async (id, estatus) => {
+    var variable;
+    if (estatus == 0) {
+      variable = 1;
+    } else {
+      variable = 0;
+    }
+    let endpoint = op.conexion + "/sucursal/eliminar";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    bodyF.append("Estatus", variable);
+    bodyF.append("token", token);
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setMensaje({
+          mostrar: true,
+          titulo: "Exito.",
+          texto: "Estatus Modificado",
+          icono: "exito",
+        });
+        console.log(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+    selecionarRegistros();
+  };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/sucursal/ConsultarTodos";
-    let bodyF = new FormData()
+    let bodyF = new FormData();
     bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
@@ -243,11 +288,15 @@ function TablaSursales() {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
-  const gestionarBanco = (op, id) => (e) => {
+  const gestionarBanco = (op, id, estatus) => (e) => {
     e.preventDefault();
-    setMostrar(true);
-    setOperacion(op);
-    setIdSucursal(id);
+    if (op === 8) {
+      cambiarEstatus(id, estatus);
+    } else {
+      setMostrar(true);
+      setOperacion(op);
+      setIdSucursal(id);
+    }
   };
   return (
     <div className="col-md-12 mx-auto p-2">
@@ -312,7 +361,7 @@ function TablaSursales() {
 
           <div className="col-3 d-flex justify-content-end">
             <button
-              onClick={gestionarBanco(1, "")}
+              onClick={gestionarBanco(1, "", "")}
               className="btn btn-sm btn-primary rounded-circle"
             >
               <i className="fas fa-plus"></i>{" "}
@@ -341,6 +390,12 @@ function TablaSursales() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
+                    {item.sucursal_direccion}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
                     {parseInt(item.sucursal_estatus) === 1
                       ? "ACTIVO"
                       : "INACTIVO"}
@@ -355,16 +410,27 @@ function TablaSursales() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.sucursal_id)}
+                      onClick={gestionarBanco(2, item.sucursal_id, "")}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(3, item.sucursal_id)}
+                      onClick={gestionarBanco(
+                        8,
+                        item.sucursal_id,
+                        item.sucursal_estatus
+                      )}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
-                      <i className="fa fa-trash"></i>{" "}
+                      {item.sucursal_estatus === 1 ? (
+                        <i className="fa fa-times"></i>
+                      ) : (
+                        <i
+                          className="fa fa-check"
+                          style={{ background: "none" }}
+                        ></i>
+                      )}
                     </button>
                   </TableCell>
                 </TableRow>

@@ -22,18 +22,20 @@ abstract class cls_sucursal extends cls_db
 					"code" => 400
 				];
 			}
-
-			$result = $this->SearchByNombre($this->nombre);
-			if (isset($result[0])) {
+			$result = $this->db->prepare("SELECT * FROM sucursal WHERE sucursal_nombre = ?");
+			$result->execute([$this->nombre]);
+			if ($result->rowCount() > 0) {
 				return [
 					"data" => [
-						"res" => "Este nombre de sucursal ($this->nombre) ya existe"
+						"res" => "Nombre duplicado",
+						"code" => 400
 					],
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("INSERT INTO sucursal(sucursal_nombre,sucursal_estatus) VALUES(?,1)");
-			$sql->execute([$this->nombre]);
+
+			$sql = $this->db->prepare("INSERT INTO sucursal(sucursal_nombre,sucursal_direccion,sucursal_estatus) VALUES(?,?,1)");
+			$sql->execute([$this->nombre, $this->direccion]);
 			$this->id = $this->db->lastInsertId();
 			if ($sql->rowCount() > 0) {
 
@@ -44,14 +46,16 @@ abstract class cls_sucursal extends cls_db
 
 				return [
 					"data" => [
-						"res" => "Registro exitoso"
+						"res" => "Registro exitoso",
+						"code" => 200
 					],
 					"code" => 200
 				];
 			}
 			return [
 				"data" => [
-					"res" => "El registro ha fallado"
+					"res" => "El registro ha fallado",
+					"code" => 400
 				],
 				"code" => 400
 			];
@@ -77,9 +81,9 @@ abstract class cls_sucursal extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("UPDATE sucursal SET sucursal_nombre = ? WHERE sucursal_id = ?");
-			if ($sql->execute([$this->nombre, $this->id])) {
-				
+			$sql = $this->db->prepare("UPDATE sucursal SET sucursal_nombre = ?, sucursal_direccion = ? WHERE sucursal_id = ?");
+			if ($sql->execute([$this->nombre, $this->direccion, $this->id])) {
+
 				$this->reg_bitacora([
 					'table_name' => "sucursal",
 					'des' => "Actualización de sucursal (id sucursal: $this->id, nombre: $this->nombre)"
@@ -87,14 +91,16 @@ abstract class cls_sucursal extends cls_db
 
 				return [
 					"data" => [
-						"res" => "Actualización de datos exitosa"
+						"res" => "Actualización de datos exitosa",
+						"code" => 200
 					],
-					"code" => 300
+					"code" => 200
 				];
 			}
 			return [
 				"data" => [
-					"res" => "Actualización de datos fallida"
+					"res" => "Actualización de datos fallida",
+					"code" => 400
 				],
 				"code" => 400
 			];
@@ -119,31 +125,31 @@ abstract class cls_sucursal extends cls_db
 
 	protected function Delete()
 	{
-		try {
-			$sql = $this->db->prepare("UPDATE sucursal SET sucursal_estatus = ? WHERE sucursal_id = ?");
-			if ($sql->execute([$this->estatus, $this->id])) {
-				
-				$this->reg_bitacora([
-					'table_name' => "sucursal",
-					'des' => "Cambio de estatus de sucursal (id: $this->id)"
-				]);
+		$sql = $this->db->prepare("UPDATE sucursal SET sucursal_estatus = ? WHERE sucursal_id = ?");
+		if ($sql->execute([$this->estatus, $this->id])) {
 
-				return [
-					"data" => [
-						"res" => "sucursal desactivada"
-					],
-					"code" => 200
-				];
-			}
-		} catch (PDOException $e) {
+			$this->reg_bitacora([
+				'table_name' => "sucursal",
+				'des' => "Cambio de estatus de sucursal (id: $this->id)"
+			]);
+
 			return [
 				"data" => [
-					"res" => "Error de consulta: " . $e->getMessage()
+					"res" => "Estatus modificado",
+					"code" => 200
+				],
+				"code" => 200
+			];
+		} else {
+			return [
+				"data" => [
+					"res" => "Error de consulta: " . $this->db->errorInfo()
 				],
 				"code" => 400
 			];
 		}
 	}
+
 
 	protected function GetOne($id)
 	{
@@ -163,7 +169,7 @@ abstract class cls_sucursal extends cls_db
 
 	protected function GetAll()
 	{
-		$sql = $this->db->prepare("SELECT * FROM sucursal ORDER BY sucursal_id ASC");
+		$sql = $this->db->prepare("SELECT * FROM sucursal ORDER BY sucursal_id DESC");
 		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		else $resultado = [];
 		return $resultado;

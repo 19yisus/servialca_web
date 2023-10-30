@@ -320,6 +320,21 @@ export const ModalUsoVehiculo = (props) => {
       );
   };
 
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -381,7 +396,8 @@ export const ModalUsoVehiculo = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-12">
+        <div class=" mb-1 col-md-12">
+          <div class="input-group input-group-sm">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombre:
             </span>
@@ -396,8 +412,14 @@ export const ModalUsoVehiculo = (props) => {
               ref={txtDescripcion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              name="nom"
+              onBlur={validarInput}
             />
+              </div>
+          <div id="nom" class="form-text hidden">Debe ingresar nombre del uso</div>
+
           </div>
+
         </div>
       </Modal.Body>
       <Modal.Footer>
