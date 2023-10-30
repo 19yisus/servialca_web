@@ -122,16 +122,15 @@ export const ModalSucursal = (props) => {
 
     if (operacion === 1) {
       endpoint = op.conexion + "/sucursal/registrar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
     } else if (operacion === 2) {
       endpoint = op.conexion + "/sucursal/actualizar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.sucursal_id);
     } else {
       endpoint = op.conexion + "/sucursal/eliminar";
-      bodyF.append("Nombre", txtDescripcion.current.value);
       bodyF.append("ID", values.sucursal_id);
     }
+    bodyF.append("Nombre", txtDescripcion.current.value);
+    bodyF.append("Direccion", txtDireccion.current.value);
     bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
@@ -193,8 +192,8 @@ export const ModalSucursal = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-
         txtDescripcion.current.value = response.sucursal_nombre;
+        txtDireccion.current.value = response.sucursal_direccion;
         setValues(response);
       })
       .catch((error) =>

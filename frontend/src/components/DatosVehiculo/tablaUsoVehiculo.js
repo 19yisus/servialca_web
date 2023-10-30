@@ -239,12 +239,54 @@ function TablaUsoVehiculo() {
     setMostrar(true);
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
+  const cambiarEstatus = async (id, estatus) => {
+    var variable;
+    if (estatus == 0) {
+      variable = 1;
+    } else {
+      variable = 0;
+    }
+    let endpoint = op.conexion + "/usoVehiculo/eliminar";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", id);
+    bodyF.append("Estatus", variable);
+    bodyF.append("token", token);
 
-  const gestionarBanco = (op, id) => (e) => {
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setMensaje({
+          mostrar: true,
+          titulo: "Exito.",
+          texto: "Estatus Modificado",
+          icono: "exito",
+        });
+        console.log(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+    selecionarRegistros();
+  };
+  const gestionarBanco = (op, id, estatus) => (e) => {
     e.preventDefault();
-    setOperacion(op);
-    setMostrar(true);
-    setIdUso(id);
+    if (op == 8) {
+      cambiarEstatus(id, estatus);
+    } else {
+      setOperacion(op);
+      setMostrar(true);
+      setIdUso(id);
+    }
   };
   return (
     <div className="col-md-12 mx-auto p-2">
@@ -309,7 +351,7 @@ function TablaUsoVehiculo() {
 
           <div className="col-3 d-flex justify-content-end">
             <button
-              onClick={gestionarBanco(1, "")}
+              onClick={gestionarBanco(1, "", "")}
               className="btn btn-sm btn-primary rounded-circle"
             >
               <i className="fas fa-plus"></i>{" "}
@@ -352,16 +394,27 @@ function TablaUsoVehiculo() {
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.usoVehiculo_id)}
+                      onClick={gestionarBanco(2, item.usoVehiculo_id, "")}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={gestionarBanco(3, item.usoVehiculo_id)}
+                      onClick={gestionarBanco(
+                        8,
+                        item.usoVehiculo_id,
+                        item.usoVehiculo_estatus
+                      )}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
-                      <i className="fa fa-trash"></i>{" "}
+                      {item.usoVehiculo_estatus === 1 ? (
+                        <i className="fa fa-times"></i>
+                      ) : (
+                        <i
+                          className="fa fa-check"
+                          style={{ background: "none" }}
+                        ></i>
+                      )}
                     </button>
                   </TableCell>
                 </TableRow>
