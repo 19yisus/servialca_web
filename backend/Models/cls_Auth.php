@@ -1,6 +1,11 @@
 <?php
 
-require_once("cls_db.php");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+if (is_file("vendor/autoload.php")) require "vendor/autoload.php";
+if (!class_exists("cls_db")) require("cls_db.php");
 
 class cls_Auth extends cls_db
 {
@@ -27,7 +32,7 @@ class cls_Auth extends cls_db
             'res' => [
               'text' => "El usuario está desactivado",
               "code" => 400
-            ] 
+            ]
           ],
           'code' => 400
         ];
@@ -63,7 +68,7 @@ class cls_Auth extends cls_db
             'res' => [
               'text' => "Su clave es inválida ($this->clave === )" . $resultado['usuario_clave'],
               "code" => 400
-            ] 
+            ]
           ],
           'code' => 400
         ];
@@ -558,4 +563,133 @@ class cls_Auth extends cls_db
       ];
     }
   }
+
+  // public function VerificarCorreo($cedula, $email)
+  // {
+  //   $email = strtoupper($email);
+  //   $sql = "SELECT usuarios.id_user FROM personas 
+  //     INNER JOIN usuarios ON usuarios.person_id_user = personas.id_person WHERE 
+  //     personas.cedula_person = '$cedula' AND personas.correo_person = '$email';";
+
+  //   $result = $this->Query($sql);
+  //   if ($result->num_rows > 0) {
+  //     $datos = $this->Get_array($result);
+  //     $code = $this->Make_code_recovery($datos['id_user']);
+  //     $this->SendEmail($code, $email);
+
+  //     return [
+  //       'status' => true,
+  //       'next' => 2,
+  //       'id_user' => $datos['id_user'],
+  //       'message' => [
+  //         'code' => 'success',
+  //         'msg' => "Correo verificado",
+  //       ]
+  //     ];
+  //   }
+
+  //   return [
+  //     'status' => false,
+  //     'next' => 1,
+  //     'message' => [
+  //       'code' => 'error',
+  //       'msg' => "El correo ingresado no coincide",
+  //     ]
+  //   ];
+  // }
+
+  // public function Make_code_recovery($id_user)
+  // {
+  //   $code = $this->generateRandomString();
+
+  //   $sql = "SELECT * FROM codigos_recuperacion WHERE char_code = '$code';";
+  //   $result = $this->Query($sql);
+
+  //   if ($result->num_rows === 0) {
+  //     $datos = $this->Get_array($result);
+  //     $this->Query("UPDATE codigos_recuperacion SET status_code = 0 WHERE id_user = $id_user;");
+
+  //     $sql = "INSERT INTO codigos_recuperacion(date_cod, status_code, char_code, id_user) VALUES (NOW(),'1','$code',$id_user);";
+  //     $this->Query($sql);
+
+  //     return $code;
+  //   }
+
+  //   die("FALLO algo");
+  //   $this->Make_code_recovery($id_user);
+  // }
+
+  // public function SendEmail($code, $email)
+  // {
+  //   if (constant('username_email')  == '') die("Debes de tener configurada una cuenta de Correo electronico");
+
+  //   $mail = new PHPMailer(true);
+  //   $email_user = strtolower($email);
+
+  //   try {
+  //     ini_set('display_errors', 1);
+  //     error_reporting(E_ALL);
+
+  //     $mail->SMTPDebug = 0;                              //Enable verbose debug output
+  //     $mail->isSMTP();                                   //Send using SMTP
+  //     $mail->Host       = 'smtp.gmail.com';              //Set the SMTP server to send through
+  //     $mail->SMTPAuth   = true;                          //Enable SMTP authentication
+  //     $mail->Username   = constant('username_email');    //SMTP username
+  //     $mail->Password   = constant('password_email');    //SMTP password
+  //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;   //Enable implicit TLS encryption
+  //     $mail->Port       = constant('port_email');
+
+
+  //     //Recipients
+  //     $mail->setFrom(constant('username_email'), 'Mailer');
+  //     $mail->addAddress($email_user);     //Add a recipient
+
+  //     //Content
+  //     $mail->isHTML(true);                                  //Set email format to HTML
+  //     $mail->Subject = 'Codigo de recuperacion';
+  //     $mail->Body    = "Este es tu código de recuperación: <b>$code</b>";
+
+  //     if (!$mail->send()) return false;
+  //     else return true;
+  //   } catch (Exception $e) {
+  //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+  //   }
+  // }
+
+  // function generateRandomString($length = 8)
+  // {
+  //   return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+  // }
+
+  // public function ValidacionCodigo($datos)
+  // {
+
+  //   $code = $datos['code'];
+  //   $id_user = $datos['id'];
+
+  //   $sql = "SELECT * FROM codigos_recuperacion WHERE char_code = '$code' AND id_user = $id_user AND status_code = 1;";
+  //   $result = $this->Query($sql);
+
+  //   if ($result->num_rows > 0) {
+
+  //     return [
+  //       'status' => true,
+  //       'next' => 3,
+  //       'id_user' => $id_user,
+  //       'message' => [
+  //         'code' => 'success',
+  //         'msg' => "Código verificado!",
+  //       ]
+  //     ];
+  //   }
+  //   return [
+  //     'status' => false,
+  //     'next' => 2,
+  //     'id_user' => $id_user,
+  //     'message' => [
+  //       'code' => 'error',
+  //       'msg' => "Código incorrecto o invalido",
+  //     ]
+  //   ];
+  // }
 }
