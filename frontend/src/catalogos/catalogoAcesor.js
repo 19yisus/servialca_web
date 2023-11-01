@@ -39,6 +39,7 @@ const CatalogoAcesor = props => {
         { id: 'Cedula', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-code'> Codigo</i>, textAlign: 'center', fontFamily: 'georgia' },
         { id: 'Nombre', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Nombre</i>, textAlign: 'center', fontFamily: 'georgia' },
         { id: 'Apellido', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Apellido</i>, textAlign: 'center', fontFamily: 'georgia' },
+        { id: 'Nombre de usuario', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Nombre de usuario</i>, textAlign: 'center', fontFamily: 'georgia' },
    
     ]
 
@@ -182,7 +183,7 @@ const CatalogoAcesor = props => {
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_id}</TableCell>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_nombre}</TableCell>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_apellido}</TableCell>
-                                 
+                                        <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.usuario_usuario}</TableCell>
                                     </TableRow>
 
                                 ))

@@ -25,10 +25,11 @@ abstract class cls_claseVehiculo extends cls_db
 
 			$result = $this->SearchByNombre($this->nombre);
 
-			if (isset($result[0])) {
+			if (isset($result)) {
 				return [
 					"data" => [
-						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe"
+						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe",
+						"code" => 400
 					],
 					"code" => 400
 				];
@@ -47,7 +48,8 @@ abstract class cls_claseVehiculo extends cls_db
 
 				return [
 					"data" => [
-						"res" => "Registro exitoso"
+						"res" => "Registro exitoso",
+						"code" => 200
 
 					],
 					"code" => 200
@@ -128,16 +130,16 @@ abstract class cls_claseVehiculo extends cls_db
 	protected function Delete()
 	{
 		try {
-			$sql = $this->db->prepare("UPDATE clasevehiculo SET claseVehiculo_estatus = ? WHERE claseVehiculo_id = ?");
+			$sql = $this->db->prepare("UPDATE clasevehiculo SET clase_estatus = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
 				$this->reg_bitacora([
 					'table_name' => "clasevehiculo",
-					'des' => "Eliminación clase de vehiculo ($this->nombre)"
+					'des' => "Eliminación clase de vehiculo ($this->id)"
 				]);
 
 				return [
 					"data" => [
-						"res" => "claseVehiculo desactivada"
+						"res" => "Estatus modificado"
 					],
 					"code" => 200
 				];

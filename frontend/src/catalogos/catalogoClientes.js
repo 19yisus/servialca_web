@@ -169,9 +169,24 @@ const CatalogoClientes = (props) => {
     var nac = cedulaCompleta[0];
     var ced = cedulaCompleta[1];
     var nom = recordsAfterPagingAndSorting()[index].cliente_nombre;
-    var ape = recordsAfterPagingAndSorting()[index].cliente_apellido;
-    var cor = recordsAfterPagingAndSorting()[index].cliente_correo;
-    var cod = telefonoCompleto[0];
+    var ape;
+    if (recordsAfterPagingAndSorting()[index].cliente_apellido){
+      ape = recordsAfterPagingAndSorting()[index].cliente_apellido;
+    }else{
+      ape = "";
+    }
+    var cor;
+    if (recordsAfterPagingAndSorting()[index].cliente_correo){
+      cor = recordsAfterPagingAndSorting()[index].cliente_correo;
+    }else{
+      cor = "";
+    }
+    var cod;
+    if (telefonoCompleto[0]){
+      cod = telefonoCompleto[0];
+    }else{
+      cod = "0412" ;
+    }
     var tel = telefonoCompleto[1];
     var dir = recordsAfterPagingAndSorting()[index].cliente_direccion;
     blanquear();
