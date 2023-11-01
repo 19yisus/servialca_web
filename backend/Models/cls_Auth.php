@@ -25,7 +25,8 @@ class cls_Auth extends cls_db
 
     $sql->execute([$this->usuario]);
     $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    if (!empty($resultado)) {
+
+    if (isset($resultado['usuario_id'])) {
       if ($resultado["usuario_estatus"] == 0) {
         return [
           'data' => [
@@ -95,7 +96,6 @@ class cls_Auth extends cls_db
 
       $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
       $dato = $this->GetOne($resultado["usuario_id"]);
-
       if (!empty($permisos)) {
         $lista = [];
         foreach ($permisos as $per) {
@@ -118,6 +118,13 @@ class cls_Auth extends cls_db
             ]
           ],
           'code' => 200
+        ];
+      } else {
+        return [
+          'data' => [
+            'res' => ['text' => "El usuario no posee permisos para acceder al sistema", 'code' => 400]
+          ],
+          'code' => 400
         ];
       }
     }
@@ -155,7 +162,7 @@ class cls_Auth extends cls_db
   {
     try {
       $result = $this->SearchByUsername($this->usuario);
-      if ($result["usuario_usuario"]) {
+      if (isset($result["usuario_usuario"])) {
         return [
           'data' => [
             'res' => "Este nombre de usuario ($this->usuario) ya existe",
@@ -166,7 +173,7 @@ class cls_Auth extends cls_db
       }
 
       $result = $this->SearchByCedula($this->cedula);
-      if ($result["usuario_cedula"]) {
+      if (isset($result["usuario_cedula"])) {
         return [
           'data' => [
             'res' => "La cédula de usuario ($this->cedula) ya existe",
@@ -177,7 +184,9 @@ class cls_Auth extends cls_db
       }
 
 
-      $clave = password_hash($this->clave, PASSWORD_BCRYPT, ['cost' => 12]);
+      // $clave = password_hash((isset($this->clave) ? $this->clave : $this->cedula), PASSWORD_BCRYPT, ['cost' => 12]);
+      $clave = $this->cedula;
+
       $sql = $this->db->prepare("INSERT INTO 
       usuario(
           usuario_usuario,
@@ -256,22 +265,22 @@ class cls_Auth extends cls_db
       sucursal_id =?,
       permisos = ?
       WHERE usuario_id = ?");
-      if (
-        $sql->execute([
-          $this->usuario,
-          $this->nombre,
-          $this->apellido,
-          $this->cedula,
-          $this->telefono,
-          $this->direccion,
-          $this->correo,
-          $this->rol,
-          $this->sucursal,
-          $this->permiso,
-          $this->id,
+      $sql->execute([
+        $this->usuario,
+        $this->nombre,
+        $this->apellido,
+        $this->cedula,
+        $this->telefono,
+        $this->direccion,
+        $this->correo,
+        $this->rol,
+        $this->sucursal,
+        $this->permiso,
+        $this->id,
+      ]);
 
-        ])
-      ) {
+
+      if ($sql->rowCount() > 0) {
 
         // $this->reg_bitacora([
         //   'table_name' => "usuario",
@@ -305,7 +314,8 @@ class cls_Auth extends cls_db
   {
     try {
       $sql = $this->db->prepare("UPDATE usuario SET usuario_estatus = ? WHERE usuario_id = ?");
-      if ($sql->execute([$this->estatus, $this->id])) {
+      $sql->execute([$this->estatus, $this->id]);
+      if ($sql->rowCount() > 0) {
         $this->reg_bitacora([
           'table_name' => "usuario",
           'des' => "Cambio de estatus del usuario ($this->id)"
@@ -331,12 +341,12 @@ class cls_Auth extends cls_db
   {
     try {
       $sql = $this->db->prepare("UPDATE usuario SET usuario_clave = ? WHERE usuario_id = ?");
-      if (
-        $sql->execute([
-          $this->clave,
-          $this->id
-        ])
-      ) {
+      $sql->execute([
+        $this->clave,
+        $this->id
+      ]);
+
+      if ($sql->rowCount() > 0) {
         return [
           'data' => [
             'res' => "Actualización de datos exitosa"
@@ -366,11 +376,10 @@ class cls_Auth extends cls_db
     $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
       INNER JOIN roles ON roles.roles_id = usuario.roles_id
       INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_id = ?");
+    $sql->execute([$id]);
 
-    if ($sql->execute([$id]))
-      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else
-      $resultado = [];
+    if ($sql->rowCount() > 0) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
     return $resultado;
   }
 
@@ -379,11 +388,10 @@ class cls_Auth extends cls_db
     $sql = $this->db->prepare("SELECT usuario.*, roles.*, sucursal.*  FROM usuario 
       INNER JOIN roles ON roles.roles_id = usuario.roles_id
       INNER JOIN sucursal ON sucursal.sucursal_id = usuario.sucursal_id WHERE usuario_usuario = ?");
+    $sql->execute([$user]);
 
-    if ($sql->execute([$user]))
-      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else
-      $resultado = [];
+    if ($sql->rowCount() > 0) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
     return $resultado;
   }
 
@@ -392,33 +400,30 @@ class cls_Auth extends cls_db
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE 
       usuario_usuario = ? AND
       usuario_id != ?");
+    $sql->execute([$this->usuario, $this->id]);
 
-    if ($sql->execute([$this->usuario, $this->id]))
-      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else
-      $resultado = [];
+    if ($sql->rowCount() > 0) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
     return $resultado;
   }
 
   protected function SearchByUsername($username)
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_usuario = ?");
+    $sql->execute([$username]);
 
-    if ($sql->execute([$username]))
-      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else
-      $resultado = [];
+    if ($sql->rowCount() > 0) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
     return $resultado;
   }
 
   protected function SearchByCedula($cedula)
   {
     $sql = $this->db->prepare("SELECT * FROM usuario WHERE usuario_cedula = ?");
+    $sql->execute([$cedula]);
 
-    if ($sql->execute([$cedula]))
-      $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-    else
-      $resultado = [];
+    if ($sql->rowCount() > 0) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+    else $resultado = [];
     return $resultado;
   }
 
