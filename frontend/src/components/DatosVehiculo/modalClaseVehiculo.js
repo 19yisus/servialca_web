@@ -297,7 +297,6 @@ export const ModalTransporte = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-
         txtDescripcion.current.value = response.clase_nombre;
         setValues(response);
       })
@@ -404,6 +403,7 @@ export const ModalTransporte = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
               name="nom"
+              onChange={soloLetras}
               onBlur={validarInput}
             />
              </div>

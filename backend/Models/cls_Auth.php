@@ -155,20 +155,22 @@ class cls_Auth extends cls_db
   {
     try {
       $result = $this->SearchByUsername($this->usuario);
-      if (isset($result[0])) {
+      if ($result["usuario_usuario"]) {
         return [
           'data' => [
-            'res' => "Este nombre de usuario ($this->usuario) ya existe"
+            'res' => "Este nombre de usuario ($this->usuario) ya existe",
+            "code" => 400
           ],
           'code' => 400
         ];
       }
 
       $result = $this->SearchByCedula($this->cedula);
-      if (isset($result[0])) {
+      if ($result["usuario_cedula"]) {
         return [
           'data' => [
-            'res' => "La cédula de usuario ($this->cedula) ya existe"
+            'res' => "La cédula de usuario ($this->cedula) ya existe",
+            "code" => 400
           ],
           'code' => 400
         ];
@@ -246,9 +248,12 @@ class cls_Auth extends cls_db
       usuario_usuario = ?,
       usuario_nombre = ?,
       usuario_apellido = ?,
+      usuario_cedula = ?,
       usuario_telefono = ?,
       usuario_direccion = ?,
       usuario_correo = ?,
+      roles_id =?,
+      sucursal_id =?,
       permisos = ?
       WHERE usuario_id = ?");
       if (
@@ -256,19 +261,22 @@ class cls_Auth extends cls_db
           $this->usuario,
           $this->nombre,
           $this->apellido,
+          $this->cedula,
           $this->telefono,
           $this->direccion,
           $this->correo,
+          $this->rol,
+          $this->sucursal,
           $this->permiso,
           $this->id,
 
         ])
       ) {
 
-        $this->reg_bitacora([
-          'table_name' => "usuario",
-          'des' => "Actualización de datos de usuario ($this->usuario, $this->nombre, $this->apellido, $this->telefono, $this->correo, $this->direccion"
-        ]);
+        // $this->reg_bitacora([
+        //   'table_name' => "usuario",
+        //   'des' => "Actualización de datos de usuario ($this->usuario, $this->nombre, $this->apellido, $this->telefono, $this->correo, $this->direccion"
+        // ]);
         return [
           'data' => [
             'res' => "Actualización de datos exitosa"

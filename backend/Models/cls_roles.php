@@ -23,10 +23,11 @@ abstract class cls_roles extends cls_db
 				];
 			}
 			$result = $this->SearchByNombre($this->nombre);
-			if (isset($result[0])) {
+			if (isset($result["roles_nombre"])) {
 				return [
 					"data" => [
-						"res" => "Este nombre de roles ($this->nombre) ya existe"
+						"res" => "Este nombre de roles ($this->nombre) ya existe",
+						"code" => 400
 					],
 					"code" => 400
 				];
@@ -34,18 +35,25 @@ abstract class cls_roles extends cls_db
 			$sql = $this->db->prepare("INSERT INTO roles(roles_nombre,roles_comision,roles_estatus) VALUES(?,?,1)");
 			$sql->execute([$this->nombre, $this->comision]);
 			$this->id = $this->db->lastInsertId();
-			if ($sql->rowCount() > 0) return [
-				"data" => [
-					"res" => "Registro exitoso"
-				],
-				"code" => 200
-			];
-			return [
-				"data" => [
-					"res" => "El registro ha fallado"
-				],
-				"code" => 400
-			];
+			if ($sql->rowCount() > 0) {
+				$this->reg_bitacora([
+					'table_name' => "roles",
+					"des" => "Insert en roles (nombre: $this->nombre)"
+				]);
+				return [
+					"data" => [
+						"res" => "Registro exitoso"
+					],
+					"code" => 200
+				];
+			} else {
+				return [
+					"data" => [
+						"res" => "El registro ha fallado"
+					],
+					"code" => 400
+				];
+			}
 		} catch (PDOException $e) {
 			return [
 				"data" => [
@@ -55,6 +63,7 @@ abstract class cls_roles extends cls_db
 			];
 		}
 	}
+
 
 	protected function update()
 	{
@@ -69,8 +78,12 @@ abstract class cls_roles extends cls_db
 				];
 			}
 			$sql = $this->db->prepare("UPDATE roles SET
-            roles_nombre = ? WHERE roles_id = ?");
-			if ($sql->execute([$this->nombre, $this->id])) {
+            roles_nombre = ?, roles_comision = ? WHERE roles_id = ?");
+			if ($sql->execute([$this->nombre, $this->comision, $this->id])) {
+				$this->reg_bitacora([
+					"table_name" => "roles",
+					"des" => "Actualización de roles (id:$this->id, nombre: $this->nombre, comision: $this->comision)"
+				]);
 				return [
 					"data" => [
 						"res" => "Actualización de datos exitosa"
@@ -108,9 +121,14 @@ abstract class cls_roles extends cls_db
 		try {
 			$sql = $this->db->prepare("UPDATE roles SET roles_estatus = ? WHERE roles_id = ?");
 			if ($sql->execute([$this->estatus, $this->id])) {
+				$this->reg_bitacora([
+					"table_name" => "roles",
+					"des" => "Cambio de estatus en roles (id: $this->id)"
+				]);
 				return [
 					"data" => [
-						"res" => "roles desactivada"
+						"res" => "Estatus modificado",
+						"code" => 200
 					],
 					"code" => 200
 				];

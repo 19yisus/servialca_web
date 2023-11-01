@@ -94,7 +94,6 @@ export const ModalLicencia = (props) => {
     // Luego puedes hacer algo con el valor validado, como establecerlo en el estado local.
   };
 
-
   const salir = () => {
     props.onHideCancela();
     setValues({
@@ -281,20 +280,20 @@ export const ModalLicencia = (props) => {
     apellido,
     cedula,
     nacionalidad,
-    Correo,
-    Codigo,
+    correo,
+    codigo,
     telefono
   ) => {
-    console.log(nombre, apellido, cedula);
+    console.log(codigo);
     cmbNacionalidad.current.value = nacionalidad + "-";
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
-    cmbTelefono.current.value = Codigo + "-";
+    cmbTelefono.current.value = codigo + "-";
     txtTelefono.current.value = telefono;
-    let item = document.getElementById("ced");
-    item.className -= " form-text fw-bold visible ";
-    item.className += " form-text fw-bold hidden ";
+    // let item = document.getElementById("ced");
+    // item.classList.remove("form-text", "fw-bold", "visible");
+    // item.classList.add("form-text", "fw-bold", "hidden");
 
     setMostrar(false);
   };
@@ -522,7 +521,7 @@ export const ModalLicencia = (props) => {
               Telefono
             </span>
             <select
-              class="form-select col-md-3"
+              class="form-select col-md-4"
               ref={cmbTelefono}
               aria-label="Default select example"
             >
@@ -534,8 +533,8 @@ export const ModalLicencia = (props) => {
             </select>
             <input
               type="text"
-              onKeyDown={handleChange(8)}
               class="form-control"
+              onKeyDown={handleChange(7)}
               ref={txtTelefono}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -684,8 +683,6 @@ export const ModalLicencia = (props) => {
               aria-describedby="inputGroup-sizing-sm"
               onChange={validaSoloNumero}
               onKeyUp={handleTipoLicenciaChange}
-              
-            
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
@@ -693,7 +690,7 @@ export const ModalLicencia = (props) => {
               Restante:
             </span>
             <input
-            disabled
+              disabled
               type="text"
               class="form-control text-right"
               ref={txtRestante}

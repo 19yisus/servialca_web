@@ -155,14 +155,16 @@ export const ModalUsuarios = (props) => {
   };
   const actualizarCertificado = async () => {
     let endpoint;
+    let bodyF = new FormData();
     if (operacion === 1) {
       endpoint = op.conexion + "/Auth/registrar";
+      bodyF.append("Clave", txtCedula.current.value);
     } else if (operacion === 2) {
       endpoint = op.conexion + "/Auth/actualizar";
     } else if (operacion === 3) {
       endpoint = op.conexion + "/Auth/eliminar";
     }
-    
+
     console.log(endpoint);
     setActivate(true);
 
@@ -181,7 +183,6 @@ export const ModalUsuarios = (props) => {
 
     //setLoading(false);
 
-    let bodyF = new FormData();
     bodyF.append("ID", props.id);
 
     bodyF.append("Usuario", txtUsuario.current.value);
@@ -211,12 +212,21 @@ export const ModalUsuarios = (props) => {
         console.log(response);
         console.log(permiso);
 
-        setMensaje({
-          mostrar: true,
-          titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
-          icono: "exito",
-        });
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
       })
       .catch((error) =>
         setMensaje({
@@ -281,7 +291,6 @@ export const ModalUsuarios = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-
         console.log(response);
         txtUsuario.current.value = response.usuario_usuario;
         txtNombre.current.value = response.usuario_nombre;
@@ -420,19 +429,22 @@ export const ModalUsuarios = (props) => {
   };
 
   const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
+    console.log(e.target.name);
+    let item = document.getElementById(e.target.name);
+    if (
+      !e.target.value ||
+      (e.target.name === "ced" && e.target.value.length < 8)
+    ) {
+      console.log("1");
+      item.className -= " form-text fw-bold hidden ";
+      item.className += " form-text fw-bold visible ";
     } else {
-      console.log('2')
+      console.log("2");
 
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
+      item.className -= " form-text fw-bold visible ";
+      item.className += " form-text fw-bold hidden ";
     }
-  }
+  };
 
   return (
     <Modal
@@ -499,206 +511,219 @@ export const ModalUsuarios = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-        <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Usuario:
-            </span>
-            <input
-              onKeyDown={handleChange(12)}
-              type="text"
-              class="form-control"
-              ref={txtUsuario}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="user"
-              onBlur={validarInput}
-            />
-             </div>
-          <div id="user" class="form-text hidden">Debe ingresar login de usuario</div>
-
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Usuario:
+              </span>
+              <input
+                onKeyDown={handleChange(12)}
+                type="text"
+                class="form-control"
+                ref={txtUsuario}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="user"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="user" class="form-text hidden">
+              Debe ingresar login de usuario
+            </div>
           </div>
           <div class="input-group input-group-sm mb-1 col-md-6"></div>
           <div class=" mb-1 col-md-6">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Nombre:
-            </span>
-            <input
-              onKeyDown={handleChange(25)}
-              type="text"
-              class="form-control"
-              ref={txtNombre}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="nom"
-              onBlur={validarInput}
-            />
-              </div>
-          <div id="nom" class="form-text hidden">Debe ingresar nombre del usuario</div>
-
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Nombre:
+              </span>
+              <input
+                onKeyDown={handleChange(25)}
+                type="text"
+                class="form-control"
+                ref={txtNombre}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="nom"
+                onBlur={validarInput}
+                onChange={validaSoloLetras}
+              />
+            </div>
+            <div id="nom" class="form-text hidden">
+              Debe ingresar nombre del usuario
+            </div>
           </div>
           <div class=" mb-1 col-md-6">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Apellido:
-            </span>
-            <input
-              onKeyDown={handleChange(25)}
-              type="text"
-              class="form-control"
-              ref={txtApellido}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="ape"
-              onBlur={validarInput}
-            />
-          </div>
-          <div id="ape" class="form-text hidden">Debe ingresar nombre del usuario</div>
-
-          </div>
-          <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Cedula:
-            </span>
-            <select
-              class="form-select col-md-3"
-              ref={cmbNacionalidad}
-              aria-label="Default select example"
-            >
-              <option value="V-">V-</option>
-              <option value="E-">E-</option>
-              <option value="J-">J-</option>
-              <option value="G-">G-</option>
-            </select>
-            <input
-              onKeyDown={handleChange(9)}
-              type="text"
-              class="form-control"
-              ref={txtCedula}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-               name="ced"
-              onBlur={validarInput}
-            />
-          </div>
-          <div id="ced" class="form-text hidden">Debe ingresar la cedula del usuario</div>
-
-          </div>
-          <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Telefono:
-            </span>
-            <select
-              class="form-select col-md-4"
-              ref={cmbTelefono}
-              aria-label="Default select example"
-            >
-              <option value="0414-">0414-</option>
-              <option value="0424-">0424-</option>
-              <option value="0416-">0416-</option>
-              <option value="0426-">0426-</option>
-              <option value="0412-">0412-</option>
-            </select>
-            <input
-              onKeyDown={handleChange(8)}
-              type="text"
-              class="form-control"
-              ref={txtTelefono}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="tlf"
-              onBlur={validarInput}
-            />
-          </div>
-          <div id="tlf" class="form-text hidden">Debe ingresar el telefono del usuario</div>
-
-          </div>
-          <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Dirección:
-            </span>
-            <input
-              onKeyDown={handleChange(30)}
-              type="text"
-              class="form-control"
-              ref={txtDireccion}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="dir"
-              onBlur={validarInput}
-            />
-          </div>
-          <div id="dir" class="form-text hidden">Debe ingresar la dirección del usuario</div>
-
-          </div>
-          <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Correo:
-            </span>
-            <input
-              onKeyDown={handleChange(25)}
-              type="text"
-              class="form-control"
-              ref={txtCorreo}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-               name="email"
-              onBlur={validarInput}
-            />
-          </div>
-          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
-
-          </div>
-          <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Rol:
-            </span>
-
-            <select
-              class="form-select"
-              ref={txtRol}
-              aria-label="Default select example"
-            >
-              {roles &&
-                roles.map((item, index) => (
-                  <option key={index} value={item.roles_id}>
-                    {" "}
-                    {item.roles_nombre}{" "}
-                  </option>
-                ))}
-            </select>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Apellido:
+              </span>
+              <input
+                onKeyDown={handleChange(25)}
+                type="text"
+                class="form-control"
+                ref={txtApellido}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="ape"
+                onBlur={validarInput}
+                onChange={validaSoloLetras}
+              />
             </div>
-          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
-
+            <div id="ape" class="form-text hidden">
+              Debe ingresar nombre del usuario
+            </div>
           </div>
           <div class=" mb-1 col-md-4">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Sucursal:
-            </span>
-
-            <select
-              class="form-select"
-              ref={txtSucursal}
-              aria-label="Default select example"
-            >
-              {sucursales &&
-                sucursales.map((item, index) => (
-                  <option key={index} value={item.sucursal_id}>
-                    {" "}
-                    {item.sucursal_nombre}{" "}
-                  </option>
-                ))}
-            </select>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Cedula:
+              </span>
+              <select
+                class="form-select col-md-3"
+                ref={cmbNacionalidad}
+                aria-label="Default select example"
+              >
+                <option value="V-">V-</option>
+                <option value="E-">E-</option>
+                <option value="J-">J-</option>
+                <option value="G-">G-</option>
+              </select>
+              <input
+                onKeyDown={handleChange(9)}
+                type="text"
+                class="form-control"
+                ref={txtCedula}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="ced"
+                onBlur={validarInput}
+                onChange={validaSoloNumero}
+              />
             </div>
-          <div id="email" class="form-text hidden">Debe ingresar el correo del usuario</div>
+            <div id="ced" class="form-text hidden">
+              Debe ingresar la cedula del usuario
+            </div>
+          </div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Telefono:
+              </span>
+              <select
+                class="form-select col-md-4"
+                ref={cmbTelefono}
+                aria-label="Default select example"
+              >
+                <option value="0414-">0414-</option>
+                <option value="0424-">0424-</option>
+                <option value="0416-">0416-</option>
+                <option value="0426-">0426-</option>
+                <option value="0412-">0412-</option>
+              </select>
+              <input
+                onKeyDown={handleChange(8)}
+                type="text"
+                class="form-control"
+                ref={txtTelefono}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="tlf"
+                onBlur={validarInput}
+                onChange={validaSoloNumero}
+              />
+            </div>
+            <div id="tlf" class="form-text hidden">
+              Debe ingresar el telefono del usuario
+            </div>
+          </div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Dirección:
+              </span>
+              <input
+                onKeyDown={handleChange(30)}
+                type="text"
+                class="form-control"
+                ref={txtDireccion}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="dir"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="dir" class="form-text hidden">
+              Debe ingresar la dirección del usuario
+            </div>
+          </div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Correo:
+              </span>
+              <input
+                onKeyDown={handleChange(25)}
+                type="text"
+                class="form-control"
+                ref={txtCorreo}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="email"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="email" class="form-text hidden">
+              Debe ingresar el correo del usuario
+            </div>
+          </div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Rol:
+              </span>
 
+              <select
+                class="form-select"
+                ref={txtRol}
+                aria-label="Default select example"
+              >
+                {roles &&
+                  roles.map((item, index) => (
+                    <option key={index} value={item.roles_id}>
+                      {" "}
+                      {item.roles_nombre}{" "}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div id="email" class="form-text hidden">
+              Debe ingresar el correo del usuario
+            </div>
+          </div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Sucursal:
+              </span>
+
+              <select
+                class="form-select"
+                ref={txtSucursal}
+                aria-label="Default select example"
+              >
+                {sucursales &&
+                  sucursales.map((item, index) => (
+                    <option key={index} value={item.sucursal_id}>
+                      {" "}
+                      {item.sucursal_nombre}{" "}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div id="email" class="form-text hidden">
+              Debe ingresar el correo del usuario
+            </div>
           </div>
           <div class="row mx-auto col-md-12">
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
@@ -716,7 +741,7 @@ export const ModalUsuarios = (props) => {
                 class="form-check-input"
                 ref={check1}
                 type="checkbox"
-                value="Lista de asesores"
+                value="Contratos Realizados"
                 id="flexCheckDefault"
               />
               <label class="form-check-label">Lista De Asesores</label>

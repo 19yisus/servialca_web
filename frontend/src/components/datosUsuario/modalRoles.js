@@ -307,6 +307,7 @@ export const ModalRoles = (props) => {
         console.log(response);
 
         txtDescripcion.current.value = response.roles_nombre;
+        txtComision.current.value = response.roles_comision;
         setValues(response);
       })
       .catch((error) =>
@@ -436,6 +437,7 @@ export const ModalRoles = (props) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
               name="comi"
+              onChange={validaSoloNumero}
               onBlur={validarInput}
             />
          </div>

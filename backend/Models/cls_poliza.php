@@ -613,8 +613,7 @@ abstract class cls_poliza extends cls_db
 				$this->db->rollback();
 				return [
 					'data' => [
-						'res' => "Ocurrión un error en la transacción",
-						"code" => 400
+						'res' => "Ocurrión un error en la transacción"
 					],
 					'code' => 400
 				];
@@ -656,6 +655,11 @@ abstract class cls_poliza extends cls_db
 
 	protected function RegistrarLicenciaConducir()
 	{
+		if ($this->abonado == "" || $this->abonado == null) {
+			$abonado = 0;
+		} else {
+			$abonado = $this->abonado;
+		}
 		$sql = $this->db->prepare("INSERT INTO licencia(
 			cliente_id,
 			licencia_correo,
@@ -664,8 +668,10 @@ abstract class cls_poliza extends cls_db
 			licencia_licencia,
 			licencia_montoTotal,
 			licencia_abonado,
-			licencia_restante
-		)values(?,?,?,?,?,?,?,?)");
+			licencia_restante,
+			sucursal_id,
+			usuario_id
+		)values(?,?,?,?,?,?,?,?,?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
@@ -674,8 +680,10 @@ abstract class cls_poliza extends cls_db
 				$this->lente,
 				$this->licencia,
 				$this->montoTotal,
-				$this->abonado,
-				$this->restante
+				$abonado,
+				$this->restante,
+				$this->sucursal,
+				$this->usuario
 			])
 		) {
 			return $this->db->lastInsertId();
@@ -763,8 +771,8 @@ abstract class cls_poliza extends cls_db
 				$this->referencia,
 				$this->cantidadDolar = str_replace(',', '.', $this->cantidadDolar),
 				$this->precioDolar,
-				57,
-				1
+				$this->usuario,
+				$this->sucursal
 			])
 		) {
 			$this->debitoCredito = $this->db->lastInsertId();
@@ -1611,10 +1619,10 @@ abstract class cls_poliza extends cls_db
     FROM debitocredito 
     INNER JOIN usuario on usuario.usuario_id = debitocredito.usuario_id
     WHERE $where");
-		if ($motivo == 2){
+		if ($motivo == 2) {
 			$a = $sql->execute([$desde, $hasta]);
-		}else{
-			$a = $sql->execute([$motivo, $desde, $hasta]);	
+		} else {
+			$a = $sql->execute([$motivo, $desde, $hasta]);
 		}
 		if ($a) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

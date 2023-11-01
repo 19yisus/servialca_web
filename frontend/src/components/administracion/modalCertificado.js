@@ -33,7 +33,8 @@ export const ModalCertificadoMedico = (props) => {
   const cmbLentes = useRef();
   const cmbPago = useRef();
   const cmbNacionalidad = useRef();
-
+  const user = JSON.parse(localStorage.getItem("username"));
+  const sucursal = JSON.parse(localStorage.getItem("sucursal"));
   const txtDatosPastor = useRef();
   const txtReferencia = useRef();
   const txtBs = useRef();
@@ -185,6 +186,8 @@ export const ModalCertificadoMedico = (props) => {
     bodyF.append("Telefono", null);
     bodyF.append("Direccion", null);
     bodyF.append("precioDolar", dolarbcv.toFixed(2));
+    bodyF.append("Usuario", user);
+    bodyF.append("Sucursal", sucursal);
     bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
@@ -291,9 +294,9 @@ export const ModalCertificadoMedico = (props) => {
     txtCedula.current.value = cedula;
     txtApellido.current.value = apellido;
     txtNombre.current.value = nombre;
-    let item = document.getElementById("ced");
-    item.className -= " form-text fw-bold visible ";
-    item.className += " form-text fw-bold hidden ";
+    // let item = document.getElementById("ced");
+    // item.className -= " form-text fw-bold visible ";
+    // item.className += " form-text fw-bold hidden ";
     setMostrar(false);
   };
 
