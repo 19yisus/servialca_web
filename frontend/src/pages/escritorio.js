@@ -115,9 +115,10 @@ function MenuImpuestoPP(props) {
   };*/
 
   let permisos = JSON.parse(localStorage.getItem("permisos"));
-  permisos = permisos.map((item) =>
-    item.replace(" ", "").replace(" ", "").replace("de", "").toLowerCase()
-  );
+  // console.log(permisos)
+  // permisos = permisos.map((item) =>
+  //   item.replace(" ", "").replace(" ", "").replace("de", "").toLowerCase()
+  // );
 
   console.log(permisos);
   console.log(pathname.substring(0, 4));

@@ -94,13 +94,13 @@ class cls_Auth extends cls_db
       // }
 
 
-      $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
+      // $permisos = $this->Get_permisos_usuario($resultado["usuario_id"]);
       $dato = $this->GetOne($resultado["usuario_id"]);
-      if (!empty($permisos)) {
-        $lista = [];
-        foreach ($permisos as $per) {
-          array_push($lista, $per["permiso_modulo"]);
-        }
+      if (!empty($dato)) {
+        // $lista = [];
+        // foreach ($permisos as $per) {
+        //   array_push($lista, $per["permiso_modulo"]);
+        // }
 
         return [
           'data' => [
@@ -108,7 +108,7 @@ class cls_Auth extends cls_db
             'usuario' => [
               'username' => $dato["usuario_usuario"],
               'user_id' => $dato["usuario_id"],
-              'permisos' => $lista,
+              'permisos' => $dato['permisos'],
               'rol' => $dato["roles_id"],
               'RequireUpdatePass' => $PasswordUpdate
             ],
