@@ -12,6 +12,12 @@ abstract class cls_db
 
   public function __construct()
   {
+    if(isset($_POST['token']) || isset($_GET['token'])){
+      $array = decodificarToken(isset($_POST['token']) ? $_POST['token'] : $_GET['token'])['data'];
+      $token = (array) $array;
+      $this->user_id = $token['id'];
+    }
+
     $this->username = $this->password = $this->host = $this->driver = $this->charset = null;
 
     $this->username = $_ENV['USERNAME_DB'];
@@ -33,8 +39,7 @@ abstract class cls_db
     $descripcion = $datos_array['des'];
     $table_name = $datos_array['table_name'];
 
-    $sql = "INSERT INTO bitacora(descripcion, table_change, hora_fecha, id_usuario)
-        VALUES('$descripcion','$table_name',NOW(),$this->user_id)";
+    $sql = "INSERT INTO bitacora(descripcion, table_change, hora_fecha, id_usuario) VALUES('$descripcion','$table_name',NOW(),$this->user_id)";
     $this->db->query($sql);
   }
 

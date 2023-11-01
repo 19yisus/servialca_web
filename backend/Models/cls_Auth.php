@@ -131,7 +131,7 @@ class cls_Auth extends cls_db
 
     return [
       'data' => [
-        'res' => "El usuario no existe o los datos ingresados son invalidos"
+        'res' => ['text' => "El usuario no existe o los datos ingresados son invalidos", 'code' => 400]
       ],
       'code' => 400
     ];
@@ -217,14 +217,18 @@ class cls_Auth extends cls_db
         $this->permiso
       ]);
       $this->id = $this->db->lastInsertId();
-      if ($sql->rowCount() > 0)
+      if ($sql->rowCount() > 0) {
+        $this->reg_bitacora([
+          'table_name' => "usuario",
+          'des' => "Registro de datos de usuario ($this->usuario, $this->nombre, $this->apellido, $this->telefono)"
+        ]);
         return [
           'data' => [
             'res' => "Registro exitoso"
           ],
           'code' => 200
         ];
-
+      }
       return [
         'data' => [
           'res' => "El registro ha fallado, verifica que no hallas duplicado el usuario de alguien mas o tus datos sean correctos"

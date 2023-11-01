@@ -238,16 +238,7 @@ function MenuImpuestoPP(props) {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body py-0 list-group px-0">
-                        {permisos.includes("contratosrealizados") && (
-                          <a
-                            href="/contratosrealizados"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-file-signature"></i>
-                            <span>Contratos Realizados</span>
-                          </a>
-                        )}
-                        {permisos.includes("listasucursales") && (
+                        {permisos.substring(0, 1) === "1" && (
                           <a
                             href="/sucursales"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -256,7 +247,16 @@ function MenuImpuestoPP(props) {
                             <span>Lista de Sucursales</span>
                           </a>
                         )}
-                        {permisos.includes("tipocontratos") && (
+                        {permisos.substring(1, 2) === "1" && (
+                          <a
+                            href="/contratosrealizados"
+                            className="list-group-item list-group-item-action py-2 ripple"
+                          >
+                            <i class="fas fas-fw me-1 fa-file-signature"></i>
+                            <span>Contratos Realizados</span>
+                          </a>
+                        )}
+                        {permisos.substring(2, 3) === "1" && (
                           <a
                             href="/tipocontratos"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -265,7 +265,7 @@ function MenuImpuestoPP(props) {
                             <span>Tipos de Contratos</span>
                           </a>
                         )}
-                        {permisos.includes("tipocontratos") && (
+                        {permisos.substring(2, 3) === "1" && (
                           <a
                             href="/morosos"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -322,7 +322,7 @@ function MenuImpuestoPP(props) {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body py-0 list-group px-0">
-                        {permisos.includes("usovehiculo") && (
+                        {permisos.substring(3, 4) === "1" && (
                           <a
                             href="/usovehiculo"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -331,7 +331,7 @@ function MenuImpuestoPP(props) {
                             <span>Uso del Vehiculo</span>
                           </a>
                         )}
-                        {permisos.includes("clasevehiculo") && (
+                        {permisos.substring(4, 5) === "1" && (
                           <a
                             href="/clasevehiculo"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -340,7 +340,7 @@ function MenuImpuestoPP(props) {
                             <span>Clases de Vehiculos</span>
                           </a>
                         )}
-                        {permisos.includes("tipovehiculo") && (
+                        {permisos.substring(5, 6) === "1" && (
                           <a
                             href="/tipovehiculo"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -349,7 +349,7 @@ function MenuImpuestoPP(props) {
                             <span>Tipos de Vehiculos</span>
                           </a>
                         )}
-                        {permisos.includes("tipovehiculo") && (
+                        {permisos.substring(5, 6) === "1" && (
                           <a
                             href="/tipovehiculobocono"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -358,7 +358,7 @@ function MenuImpuestoPP(props) {
                             <span>Tipos de Vehiculos Bocono</span>
                           </a>
                         )}
-                        {permisos.includes("lineatransporte") && (
+                        {permisos.substring(6, 7) === "1" && (
                           <a
                             href="/transporte"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -393,7 +393,7 @@ function MenuImpuestoPP(props) {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body py-0 list-group px-0">
-                        {permisos.includes("usuarios") && (
+                        {permisos.substring(7, 8) === "1" && (
                           <a
                             href="/usarios"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -402,7 +402,7 @@ function MenuImpuestoPP(props) {
                             <span>Usuarios</span>
                           </a>
                         )}
-                        {permisos.includes("roles") && (
+                        {permisos.substring(8, 9) === "1" && (
                           <a
                             href="/roles"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -580,7 +580,11 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/listaPrecios" component={TablaPrecio} />
               <AuthRoute exact path="/licencias" component={TablaLicencias} />
               <AuthRoute exact path="/chats" component={PageChats} />
-              <AuthRoute exact path="/reporteSemanal" component={ReportesSemanal}/>
+              <AuthRoute
+                exact
+                path="/reporteSemanal"
+                component={ReportesSemanal}
+              />
 
               <AuthRoute
                 exact
