@@ -1,6 +1,6 @@
 <?php
 require './vendor/autoload.php';
- 
+
 $options = array(
   'cluster' => 'us2',
   'useTLS' => true
@@ -38,12 +38,18 @@ class Con_chat extends cls_chat
   public function crearConversacion()
   {
     $result1 = $this->buscarChats($this->user_1_id, $this->user_2_id);
-    if($result1['code'] == 200) Response($result1['data'], $result1['code']);
+    if ($result1['code'] == 200) $this->conversacion_id = $result1['conversacion_id'];
+
     $result2 = $this->buscarChats($this->user_2_id, $this->user_1_id);
-    if($result2['code'] == 200) Response($result2['data'], $result2['code']);
-    
-    $resultado = $this->iniciarConversacion();
-    Response($resultado['data'], $resultado['code']);
+    if ($result2['code'] == 200) $this->conversacion_id = $result2['conversacion_id'];
+
+    if ($this->conversacion_id != "") {
+      $resultado = $this->VerConversacion();
+      Response($resultado['data'], $resultado['code']);
+    } else {
+      $resultado = $this->iniciarConversacion();
+      Response($resultado['data'], $resultado['code']);
+    }
   }
 
   public function enviarMensaje()

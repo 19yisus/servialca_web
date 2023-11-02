@@ -105,7 +105,7 @@ abstract class cls_chat extends cls_db
       $sql = $this->db->query("SELECT * FROM  conversacion WHERE user_1_id = $user1 OR user_2_id = $user2");
 
       if ($sql->RowCount() > 0) {
-        $listado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        $listado = $sql->fetch(PDO::FETCH_ASSOC);
         return [
           "data" => [
             "res" => $listado
