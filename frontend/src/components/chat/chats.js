@@ -217,7 +217,7 @@ function PageChats() {
     bodyF.append("user_2_id", id);
 
 
-    console.log(user_id,id)
+   
 
     setActivate(true);
 
@@ -225,10 +225,12 @@ function PageChats() {
 
     await fetch(endpoint, {
       method: "POST",
+      body: bodyF,
     })
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
+        console.log(user_id,id)
         console.log(response);
   //     setRecords(response);
       })
