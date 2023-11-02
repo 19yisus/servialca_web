@@ -22,7 +22,7 @@ abstract class cls_chat extends cls_db
         VALUES(NOW(),?,?,1)");
 
       if ($sql->execute([$this->user_1_id, $this->user_2_id])) {
-
+        $id = $this->db->lastInsertId();
         $this->reg_bitacora([
           'table_name' => "conversacion",
           'des' => "Creación de conversación de los usuarios 1: $this->user_1_id, 2: $this->user_2_id"
@@ -30,7 +30,8 @@ abstract class cls_chat extends cls_db
 
         return [
           "data" => [
-            "res" => "Conversación creada!"
+            "res" => "Conversación creada!",
+            "id" => $id
           ],
           "code" => 200
         ];
@@ -164,19 +165,22 @@ abstract class cls_chat extends cls_db
   protected function VerConversacion()
   {
     try {
-      $sql = $this->db->query("SELECT * FROM sms_conversacion WHERE conversacion_id = $this->conversacion_id ORDER BY fecha_hora_sms DESC");
+      $sql = $this->db->query("SELECT * FROM sms_conversacion WHERE conversacion_id = $this->conversacion_id ORDER BY fecha_hora_sms ASC");
       if ($sql->RowCount() > 0) {
         $chat = $sql->fetchAll(PDO::FETCH_ASSOC);
         return [
           "data" => [
-            "res" => $chat
+            "res" => $chat,
+            "id" => $this->conversacion_id
           ],
           "code" => 200
         ];
       } else {
+
         return [
           "data" => [
-            "res" => "Sin mensajes disponibles"
+            "res" => "Sin mensajes disponibles",
+            "id" => $this->conversacion_id
           ],
           "code" => 400
         ];

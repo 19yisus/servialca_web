@@ -52,14 +52,16 @@ function PageChats() {
     },
   ];
 
+  const txtMensaje = useRef()
+
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [cuentas, setCuentas] = useState();
   const [montoCuenta, setMontoCuenta] = useState();
   const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
-  const [totalpresu, setTotalpresu] = useState(0.0);
+  const [idCon, setIdCon] = useState(0.0);
+  const [conversacion, setConversacion] = useState([]);
+  const [idResector, setIdResector] = useState(0.0);
   const [totaltipo, setTotaltipo] = useState(0.0);
   const [presupuesto, setPresupuesto] = useState(0.0);
   const [totalrc, setTotalrc] = useState(0.0);
@@ -222,6 +224,53 @@ function PageChats() {
     setActivate(true);
 
     //setLoading(false);
+  
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+  
+        console.log(response.res);
+        setIdCon(response.id)
+        if(response.res !== 'Conversación creada' || response.res !== 'Sin mensajes disponibles' ){
+          setConversacion(response.res)
+        } else {
+          conversacion.push({
+            content_sms:'AHORA PUEDES COMUNICARTE CON OTROS USUARIOS DEL SISTEMA',
+            fecha_hora_sms:'Ahora'
+          })
+          
+        }
+       
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  const enviarSMS = async () => {
+    let endpoint = op.conexion + "/chat/enviarMensaje";
+    let bodyF = new FormData()
+    bodyF.append("token", token);
+    bodyF.append("conversacion_id", idCon);
+    bodyF.append("remitente", user_id);
+    bodyF.append("content_sms", txtMensaje.current.value);
+
+    
+
+   
+
+    setActivate(true);
+
+    //setLoading(false);
 
     await fetch(endpoint, {
       method: "POST",
@@ -230,9 +279,11 @@ function PageChats() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(user_id,id)
+  
         console.log(response);
-  //     setRecords(response);
+        txtMensaje.current.value=''
+        listarConversaciones(idResector)
+      
       })
       .catch((error) =>
         setMensaje({
@@ -274,16 +325,50 @@ function PageChats() {
     selecionarRegistros();
   }, []);
 
+  const onChangeValidar = (e) => {
+    e.preventDefault()
+    console.log('si')
+    let sigue = true;
+    if(txtMensaje.current.value === ''){
+      sigue = false;
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: 'Debe ingresar un mensaje',
+        icono: "informacion",
+      })
+      txtMensaje.current.focus()
+
+    }
+
+    if(sigue){
+      enviarSMS()
+    }
+  }
+
 
   const consultarChat = (item) => (e) => {
     e.preventDefault()
 console.log(item)
 setNombreChat(item.usuario_nombre + ' ' + item.usuario_apellido)
+setIdResector(item.usuario_id)
 listarConversaciones(item.usuario_id)
   }
   return (
    
     <div class="container-fluid h-100">
+
+<Mensaje
+          mensaje={mensaje}
+          onHide={() => {
+           setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
     <div class="row justify-content-center h-100">
       <div class="col-md-4 col-xl-3 chat"><div class="card2 mb-sm-3 mb-md-0 contacts_card">
         <div class="card-header">
@@ -294,6 +379,7 @@ listarConversaciones(item.usuario_id)
             </div>
           </div>
         </div>
+        <input type="hidden" />
         <div class="card-body contacts_body">
           <ui class="contacts">
           
@@ -333,29 +419,38 @@ listarConversaciones(item.usuario_id)
               </div>
               <div class="user_info">
                 <span>{nombreChat}</span>
-                <p>1767 Messages</p>
+                <p>{ conversacion.length + ' Mensajes'}</p>
               </div>
               
             </div>
            
           </div>
           <div class="card-body msg_card_body">
-            <div class="d-flex justify-content-start mb-4">
-              <div class="img_cont_msg">
-                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"/>
-              </div>
-              <div class="msg_cotainer">
-                Hi, how are you samim?
-                <span class="msg_time">8:40 AM, Today</span>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end mb-4">
-              <div class="msg_cotainer_send">
-                Hi Khalid i am good tnx how about you?
-                <span class="msg_time_send">8:55 AM, Today</span>
-              </div>
-         
-            </div>
+          {conversacion &&
+  conversacion.map((item, index) => {
+    if (item.remitente !== user_id) {
+      return (
+        <div class="d-flex justify-content-start mb-4">
+          <div class="msg_cotainer">
+           {item.content_sms}
+            <span class="msg_time">{item.fecha_hora_sms} </span>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div class="d-flex justify-content-end mb-4">
+          <div class="msg_cotainer_send">
+           {item.content_sms}
+            <span class="msg_time_send">{item.fecha_hora_sms} </span>
+          </div>
+        </div>
+      );
+    }
+  })
+}
+
+           
         
           </div>
           <div class="card-footer">
@@ -363,9 +458,9 @@ listarConversaciones(item.usuario_id)
               <div class="input-group-append">
                 <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
               </div>
-              <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+              <textarea ref={txtMensaje} name="" class="form-control type_msg" placeholder="Ingrese su mensaje..."></textarea>
               <div class="input-group-append">
-                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                <button class="input-group-text send_btn" onClick={onChangeValidar} type="button"><i class="fas fa-location-arrow"></i></button>
               </div>
             </div>
           </div>
