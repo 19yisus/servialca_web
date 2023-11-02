@@ -52,6 +52,26 @@ function Panel() {
   const [totalact, setTotalact] = useState(0.0);
   const [idRol, setIdRol] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+  const [values, setValues] = useState({
+    ced: "",
+    nombre: "",
+    apellido: "",
+    fecha_nac: "",
+    bas_agua: 1,
+
+    status: 1,
+    bas_espirit: 1,
+    cod_iglesia: "",
+    sexo: "M",
+    fecha_baus: "",
+    nacionalidad: "V",
+    direccion: "",
+    telefono: "",
+    celular: "",
+    estadocivil: 0,
+    correo: "",
+    tiposangre: "",
+  });
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -106,15 +126,25 @@ function Panel() {
     ],
   };
 
-  {/*const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/panel/ConsultarTodos";
-    console.log(endpoint);
+  const blanquear = () => {
+    setValues({
+      ced: "",
+      nombre: "",
+      apellido: "",
+      fecha_nac: "",
+      bas_agua: 1,
+
+      status: 1,
+      bas_espirit: 1,
+      cod_iglesia: "",
+      sexo: "M",
+    });
+  };
+
+  const seleccionarRegistrosTexto = async () => {
+    let endpoint = op.conexion + "/panel/ConsultarTodosTexts";
     setActivate(true);
-
-    //setLoading(false);
-
     let bodyF = new FormData();
-
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -123,7 +153,9 @@ function Panel() {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        setRecords(response);
+       
+        text_home.current.value = response.text_home;
+        setValues(response);
       })
       .catch((error) =>
         setMensaje({
@@ -133,7 +165,7 @@ function Panel() {
           icono: "informacion",
         })
       );
-  };*/}
+  };
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/panel/ConsultarTag";
@@ -148,14 +180,10 @@ function Panel() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-        console.log(response);
         let carrusel_1 = "";
         let carrusel_2 = "";
         let carrusel_3 = "";
-
         console.log("aqui");
-
         for (let i = 0; i < response.length; i++) {
           if (response[i].tag && response[i].tag.toString() === "carrusel_1") {
             carrusel_1 = response[i].ruta_img;
@@ -247,7 +275,7 @@ function Panel() {
 
   useEffect(() => {
     selecionarRegistros();
-   // selecionarRegistrosTag();
+    seleccionarRegistrosTexto();
   }, []);
 
   const onChangeValidar = (e) => {
@@ -273,18 +301,37 @@ function Panel() {
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_1+"')" }}
+                  style={{
+                    height: "170px",
+                    width: "100%",
+                    backgroundImage:
+                      "url('" +
+                      op.conexion +
+                      "/ImgPanel/" +
+                      records.carrusel_1 +
+                      "')",
+                  }}
                   name="carrusel_1"
                   ref={carrusel_1}
                   class="form-control bg-transparent border "
-                  onChange={(e)=>{console.log(e.target.value)}}
-                  
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                  }}
                 />
               </div>
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_2+"')" }}
+                  style={{
+                    height: "170px",
+                    width: "100%",
+                    backgroundImage:
+                      "url('" +
+                      op.conexion +
+                      "/ImgPanel/" +
+                      records.carrusel_2 +
+                      "')",
+                  }}
                   name="carrusel_2"
                   ref={carrusel_2}
                   class="form-control bg-transparent border "
@@ -293,7 +340,16 @@ function Panel() {
               <div class="col-md-4 px-0">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%",backgroundImage:"url('"+op.conexion + "/ImgPanel/" + records.carrusel_3+"')" }}
+                  style={{
+                    height: "170px",
+                    width: "100%",
+                    backgroundImage:
+                      "url('" +
+                      op.conexion +
+                      "/ImgPanel/" +
+                      records.carrusel_3 +
+                      "')",
+                  }}
                   name="carrusel_3"
                   ref={carrusel_3}
                   class="form-control bg-transparent border "
@@ -318,7 +374,6 @@ function Panel() {
 
               <div class="col-md-8">
                 <textarea
-                  name="text_home"
                   ref={text_home}
                   class="form-control"
                   id="exampleFormControlTextarea1"

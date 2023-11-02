@@ -131,7 +131,7 @@ const CatalogoAcesor = props => {
 
     const seleccionarClase = (index) => (event) => {
      
-        var nom = recordsAfterPagingAndSorting()[index].usuario_nombre;
+        var nom = recordsAfterPagingAndSorting()[index].usuario_usuario;
         
       
         blanquear();
