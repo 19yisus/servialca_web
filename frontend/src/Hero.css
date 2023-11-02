@@ -1618,17 +1618,21 @@ div#slider figure {
     margin-bottom: auto;
   }
   .card2{
-    height: 80vh;
+   height: 82vh;
     border-radius: 15px !important;
     background-color: rgba(0,0,0,0.4) !important;
   }
   .contacts_body{
     padding:  0.75rem 0 !important;
-    overflow-y: auto;
+   
     white-space: nowrap;
+    max-height: 90%;
+    overflow-y: scroll;
   }
   .msg_card_body{
     overflow-y: auto;
+    min-height: 75%;
+    overflow-y: scroll;
   }
   .card-header{
     border-radius: 15px 15px 0 0 !important;
@@ -1692,11 +1696,17 @@ background-color: rgba(0,0,0,0.3) !important;
     padding: 5px 10px;
     margin-bottom: 15px !important;
   }
-
+.active{
+    background-color: rgba(0,0,0,0.3);
+}
   .user_img{
-    height: 40px;
-    width: 40px;
-    border:1.5px solid #f5f6fa;
+    font-size: 35px;   
+
+   
+  
+  }
+  .user_img2{
+ font-size: 35px;   
   
   }
   .user_img_msg{
@@ -1825,5 +1835,5 @@ margin: 0;
 @media(max-width: 576px){
 .contacts_card{
   margin-bottom: 15px !important;
-}}
-
+}
+}
