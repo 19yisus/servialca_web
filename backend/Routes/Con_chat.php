@@ -5,12 +5,12 @@ $options = array(
   'cluster' => 'us2',
   'useTLS' => true
 );
-$pusher = new Pusher\Pusher(
-  '0de0045a64400606066e',
-  '9924920562895d4b64f2',
-  '1696319',
-  $options
-);
+//$pusher = new Pusher\Pusher(
+ // '0de0045a64400606066e',
+  //'9924920562895d4b64f2',
+  //'1696319',
+ // $options
+//);
 
 require_once("./Models/cls_chat.php");
 
