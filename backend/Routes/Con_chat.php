@@ -38,10 +38,10 @@ class Con_chat extends cls_chat
   public function crearConversacion()
   {
     $result1 = $this->buscarChats($this->user_1_id, $this->user_2_id);
-    if ($result1['code'] == 200) $this->conversacion_id = $result1['conversacion_id'];
+    if ($result1['code'] == 200) $this->conversacion_id = $result1['data']['res']['id_con'];
 
     $result2 = $this->buscarChats($this->user_2_id, $this->user_1_id);
-    if ($result2['code'] == 200) $this->conversacion_id = $result2['conversacion_id'];
+    if ($result2['code'] == 200) $this->conversacion_id = $result2['data']['res']['id_con'];
 
     if ($this->conversacion_id != "") {
       $resultado = $this->VerConversacion();

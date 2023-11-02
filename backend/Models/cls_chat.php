@@ -102,7 +102,7 @@ abstract class cls_chat extends cls_db
   protected function buscarChats($user1, $user2)
   {
     try {
-      $sql = $this->db->query("SELECT * FROM  conversacion WHERE user_1_id = $user1 OR user_2_id = $user2");
+      $sql = $this->db->query("SELECT * FROM  conversacion WHERE user_1_id = $user1 AND user_2_id = $user2");
 
       if ($sql->RowCount() > 0) {
         $listado = $sql->fetch(PDO::FETCH_ASSOC);
