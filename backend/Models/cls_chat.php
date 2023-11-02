@@ -69,7 +69,7 @@ abstract class cls_chat extends cls_db
         VALUES(?,?,NOW(),?)");
 
       if ($sql->execute([$this->conversacion_id, $this->remitente, $this->content_sms])) {
-        
+
         $this->reg_bitacora([
           'table_name' => "sms_conversacion",
           'des' => "Envio de mensaje, remitente: $this->remitente, id_conversación: $this->conversacion_id"
@@ -89,6 +89,37 @@ abstract class cls_chat extends cls_db
         ],
         "code" => 400
       ];
+    } catch (PDOException $e) {
+      return [
+        "data" => [
+          'res' => "Error de consulta: " . $e->getMessage()
+        ],
+        "code" => 400
+      ];
+    }
+  }
+
+  protected function buscarChats($user1, $user2)
+  {
+    try {
+      $sql = $this->db->query("SELECT * FROM  conversacion WHERE user_1_id = $user1 OR user_2_id = $user2");
+
+      if ($sql->RowCount() > 0) {
+        $listado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        return [
+          "data" => [
+            "res" => $listado
+          ],
+          "code" => 200
+        ];
+      } else {
+        return [
+          "data" => [
+            "res" => "Sin conversaciones disponibles"
+          ],
+          "code" => 400
+        ];
+      }
     } catch (PDOException $e) {
       return [
         "data" => [

@@ -37,6 +37,11 @@ class Con_chat extends cls_chat
 
   public function crearConversacion()
   {
+    $result1 = $this->buscarChats($this->user_1_id, $this->user_2_id);
+    if($result1['code'] == 200) Response($result1['data'], $result1['code']);
+    $result2 = $this->buscarChats($this->user_2_id, $this->user_1_id);
+    if($result2['code'] == 200) Response($result2['data'], $result2['code']);
+    
     $resultado = $this->iniciarConversacion();
     Response($resultado['data'], $resultado['code']);
   }
