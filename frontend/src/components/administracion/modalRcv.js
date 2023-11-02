@@ -35,6 +35,7 @@ export const ModalRcv = (props) => {
   const user = JSON.parse(localStorage.getItem("username"));
   const idUser = JSON.parse(localStorage.getItem("user_id"));
   const suc = JSON.parse(localStorage.getItem("sucursal"));
+  const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const [value, setValue] = useState("");
   //ID
   const idPoliza = useRef();
@@ -160,7 +161,6 @@ export const ModalRcv = (props) => {
   const [operacion, setOperacion] = useState(0);
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
- 
 
   const salir = () => {
     props.onHideCancela();
@@ -311,7 +311,7 @@ export const ModalRcv = (props) => {
     let bodyF = new FormData();
     bodyF.append("Contrato", TxtTipoContrato.current.value);
     bodyF.append("Tipo", cmbTipo.current.value);
-    bodyF.append("Sucursal", cmbSucursal.current.value);
+    bodyF.append("Sucursal", suc);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -319,6 +319,8 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
+        txtDolar.current.value = response[0]["precio_monto"];
+        txtBs.current.value = response[0]["precio_monto"] * dolarbcv; 
         console.log("tipo contrato");
         setTipoContrato(response);
         console.log(response);
@@ -527,14 +529,14 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarTipo = async () => {
-    let endpoint = op.conexion + "/tipo_vehiculo /ConsultarTodos";
+    let endpoint =op.conexion +"/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
     setActivate(true);
 
     //setLoading(false);
 
     let bodyF = new FormData();
 
-    // bodyF.append("ID", user_id)
+    // bodyF.append("Sucursal",);
 
     await fetch(endpoint, {
       method: "POST",
@@ -652,6 +654,7 @@ export const ModalRcv = (props) => {
     txtPeso.current.value = peso;
     txtCapTon.current.value = capTotal;
     setMostrar(false);
+    selecionarPrecio();
   };
   const seleccionarTitular = (nombre, apellido, cedula, nacionalidad) => {
     setMostrar9(false);
@@ -1364,7 +1367,7 @@ export const ModalRcv = (props) => {
 
                     <input
                       disabled
-                      defaultValue={suc === 1 ? user : ""}
+                      defaultValue={operacion === 1 ? suc : ""}
                       type="text"
                       class="form-control"
                       ref={cmbSucursal}

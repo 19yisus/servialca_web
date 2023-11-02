@@ -14,7 +14,7 @@ function TablaTipoVehiculo() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -186,7 +186,8 @@ function TablaTipoVehiculo() {
   };
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarTodos";
+    let endpoint =
+      op.conexion + "/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
     console.log(endpoint);
     setActivate(true);
 

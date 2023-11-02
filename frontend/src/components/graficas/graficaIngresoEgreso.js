@@ -168,7 +168,7 @@ function GraficosIngresos() {
           octubre,
           noviembre,
           diciembre,
-          ],
+        ],
         backgroundColor: "rgb(149, 187, 227)",
       },
     ],
@@ -239,7 +239,10 @@ function GraficosIngresos() {
             sumaRcv++;
           } else if (item.nota_motivo === "Renovación") {
             sumaRenovacion++;
-          } else if (item.nota_motivo === "Seguro"|| item.nota_motivo === "Medico") {
+          } else if (
+            item.nota_motivo === "Seguro" ||
+            item.nota_motivo === "Medico"
+          ) {
             sumaSeguro++;
           } else if (item.nota_IngresoEgreso === 0) {
             sumaEgreso++;
@@ -446,8 +449,17 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_tipoPago}
+                      {item.nota_tipoPago === 0
+                        ? "Pago Móvil"
+                        : item.nota_tipoPago === 1
+                        ? "Efectivo"
+                        : item.nota_tipoPago === 2
+                        ? "Transferencia"
+                        : item.nota_tipoPago === 3
+                        ? "Punto"
+                        : "Método Desconocido"}
                     </TableCell>
+
                     <TableCell
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}

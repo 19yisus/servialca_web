@@ -348,8 +348,10 @@ function ReportesSemanal() {
             onChange={(e) => (hasta.current = e.target.value)}
           />
           <input
+            value={"Buscar"}
+            style={{ backgroundColor: "white", color: "black",  }}
             type="button"
-            className=" col-3"
+            className=" col-2"
             placeholder="Buscar"
             onClick={selecionarRegistros}
           />

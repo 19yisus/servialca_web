@@ -16,7 +16,7 @@ import axios from "axios";
 const CatalogoTipo = (props) => {
   let op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-
+  const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const btnCancela = useRef();
   const [mostrar, setMostrar] = useState(false);
   const [titulo, setTitulo] = useState();
@@ -78,11 +78,11 @@ const CatalogoTipo = (props) => {
         } else {
           return items.filter((x) => {
             if (
-              x.cliente_cedula.includes(target.value) ||
-              x.cliente_nombre
+              x.tipoVehiculo_nombre.includes(target.value) ||
+              x.tipoVehiculo_nombre
                 .toLowerCase()
                 .includes(target.value.toLowerCase()) ||
-              x.cliente_apellido
+              x.precio_monto
                 .toLowerCase()
                 .includes(target.value.toLowerCase())
             ) {
@@ -102,7 +102,7 @@ const CatalogoTipo = (props) => {
     //setLoading(false);
 
     let bodyF = new FormData();
-
+    bodyF.append("sucursal", idsucursal);
     // bodyF.append("ID", user_id)
 
     await fetch(endpoint, {
@@ -164,7 +164,8 @@ const CatalogoTipo = (props) => {
       backdrop="static"
       keyboard={false}
       onShow={() => {
-        selecionarRegistros();
+        // selecionarRegistros();
+        setRecords(props.records)
       }}
     >
       <Modal.Header className="bg-danger">
