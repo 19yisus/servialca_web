@@ -191,6 +191,7 @@ function PageChats() {
 
     await fetch(endpoint, {
       method: "POST",
+      body: bodyF,
     })
       .then((res) => res.json())
       .then((response) => {
