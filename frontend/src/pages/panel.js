@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 
 import { Mensaje } from "../components/mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
@@ -21,22 +21,22 @@ function Panel() {
 
   console.log(user_id);
 
-  const carrusel_1 = useState();
-  const carrusel_2 = useState();
-  const carrusel_3 = useState();
-  const img_home = useState();
-  const text_home = useState();
-  const img_about = useState();
-  const text_about = useState();
-  const text_mision = useState();
-  const text_vision = useState();
-  const text_ubicacion = useState();
-  const text_correo = useState();
-  const text_telefono = useState();
-  const text_banner = useState();
-  const img_banner = useState();
-  const img_login = useState();
-  const text_fax = useState;
+  const carrusel_1 = useRef();
+  const carrusel_2 = useRef();
+  const carrusel_3 = useRef();
+  const img_home = useRef();
+  const text_home = useRef();
+  const img_about = useRef();
+  const text_about = useRef();
+  const text_mision = useRef();
+  const text_vision = useRef();
+  const text_ubicacion = useRef();
+  const text_correo = useRef();
+  const text_telefono = useRef();
+  const text_banner = useRef();
+  const img_banner = useRef();
+  const img_login = useRef();
+  const text_fax = useRef();
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
   const [operacion, setOperacion] = useState();
@@ -154,7 +154,14 @@ function Panel() {
         setActivate(false);
         console.log(response);
        
-        text_home.current.value = response.text_home;
+        text_home.current.value = response[0].text_home;
+       text_about.current.value = response[0].text_about;
+       text_mision.current.value = response[0].text_mision;
+       text_vision.current.value = response[0].text_vision;
+       text_ubicacion.current.value = response[0].text_ubicacion;
+       text_correo.current.value = response[0].text_correo;
+       text_telefono.current.value = response[0].text_telefono;
+       text_banner.current.value = response[0].text_banner;
         setValues(response);
       })
       .catch((error) =>
@@ -285,6 +292,9 @@ function Panel() {
 
   return (
     <div className="col-md-12 mx-auto">
+        {/*<Dimmer active={activate} inverted>
+          <Loader inverted>cargando...</Loader>
+  </Dimmer>*/}
       <div className="col-md-12 px-0 mx-auto ">
         <div class="col-md-12 mx-auto row px-2 py-4 mt-5">
           <form
@@ -293,7 +303,8 @@ function Panel() {
             class="col-md-12 mx-auto row bg-light mt-4 rounded py-3"
           >
             <h3 class="mx-auto">Panel de Control</h3>
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+            <fieldset class=" row mx-auto col-md-12 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
               <div class="col-md-12 ">
                 <label class="fw-bold w-auto ">Imagenes del Carrusel</label>
               </div>
@@ -355,16 +366,18 @@ function Panel() {
                   class="form-control bg-transparent border "
                 />
               </div>
+              </div>
             </fieldset>
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+            <fieldset class=" row mx-auto col-md-4 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
               <div class="col-md-12 ">
                 <label class="fw-bold w-auto ">Home</label>
               </div>
 
-              <div class="col-md-4 px-0">
+              <div class="col-md-12 px-0 mb-1">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "80px", width: "100%" }}
                   id="img_home"
                   ref={img_home}
                   name="home_1"
@@ -372,7 +385,7 @@ function Panel() {
                 />
               </div>
 
-              <div class="col-md-8">
+              <div class="col-md-12 px-0">
                 <textarea
                   ref={text_home}
                   class="form-control"
@@ -381,16 +394,18 @@ function Panel() {
                   rows="6"
                 ></textarea>
               </div>
+              </div>
             </fieldset>
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+            <fieldset class=" row mx-auto col-md-4 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
               <div class="col-md-12 ">
                 <label class="fw-bold w-auto ">Quienes Somos</label>
               </div>
 
-              <div class="col-md-4 px-0">
+              <div class="col-md-12 px-0 mb-1">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "80px", width: "100%" }}
                   id="img_about"
                   ref={img_about}
                   name="about_1"
@@ -398,7 +413,7 @@ function Panel() {
                 />
               </div>
 
-              <div class="col-md-8">
+              <div class="col-md-12 px-0">
                 <textarea
                   name="text_about"
                   ref={text_about}
@@ -408,10 +423,12 @@ function Panel() {
                   rows="6"
                 ></textarea>
               </div>
+              </div>
             </fieldset>
 
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
-              <div class="col-md-6">
+            <fieldset class=" row mx-auto col-md-4 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+              <div class="col-md-12 px-0">
                 <label
                   for="exampleFormControlTextarea1"
                   class="form-label fw-bold"
@@ -426,7 +443,7 @@ function Panel() {
                   rows="3"
                 ></textarea>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-12 px-0">
                 <label
                   for="exampleFormControlTextarea1"
                   class="form-label fw-bold"
@@ -441,14 +458,16 @@ function Panel() {
                   rows="3"
                 ></textarea>
               </div>
+              </div>
             </fieldset>
 
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+            <fieldset class=" row mx-auto col-md-5 mb-1 px-0">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
               <div class="col-md-12 mb-2">
                 <label class="fw-bold w-auto ">Contactanos</label>
               </div>
 
-              <div class="mb-2 col-md-6">
+              <div class="mb-2 col-md-12">
                 <label class="form-label">Ubicación</label>
                 <input
                   type="input"
@@ -457,7 +476,7 @@ function Panel() {
                   class="form-control"
                 />
               </div>
-              <div class="mb-2 col-md-6">
+              <div class="mb-2 col-md-12">
                 <label class="form-label">Correo Electronico</label>
                 <input
                   type="email"
@@ -466,7 +485,7 @@ function Panel() {
                   class="form-control"
                 />
               </div>
-              <div class="mb-2 col-md-6">
+              <div class="mb-2 col-md-12">
                 <label class="form-label">Telefono</label>
                 <input
                   type="input"
@@ -475,11 +494,11 @@ function Panel() {
                   class="form-control"
                 />
               </div>
-              {/* <div class="mb-2 col-md-6">
+              {/* <div class="mb-2 col-md-12">
                 <label class="form-label">Fax</label>
                 <input type="input" name="text_fax" class="form-control" />
               </div> */}
-              <div class="mb-2 col-md-6">
+              <div class="mb-2 col-md-12">
                 <label class="form-label">Banner de Texto</label>
                 <input
                   type="text"
@@ -488,40 +507,48 @@ function Panel() {
                   class="form-control"
                 />
               </div>
+              </div>
             </fieldset>
-            {
-              <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+        <div className="col-md-7 row">
+        <fieldset class=" row mx-auto col-md-12 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
                 <div class="col-md-12 mb-2">
                   <label class="fw-bold w-auto ">Banner</label>
                 </div>
 
-                <div class="col-md-4 px-0 mx-auto mb-3">
+                <div class="col-md-12 px-0 mx-auto mb-1">
                   <input
                     type="file"
-                    style={{ height: "170px", width: "100%" }}
+                    style={{ height: "80px", width: "100%" }}
                     ref={img_banner}
                     id="img_banner"
                     name="img_banner"
                     class="form-control bg-transparent border "
                   />
                 </div>
+                </div>
               </fieldset>
-            }
+          
 
-            <fieldset class="border border-danger rounded p-2 row mx-auto col-md-12 mb-3">
+              <fieldset class=" row mx-auto col-md-12 mb-1">
+            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
               <div class="col-md-12 ">
                 <label class="fw-bold w-auto">Login</label>
               </div>
               <div class="col-md-12">
                 <input
                   type="file"
-                  style={{ height: "170px", width: "100%" }}
+                  style={{ height: "80px", width: "100%" }}
                   ref={img_login}
                   name="img_banner"
                   class="form-control bg-transparent border "
                 />
               </div>
+              </div>
+
             </fieldset>
+        </div>
+            
 
             <button
               onClick={onChangeValidar}

@@ -165,19 +165,22 @@ abstract class cls_chat extends cls_db
   protected function VerConversacion()
   {
     try {
-      $sql = $this->db->query("SELECT * FROM sms_conversacion WHERE conversacion_id = $this->conversacion_id ORDER BY fecha_hora_sms DESC");
+      $sql = $this->db->query("SELECT * FROM sms_conversacion WHERE conversacion_id = $this->conversacion_id ORDER BY fecha_hora_sms ASC");
       if ($sql->RowCount() > 0) {
         $chat = $sql->fetchAll(PDO::FETCH_ASSOC);
         return [
           "data" => [
-            "res" => $chat
+            "res" => $chat,
+            "id" => $this->conversacion_id
           ],
           "code" => 200
         ];
       } else {
+
         return [
           "data" => [
-            "res" => "Sin mensajes disponibles"
+            "res" => "Sin mensajes disponibles",
+            "id" => $this->conversacion_id
           ],
           "code" => 400
         ];
