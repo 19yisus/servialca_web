@@ -192,7 +192,7 @@ function TablaMorosos() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/sucursal/ConsultarTodos";
+    let endpoint = op.conexion + "/moroso/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
@@ -330,39 +330,37 @@ function TablaMorosos() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_id}
+                    {item.poliza_id}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.cliente_nombre + " " + item.cliente_apellido}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.sucursal_estatus) === 1
-                      ? "ACTIVO"
-                      : "INACTIVO"}
+                    {item.cliente_cedula}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.vehiculo_placa}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.moroso_abonado}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.sucursal_nombre}
+                    {item.moroso_restante}
                   </TableCell>
                 </TableRow>
               ))}
