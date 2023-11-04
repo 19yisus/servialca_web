@@ -61,10 +61,17 @@ export const GestionarPreguntas = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        txtP1.current.value = response[0].des_pregunta;
-        txtP2.current.value = response[0].des_pregunta2;
-        txtR1.current.value = response[0].des_respuesta;
-        txtR2.current.value = response[0].des_respuesta2;
+        if (response != "" && response != null) {
+          txtP1.current.value = response[0].des_pregunta;
+          txtP2.current.value = response[0].des_pregunta2;
+          txtR1.current.value = response[0].des_respuesta;
+          txtR2.current.value = response[0].des_respuesta2;
+        }else{
+          txtP1.current.value = "";
+          txtP2.current.value = "";
+          txtR1.current.value = "";
+          txtR2.current.value = "";
+        }
       });
   };
 

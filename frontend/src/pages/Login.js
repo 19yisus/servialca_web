@@ -11,14 +11,29 @@ import { GestionarClave } from "../components/seguridad/cambiarClavePersonal";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
-
+  const img_login = useRef();
   let op = require("../modulos/datos");
   const [bloquear, setBloquear] = useState(0);
   const context = useContext(AuthContext);
+
   const [activate, setActivate] = useState(false);
+  const [records, setRecords] = useState([
+    {
+      idproducto: "",
+      codigo: "",
+      cantidad: "",
+      producto: "",
+      precio: "",
+      iva: "",
+      motoiva: "",
+      descuento: "",
+      total: "",
+    },
+  ]);
 
   const [token, setToken] = useState();
   const [idzona, setIdZona] = useState();
+
   const [mostrar, setMostrar] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -33,6 +48,7 @@ function Login(props) {
   });
 
   useEffect(() => {
+    selecionarRegistros();
     context.logout();
   }, []);
 
@@ -79,7 +95,85 @@ function Login(props) {
         });
       });
   };
+  const selecionarRegistros = async () => {
+    let endpoint = op.conexion + "/panel/ConsultarTag";
+    setActivate(true);
+    //setLoading(false);
+    let bodyF = new FormData();
+    bodyF.append("tag", "carrusel");
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        let carrusel_1 = "";
+        let carrusel_2 = "";
+        let carrusel_3 = "";
+        let img_home = "";
+        let img_about = "";
+        let img_banner = "";
+        let img_login = "";
+        console.log("aqui");
+        for (let i = 0; i < response.length; i++) {
+          if (response[i].tag && response[i].tag.toString() === "carrusel_1") {
+            carrusel_1 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "carrusel_2"
+          ) {
+            carrusel_2 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "carrusel_3"
+          ) {
+            carrusel_3 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_home"
+          ) {
+            img_home = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_about"
+          ) {
+            img_about = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_banner"
+          ) {
+            img_banner = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_login"
+          ) {
+            img_login = response[i].ruta_img;
+          }
+        }
 
+        setRecords({
+          carrusel_1: carrusel_1,
+          carrusel_2: carrusel_2,
+          carrusel_3: carrusel_3,
+          img_home: img_home,
+          img_about: img_about,
+          img_banner: img_banner,
+          img_login: img_login,
+        });
+
+        console.log(records);
+        console.log("aqui3");
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const sinIgn = async () => {
     let endpoint = op.conexion + "/Auth/login";
     console.log(endpoint);
@@ -139,7 +233,7 @@ function Login(props) {
             "sucursal",
             JSON.stringify(response.data.usuario[1].name)
           );
-          
+
           setMensaje({
             mostrar: true,
             titulo: "Exito.",
@@ -406,18 +500,21 @@ function Login(props) {
         </Dimmer>
         <div class="row g-0">
           <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
-            <video controls>
-              <source
-                src="./servialca.mp4"
-                width="100%"
-                height="100%"
-                loop
-                autoplay
-                controls
-                type="video/mp4"
-              />
-              Tu navegador no soporta la reproducción de video.
-            </video>
+            <div
+              style={{
+                height: "100vh",
+                width: "100%",
+                backgroundImage:
+                  "url('" +
+                  op.conexion +
+                  "/ImgPanel/" +
+                  records.img_login +
+                  "')",
+                backgroundSize: "cover",
+              }}
+              ref={img_login}
+              name="img_login"
+            />
           </div>
           <div class="col-md-8 col-lg-6">
             <div class="login d-flex align-items-center ">
