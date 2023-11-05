@@ -265,7 +265,7 @@ function MenuImpuestoPP(props) {
                             <span>Tipos de Contratos</span>
                           </a>
                         )}
-                        {permisos.substring(2, 3) === "1" && (
+                        {/* {permisos.substring(2, 3) === "1" && (
                           <a
                             href="/morosos"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -273,7 +273,7 @@ function MenuImpuestoPP(props) {
                             <i class="fas fas-fw me-1 fa-hand-holding-usd"></i>
                             <span>Listado de Morosos</span>
                           </a>
-                        )}
+                        )} */}
                         <a
                           href="/documento"
                           className="list-group-item list-group-item-action py-2 ripple"

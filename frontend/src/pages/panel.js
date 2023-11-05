@@ -153,15 +153,15 @@ function Panel() {
       .then((response) => {
         setActivate(false);
         console.log(response);
-       
+
         text_home.current.value = response[0].text_home;
-       text_about.current.value = response[0].text_about;
-       text_mision.current.value = response[0].text_mision;
-       text_vision.current.value = response[0].text_vision;
-       text_ubicacion.current.value = response[0].text_ubicacion;
-       text_correo.current.value = response[0].text_correo;
-       text_telefono.current.value = response[0].text_telefono;
-       text_banner.current.value = response[0].text_banner;
+        text_about.current.value = response[0].text_about;
+        text_mision.current.value = response[0].text_mision;
+        text_vision.current.value = response[0].text_vision;
+        text_ubicacion.current.value = response[0].text_ubicacion;
+        text_correo.current.value = response[0].text_correo;
+        text_telefono.current.value = response[0].text_telefono;
+        text_banner.current.value = response[0].text_banner;
         setValues(response);
       })
       .catch((error) =>
@@ -190,6 +190,10 @@ function Panel() {
         let carrusel_1 = "";
         let carrusel_2 = "";
         let carrusel_3 = "";
+        let img_home = "";
+        let img_about = "";
+        let img_banner = "";
+        let img_login = "";
         console.log("aqui");
         for (let i = 0; i < response.length; i++) {
           if (response[i].tag && response[i].tag.toString() === "carrusel_1") {
@@ -204,15 +208,37 @@ function Panel() {
             response[i].tag.toString() === "carrusel_3"
           ) {
             carrusel_3 = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_home"
+          ) {
+            img_home = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_about"
+          ) {
+            img_about = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_banner"
+          ) {
+            img_banner = response[i].ruta_img;
+          } else if (
+            response[i].tag &&
+            response[i].tag.toString() === "img_login"
+          ) {
+            img_login = response[i].ruta_img;
           }
         }
-
-        console.log("aqui2");
 
         setRecords({
           carrusel_1: carrusel_1,
           carrusel_2: carrusel_2,
           carrusel_3: carrusel_3,
+          img_home: img_home,
+          img_about: img_about,
+          img_banner: img_banner,
+          img_login: img_login,
         });
 
         console.log(records);
@@ -292,7 +318,7 @@ function Panel() {
 
   return (
     <div className="col-md-12 mx-auto">
-        {/*<Dimmer active={activate} inverted>
+      {/*<Dimmer active={activate} inverted>
           <Loader inverted>cargando...</Loader>
   </Dimmer>*/}
       <div className="col-md-12 px-0 mx-auto ">
@@ -304,251 +330,284 @@ function Panel() {
           >
             <h3 class="mx-auto">Panel de Control</h3>
             <fieldset class=" row mx-auto col-md-12 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 ">
-                <label class="fw-bold w-auto ">Imagenes del Carrusel</label>
-              </div>
+              <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                <div class="col-md-12 ">
+                  <label class="fw-bold w-auto ">Imagenes del Carrusel</label>
+                </div>
 
-              <div class="col-md-4 px-0">
-                <input
-                  type="file"
-                  style={{
-                    height: "170px",
-                    width: "100%",
-                    backgroundImage:
-                      "url('" +
-                      op.conexion +
-                      "/ImgPanel/" +
-                      records.carrusel_1 +
-                      "')",
-                  }}
-                  name="carrusel_1"
-                  ref={carrusel_1}
-                  class="form-control bg-transparent border "
-                  onChange={(e) => {
-                    console.log(e.target.value);
-                  }}
-                />
-              </div>
-              <div class="col-md-4 px-0">
-                <input
-                  type="file"
-                  style={{
-                    height: "170px",
-                    width: "100%",
-                    backgroundImage:
-                      "url('" +
-                      op.conexion +
-                      "/ImgPanel/" +
-                      records.carrusel_2 +
-                      "')",
-                  }}
-                  name="carrusel_2"
-                  ref={carrusel_2}
-                  class="form-control bg-transparent border "
-                />
-              </div>
-              <div class="col-md-4 px-0">
-                <input
-                  type="file"
-                  style={{
-                    height: "170px",
-                    width: "100%",
-                    backgroundImage:
-                      "url('" +
-                      op.conexion +
-                      "/ImgPanel/" +
-                      records.carrusel_3 +
-                      "')",
-                  }}
-                  name="carrusel_3"
-                  ref={carrusel_3}
-                  class="form-control bg-transparent border "
-                />
-              </div>
+                <div class="col-md-4 px-0">
+                  <input
+                    type="file"
+                    style={{
+                      height: "170px",
+                      width: "100%",
+                      backgroundImage:
+                        "url('" +
+                        op.conexion +
+                        "/ImgPanel/" +
+                        records.carrusel_1 +
+                        "')",
+                    }}
+                    name="carrusel_1"
+                    ref={carrusel_1}
+                    class="form-control bg-transparent border "
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                    }}
+                  />
+                </div>
+                <div class="col-md-4 px-0">
+                  <input
+                    type="file"
+                    style={{
+                      height: "170px",
+                      width: "100%",
+                      backgroundImage:
+                        "url('" +
+                        op.conexion +
+                        "/ImgPanel/" +
+                        records.carrusel_2 +
+                        "')",
+                    }}
+                    name="carrusel_2"
+                    ref={carrusel_2}
+                    class="form-control bg-transparent border "
+                  />
+                </div>
+                <div class="col-md-4 px-0">
+                  <input
+                    type="file"
+                    style={{
+                      height: "170px",
+                      width: "100%",
+                      backgroundImage:
+                        "url('" +
+                        op.conexion +
+                        "/ImgPanel/" +
+                        records.carrusel_3 +
+                        "')",
+                    }}
+                    name="carrusel_3"
+                    ref={carrusel_3}
+                    class="form-control bg-transparent border "
+                  />
+                </div>
               </div>
             </fieldset>
             <fieldset class=" row mx-auto col-md-4 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 ">
-                <label class="fw-bold w-auto ">Home</label>
-              </div>
+              <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                <div class="col-md-12 ">
+                  <label class="fw-bold w-auto ">Home</label>
+                </div>
 
-              <div class="col-md-12 px-0 mb-1">
-                <input
-                  type="file"
-                  style={{ height: "80px", width: "100%" }}
-                  id="img_home"
-                  ref={img_home}
-                  name="home_1"
-                  class="form-control bg-transparent border "
-                />
-              </div>
+                <div class="col-md-12 px-0 mb-1">
+                  <input
+                    type="file"
+                    style={{
+                      height: "80px",
+                      width: "100%",
+                      backgroundImage:
+                        "url('" +
+                        op.conexion +
+                        "/ImgPanel/" +
+                        records.img_home +
+                        "')",
+                    }}
+                    ref={img_home}
+                    name="img_home"
+                    class="form-control bg-transparent border "
+                  />
+                </div>
 
-              <div class="col-md-12 px-0">
-                <textarea
-                  ref={text_home}
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  placeholder="Agregar una descripción"
-                  rows="6"
-                ></textarea>
-              </div>
+                <div class="col-md-12 px-0">
+                  <textarea
+                    ref={text_home}
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    placeholder="Agregar una descripción"
+                    rows="6"
+                  ></textarea>
+                </div>
               </div>
             </fieldset>
             <fieldset class=" row mx-auto col-md-4 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 ">
-                <label class="fw-bold w-auto ">Quienes Somos</label>
-              </div>
+              <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                <div class="col-md-12 ">
+                  <label class="fw-bold w-auto ">Quienes Somos</label>
+                </div>
 
-              <div class="col-md-12 px-0 mb-1">
-                <input
-                  type="file"
-                  style={{ height: "80px", width: "100%" }}
-                  id="img_about"
-                  ref={img_about}
-                  name="about_1"
-                  class="form-control bg-transparent border "
-                />
-              </div>
+                <div class="col-md-12 px-0 mb-1">
+                  <input
+                    type="file"
+                    style={{
+                      height: "80px",
+                      width: "100%",
+                      backgroundImage:
+                        "url('" +
+                        op.conexion +
+                        "/ImgPanel/" +
+                        records.img_about +
+                        "')",
+                    }}
+                    id="img_about"
+                    ref={img_about}
+                    name="about_1"
+                    class="form-control bg-transparent border "
+                  />
+                </div>
 
-              <div class="col-md-12 px-0">
-                <textarea
-                  name="text_about"
-                  ref={text_about}
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  placeholder="Agregar una descripción"
-                  rows="6"
-                ></textarea>
-              </div>
+                <div class="col-md-12 px-0">
+                  <textarea
+                    name="text_about"
+                    ref={text_about}
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    placeholder="Agregar una descripción"
+                    rows="6"
+                  ></textarea>
+                </div>
               </div>
             </fieldset>
 
             <fieldset class=" row mx-auto col-md-4 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 px-0">
-                <label
-                  for="exampleFormControlTextarea1"
-                  class="form-label fw-bold"
-                >
-                  Mision
-                </label>
-                <textarea
-                  name="text_mision"
-                  ref={text_mision}
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div class="col-md-12 px-0">
-                <label
-                  for="exampleFormControlTextarea1"
-                  class="form-label fw-bold"
-                >
-                  Vision
-                </label>
-                <textarea
-                  name="text_vision"
-                  ref={text_vision}
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                ></textarea>
-              </div>
+              <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                <div class="col-md-12 px-0">
+                  <label
+                    for="exampleFormControlTextarea1"
+                    class="form-label fw-bold"
+                  >
+                    Mision
+                  </label>
+                  <textarea
+                    name="text_mision"
+                    ref={text_mision}
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div class="col-md-12 px-0">
+                  <label
+                    for="exampleFormControlTextarea1"
+                    class="form-label fw-bold"
+                  >
+                    Vision
+                  </label>
+                  <textarea
+                    name="text_vision"
+                    ref={text_vision}
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                  ></textarea>
+                </div>
               </div>
             </fieldset>
 
             <fieldset class=" row mx-auto col-md-5 mb-1 px-0">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 mb-2">
-                <label class="fw-bold w-auto ">Contactanos</label>
-              </div>
+              <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                <div class="col-md-12 mb-2">
+                  <label class="fw-bold w-auto ">Contactanos</label>
+                </div>
 
-              <div class="mb-2 col-md-12">
-                <label class="form-label">Ubicación</label>
-                <input
-                  type="input"
-                  name="text_ubicacion"
-                  ref={text_ubicacion}
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-2 col-md-12">
-                <label class="form-label">Correo Electronico</label>
-                <input
-                  type="email"
-                  ref={text_correo}
-                  name="text_correo"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-2 col-md-12">
-                <label class="form-label">Telefono</label>
-                <input
-                  type="input"
-                  ref={text_telefono}
-                  name="text_telefono"
-                  class="form-control"
-                />
-              </div>
-              {/* <div class="mb-2 col-md-12">
+                <div class="mb-2 col-md-12">
+                  <label class="form-label">Ubicación</label>
+                  <input
+                    type="input"
+                    name="text_ubicacion"
+                    ref={text_ubicacion}
+                    class="form-control"
+                  />
+                </div>
+                <div class="mb-2 col-md-12">
+                  <label class="form-label">Correo Electronico</label>
+                  <input
+                    type="email"
+                    ref={text_correo}
+                    name="text_correo"
+                    class="form-control"
+                  />
+                </div>
+                <div class="mb-2 col-md-12">
+                  <label class="form-label">Telefono</label>
+                  <input
+                    type="input"
+                    ref={text_telefono}
+                    name="text_telefono"
+                    class="form-control"
+                  />
+                </div>
+                {/* <div class="mb-2 col-md-12">
                 <label class="form-label">Fax</label>
                 <input type="input" name="text_fax" class="form-control" />
               </div> */}
-              <div class="mb-2 col-md-12">
-                <label class="form-label">Banner de Texto</label>
-                <input
-                  type="text"
-                  ref={text_banner}
-                  name="text_banner"
-                  class="form-control"
-                />
-              </div>
-              </div>
-            </fieldset>
-        <div className="col-md-7 row">
-        <fieldset class=" row mx-auto col-md-12 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-                <div class="col-md-12 mb-2">
-                  <label class="fw-bold w-auto ">Banner</label>
-                </div>
-
-                <div class="col-md-12 px-0 mx-auto mb-1">
+                <div class="mb-2 col-md-12">
+                  <label class="form-label">Banner de Texto</label>
                   <input
-                    type="file"
-                    style={{ height: "80px", width: "100%" }}
-                    ref={img_banner}
-                    id="img_banner"
-                    name="img_banner"
-                    class="form-control bg-transparent border "
+                    type="text"
+                    ref={text_banner}
+                    name="text_banner"
+                    class="form-control"
                   />
                 </div>
+              </div>
+            </fieldset>
+            <div className="col-md-7 row">
+              <fieldset class=" row mx-auto col-md-12 mb-1">
+                <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                  <div class="col-md-12 mb-2">
+                    <label class="fw-bold w-auto ">Banner</label>
+                  </div>
+
+                  <div class="col-md-12 px-0 mx-auto mb-1">
+                    <input
+                      type="file"
+                      style={{
+                        height: "80px",
+                        width: "100%",
+                        backgroundImage:
+                          "url('" +
+                          op.conexion +
+                          "/ImgPanel/" +
+                          records.img_banner +
+                          "')",
+                        backgroundSize: "cover",
+                      }}
+                      ref={img_banner}
+                      id="img_banner"
+                      name="img_banner"
+                      class="form-control bg-transparent border "
+                    />
+                  </div>
                 </div>
               </fieldset>
-          
 
               <fieldset class=" row mx-auto col-md-12 mb-1">
-            <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
-              <div class="col-md-12 ">
-                <label class="fw-bold w-auto">Login</label>
-              </div>
-              <div class="col-md-12">
-                <input
-                  type="file"
-                  style={{ height: "80px", width: "100%" }}
-                  ref={img_login}
-                  name="img_banner"
-                  class="form-control bg-transparent border "
-                />
-              </div>
-              </div>
-
-            </fieldset>
-        </div>
-            
+                <div class="col-md-12 p-2 rounded row border mx-auto bg-light border-dark">
+                  <div class="col-md-12 ">
+                    <label class="fw-bold w-auto">Login</label>
+                  </div>
+                  <div class="col-md-12">
+                    <input
+                      type="file"
+                      style={{
+                        height: "80px",
+                        width: "100%",
+                        backgroundImage:
+                          "url('" +
+                          op.conexion +
+                          "/ImgPanel/" +
+                          records.img_login +
+                          "')",
+                      }}
+                      ref={img_login}
+                      name="img_login"
+                      class="form-control bg-transparent border "
+                    />
+                  </div>
+                </div>
+              </fieldset>
+            </div>
 
             <button
               onClick={onChangeValidar}

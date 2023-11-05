@@ -46,7 +46,7 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 
 	public function ConsultarTodos()
 	{
-		$resultado = $this->GetAll();
+		$resultado = $this->GetAll($_GET["Sucursal"]);
 		Response($resultado, 200);
 	}
 

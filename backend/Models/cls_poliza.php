@@ -57,6 +57,8 @@ abstract class cls_poliza extends cls_db
 			} else {
 			}
 		}
+		$this->SearchByUsuario();
+		$this->SearchBySucursal();
 		$result = $this->precioDolar($dolar);
 		// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 		if (!$result) {
@@ -164,6 +166,8 @@ abstract class cls_poliza extends cls_db
 				return $result;
 			}
 			$this->db->beginTransaction();
+			$this->SearchByUsuario();
+			$this->SearchBySucursal();
 			$result = $this->SearchByColor();
 			// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 			if (!$result) {
@@ -310,8 +314,7 @@ abstract class cls_poliza extends cls_db
 				];
 			}
 			$this->SearchbyContrato();
-			$this->SearchByUsuario();
-			$this->SearchBySucursal();
+
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
 			$this->generarQR($this->id);

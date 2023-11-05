@@ -42,7 +42,7 @@ abstract class cls_tipo_vehiculo extends cls_db
       $sql = $this->db->prepare("INSERT INTO tipovehiculo(tipoVehiculo_nombre, tipoVehiculo_estatus)  VALUES(?,1)");
 
       $sql->execute([$this->nombre]);
-      
+
       if ($sql->rowCount() > 0) {
         $this->id = $this->db->lastInsertId();
         $this->reg_bitacora([
@@ -194,11 +194,12 @@ abstract class cls_tipo_vehiculo extends cls_db
       $resultado = [];
     return $resultado;
   }
-  protected function GetAll()
+  protected function GetAll($sucursal)
   {
     $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*, precio.* FROM precio 
     INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
     INNER JOIN tipocontrato on tipocontrato.contrato_id = precio.tipoContrato_id
+    " . ($sucursal != 21 ? '' : 'WHERE sucursal_id = :sucursal') . "
     ORDER BY precio.precio_id ASC");
     if ($sql->execute())
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
