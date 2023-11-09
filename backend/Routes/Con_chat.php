@@ -3,19 +3,21 @@ require './vendor/autoload.php';
 
 require_once("./Models/cls_chat.php");
 
+$options = array(
+  'cluster' => 'us2',
+  'useTLS' => true
+);
+
+define("PUSHER", new Pusher\Pusher(
+  '0de0045a64400606066e',
+  '9924920562895d4b64f2',
+  '1696319',
+  $options
+));
+
 function refrescar_chat($id_user, $data)
 {
-  $options = array(
-    'cluster' => 'us2',
-    'useTLS' => true
-  );
-  $pusher = new Pusher\Pusher(
-    '0de0045a64400606066e',
-    '9924920562895d4b64f2',
-    '1696319',
-    $options
-  );
-  $pusher->trigger("chat_$id_user", 'chat_nuevo', $data);
+  constant("PUSHER")->trigger("chat_$id_user", 'chat_nuevo', $data);
 }
 
 
