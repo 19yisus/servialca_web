@@ -359,7 +359,7 @@ function GraficosIngresos() {
     <div className="col-md-12 mx-auto p-2">
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Ingreso Y Egreso</h2>
+          <h2 className=" col-5 text-light">Grafica de Ingreso Y Egreso</h2>
         </div>
       </div>
       <div className="col-md-12 bg-light py-2 rounded row py-5">

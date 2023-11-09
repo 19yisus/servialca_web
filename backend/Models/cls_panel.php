@@ -61,15 +61,32 @@ abstract class cls_panel extends cls_db
 				$sql2 = $this->db->prepare("UPDATE pagina_web SET text_home =?, text_about=?, text_mision=?, text_vision=?, text_ubicacion=?, text_correo=?, text_telefono =?, text_fax=? WHERE 1");
 			}
 
-			$sql2->execute([$datos['text_home'], $datos["text_about"], $datos["text_mision"], $datos["text_vision"], $datos["text_ubicacion"], $datos["text_correo"], $datos["text_telefono"], $datos["text_banner"]]);
+			if ($sql2->execute([
+				$datos['text_home'],
+				$datos["text_about"], $datos["text_mision"], $datos["text_vision"], $datos["text_ubicacion"], $datos["text_correo"], $datos["text_telefono"], $datos["text_banner"]
+			])) {
+				return [
+					"data" => [
+						"res" => "Registro exitoso",
+						"code" => 200
+					],
+					"code" => 200
+				];
+			}else{
+				return [
+					"data" => [
+						"res" => "Hubo un error"
+					],
+					"code" => 400
+				];
+			}
 			
 			// $this->reg_bitacora([
 			// 	'table_name' => "pagina_web",
 			// 	'des' => "Subida de información de la pagina web"
 			// ]);
 		}
-
-		return 1;
+		
 	}
 
 	private function buscar_y_desactivar($tag)

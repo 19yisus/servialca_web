@@ -161,7 +161,7 @@ function Panel() {
         text_ubicacion.current.value = response[0].text_ubicacion;
         text_correo.current.value = response[0].text_correo;
         text_telefono.current.value = response[0].text_telefono;
-        text_banner.current.value = response[0].text_banner;
+        text_banner.current.value = response[0].text_fax;
         setValues(response);
       })
       .catch((error) =>
@@ -278,7 +278,6 @@ function Panel() {
     bodyF.append("text_banner", text_banner.current.value);
     bodyF.append("img_banner", img_banner.current.files[0]);
     bodyF.append("img_login", img_login.current.files[0]);
-    bodyF.append("text_banner", text_banner.current.value);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -286,13 +285,22 @@ function Panel() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response);
-        setMensaje({
-          mostrar: true,
-          titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
-          icono: "exito",
-        });
+        if (response.code == 200) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        }
       })
       .catch((error) =>
         setMensaje({
@@ -303,9 +311,25 @@ function Panel() {
         })
       );
   };
+  const cerrarModal = () => {
+    setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
+   
+  };
 
   console.log("estas en menu");
-
+  <Mensaje
+    mensaje={mensaje}
+    onHide={() => {
+      mensaje.titulo === "Exito."
+        ? cerrarModal()
+        : setMensaje({
+            mostrar: false,
+            titulo: "",
+            texto: "",
+            icono: "",
+          });
+    }}
+  />;
   useEffect(() => {
     selecionarRegistros();
     seleccionarRegistrosTexto();
@@ -543,12 +567,7 @@ function Panel() {
               </div> */}
                 <div class="mb-2 col-md-12">
                   <label class="form-label">Banner de Texto</label>
-                  <input
-                    type="text"
-                    ref={text_banner}
-                    name="text_banner"
-                    class="form-control"
-                  />
+                  <input type="text" ref={text_banner} class="form-control" />
                 </div>
               </div>
             </fieldset>

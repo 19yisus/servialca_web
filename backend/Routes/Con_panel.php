@@ -47,6 +47,7 @@ class Con_panel extends cls_panel
         $i++;
       }
     }
-    $this->Save($_POST);
+    $resultado = $this->Save($_POST);
+    Response($resultado, 200);
   }
 }
