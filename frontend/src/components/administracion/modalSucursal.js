@@ -408,7 +408,7 @@ export const ModalSucursal = (props) => {
               Dirección:
             </span>
             <textarea
-              onKeyDown={handleChange(30)}
+              onKeyDown={handleChange(100)}
               type="textarea"
               disabled={operacion === 1 || operacion === 2 ? false : true}
               style={{ height: 40 }}

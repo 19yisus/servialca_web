@@ -212,7 +212,7 @@ function MenuImpuestoPP(props) {
                   aria-current="true"
                 >
                   <i className="fas fa-tachometer-alt fa-fw me-1" />
-                  <span>Panel de Control</span>
+                  <span>Inicio</span>
                 </a>
                 <div className="accordion  px-0 border-0" id="accordionExample">
                   {/* {permisos.includes("contratosrealizados") || permisos.includes("listasucursales") || permisos.includes("tipocontratos") && */}
@@ -441,7 +441,7 @@ function MenuImpuestoPP(props) {
                           className="list-group-item list-group-item-action py-2 ripple"
                         >
                           <i class="fas fa-money-check-alt fa-fw me-1"></i>
-                          <span>Ingresos y Egresos</span>
+                          <span>Grafica</span>
                         </a>
                         <a
                           href="/gastosPersonales"
@@ -498,7 +498,7 @@ function MenuImpuestoPP(props) {
                 >
                   <i class="fas fa-fw me-1 fa-solar-panel"></i>
 
-                  <span>Panel</span>
+                  <span>Imagen</span>
                 </a>
                 <a
                   href="/listaPrecios"

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useContext, useState } from "react";
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-
+import Pusher from "pusher-js";
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
@@ -23,7 +23,64 @@ function PageChats() {
     icono: "",
   });
 
-  console.log(user_id);
+  let valida = 1
+
+  //chat en linea tiempo real
+
+  const Conversacion = async (id) => {
+   if(valida = 1){
+    let endpoint = op.conexion + "/chat/DetalleConversacion";
+    let bodyF = new FormData();
+    console.log(id)
+    bodyF.append("token", token);
+    bodyF.append("conversacion_id", id);
+
+    setActivate(true);
+
+    //setLoading(false);
+
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+
+        console.log(response);
+        setConversacion(response.res)
+        valida = valida + 1
+      
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+   }
+  };
+
+  Pusher.logToConsole = false;
+
+  var pusher = new Pusher("0de0045a64400606066e", {
+    cluster: "us2",
+  });
+
+  // Pusher.log = (msg) => {
+  //   console.group("loguer");
+  //   console.log(msg);
+  //   console.log(typeof msg);
+  //   console.groupEnd();
+  // };
+
+  var channel = pusher.subscribe("chat_" + user_id);
+  channel.bind("chat_nuevo", function (data) {
+    Conversacion(data.data.id)
+  });
+
   const headCells = [
     {
       label: "Codigo",
@@ -52,7 +109,7 @@ function PageChats() {
     },
   ];
 
-  const txtMensaje = useRef()
+  const txtMensaje = useRef();
 
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
@@ -68,7 +125,7 @@ function PageChats() {
   const [totalavi, setTotalavi] = useState(0.0);
   const [idSucursal, setIdSucursal] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
-  const [nombreChat, setNombreChat] = useState('');
+  const [nombreChat, setNombreChat] = useState("");
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -184,7 +241,7 @@ function PageChats() {
 
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
-    let bodyF = new FormData()
+    let bodyF = new FormData();
     bodyF.append("token", token);
     console.log(endpoint);
     setActivate(true);
@@ -199,7 +256,7 @@ function PageChats() {
       .then((response) => {
         setActivate(false);
         console.log(response);
-       setRecords(response);
+        setRecords(response);
       })
       .catch((error) =>
         setMensaje({
@@ -213,18 +270,15 @@ function PageChats() {
 
   const listarConversaciones = async (id) => {
     let endpoint = op.conexion + "/chat/crearConversacion";
-    let bodyF = new FormData()
+    let bodyF = new FormData();
     bodyF.append("token", token);
     bodyF.append("user_1_id", user_id);
     bodyF.append("user_2_id", id);
 
-
-   
-
     setActivate(true);
 
     //setLoading(false);
-  
+
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -232,19 +286,21 @@ function PageChats() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-  
+
         console.log(response.res);
-        setIdCon(response.id)
-        if(response.res !== 'Conversación creada' || response.res !== 'Sin mensajes disponibles' ){
-          setConversacion(response.res)
+        setIdCon(response.id);
+        if (
+          response.res !== "Conversación creada" ||
+          response.res !== "Sin mensajes disponibles"
+        ) {
+          setConversacion(response.res);
         } else {
           conversacion.push({
-            content_sms:'AHORA PUEDES COMUNICARTE CON OTROS USUARIOS DEL SISTEMA',
-            fecha_hora_sms:'Ahora'
-          })
-          
+            content_sms:
+              "AHORA PUEDES COMUNICARTE CON OTROS USUARIOS DEL SISTEMA",
+            fecha_hora_sms: "Ahora",
+          });
         }
-       
       })
       .catch((error) =>
         setMensaje({
@@ -258,15 +314,12 @@ function PageChats() {
 
   const enviarSMS = async () => {
     let endpoint = op.conexion + "/chat/enviarMensaje";
-    let bodyF = new FormData()
+    let bodyF = new FormData();
     bodyF.append("token", token);
     bodyF.append("conversacion_id", idCon);
     bodyF.append("remitente", user_id);
     bodyF.append("content_sms", txtMensaje.current.value);
-
-    
-
-   
+    bodyF.append("user_2_id", idResector);
 
     setActivate(true);
 
@@ -279,11 +332,10 @@ function PageChats() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-  
+
         console.log(response);
-        txtMensaje.current.value=''
-        listarConversaciones(idResector)
-      
+        txtMensaje.current.value = "";
+        listarConversaciones(idResector);
       })
       .catch((error) =>
         setMensaje({
@@ -326,148 +378,165 @@ function PageChats() {
   }, []);
 
   const onChangeValidar = (e) => {
-    e.preventDefault()
-    console.log('si')
+    e.preventDefault();
+    console.log("si");
     let sigue = true;
-    if(txtMensaje.current.value === ''){
+    if (txtMensaje.current.value === "") {
       sigue = false;
       setMensaje({
         mostrar: true,
         titulo: "Notificación",
-        texto: 'Debe ingresar un mensaje',
+        texto: "Debe ingresar un mensaje",
         icono: "informacion",
-      })
-      txtMensaje.current.focus()
-
+      });
+      txtMensaje.current.focus();
     }
 
-    if(sigue){
-      enviarSMS()
+    if (sigue) {
+      enviarSMS();
     }
-  }
-
+  };
 
   const consultarChat = (item) => (e) => {
-    e.preventDefault()
-console.log(item)
-setNombreChat(item.usuario_nombre + ' ' + item.usuario_apellido)
-setIdResector(item.usuario_id)
-listarConversaciones(item.usuario_id)
-  }
+    e.preventDefault();
+    console.log(item);
+    setNombreChat(item.usuario_nombre + " " + item.usuario_apellido);
+    setIdResector(item.usuario_id);
+    listarConversaciones(item.usuario_id);
+  };
   return (
-   
     <div class="container-fluid h-100">
-
-<Mensaje
-          mensaje={mensaje}
-          onHide={() => {
-           setMensaje({
-                  mostrar: false,
-                  titulo: "",
-                  texto: "",
-                  icono: "",
-                });
-          }}
-        />
-    <div class="row justify-content-center h-100">
-      <div class="col-md-4 col-xl-3 chat"><div class="card2 mb-sm-3 mb-md-0 contacts_card">
-        <div class="card-header">
-          <div class="input-group">
-            <input type="text" placeholder="Search..." name="" class="form-control search"/>
-            <div class="input-group-prepend">
-              <span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
-            </div>
-          </div>
-        </div>
-        <input type="hidden" />
-        <div class="card-body contacts_body">
-          <ui class="contacts">
-          
-
-          {records &&
-              records.map((item, index) => (
-            
-
-
-<li class="active" type='button' onClick={consultarChat(item)}>
-            <div class="d-flex bd-highlight">
-              <div class="img_cont">
-              <i class="user_img far fa-user-circle"></i>
-                <span class="online_icon"></span>
-              </div>
-              <div class="user_info">
-                <span>{item.usuario_nombre + ' ' + item.usuario_apellido}</span>
-                <p>Kalid is online</p>
+      <Mensaje
+        mensaje={mensaje}
+        onHide={() => {
+          setMensaje({
+            mostrar: false,
+            titulo: "",
+            texto: "",
+            icono: "",
+          });
+        }}
+      />
+      <div class="row justify-content-center h-100">
+        <div class="col-md-4 col-xl-3 chat">
+          <div class="card2 mb-sm-3 mb-md-0 contacts_card">
+            <div class="card-header">
+              <div class="input-group">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  name=""
+                  class="form-control search"
+                />
+                <div class="input-group-prepend">
+                  <span class="input-group-text search_btn">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
               </div>
             </div>
-          </li>
-              ))}
-         
-          
-          </ui>
-        </div>
-        <div class="card-footer"></div>
-      </div></div>
-      <div class="col-md-8 col-xl-9 chat">
-        <div class="card2">
-          <div class="card-header msg_head">
-            <div class="d-flex bd-highlight">
-              <div class="img_cont">
-              <i class="user_img2 far fa-user-circle"></i>
-              
-                <span class="online_icon"></span>
-              </div>
-              <div class="user_info">
-                <span>{nombreChat}</span>
-                <p>{ conversacion.length + ' Mensajes'}</p>
-              </div>
-              
+            <input type="hidden" />
+            <div class="card-body contacts_body">
+              <ui class="contacts">
+                {records &&
+                  records.map((item, index) => (
+                    <li
+                      class="active"
+                      type="button"
+                      onClick={consultarChat(item)}
+                    >
+                      <div class="d-flex bd-highlight">
+                        <div class="img_cont">
+                          <i class="user_img far fa-user-circle"></i>
+                          <span class="online_icon"></span>
+                        </div>
+                        <div class="user_info">
+                          <span>
+                            {item.usuario_nombre + " " + item.usuario_apellido}
+                          </span>
+                          <p>Kalid is online</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ui>
             </div>
-           
-          </div>
-          <div class="card-body msg_card_body">
-          {conversacion &&
-  conversacion.map((item, index) => {
-    if (item.remitente !== user_id) {
-      return (
-        <div class="d-flex justify-content-start mb-4">
-          <div class="msg_cotainer">
-           {item.content_sms}
-            <span class="msg_time">{item.fecha_hora_sms} </span>
+            <div class="card-footer"></div>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div class="d-flex justify-content-end mb-4">
-          <div class="msg_cotainer_send">
-           {item.content_sms}
-            <span class="msg_time_send">{item.fecha_hora_sms} </span>
-          </div>
-        </div>
-      );
-    }
-  })
-}
+        <div class="col-md-8 col-xl-9 chat">
+          <div class="card2">
+            <div class="card-header msg_head">
+              <div class="d-flex bd-highlight">
+                <div class="img_cont">
+                  <i class="user_img2 far fa-user-circle"></i>
 
-           
-        
-          </div>
-          <div class="card-footer">
-            <div class="input-group">
-              <div class="input-group-append">
-                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                  <span class="online_icon"></span>
+                </div>
+                <div class="user_info">
+                  <span>{nombreChat}</span>
+                  <p>{conversacion.length + " Mensajes"}</p>
+                </div>
               </div>
-              <textarea ref={txtMensaje} name="" class="form-control type_msg" placeholder="Ingrese su mensaje..."></textarea>
-              <div class="input-group-append">
-                <button class="input-group-text send_btn" onClick={onChangeValidar} type="button"><i class="fas fa-location-arrow"></i></button>
+            </div>
+            <div class="card-body msg_card_body">
+              {Array.isArray(conversacion) &&
+                conversacion.length > 0 &&
+                conversacion.map((item, index) => {
+                  if (item.remitente !== user_id) {
+                    return (
+                      <div
+                        class="d-flex justify-content-start mb-4"
+                        key={index}
+                      >
+                        <div class="msg_cotainer">
+                          {item.content_sms}
+                          <span class="msg_time">{item.fecha_hora_sms} </span>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div class="d-flex justify-content-end mb-4" key={index}>
+                        <div class="msg_cotainer_send">
+                          {item.content_sms}
+                          <span class="msg_time_send">
+                            {item.fecha_hora_sms}{" "}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+            </div>
+            <div class="card-footer">
+              <div class="input-group">
+                <div class="input-group-append">
+                  <span class="input-group-text attach_btn">
+                    <i class="fas fa-paperclip"></i>
+                  </span>
+                </div>
+                <textarea
+                  ref={txtMensaje}
+                  name=""
+                  class="form-control type_msg"
+                  placeholder="Ingrese su mensaje..."
+                ></textarea>
+                <div class="input-group-append">
+                  <button
+                    class="input-group-text send_btn"
+                    onClick={onChangeValidar}
+                    type="button"
+                  >
+                    <i class="fas fa-location-arrow"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   );
 }
 

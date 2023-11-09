@@ -22,6 +22,7 @@ function PaginaWeb(props) {
       return items;
     },
   });
+  const span = useRef();
   const [token, setToken] = useState();
   const [idzona, setIdZona] = useState();
   const [mostrar, setMostrar] = useState(false);
@@ -415,7 +416,7 @@ function PaginaWeb(props) {
         <div class="slider2">
           <div class="slide-track d-flex justify-content-end">
             <div class="slide text-left">
-              <span>Servialca lideres en RCV</span>
+            <span>{values.text_fax}</span>
             </div>
           </div>
         </div>
