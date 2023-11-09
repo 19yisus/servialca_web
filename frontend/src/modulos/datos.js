@@ -4,21 +4,21 @@ var host;
 switch (municipio) {
   case "sarep":
     //host = 'http://192.168.88.76'
-<<<<<<< HEAD
+
     // host = 'http://localhost' 
     // host = 'http://localhost' 
     //host = 'http://localhost:80/servialca_web/backend'
-    host = 'https://servialcarcv.com/servialca_web/backend'
+    //host = 'https://servialcarcv.com/servialca_web/backend'
     
-=======
+
     // host = 'http://localhost'
     // host = 'http://localhost'
-    //host = "http://localhost:80/servialca_web/backend";
+    host = "http://localhost:80/servialca_web/backend";
 
     //host = 'https://servialcarcv.com/servialca_web/backend'
-    host = 'https://servialcarcv.com/servialca_web/backend'
+    //host = 'https://servialcarcv.com/servialca_web/backend'
 
->>>>>>> 5f2233d5b2ad219dec957630d8dd4950f8490416
+
     // host = 'http://192.168.0.110'
     module.exports = {
       url: host,
