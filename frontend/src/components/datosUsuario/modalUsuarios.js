@@ -743,7 +743,7 @@ export const ModalUsuarios = (props) => {
                 type="checkbox"
                 value="Contratos Realizados"
                 id="flexCheckDefault"
-                checked={true}
+                
               />
               <label class="form-check-label">Lista De Asesores</label>
             </div>
