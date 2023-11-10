@@ -13,10 +13,10 @@ switch (municipio) {
 
     // host = 'http://localhost'
     // host = 'http://localhost'
-    host = "http://localhost:80/servialca_web/backend";
+    //host = "http://localhost:80/servialca_web/backend";
 
     //host = 'https://servialcarcv.com/servialca_web/backend'
-    //host = 'https://servialcarcv.com/servialca_web/backend'
+    host = 'https://servialcarcv.com/servialca_web/backend'
 
 
     // host = 'http://192.168.0.110'
