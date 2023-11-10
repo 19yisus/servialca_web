@@ -115,7 +115,7 @@ function MenuImpuestoPP(props) {
   };*/
 
   let permisos = JSON.parse(localStorage.getItem("permisos"));
-  // console.log(permisos)
+  console.log(permisos)
   // permisos = permisos.map((item) =>
   //   item.replace(" ", "").replace(" ", "").replace("de", "").toLowerCase()
   // );
@@ -238,15 +238,15 @@ function MenuImpuestoPP(props) {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body py-0 list-group px-0">
-                        {permisos.substring(0, 1) === "1" && (
+                        {permisos.substring(0, 1) === "1" ? (
                           <a
                             href="/sucursales"
                             className="list-group-item list-group-item-action py-2 ripple"
                           >
-                            <i class="fas fas-fw me-1 fa-map-signs"></i>
+                            <i className="fas fas-fw me-1 fa-map-signs"></i>
                             <span>Lista de Sucursales</span>
                           </a>
-                        )}
+                        ) : null}
                         {permisos.substring(1, 2) === "1" && (
                           <a
                             href="/contratosrealizados"
