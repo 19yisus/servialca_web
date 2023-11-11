@@ -83,4 +83,38 @@ abstract class cls_cliente extends cls_db
 			];
 		}
 	}
+
+	public function consultarByDedulaTitular($cedula)
+	{
+		if ($cedula === "V-" || $cedula === "E-" || $cedula === "J-" || $cedula === "G-") {
+			return [
+				'data' => [
+					'res' => "cliente no encontrado",
+					"code" => 400
+				],
+				'code' => 400
+			];
+		}
+		$res = $this->db->prepare('SELECT * FROM titular WHERE titular_cedula = ? AND titular_nombre IS NOT NULL AND titular_apellido IS NOT NULL');
+		$res->execute([$cedula]);
+		if ($res->rowCount() > 0) {
+			$data = $res->fetch(PDO::FETCH_ASSOC);
+			return [
+				'data' => [
+					'res' => "Titular encontrado",
+					'cliente' => $data,
+					"code" => 200
+				],
+				'code' => 200
+			];
+		} else {
+			return [
+				'data' => [
+					'res' => "Titular no encontrado",
+					"code" => 400
+				],
+				'code' => 400
+			];
+		}
+	}
 }

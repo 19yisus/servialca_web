@@ -236,7 +236,39 @@ export const ModalRcv = (props) => {
         );
     }
   };
-
+  const consultarTitular = async ($cedula) => {
+    let endpoint = op.conexion + "/cliente/consultarCedulaTitular";
+    let bodyF = new FormData();
+    bodyF.append("cedula", $cedula);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          txtNombreTitular.current.value = response.cliente.titular_nombre;
+          txtApellidoTitular.current.value = response.cliente.titular_apellido;
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const consultarCliente = async ($cedula) => {
     let endpoint = op.conexion + "/cliente/consultarCedulaCliente";
     let bodyF = new FormData();
@@ -1547,7 +1579,10 @@ export const ModalRcv = (props) => {
                     type="button"
                     class="btn btn-success"
                     onClick={() => {
-                      setMostrar9(true);
+                      consultarTitular(
+                        cmbNacionalidadTitular.current.value +
+                          txtCedulatTitular.current.value
+                      );
                     }}
                   >
                     <i class="fa fa-search"></i>
