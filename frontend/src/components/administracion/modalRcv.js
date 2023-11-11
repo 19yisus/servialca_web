@@ -236,6 +236,37 @@ export const ModalRcv = (props) => {
         );
     }
   };
+
+  const consultarContrato = async ($cedula, $placa) => {
+    if ($cedula && $placa) {
+      let endpoint = op.conexion + "poliza/ConsultarContrato";
+      let bodyF = new FormData();
+      bodyF.append("Cedula", $cedula);
+      bodyF.append("Placa", $placa);
+
+      setActivate(true);
+
+      try {
+        let response = await fetch(endpoint, {
+          method: "POST",
+          body: bodyF,
+        });
+
+        let data = await response.json();
+        setActivate(false);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.message,
+          icono: "informacion",
+        });
+      }
+    }
+  };
+
   const consultarTitular = async ($cedula) => {
     let endpoint = op.conexion + "/cliente/consultarCedulaTitular";
     let bodyF = new FormData();
