@@ -240,7 +240,7 @@ function Login(props) {
             texto: response.data.res.text,
             icono: "exito",
           });
-
+         
           window.location.href = "/inicio";
         }
         if (response.data.res.code == 400) {

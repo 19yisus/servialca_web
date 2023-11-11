@@ -285,14 +285,13 @@ function Panel() {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        if (response.code == 200) {
-          setMensaje({
-            mostrar: true,
-            titulo: "Exito.",
-            texto: response.res,
-            icono: "exito",
-          });
-        }
+        setMensaje({
+          mostrar: true,
+          titulo: "Exito.",
+          texto: response.res,
+          icono: "exito",
+        });
+
         if (response.code == 400) {
           setMensaje({
             mostrar: true,
@@ -313,23 +312,10 @@ function Panel() {
   };
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-   
   };
 
   console.log("estas en menu");
-  <Mensaje
-    mensaje={mensaje}
-    onHide={() => {
-      mensaje.titulo === "Exito."
-        ? cerrarModal()
-        : setMensaje({
-            mostrar: false,
-            titulo: "",
-            texto: "",
-            icono: "",
-          });
-    }}
-  />;
+
   useEffect(() => {
     selecionarRegistros();
     seleccionarRegistrosTexto();
@@ -345,6 +331,20 @@ function Panel() {
       {/*<Dimmer active={activate} inverted>
           <Loader inverted>cargando...</Loader>
   </Dimmer>*/}
+      <Mensaje
+        mensaje={mensaje}
+        onHide={() => {
+          mensaje.titulo === "Exito."
+            ? cerrarModal()
+            : setMensaje({
+                mostrar: false,
+                titulo: "",
+                texto: "",
+                icono: "",
+              });
+        }}
+      />
+      ;
       <div className="col-md-12 px-0 mx-auto ">
         <div class="col-md-12 mx-auto row px-2 py-4 mt-5">
           <form
