@@ -5,11 +5,10 @@ switch (municipio) {
   case "sarep":
     //host = 'http://192.168.88.76'
 
-    // host = 'http://localhost' 
-    // host = 'http://localhost' 
+    // host = 'http://localhost'
+    // host = 'http://localhost'
     //host = 'http://localhost:80/servialca_web/backend'
     //host = 'https://servialcarcv.com/servialca_web/backend'
-    
 
     // host = 'http://localhost'
     // host = 'http://localhost'
@@ -17,7 +16,6 @@ switch (municipio) {
 
     //host = 'https://servialcarcv.com/servialca_web/backend'
     host = 'https://servialcarcv.com/servialca_web/backend'
-
 
     // host = 'http://192.168.0.110'
     module.exports = {

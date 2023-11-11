@@ -185,7 +185,97 @@ export const ModalRcv = (props) => {
       tiposangre: "",
     });
   };
+  const consultarVehiculo = async ($placa) => {
+    if ($placa == null || $placa == "") {
+      setMensaje({
+        mostrar: true,
+        titulo: "Error.",
+        texto: "Vehiculo no encontrado",
+        icono: "error",
+      });
+    } else {
+      let endpoint = op.conexion + "/vehiculo/ConsultarUno?Placa=" + $placa;
+      let bodyF = new FormData();
+      setActivate(true);
+      await fetch(endpoint, {
+        method: "POST",
+        body: bodyF,
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          setActivate(false);
+          if (response == "" || response == null || response == []) {
+            setMensaje({
+              mostrar: true,
+              titulo: "Error.",
+              texto: "Vehiculo no encontrado",
+              icono: "error",
+            });
+          } else {
+            txtPuesto.current.value = response.vehiculo_puesto;
+            txtAño.current.value = response.vehiculo_año;
+            txtSerMotor.current.value = response.vehiculo_serialMotor;
+            txtSerCarroceria.current.value = response.vehiculo_serialCarroceria;
+            txtColor.current.value = response.color_nombre;
+            txtMarca.current.value = response.marca_nombre;
+            txtModelo.current.value = response.modelo_nombre;
+            txtPeso.current.value = response.vehiculo_peso;
+            txtCapTon.current.value = response.vehiculo_capTon;
+            txtUso.current.value = response.usoVehiculo_nombre;
+            cmbTipo.current.value = response.tipoVehiculo_nombre;
+            txtClase.current.value = response.clase_nombre;
+          }
+        })
+        .catch((error) =>
+          setMensaje({
+            mostrar: true,
+            titulo: "Notificación",
+            texto: error.res,
+            icono: "informacion",
+          })
+        );
+    }
+  };
 
+  const consultarCliente = async ($cedula) => {
+    let endpoint = op.conexion + "/cliente/consultarCedulaCliente";
+    let bodyF = new FormData();
+    bodyF.append("cedula", $cedula);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          txtFechaNaci.current.value = response.cliente.cliente_fechaNacimiento;
+          txtNombre.current.value = response.cliente.cliente_nombre;
+          txtApellido.current.value = response.cliente.cliente_apellido;
+          let telefono = response.cliente.cliente_telefono.split("-");
+          cmbTelefono.current.value = telefono[0] + "-";
+          txtTelefono.current.value = telefono[1];
+          txtCorreo.current.value = response.cliente.cliente_correo;
+          txtDirec.current.value = response.cliente.cliente_direccion;
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const actualizarCertificado = async () => {
     let endpoint = "";
     if (operacion === 2) {
@@ -320,7 +410,7 @@ export const ModalRcv = (props) => {
       .then((response) => {
         setActivate(false);
         txtDolar.current.value = response[0]["precio_monto"];
-        txtBs.current.value = response[0]["precio_monto"] * dolarbcv; 
+        txtBs.current.value = response[0]["precio_monto"] * dolarbcv;
         console.log("tipo contrato");
         setTipoContrato(response);
         console.log(response);
@@ -529,7 +619,8 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarTipo = async () => {
-    let endpoint =op.conexion +"/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
+    let endpoint =
+      op.conexion + "/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
     setActivate(true);
 
     //setLoading(false);
@@ -1180,18 +1271,20 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
-                    name="ced"
                     onChange={validaSoloNumero}
                   />
                   <button
                     type="button"
                     class="btn btn-success"
-                    onClick={() => {
-                      setMostrar(true);
-                    }}
+                    onClick={() =>
+                      consultarCliente(
+                        cmbNacionalidad.current.value + txtCedula.current.value
+                      )
+                    }
                   >
                     <i class="fa fa-search"></i>
                   </button>
+
                   <div id="ced" class="form-text hidden">
                     Debe ingresar un cedula valida longitud(8-9).
                   </div>
@@ -1522,7 +1615,7 @@ export const ModalRcv = (props) => {
                     type="button"
                     class="btn btn-success"
                     onClick={() => {
-                      setMostrar8(true);
+                      consultarVehiculo(txtPlaca.current.value);
                     }}
                   >
                     <i class="fa fa-search"></i>

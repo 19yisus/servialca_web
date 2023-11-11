@@ -83,12 +83,6 @@ function GraficosIngresos() {
       backgroundColor: "#e70101bf",
       color: "white",
     },
-    {
-      label: "Total neto",
-      textAlign: "center",
-      backgroundColor: "#e70101bf",
-      color: "white",
-    },
   ];
 
   const txtDate1 = useRef();
@@ -449,15 +443,13 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_tipoPago === 0
-                        ? "Pago Móvil"
-                        : item.nota_tipoPago === 1
+                      {item.nota_tipoPago === 1
                         ? "Efectivo"
                         : item.nota_tipoPago === 2
                         ? "Transferencia"
                         : item.nota_tipoPago === 3
                         ? "Punto"
-                        : "Método Desconocido"}
+                        : "Pago Móvil"}
                     </TableCell>
 
                     <TableCell
@@ -471,12 +463,6 @@ function GraficosIngresos() {
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
                       {item.nota_monto}
-                    </TableCell>
-                    <TableCell
-                      className="align-baseline"
-                      style={{ textAlign: "center", alignItems: "center" }}
-                    >
-                      {}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -52,13 +52,24 @@ abstract class cls_cliente extends cls_db
 
 	protected function consultarByCedula($cedula)
 	{
-		$res = $this->db->query("SELECT * FROM cliente WHERE cliente_cedula = $cedula");
+		if ($cedula === "V-" || $cedula === "E-" || $cedula === "J-" || $cedula === "G-") {
+			return [
+				'data' => [
+					'res' => "cliente no encontrado",
+					"code" => 400
+				],
+				'code' => 400
+			];
+		}
+		$res = $this->db->prepare("SELECT * FROM cliente WHERE cliente_cedula = ? AND cliente_nombre IS NOT NULL AND cliente_cedula IS NOT NULL");
+		$res->execute([$cedula]);
 		if ($res->rowCount() > 0) {
 			$data = $res->fetch(PDO::FETCH_ASSOC);
 			return [
 				'data' => [
 					'res' => "cliente encontrado",
-					'cliente' => $data
+					'cliente' => $data,
+					"code" => 200
 				],
 				'code' => 200
 			];
@@ -66,6 +77,7 @@ abstract class cls_cliente extends cls_db
 			return [
 				'data' => [
 					'res' => "cliente no encontrado",
+					"code" => 400
 				],
 				'code' => 400
 			];
