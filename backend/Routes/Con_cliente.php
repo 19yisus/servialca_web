@@ -24,4 +24,10 @@ class Con_cliente extends cls_cliente
         $resultado = $this->GetAllTitular();
         Response($resultado, 200);
     }
+
+    public function consultarCedulaCliente()
+    {
+        $resultado = $this->consultarByCedula($_POST['cedula']);
+        Response($resultado["data"], $resultado['code']);
+    }
 }

@@ -117,6 +117,11 @@ class Con_poliza extends cls_poliza
         Response($resultado['data'], $resultado['code']);
     }
 
+    public function encontrarContrato()
+    {
+        $resultado = $this->findContrato();
+        Response($resultado['data'], $resultado['code']);
+    }
     public function ConsultarUno()
     {
         $resultado = $this->GetOne($_GET['ID']);

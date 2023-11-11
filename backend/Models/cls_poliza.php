@@ -32,6 +32,52 @@ abstract class cls_poliza extends cls_db
 		$correoLicencia, $licencia, $licenciaRestante, $montoTotal, $abonado, $restante;
 
 
+	protected function findContrato()
+	{
+		if (empty($this->cedula)) {
+			return [
+				'data' => [
+					'res' => "No se puede consultar sin la cédula del cliente"
+				],
+				'code' => 400
+			];
+		}
+
+		if (empty($this->placa)) {
+			return [
+				'data' => [
+					'res' => "No se puede consultar sin la placa del vehiculo"
+				],
+				'code' => 400
+			];
+		}
+
+		$sql = "SELECT * FROM poliza 
+		INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+			INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+			WHERE cliente.cliente_cedula = '$this->cedula' AND vehiculo.vehiculo_placa = '$this->placa';";
+
+		$result = $this->db->query($sql);
+
+		if ($result->rowCount() > 0) {
+			$data = $result->fetch(PDO::FETCH_ASSOC);
+			return [
+				'data' => [
+					'res' => "Contrato encontrado",
+					'contrato' => $data
+				],
+				'code' => 200
+			];
+		} else {
+			return [
+				'data' => [
+					'res' => "no existe contrato"
+				],
+				'code' => 400
+			];
+		}
+	}
+
 	protected function renovar_poliza($dolar, $tipoIngreso, $motivo)
 	{
 		if (empty($this->fechaNacimiento)) {
