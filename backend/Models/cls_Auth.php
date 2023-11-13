@@ -265,6 +265,7 @@ class cls_Auth extends cls_db
       usuario_telefono = ?,
       usuario_direccion = ?,
       usuario_correo = ?,
+      usuario_clave = ?,
       roles_id =?,
       sucursal_id =?,
       permisos = ?
@@ -277,6 +278,7 @@ class cls_Auth extends cls_db
         $this->telefono,
         $this->direccion,
         $this->correo,
+        $this->clave,
         $this->rol,
         $this->sucursal,
         $this->permiso,
