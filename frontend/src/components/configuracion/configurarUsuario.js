@@ -22,8 +22,7 @@ export const ModalConfigurarUsuarios = (props) => {
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-  const user_id = JSON.parse(localStorage.getItem('user_id'))
-
+  const user_id = JSON.parse(localStorage.getItem("user_id"));
 
   const txtEdad = useRef();
   const txtUsuario = useRef();
@@ -34,7 +33,7 @@ export const ModalConfigurarUsuarios = (props) => {
   const cmbLentes = useRef();
   const cmbPago = useRef();
   const cmbNacionalidad = useRef();
-
+  const txtClave = useRef();
   const txtDatosPastor = useRef();
   const txtReferencia = useRef();
   const txtBs = useRef();
@@ -157,7 +156,7 @@ export const ModalConfigurarUsuarios = (props) => {
   };
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/Auth/actualizar";
-    
+
     console.log(endpoint);
     setActivate(true);
 
@@ -182,7 +181,7 @@ export const ModalConfigurarUsuarios = (props) => {
     bodyF.append("Rol", txtRol.current.value);
     bodyF.append("Sucursal", txtSucursal.current.value);
     bodyF.append("Permiso", values.permisos);
-
+    bodyF.append("Clave", txtClave.current.value);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -191,7 +190,6 @@ export const ModalConfigurarUsuarios = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-      
 
         setMensaje({
           mostrar: true,
@@ -282,9 +280,9 @@ export const ModalConfigurarUsuarios = (props) => {
         txtCorreo.current.value = response.usuario_correo;
         txtRol.current.value = response.roles_id;
         txtSucursal.current.value = response.sucursal_id;
-        setValues(response)
-        console.log(response)
-      
+        txtClave.current.value = response.usuario_clave;
+        setValues(response);
+        console.log(response);
       })
       .catch((error) =>
         setMensaje({
@@ -368,14 +366,13 @@ export const ModalConfigurarUsuarios = (props) => {
         setOperacion(props.operacion);
         setActivate(false);
 
-      const id = JSON.parse(localStorage.getItem('user_id'))
-          selecionarUsuario(id);
-       
+        const id = JSON.parse(localStorage.getItem("user_id"));
+        selecionarUsuario(id);
       }}
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-         Configuración de Usuario
+          Configuración de Usuario
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -426,9 +423,21 @@ export const ModalConfigurarUsuarios = (props) => {
               aria-describedby="inputGroup-sizing-sm"
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6"></div>
-
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class="input-group input-group-sm mb-3 col-md-4">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Contraseña:
+            </span>
+            <input
+              onKeyDown={handleChange(12)}
+              type="text"
+              class="form-control"
+              ref={txtClave}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+          </div>
+          <div class="input-group input-group-sm mb-3 col-md-3"></div>
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Nombre:
             </span>
@@ -441,7 +450,7 @@ export const ModalConfigurarUsuarios = (props) => {
               aria-describedby="inputGroup-sizing-sm"
             />
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
+          <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Apellido:
             </span>
@@ -535,7 +544,7 @@ export const ModalConfigurarUsuarios = (props) => {
             </span>
 
             <select
-            disabled
+              disabled
               class="form-select"
               ref={txtRol}
               aria-label="Default select example"
@@ -569,13 +578,11 @@ export const ModalConfigurarUsuarios = (props) => {
                 ))}
             </select>
           </div>
-          
         </div>
       </Modal.Body>
       <Modal.Footer>
         <button
           className="btn btn-sm btn-success rounded-pill "
-        
           onClick={onChangeValidar}
         >
           <i className="fas fa-check-circle"> Aceptar</i>
