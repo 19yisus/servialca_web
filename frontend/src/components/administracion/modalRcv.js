@@ -1014,7 +1014,12 @@ export const ModalRcv = (props) => {
         txtMarca.current.value = response[0].marca_nombre;
         txtPeso.current.value = response[0].vehiculo_peso;
         txtCapTon.current.value = response[0].vehiculo_capTon;
-        cmbFormaPago.current.value = response[0].nota_tipoPago;
+        if (response[0].nota_tipoPago == null) {
+          cmbFormaPago.current.value = 0;
+        } else {
+          cmbFormaPago.current.value = response[0].nota_tipoPago;
+        }
+
         txtReferencia.current.value = response[0].nota_referencia;
         txtDolar.current.value = response[0].nota_monto;
         txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
