@@ -306,6 +306,8 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
+    if(TxtTipoContrato.current.value === "") alert("No se puede consultar sin el contrato seleccionado"); return false;
+    if(cmbTipo.current.value === "") alert("No se puede consultar sin el tipo de contrato seleccionado"); return false;
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();

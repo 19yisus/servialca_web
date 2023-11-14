@@ -341,7 +341,7 @@ function TablaDocumento() {
                   >
                     <button
                       onClick={imprimir(item.documento_ruta)}
-                      className="btn btn-sm mx-1 btn-info rounded-circle"
+                      className="btn btn-sm mx-3 btn-info rounded-circle"
                     >
                       <i className="fas fa-print"></i>{" "}
                     </button>

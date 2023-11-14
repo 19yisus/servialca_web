@@ -584,7 +584,7 @@ function Inicio2() {
                   >
                     <button
                       onClick={gestionarBanco(1, item.poliza_id)}
-                      className="btn btn-sm mx-1 btn-info rounded-circle"
+                      className="btn btn-sm mx-3 btn-info rounded-circle"
                     >
                       <i className="fas fa-eye"></i>{" "}
                     </button>

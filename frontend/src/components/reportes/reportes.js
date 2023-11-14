@@ -395,7 +395,7 @@ const TablaReportes = (props) => {
                   onClick={generarReporte}
                   class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary"
                 >
-                  Generear{" "}
+                  Generar{" "}
                 </button>
                 <button
                   type="button"
