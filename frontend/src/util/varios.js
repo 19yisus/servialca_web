@@ -156,7 +156,7 @@ export const validaSoloNumero = (event) => {
 
 export const validaSoloLetras = (event) => {
   $(event.target).val(function (index, value) {
-    return value.replace(/^[0-9]+$/i, "", /^[0-9]+$/i);
+    return value.replace(/^[0-9]+$/i, "", /^[0-9]+$/i).toUpperCase();
   });
 };
 

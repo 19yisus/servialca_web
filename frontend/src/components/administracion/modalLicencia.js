@@ -118,7 +118,8 @@ export const ModalLicencia = (props) => {
     });
   };
   const seleccionarRegistros = async (id) => {
-    let endpoint = op.conexion + "/licencia/ConsultarUno";
+    if(id === "") return false;
+    let endpoint = op.conexion + "/Licencia/ConsultarUno";
     console.log(endpoint);
     let bodyF = new FormData();
     bodyF.append("ID", id);
@@ -162,7 +163,7 @@ export const ModalLicencia = (props) => {
   const actualizarCertificado = async () => {
     let endpoint = "";
     if (props.operacion === 2) {
-      endpoint = op.conexion + "/licencia/Editar";
+      endpoint = op.conexion + "/Licencia/Editar";
     } else {
       endpoint = op.conexion + "/poliza/registrarLicencia";
     }
@@ -392,7 +393,7 @@ export const ModalLicencia = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-
+        console.log(props)
         if (props.operacion) {
           seleccionarRegistros(props.idLicencia);
         }

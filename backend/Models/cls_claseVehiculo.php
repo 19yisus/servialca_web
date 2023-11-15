@@ -77,7 +77,7 @@ abstract class cls_claseVehiculo extends cls_db
 	{
 		try {
 			$res = $this->GetDuplicados();
-			if (isset($res[0])) {
+			if ($res) {
 				return [
 					"data" => [
 						"res" => "Estas duplicando los datos de otra claseVehiculo"
@@ -85,8 +85,7 @@ abstract class cls_claseVehiculo extends cls_db
 					"code" => 400
 				];
 			}
-			$sql = $this->db->prepare("UPDATE clasevehiculo SET
-            clase_nombre = ? WHERE claseVehiculo_id = ?");
+			$sql = $this->db->prepare("UPDATE clasevehiculo SET clase_nombre = ? WHERE claseVehiculo_id = ?");
 			if ($sql->execute([$this->nombre, $this->id])) {
 				$this->reg_bitacora([
 					'table_name' => "clasevehiculo",
@@ -118,13 +117,9 @@ abstract class cls_claseVehiculo extends cls_db
 
 	private function GetDuplicados()
 	{
-		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE 
-        clase_nombre =? AND claseVehiculo_id = ?");
-		if ($sql->execute([$this->nombre, $this->id]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE clase_nombre = ? AND claseVehiculo_id != ?");
+		$sql->execute([$this->nombre, $this->id]);
+		if ($sql->rowCount() > 0) return true; else return false;
 	}
 
 	protected function Delete()
@@ -157,30 +152,22 @@ abstract class cls_claseVehiculo extends cls_db
 	protected function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE claseVehiculo_id = ?");
-		if ($sql->execute([$id]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute([$id]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function SearchByNombre($nombre)
 	{
+		$nombre = strtoupper($nombre);
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo WHERE clase_nombre = ?");
-		if ($sql->execute([$this->nombre]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute([$nombre]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function GetAll()
 	{
 		$sql = $this->db->prepare("SELECT * FROM clasevehiculo ORDER BY claseVehiculo_id DESC");
-		if ($sql->execute())
-			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute();
+		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
 	}
 }

@@ -24,7 +24,7 @@ abstract class cls_transporte extends cls_db
 				];
 			}
 			$result = $this->SearchByNombre($this->nombre);
-			if (isset($result[0])) {
+			if ($result) {
 				return [
 					"data" => [
 						"res" => "Este nombre de transporte ($this->nombre) ya existe"
@@ -111,11 +111,9 @@ abstract class cls_transporte extends cls_db
 
 	private function GetDuplicados()
 	{
-		$sql = $this->db->prepare("SELECT * FROM transporte WHERE 
-        transporte_nombre =? AND transporte_id = ?");
-		if ($sql->execute([$this->nombre, $this->id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
-		return $resultado;
+		$sql = $this->db->prepare("SELECT * FROM transporte WHERE transporte_nombre =? AND transporte_id = ?");
+		$sql->execute([$this->nombre, $this->id]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function Delete()
@@ -148,24 +146,21 @@ abstract class cls_transporte extends cls_db
 	protected function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT * FROM transporte WHERE transporte_id = ?");
-		if ($sql->execute([$id])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
-		return $resultado;
+		$sql->execute([$id]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function SearchByNombre($nombre)
 	{
 		$sql = $this->db->prepare("SELECT * FROM transporte WHERE transporte_nombre = ?");
-		if ($sql->execute([$this->nombre])) $resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else $resultado = [];
-		return $resultado;
+		$sql->execute([$nombre]);
+		if ($sql->rowCount() > 0) return true; return false;
 	}
 
 	protected function GetAll()
 	{
 		$sql = $this->db->prepare("SELECT * FROM transporte ORDER BY transporte_id DESC");
-		if ($sql->execute()) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		else $resultado = [];
-		return $resultado;
+		$sql->execute();
+		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
 	}
 }

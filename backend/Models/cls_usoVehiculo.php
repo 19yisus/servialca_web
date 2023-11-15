@@ -114,13 +114,9 @@ abstract class cls_usoVehiculo extends cls_db
 
 	private function GetDuplicados()
 	{
-		$sql = $this->db->prepare("SELECT * FROM usovehiculo WHERE 
-        usoVehiculo_nombre =? AND usoVehiculo_id = ?");
-		if ($sql->execute([$this->nombre, $this->id]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql = $this->db->prepare("SELECT * FROM usovehiculo WHERE usoVehiculo_nombre =? AND usoVehiculo_id != ?");
+		$sql->execute([$this->nombre, $this->id]);
+		if ($sql->rowCount() > 0) return true; else return false;
 	}
 
 	protected function Delete()
@@ -155,30 +151,21 @@ abstract class cls_usoVehiculo extends cls_db
 	protected function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT * FROM usovehiculo WHERE usoVehiculo_id = ?");
-		if ($sql->execute([$id]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute([$id]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function SearchByNombre($nombre)
 	{
 		$sql = $this->db->prepare("SELECT * FROM usovehiculo WHERE usoVehiculo_nombre = ?");
-		if ($sql->execute([$this->nombre]))
-			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute([$nombre]);
+		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
 	}
 
 	protected function GetAll()
 	{
 		$sql = $this->db->prepare("SELECT * FROM usovehiculo ORDER BY usoVehiculo_id DESC");
-		if ($sql->execute())
-			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-		else
-			$resultado = [];
-		return $resultado;
+		$sql->execute();
+		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
 	}
 }

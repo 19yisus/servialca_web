@@ -264,7 +264,7 @@ const TablaRegistroZonal = (props) => {
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: '270px' }}>{item.descripcion}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.constituida === 1 ? <span className='text-success2 mayuscula fw-bold'>constituida</span> : item.constituida === null ? <span className='text-danger mayuscula fw-bold'>sin registro</span> : <span className='text-danger2 mayuscula fw-bold'>no constituida</span>}</TableCell>
                         <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
-                          <button onClick={seleccionaOperacion(item.idiglesia,4)} className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
+                          <button onClick={seleccionaOperacion(item.idiglesia,4)} className="btn btn-sm mx-3 btn-info rounded-circle" ><i className="fas fa-eye"></i> </button>
                           <button onClick={seleccionaOperacion(item.idiglesia,2)} className="btn btn-sm mx-1 btn-warning rounded-circle"><i className="fa fa-edit"></i> </button>
                           <button onClick={seleccionaOperacion(item.idiglesia,3)} className="btn btn-sm mx-1 btn-danger rounded-circle"><i className="fa fa-trash"></i> </button>
                           <button onClick={imprimirQr} className="btn btn-sm mx-1 btn-primary rounded-circle"><i className="fa fa-print"></i> </button>

@@ -226,7 +226,7 @@ function TablaLicencia() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/licencia/ConsultarTodos";
+    let endpoint = op.conexion + "/Licencia/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
 
@@ -460,7 +460,7 @@ function TablaLicencia() {
                     </button>
                     <button
                       onClick={imprimir(item.licencia_id)}
-                      className="btn btn-sm mx-1 btn-info rounded-circle"
+                      className="btn btn-sm mx-3 btn-info rounded-circle"
                     >
                       <i className="fas fa-print"></i>
                     </button>
