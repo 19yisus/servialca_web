@@ -324,8 +324,14 @@ export const ModalRcv = (props) => {
           txtNombre.current.value = response.cliente.cliente_nombre;
           txtApellido.current.value = response.cliente.cliente_apellido;
           let telefono = response.cliente.cliente_telefono.split("-");
-          cmbTelefono.current.value = telefono[0] + "-";
-          txtTelefono.current.value = telefono[1];
+          if (telefono[1] == null) {
+            cmbTelefono.current.value = "0412-";
+            txtTelefono.current.value = "";
+          } else {
+            cmbTelefono.current.value = telefono[0] + "-";
+            txtTelefono.current.value = telefono[1];
+          }
+
           txtCorreo.current.value = response.cliente.cliente_correo;
           txtDirec.current.value = response.cliente.cliente_direccion;
         }
@@ -459,8 +465,12 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
-    if(TxtTipoContrato.current.value === "") alert("No se puede consultar sin el contrato seleccionado"); return false;
-    if(cmbTipo.current.value === "") alert("No se puede consultar sin el tipo de contrato seleccionado"); return false;
+    if (TxtTipoContrato.current.value === "")
+      alert("No se puede consultar sin el contrato seleccionado");
+    return false;
+    if (cmbTipo.current.value === "")
+      alert("No se puede consultar sin el tipo de contrato seleccionado");
+    return false;
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();
@@ -894,7 +904,9 @@ export const ModalRcv = (props) => {
   };
 
   const handleChange = (maxValue) => (e) => {
+    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
     const inputValue = e.target.value;
+
     // Verificar si la longitud del valor ingresado supera el valor máximo
     if (isNaN(inputValue)) {
       if (inputValue.length > maxValue && e.key !== "Backspace") {
@@ -953,6 +965,26 @@ export const ModalRcv = (props) => {
       ".",
       2
     );
+  };
+
+  const igualA = async () => {
+    let contratante = cmbNacionalidad.current.value + txtCedula.current.value;
+    let titular =
+      cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value;
+
+    // Guardar los valores originales del contratante
+    let nombreContratanteOriginal = txtNombre.current.value;
+    let apellidoContratanteOriginal = txtApellido.current.value;
+
+    if (contratante === titular) {
+      // Asignar los valores del titular al contratante
+      txtNombre.current.value = txtNombreTitular.current.value;
+      txtApellido.current.value = txtApellidoTitular.current.value;
+    } else if (titular === contratante) {
+      // Asignar los valores originales del contratante al titular
+      txtNombreTitular.current.value = nombreContratanteOriginal;
+      txtApellidoTitular.current.value = apellidoContratanteOriginal;
+    }
   };
 
   const selecionarRegistros = async (id) => {
@@ -1337,7 +1369,7 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     disabled={operacion === 3}
                     ref={txtCedula}
-                    onKeyDown={handleChange(9)}
+                    onKeyUp={handleChange(9)}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
@@ -1388,7 +1420,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       disabled={operacion === 3}
-                      onKeyDown={handleChange(25)}
+                      onKeyUp={handleChange(25)}
                       ref={txtNombre}
                       class="form-control "
                       aria-label="Sizing example input"
@@ -1405,7 +1437,7 @@ export const ModalRcv = (props) => {
                     <input
                       disabled={operacion === 3}
                       type="text"
-                      onKeyDown={handleChange(25)}
+                      onKeyUp={handleChange(25)}
                       ref={txtApellido}
                       class="form-control"
                       aria-label="Sizing example input"
@@ -1433,7 +1465,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyDown={handleChange(7)}
+                      onKeyUp={handleChange(7)}
                       ref={txtTelefono}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
@@ -1449,7 +1481,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyDown={handleChange(25)}
+                      onKeyUp={handleChange(25)}
                       ref={txtCorreo}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
@@ -1464,7 +1496,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyDown={handleChange(30)}
+                      onKeyUp={handleChange(30)}
                       ref={txtDirec}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
@@ -1606,7 +1638,7 @@ export const ModalRcv = (props) => {
                   <input
                     type="text"
                     class="form-control"
-                    onKeyDown={handleChange(9)}
+                    onKeyUp={handleChange(9)}
                     onKeyPress={validarTitular}
                     ref={txtCedulatTitular}
                     aria-label="Sizing example input"
@@ -1634,7 +1666,7 @@ export const ModalRcv = (props) => {
                       Nombre
                     </span>
                     <input
-                      onKeyDown={handleChange(25)}
+                      onKeyUp={handleChange(25)}
                       type="text"
                       ref={txtNombreTitular}
                       class="form-control"
@@ -1650,7 +1682,7 @@ export const ModalRcv = (props) => {
                       Apellido
                     </span>
                     <input
-                      onKeyDown={handleChange(25)}
+                      onKeyUp={handleChange(25)}
                       type="text"
                       ref={txtApellidoTitular}
                       class="form-control"
@@ -1679,7 +1711,7 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     ref={txtPlaca}
-                    onKeyDown={handleChange(8)}
+                    onKeyUp={handleChange(8)}
                     class="form-control"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
@@ -1703,7 +1735,7 @@ export const ModalRcv = (props) => {
                   <input
                     disabled={operacion === 3}
                     type="text"
-                    onKeyDown={handleChange(2)}
+                    onKeyUp={handleChange(2)}
                     ref={txtPuesto}
                     class="form-control"
                     aria-label="Sizing example input"
@@ -1752,7 +1784,7 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     class="form-control"
-                    onKeyDown={handleChange(4)}
+                    onKeyUp={handleChange(4)}
                     ref={txtAño}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
@@ -1769,7 +1801,7 @@ export const ModalRcv = (props) => {
                   <input
                     type="text"
                     class="form-control"
-                    onKeyDown={handleChange(18)}
+                    onKeyUp={handleChange(18)}
                     ref={txtSerMotor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
@@ -1813,7 +1845,7 @@ export const ModalRcv = (props) => {
                     Color
                   </span>
                   <input
-                    onKeyDown={handleChange(20)}
+                    onKeyUp={handleChange(20)}
                     type="text"
                     class="form-control"
                     ref={txtColor}
@@ -1833,7 +1865,7 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     class="form-control"
-                    onKeyDown={handleChange(18)}
+                    onKeyUp={handleChange(18)}
                     ref={txtSerCarroceria}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
@@ -1885,7 +1917,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyDown={handleChange(15)}
+                    onKeyUp={handleChange(15)}
                     type="text"
                     class="form-control"
                     ref={txtModelo}
@@ -1902,7 +1934,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyDown={handleChange(15)}
+                    onKeyUp={handleChange(15)}
                     type="text"
                     class="form-control"
                     ref={txtMarca}
@@ -1919,7 +1951,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyDown={handleChange(10)}
+                    onKeyUp={handleChange(10)}
                     type="text"
                     class="form-control"
                     ref={txtPeso}
@@ -1937,7 +1969,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyDown={handleChange(10)}
+                    onKeyUp={handleChange(10)}
                     type="text"
                     class="form-control"
                     ref={txtCapTon}
@@ -1981,7 +2013,7 @@ export const ModalRcv = (props) => {
                     Referencia
                   </span>
                   <input
-                    onKeyDown={handleChange(4)}
+                    onKeyUp={handleChange(4)}
                     type="text"
                     class="form-control"
                     ref={txtReferencia}

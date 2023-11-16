@@ -156,6 +156,40 @@ export const ModalCertificadoMedico = (props) => {
         })
       );
   };
+  const consultarCliente = async ($cedula) => {
+    let endpoint = op.conexion + "/cliente/consultarCedulaCliente";
+    let bodyF = new FormData();
+    bodyF.append("cedula", $cedula);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          txtNombre.current.value = response.cliente.cliente_nombre;
+          txtApellido.current.value = response.cliente.cliente_apellido;
+          txtFechaNaci.current.value = response.cliente.cliente_fechaNacimiento;
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const actualizarCertificado = async () => {
     let endpoint;
     if (operacion === 3) {
@@ -321,7 +355,9 @@ export const ModalCertificadoMedico = (props) => {
     setEdad(edadCalculada);
   }
   const handleChange = (maxValue) => (e) => {
+    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
     const inputValue = e.target.value;
+
     // Verificar si la longitud del valor ingresado supera el valor máximo
     if (isNaN(inputValue)) {
       if (inputValue.length > maxValue && e.key !== "Backspace") {
@@ -461,9 +497,11 @@ export const ModalCertificadoMedico = (props) => {
             <button
               type="button"
               class="btn btn-success"
-              onClick={() => {
-                setMostrar(true);
-              }}
+              onClick={() =>
+                consultarCliente(
+                  cmbNacionalidad.current.value + txtCedula.current.value
+                )
+              }
             >
               <i class="fa fa-search"></i>
             </button>
