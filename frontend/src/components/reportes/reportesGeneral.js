@@ -18,7 +18,7 @@ import { formatMoneda } from "../../util/varios";
 
 import moment from "moment";
 
-const TablaReportes = (props) => {
+function TablaReportes () {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -125,10 +125,12 @@ const TablaReportes = (props) => {
   const [idcuentabancaria, setIdCuentaBancaria] = useState("");
   const [datos, setDatos] = useState([]);
 
-  // const generarReporte = async (e) => {
-  //   e.preventDefault();
-  //   window.open(`${op.conexion}/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`);
-  // };
+  const generarReporte = async (e) => {
+    e.preventDefault();
+    window.open(
+      `${op.conexion}/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
+    );
+  };
 
   const seleccionaOperacion = (id, op) => (e) => {
     e.preventDefault();
@@ -392,7 +394,7 @@ const TablaReportes = (props) => {
               <div className="col-md-5 mx-auto row">
                 <button
                   type="button"
-                  // onClick={generarReporte}
+                  onClick={generarReporte}
                   class="btn col-md-6 btn-sm mx-auto rounded-pill btn-primary"
                 >
                   Generar{" "}
