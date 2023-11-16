@@ -126,7 +126,7 @@ const TablaReportes = (props) => {
   const [datos, setDatos] = useState([]);
 
   const generarReporte = async (e) => {
-    e.preventDefault();
+
     window.open(`${op.conexion}/reporte/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`);
   };
 
