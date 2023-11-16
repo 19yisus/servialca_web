@@ -182,11 +182,8 @@ class cls_Auth extends cls_db
           'code' => 400
         ];
       }
-
-
       // $clave = password_hash((isset($this->clave) ? $this->clave : $this->cedula), PASSWORD_BCRYPT, ['cost' => 12]);
-      $clave = $this->cedula;
-
+  
       $sql = $this->db->prepare("INSERT INTO 
       usuario(
           usuario_usuario,
@@ -211,7 +208,7 @@ class cls_Auth extends cls_db
         $this->telefono,
         $this->direccion,
         $this->correo,
-        $clave,
+        $this->clave,
         $this->rol,
         $this->sucursal,
         $this->permiso
@@ -265,6 +262,7 @@ class cls_Auth extends cls_db
       usuario_telefono = ?,
       usuario_direccion = ?,
       usuario_correo = ?,
+      usuario_clave = ?,
       roles_id =?,
       sucursal_id =?,
       permisos = ?
@@ -277,6 +275,7 @@ class cls_Auth extends cls_db
         $this->telefono,
         $this->direccion,
         $this->correo,
+        $this->clave,
         $this->rol,
         $this->sucursal,
         $this->permiso,

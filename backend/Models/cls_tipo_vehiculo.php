@@ -147,7 +147,8 @@ abstract class cls_tipo_vehiculo extends cls_db
 
         return [
           "data" => [
-            "res" => "vehiculo desactivado"
+            "res" => "Estatus modificado",
+            "code" => 200
           ],
           "code" => 200
         ];

@@ -13,7 +13,7 @@ abstract class cls_vehiculo extends cls_db
 
 	protected function GetOne($placa)
 	{
-		$sql = $this->db->prepare("SELECT vehiculo.*, color.*, modelo.*, marca.*, usovehiculo.*, tipovehiculo.*
+		$sql = $this->db->prepare("SELECT vehiculo.*, color.*, modelo.*, marca.*, usovehiculo.*, tipovehiculo.*, clasevehiculo.*
             FROM vehiculo
             INNER JOIN color ON color.color_id = vehiculo.color_id
             INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
@@ -22,7 +22,6 @@ abstract class cls_vehiculo extends cls_db
             INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
             INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = vehiculo.tipo_id
             WHERE vehiculo_placa = ?");
-
 		if ($sql->execute([$placa])) {
 			$resultado = $sql->fetch(PDO::FETCH_ASSOC);
 		} else {

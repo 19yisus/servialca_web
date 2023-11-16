@@ -1254,7 +1254,7 @@ abstract class cls_poliza extends cls_db
 		// URL de la página a la que deseas redirigir
 		$paginaWeb = "https://servialcarcv.com/servialca2/Controlador/reporteRCVWEB.php?ID=5608";
 
-		$QRcodeImg = "../Controlador/ImgQr/" . $id . ".png";
+		$QRcodeImg = "./backend/ImgQr/" . $id . ".png";
 		QRcode::png($paginaWeb, $QRcodeImg);
 
 		$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");

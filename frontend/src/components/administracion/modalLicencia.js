@@ -118,7 +118,7 @@ export const ModalLicencia = (props) => {
     });
   };
   const seleccionarRegistros = async (id) => {
-    if(id === "") return false;
+    if (id === "") return false;
     let endpoint = op.conexion + "/Licencia/ConsultarUno";
     console.log(endpoint);
     let bodyF = new FormData();
@@ -336,7 +336,9 @@ export const ModalLicencia = (props) => {
   }
 
   const handleChange = (maxValue) => (e) => {
+    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
     const inputValue = e.target.value;
+
     // Verificar si la longitud del valor ingresado supera el valor máximo
     if (isNaN(inputValue)) {
       if (inputValue.length > maxValue && e.key !== "Backspace") {
@@ -352,7 +354,47 @@ export const ModalLicencia = (props) => {
       }
     }
   };
-
+  const consultarCliente = async ($cedula) => {
+    let endpoint = op.conexion + "/cliente/consultarCedulaCliente";
+    let bodyF = new FormData();
+    bodyF.append("cedula", $cedula);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          txtNombre.current.value = response.cliente.cliente_nombre;
+          txtApellido.current.value = response.cliente.cliente_apellido;
+          let telefono = response.cliente.cliente_telefono.split("-");
+          if (telefono[1] == null) {
+            cmbTelefono.current.value = "0412-";
+            txtTelefono.current.value = "";
+          } else {
+            cmbTelefono.current.value = telefono[0] + "-";
+            txtTelefono.current.value = telefono[1];
+          }
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -393,7 +435,7 @@ export const ModalLicencia = (props) => {
       keyboard={false}
       onShow={() => {
         setOperacion(props.operacion);
-        console.log(props)
+        console.log(props);
         if (props.operacion) {
           seleccionarRegistros(props.idLicencia);
         }
@@ -468,9 +510,11 @@ export const ModalLicencia = (props) => {
             <button
               type="button"
               class="btn btn-success"
-              onClick={() => {
-                setMostrar(true);
-              }}
+              onClick={() =>
+                consultarCliente(
+                  cmbNacionalidad.current.value + txtCedula.current.value
+                )
+              }
             >
               <i class="fa fa-search"></i>
             </button>
