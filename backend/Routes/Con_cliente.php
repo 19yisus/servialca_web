@@ -9,7 +9,7 @@ class Con_cliente extends cls_cliente
 
     public function Cumple()
     {
-        $resultado = $this->cumpleañero();
+        $resultado = $this->cumpleanero();
         Response($resultado, 200);
     }
 
