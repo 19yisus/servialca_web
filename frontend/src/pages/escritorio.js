@@ -21,7 +21,7 @@ import TablaTransporte from "../components/DatosVehiculo/tablaTransporte";
 import TablaUsuarios from "../components/datosUsuario/tablaUsuarios";
 import TablaRoles from "../components/datosUsuario/tablaRoles";
 import TablaCertificado from "../components/medico/tablaCertificado";
-import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
+import TablaClumpeaneros from "../components/cumpleaneros/tablaCumpleaneros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
 import TablaReportes from "../components/reportes/reportesGeneral";
@@ -554,8 +554,8 @@ function MenuImpuestoPP(props) {
               />
               <AuthRoute
                 exact
-                path="/cumpleañeros"
-                component={TablaClumpeañeros}
+                path="/cumpleaneros"
+                component={TablaClumpeaneros}
               />
               <AuthRoute
                 exact
