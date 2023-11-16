@@ -126,8 +126,8 @@ const TablaReportes = (props) => {
   const [datos, setDatos] = useState([]);
 
   const generarReporte = async (e) => {
-
-    window.open(`${op.conexion}/reporte/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`);
+    e.preventDefault();
+    window.open(`${op.conexion}/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`);
   };
 
   const seleccionaOperacion = (id, op) => (e) => {
