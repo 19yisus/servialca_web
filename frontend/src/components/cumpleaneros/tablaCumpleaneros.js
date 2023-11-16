@@ -121,7 +121,7 @@ function TablaClumpeaneros() {
   
   
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/Cliente/Cumple";
+    let endpoint = op.conexion + "/cliente/Cumple";
 console.log(endpoint)
     setActivate(true)
    
@@ -163,9 +163,9 @@ console.log(endpoint)
           return items;
         else
           return items.filter(x => {
-            if ((x.idcuentabancaria !== null ? String(x.idcuentabancaria).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+            if ((x.cliente_cedula !== null ? String(x.cliente_cedula).includes(target.value) : 0)
+              || (x.cliente_nombre !== null ? x.cliente_nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
+              || (x.cliente_apellido !== null ? x.cliente_apellido.includes(target.value) : '')
             ) {
               return x;
             }
