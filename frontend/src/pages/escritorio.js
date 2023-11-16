@@ -485,7 +485,7 @@ function MenuImpuestoPP(props) {
                   <span>Licencias</span>
                 </a>
                 <a
-                  href="/cumpleañeros"
+                  href="/cumpleaneros"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i class="fas fa-birthday-cake  fa-fw me-1 "></i>
