@@ -21,10 +21,10 @@ import TablaTransporte from "../components/DatosVehiculo/tablaTransporte";
 import TablaUsuarios from "../components/datosUsuario/tablaUsuarios";
 import TablaRoles from "../components/datosUsuario/tablaRoles";
 import TablaCertificado from "../components/medico/tablaCertificado";
-import TablaClumpeañeros from "../components/cumpleañeros/tablaCumpleañeros";
+import TablaClumpeaneros from "../components/cumpleaneros/tablaCumpleaneros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
-import TablaReportes from "../components/reportes/reportesGeneral";
+import TablaReportes from "../components/reportesPorqueria/reportesGeneral";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
@@ -34,7 +34,7 @@ import Panel from "./panel";
 import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 import TablaLicencias from "../components/administracion/tablaLicencia";
 import PageChats from "../components/chat/chats";
-import ReportesSemanal from "../components/reportes/resportes";
+import ReportesSemanal from "../components/reportesPorqueria/resportes";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -470,7 +470,7 @@ function MenuImpuestoPP(props) {
                   <span>Lista de vendedores semanal</span>
                 </a>
                 <a
-                  href="/reportes"
+                  href="/reportesGeneral"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i className="fas fa-fw me-1 fa-print " />
@@ -485,7 +485,7 @@ function MenuImpuestoPP(props) {
                   <span>Licencias</span>
                 </a>
                 <a
-                  href="/cumpleañeros"
+                  href="/cumpleaneros"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i class="fas fa-birthday-cake  fa-fw me-1 "></i>
@@ -554,8 +554,8 @@ function MenuImpuestoPP(props) {
               />
               <AuthRoute
                 exact
-                path="/cumpleañeros"
-                component={TablaClumpeañeros}
+                path="/cumpleaneros"
+                component={TablaClumpeaneros}
               />
               <AuthRoute
                 exact
@@ -573,7 +573,7 @@ function MenuImpuestoPP(props) {
                 component={TablaTipoVehiculoBocono}
               />
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
-              <AuthRoute exact path="/reportes" component={TablaReportes} />
+              <AuthRoute exact path="/reportesGeneral" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />

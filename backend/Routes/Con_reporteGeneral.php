@@ -1,6 +1,6 @@
 <?php
-include("./FPDF/fpdf.php");
-include("./Models/cls_poliza.php");
+include_once("./FPDF/fpdf.php");
+include_once("./Models/cls_poliza.php");
 class Reporte extends cls_poliza
 {
 }
