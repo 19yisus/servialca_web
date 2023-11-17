@@ -470,7 +470,7 @@ function MenuImpuestoPP(props) {
                   <span>Lista de vendedores semanal</span>
                 </a>
                 <a
-                  href="/reportes"
+                  href="/reportesGeneral"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
                 >
                   <i className="fas fa-fw me-1 fa-print " />
@@ -573,7 +573,7 @@ function MenuImpuestoPP(props) {
                 component={TablaTipoVehiculoBocono}
               />
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
-              <AuthRoute exact path="/reportes" component={TablaReportes} />
+              <AuthRoute exact path="/reportesGeneral" component={TablaReportes} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />
