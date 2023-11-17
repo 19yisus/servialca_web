@@ -24,7 +24,7 @@ import TablaCertificado from "../components/medico/tablaCertificado";
 import TablaClumpeaneros from "../components/cumpleaneros/tablaCumpleaneros";
 import GraficosIngresos from "../components/graficas/graficaIngresoEgreso";
 import TablaTipoVehiculo from "../components/DatosVehiculo/tablaTipoVehiculo";
-import TablaReportes from "../components/reportes/reportesGeneral";
+import TablaReportes from "../components/reportesPorqueria/reportesGeneral";
 import TablaMorosos from "../components/administracion/tablaMorosos";
 import TablaTipoVehiculoBocono from "../components/DatosVehiculo/tablaTipoVehiculoBocono";
 import TablaLicencia from "../components/licencia/tablaLicencia";
@@ -34,7 +34,7 @@ import Panel from "./panel";
 import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 import TablaLicencias from "../components/administracion/tablaLicencia";
 import PageChats from "../components/chat/chats";
-import ReportesSemanal from "../components/reportes/resportes";
+import ReportesSemanal from "../components/reportesPorqueria/resportes";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
