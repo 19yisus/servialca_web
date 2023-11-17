@@ -256,68 +256,68 @@ function TablaReportes () {
     txtDesde.current.value = fechaActual;
     txtHasta.current.value = fechaActual;
   }, []);
-  const generar = () => {
-    let sigue = true;
+  // const generar = () => {
+  //   let sigue = true;
 
-    if (cmbTipo.current.value === "") {
-      sigue = false;
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "Seleccione un tipo de reposrte",
-        icono: "informacion",
-      });
-      cmbTipo.current.focus();
-    } else if (cmbDato.current.value === "") {
-      sigue = false;
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "Seleccione un regsitro",
-        icono: "informacion",
-      });
-      cmbDato.current.focus();
-    } else if (txtDesde.current.value === "") {
-      sigue = false;
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "Ingrese una fecha de inicio",
-        icono: "informacion",
-      });
-      txtDesde.current.focus();
-    } else if (txtHasta.current.value === "") {
-      sigue = false;
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "Ingrese una fecha Final",
-        icono: "informacion",
-      });
-      txtHasta.current.focus();
-    } else if (txtDesde.current.value > txtHasta.current.value) {
-      sigue = false;
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "La fecha de inicio no debe ser mayora a la fecha final",
-        icono: "informacion",
-      });
-      txtHasta.current.focus();
-    }
+  //   if (cmbTipo.current.value === "") {
+  //     sigue = false;
+  //     setMensaje({
+  //       mostrar: true,
+  //       titulo: "Notificación",
+  //       texto: "Seleccione un tipo de reposrte",
+  //       icono: "informacion",
+  //     });
+  //     cmbTipo.current.focus();
+  //   } else if (cmbDato.current.value === "") {
+  //     sigue = false;
+  //     setMensaje({
+  //       mostrar: true,
+  //       titulo: "Notificación",
+  //       texto: "Seleccione un regsitro",
+  //       icono: "informacion",
+  //     });
+  //     cmbDato.current.focus();
+  //   } else if (txtDesde.current.value === "") {
+  //     sigue = false;
+  //     setMensaje({
+  //       mostrar: true,
+  //       titulo: "Notificación",
+  //       texto: "Ingrese una fecha de inicio",
+  //       icono: "informacion",
+  //     });
+  //     txtDesde.current.focus();
+  //   } else if (txtHasta.current.value === "") {
+  //     sigue = false;
+  //     setMensaje({
+  //       mostrar: true,
+  //       titulo: "Notificación",
+  //       texto: "Ingrese una fecha Final",
+  //       icono: "informacion",
+  //     });
+  //     txtHasta.current.focus();
+  //   } else if (txtDesde.current.value > txtHasta.current.value) {
+  //     sigue = false;
+  //     setMensaje({
+  //       mostrar: true,
+  //       titulo: "Notificación",
+  //       texto: "La fecha de inicio no debe ser mayora a la fecha final",
+  //       icono: "informacion",
+  //     });
+  //     txtHasta.current.focus();
+  //   }
 
-    if (sigue) {
-      window.open(
-        `${op.conexion}/reporte_Ingreso_egreso?nota_id=${
-          cmbTipo.current.value
-        }&sucursal_id=${cmbDato.current.value}&user_id=${
-          cmbDato.current.value
-        }&fechaInicio=${moment(txtDesde.current.value).format(
-          "YYYY-MM-DD"
-        )}&fechaFin=${moment(txtHasta.current.value).format("YYYY-MM-DD")}`
-      );
-    }
-  };
+  //   if (sigue) {
+  //     window.open(
+  //       `${op.conexion}/reporte_Ingreso_egreso?nota_id=${
+  //         cmbTipo.current.value
+  //       }&sucursal_id=${cmbDato.current.value}&user_id=${
+  //         cmbDato.current.value
+  //       }&fechaInicio=${moment(txtDesde.current.value).format(
+  //         "YYYY-MM-DD"
+  //       )}&fechaFin=${moment(txtHasta.current.value).format("YYYY-MM-DD")}`
+  //     );
+  //   }
+  // };
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
