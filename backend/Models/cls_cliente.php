@@ -8,7 +8,7 @@ abstract class cls_cliente extends cls_db
 		parent::__construct();
 	}
 
-	protected function cumpleañero()
+	protected function cumpleanero()
 	{
 		$dia = date("d");
 		$mes = date("m");

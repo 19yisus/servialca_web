@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 
 import { Mensaje } from "../mensajes";
+import { MensajeSiNo } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
 
@@ -13,7 +14,7 @@ function TablaUsuarios() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const [variable, setVariable] = useState();
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -192,14 +193,14 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
-      selecionarRegistros();
+    selecionarRegistros();
   };
 
-  const deleteUser = async (id) => {
+  const deleteUser = async () => {
     let endpoint = op.conexion + "/Auth/EliminarUsuario";
     setActivate(true);
     let bodyF = new FormData();
-    bodyF.append("ID", id);
+    bodyF.append("ID", variable);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -222,7 +223,7 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
-      selecionarRegistros();
+    selecionarRegistros();
   };
   const cambiarEstatus = async (id, estatus) => {
     var variable;
@@ -258,7 +259,7 @@ function TablaUsuarios() {
           icono: "informacion",
         })
       );
-      selecionarRegistros();
+    selecionarRegistros();
   };
   const selecionarRegistros = async () => {
     let endpoint = op.conexion + "/Auth/ConsultarTodos";
@@ -337,7 +338,19 @@ function TablaUsuarios() {
   };
 
   console.log("estas en menu");
-
+  const [mensajesino, setMensajesino] = useState({
+    mostrar: false,
+    titulo: "",
+    texto: "",
+    icono: "",
+  });
+  const handleCloseNo = () => {
+    setMensajesino({ mostrar: false, titulo: "", texto: "", icono: "" });
+  };
+  const handleCloseSi = () => {
+    deleteUser();
+    setMensajesino({ mostrar: false, titulo: "", texto: "", icono: "" });
+  };
   useEffect(() => {
     selecionarRegistros();
   }, []);
@@ -350,7 +363,13 @@ function TablaUsuarios() {
   const gestionarBanco = (op, id, estatus) => (e) => {
     e.preventDefault();
     if (op == 5) {
-      deleteUser(id);
+      setVariable(id);
+      setMensajesino({
+        mostrar: true,
+        titulo: "¿Seguro que deseas realizar la operación?",
+        texto: "Una vez eliminado el usuario desaparecera del sistema",
+        icono: "informacion",
+      });
     } else if (op == 9) {
       quitarLuz();
     } else if (op == 8) {
@@ -363,6 +382,11 @@ function TablaUsuarios() {
   };
   return (
     <div className="col-md-12 mx-auto p-2">
+      <MensajeSiNo
+        mensaje={mensajesino}
+        onHideNo={handleCloseNo}
+        onHideSi={handleCloseSi}
+      />
       <ModalUsuarios
         operacion={operacion}
         show={mostrar}
@@ -372,7 +396,6 @@ function TablaUsuarios() {
         render={selecionarRegistros}
         id={idUser}
       />
-
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
           <h2 className=" col-5 text-light">Usuarios Del Sistema</h2>
@@ -506,7 +529,7 @@ function TablaUsuarios() {
                     </button>
                     <button
                       onClick={gestionarBanco(5, item.usuario_id)}
-                      className="btn btn-sm mx-1 btn-danger rounded-circle"
+                      className="btn btn-sm mx-1 btn-black rounded-circle"
                     >
                       <i className="fa fa-trash"></i>{" "}
                     </button>
@@ -517,7 +540,6 @@ function TablaUsuarios() {
         </TblContainer>
         <TblPagination />
       </div>
-
       <Dimmer active={activate} inverted>
         <Loader inverted>cargando...</Loader>
       </Dimmer>
