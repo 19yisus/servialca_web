@@ -53,7 +53,7 @@ class cls_Auth extends cls_db
         return false;
       }
 
-      if ($this->clave != $resultado['usuario_clave']) {
+      if (!password_verify($this->clave, $resultado['usuario_clave'])){
         // if (!password_verify($this->clave, $resultado['usuario_clave'])) {
         //   return [
         //     'data' => [
@@ -145,7 +145,7 @@ class cls_Auth extends cls_db
     return $resultado;
   }
 
-  protected function encriptPasswords()
+  public function encriptPasswords()
   {
     $datos = $this->db->query("SELECT * FROM usuario WHERE usuario_clave != '' ");
     $datos = $datos->fetchAll(PDO::FETCH_ASSOC);
@@ -182,7 +182,7 @@ class cls_Auth extends cls_db
           'code' => 400
         ];
       }
-      // $clave = password_hash((isset($this->clave) ? $this->clave : $this->cedula), PASSWORD_BCRYPT, ['cost' => 12]);
+      $clave = password_hash((isset($this->clave) ? $this->clave : $this->cedula), PASSWORD_BCRYPT, ['cost' => 12]);
   
       $sql = $this->db->prepare("INSERT INTO 
       usuario(
@@ -343,6 +343,7 @@ class cls_Auth extends cls_db
   protected function updatePass()
   {
     try {
+      $this->clave = password_hash($this->clave, PASSWORD_BCRYPT, ['cost' => 12]);
       $sql = $this->db->prepare("UPDATE usuario SET usuario_clave = ? WHERE usuario_id = ?");
       $sql->execute([
         $this->clave,
@@ -602,132 +603,91 @@ class cls_Auth extends cls_db
     };
   }
 
-  // public function VerificarCorreo($cedula, $email)
-  // {
-  //   $email = strtoupper($email);
-  //   $sql = "SELECT usuarios.id_user FROM personas 
-  //     INNER JOIN usuarios ON usuarios.person_id_user = personas.id_person WHERE 
-  //     personas.cedula_person = '$cedula' AND personas.correo_person = '$email';";
-
-  //   $result = $this->Query($sql);
-  //   if ($result->num_rows > 0) {
-  //     $datos = $this->Get_array($result);
-  //     $code = $this->Make_code_recovery($datos['id_user']);
-  //     $this->SendEmail($code, $email);
-
-  //     return [
-  //       'status' => true,
-  //       'next' => 2,
-  //       'id_user' => $datos['id_user'],
-  //       'message' => [
-  //         'code' => 'success',
-  //         'msg' => "Correo verificado",
-  //       ]
-  //     ];
-  //   }
-
-  //   return [
-  //     'status' => false,
-  //     'next' => 1,
-  //     'message' => [
-  //       'code' => 'error',
-  //       'msg' => "El correo ingresado no coincide",
-  //     ]
-  //   ];
-  // }
-
   // public function Make_code_recovery($id_user)
   // {
   //   $code = $this->generateRandomString();
 
-  //   $sql = "SELECT * FROM codigos_recuperacion WHERE char_code = '$code';";
-  //   $result = $this->Query($sql);
+  //   $result = $this->db->query("SELECT * FROM codigos_recuperacion WHERE char_code = '$code';");
 
-  //   if ($result->num_rows === 0) {
-  //     $datos = $this->Get_array($result);
-  //     $this->Query("UPDATE codigos_recuperacion SET status_code = 0 WHERE id_user = $id_user;");
+  //   if ($result->rowCount() === 0) {
+  //     $datos = $result->fetch(PDO::FETCH_ASSOC);
+  //     $this->db->query("UPDATE codigos_recuperacion SET status_code = 0 WHERE id_user = $id_user;");
 
-  //     $sql = "INSERT INTO codigos_recuperacion(date_cod, status_code, char_code, id_user) VALUES (NOW(),'1','$code',$id_user);";
-  //     $this->Query($sql);
-
+  //     $this->db->query("INSERT INTO codigos_recuperacion(date_cod, status_code, char_code, id_user) VALUES (NOW(),'1','$code',$id_user);");
   //     return $code;
   //   }
 
-  //   die("FALLO algo");
   //   $this->Make_code_recovery($id_user);
   // }
 
-  // public function SendEmail($code, $email)
-  // {
-  //   if (constant('username_email')  == '') die("Debes de tener configurada una cuenta de Correo electronico");
+  public function SendEmail($code, $email)
+  {
+    if ($_ENV['MAILTO_EMAIL']  == '') die("Debes de tener configurada una cuenta de Correo electronico");
 
-  //   $mail = new PHPMailer(true);
-  //   $email_user = strtolower($email);
+    $mail = new PHPMailer(true);
+    $email_user = strtolower($email);
 
-  //   try {
-  //     ini_set('display_errors', 1);
-  //     error_reporting(E_ALL);
+    try {
+      ini_set('display_errors', 1);
+      error_reporting(E_ALL);
 
-  //     $mail->SMTPDebug = 0;                              //Enable verbose debug output
-  //     $mail->isSMTP();                                   //Send using SMTP
-  //     $mail->Host       = 'smtp.gmail.com';              //Set the SMTP server to send through
-  //     $mail->SMTPAuth   = true;                          //Enable SMTP authentication
-  //     $mail->Username   = constant('username_email');    //SMTP username
-  //     $mail->Password   = constant('password_email');    //SMTP password
-  //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;   //Enable implicit TLS encryption
-  //     $mail->Port       = constant('port_email');
+      $mail->SMTPDebug = 0;                              //Enable verbose debug output
+      $mail->isSMTP();                                   //Send using SMTP
+      $mail->Host       = 'smtp.gmail.com';              //Set the SMTP server to send through
+      $mail->SMTPAuth   = true;                          //Enable SMTP authentication
+      $mail->Username   = $_ENV['MAILTO_EMAIL'];    //SMTP username
+      $mail->Password   = $_ENV['MAILTO_TOKEN'];    //SMTP password
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;   //Enable implicit TLS encryption
+      $mail->Port       = $_ENV['MAILTO_PORT'];
 
+      //Recipients
+      $mail->setFrom($_ENV['MAILTO_EMAIL'], 'Mailer');
+      $mail->addAddress($email_user);     //Add a recipient
 
-  //     //Recipients
-  //     $mail->setFrom(constant('username_email'), 'Mailer');
-  //     $mail->addAddress($email_user);     //Add a recipient
+      //Content
+      $mail->isHTML(true);                                  //Set email format to HTML
+      $mail->Subject = 'Codigo de recuperacion';
+      $mail->Body    = "Esta es su nueva clave de acceso: <b>$code</b>";
 
-  //     //Content
-  //     $mail->isHTML(true);                                  //Set email format to HTML
-  //     $mail->Subject = 'Codigo de recuperacion';
-  //     $mail->Body    = "Este es tu código de recuperación: <b>$code</b>";
+      if (!$mail->send()) return false;
+      else return true;
+    } catch (Exception $e) {
+      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+  }
 
-  //     if (!$mail->send()) return false;
-  //     else return true;
-  //   } catch (Exception $e) {
-  //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-  //   }
-  // }
+  function generateRandomString($length = 8)
+  {
+    return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+  }
 
-  // function generateRandomString($length = 8)
-  // {
-  //   return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
-  // }
+  public function ValidacionCodigo($datos)
+  {
+    $code = $datos['code'];
+    $id_user = $datos['id'];
 
-  // public function ValidacionCodigo($datos)
-  // {
+    $result = $this->db->query("SELECT * FROM codigos_recuperacion WHERE char_code = '$code' AND id_user = $id_user AND status_code = 1;");
+    
+    if ($result->rowCount() > 0) {
 
-  //   $code = $datos['code'];
-  //   $id_user = $datos['id'];
-
-  //   $sql = "SELECT * FROM codigos_recuperacion WHERE char_code = '$code' AND id_user = $id_user AND status_code = 1;";
-  //   $result = $this->Query($sql);
-
-  //   if ($result->num_rows > 0) {
-
-  //     return [
-  //       'status' => true,
-  //       'next' => 3,
-  //       'id_user' => $id_user,
-  //       'message' => [
-  //         'code' => 'success',
-  //         'msg' => "Código verificado!",
-  //       ]
-  //     ];
-  //   }
-  //   return [
-  //     'status' => false,
-  //     'next' => 2,
-  //     'id_user' => $id_user,
-  //     'message' => [
-  //       'code' => 'error',
-  //       'msg' => "Código incorrecto o invalido",
-  //     ]
-  //   ];
-  // }
+      return [
+        'status' => true,
+        'next' => 3,
+        'id_user' => $id_user,
+        'message' => [
+          'code' => 'success',
+          'msg' => "Código verificado!",
+        ]
+      ];
+    }
+    return [
+      'status' => false,
+      'next' => 2,
+      'id_user' => $id_user,
+      'message' => [
+        'code' => 'error',
+        'msg' => "Código incorrecto o invalido",
+      ]
+    ];
+  }
 }
