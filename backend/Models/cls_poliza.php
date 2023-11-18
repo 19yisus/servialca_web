@@ -57,14 +57,14 @@ abstract class cls_poliza extends cls_db
         INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
         WHERE cliente.cliente_cedula = ? AND vehiculo.vehiculo_placa = ?");
 		$sql->execute([$this->cedula, $this->placa]);
-
 		if ($sql->rowCount() > 0) {
 			$data = $sql->fetch(PDO::FETCH_ASSOC);
+			$datos = $this->GetOne($data["poliza_id"]);
 			return [
 				'data' => [
 					'res' => "Contrato encontrado",
 					"code" => 200,
-					'contrato' => $data
+					'contrato' => $datos
 				],
 				'code' => 200
 			];
