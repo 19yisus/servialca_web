@@ -730,6 +730,7 @@ export const ModalUsuarios = (props) => {
               <input
                 class="form-check-input "
                 ref={check}
+                checked={true}
                 type="checkbox"
                 value="Contratos realizados"
                 id="flexCheckDefault"
