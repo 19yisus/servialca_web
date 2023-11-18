@@ -53,7 +53,7 @@ class cls_Auth extends cls_db
         return false;
       }
 
-      if (!password_verify($this->clave, $resultado['usuario_clave'])){
+      if (!password_verify($this->clave, $resultado['usuario_clave'])) {
         // if (!password_verify($this->clave, $resultado['usuario_clave'])) {
         //   return [
         //     'data' => [
@@ -183,7 +183,7 @@ class cls_Auth extends cls_db
         ];
       }
       $clave = password_hash((isset($this->clave) ? $this->clave : $this->cedula), PASSWORD_BCRYPT, ['cost' => 12]);
-  
+
       $sql = $this->db->prepare("INSERT INTO 
       usuario(
           usuario_usuario,
@@ -667,7 +667,7 @@ class cls_Auth extends cls_db
     $id_user = $datos['id'];
 
     $result = $this->db->query("SELECT * FROM codigos_recuperacion WHERE char_code = '$code' AND id_user = $id_user AND status_code = 1;");
-    
+
     if ($result->rowCount() > 0) {
 
       return [
@@ -691,3 +691,5 @@ class cls_Auth extends cls_db
     ];
   }
 }
+
+

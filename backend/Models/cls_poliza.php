@@ -52,18 +52,18 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 
-		$sql = "SELECT * FROM poliza 
-		INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-			INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-			WHERE cliente.cliente_cedula = '$this->cedula' AND vehiculo.vehiculo_placa = '$this->placa';";
+		$sql = $this->db->prepare("SELECT * FROM poliza 
+        INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+        INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+        WHERE cliente.cliente_cedula = ? AND vehiculo.vehiculo_placa = ?");
+		$sql->execute([$this->cedula, $this->placa]);
 
-		$result = $this->db->query($sql);
-
-		if ($result->rowCount() > 0) {
-			$data = $result->fetch(PDO::FETCH_ASSOC);
+		if ($sql->rowCount() > 0) {
+			$data = $sql->fetch(PDO::FETCH_ASSOC);
 			return [
 				'data' => [
 					'res' => "Contrato encontrado",
+					"code" => 200,
 					'contrato' => $data
 				],
 				'code' => 200
@@ -1090,7 +1090,7 @@ abstract class cls_poliza extends cls_db
 	public function GetOne($id)
 	{
 		$sql = $this->db->prepare("SELECT poliza.*,vehiculo.*, titular.*, cliente.*, marca.*, modelo.*, usovehiculo.*, color.*,tipovehiculo.*, usuario.*, clasevehiculo.*, 
-        tipocontrato.*, usovehiculo.*,coberturas.*,debitocredito.*, sucursal.* 
+        tipocontrato.*, usovehiculo.*,coberturas.*,debitocredito.*, sucursal.*, estado.* 
         FROM poliza 
         INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
         INNER JOIN titular ON titular.titular_id = poliza.titular_id
@@ -1106,6 +1106,7 @@ abstract class cls_poliza extends cls_db
         INNER JOIN coberturas ON coberturas.cobertura_id = poliza.cobertura_id
         INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
 		INNER JOIN sucursal on sucursal.sucursal_id = poliza.sucursal_id
+		INNER JOIN estado ON estado.estado_id = poliza.estado_id
         WHERE poliza.poliza_id = $id");
 		if ($sql->execute()) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
