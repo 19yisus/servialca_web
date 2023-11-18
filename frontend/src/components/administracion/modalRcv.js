@@ -290,6 +290,71 @@ export const ModalRcv = (props) => {
             texto: response.res,
             icono: "informacion",
           });
+          setOperacion(3);
+          idPoliza.current.value = response[0].poliza_id;
+          idCliente.current.value = response[0].cliente_id;
+          idTitular.current.value = response[0].titular_id;
+          idVehiculo.current.value = response[0].vehiculo_id;
+          idCobertura.current.value = response[0].nota_id;
+          TxtTipoContrato.current.value = response[0].contrato_nombre;
+          txtDesde.current.value = response[0].poliza_fechaInicio;
+          txtHasta.current.value = response[0].poliza_fechaVencimiento;
+          var cedula = response[0].cliente_cedula.split("-");
+          cmbNacionalidad.current.value = cedula[0] + "-";
+          txtCedula.current.value = cedula[1];
+          txtNombre.current.value = response[0].cliente_nombre;
+          txtApellido.current.value = response[0].cliente_apellido;
+          txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
+          var telefono = response[0].cliente_telefono.split("-");
+          cmbTelefono.current.value = telefono[0] + "-";
+          txtTelefono.current.value = telefono[1];
+          txtCorreo.current.value = response[0].cliente_correo;
+          txtDirec.current.value = response[0].cliente_direccion;
+          if (!response[0].estado_nombre) {
+            cmbEstado.current.value = "Portuguesa";
+          } else {
+            cmbEstado.current.value = response[0].estado_nombre;
+          }
+         
+          if (response[0].usuario_nombre == null){
+            txtAcesor.current.value = "MFIGUEROA";
+          }else{
+            txtAcesor.current.value = response[0].usuario_nombre;
+          }
+          cmbSucursal.current.value = response[0].sucursal_nombre;
+          if (!response[0].linea_nombre) {
+            txtLinea.current.value = "";
+          } else {
+            txtLinea.current.value = response[0].linea_nombre;
+          }
+          var cedulaTitular = response[0].titular_cedula.split("-");
+          cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
+          txtCedulatTitular.current.value = cedulaTitular[1];
+          txtNombreTitular.current.value = response[0].titular_nombre;
+          txtApellidoTitular.current.value = response[0].titular_apellido;
+          txtPlaca.current.value = response[0].vehiculo_placa;
+          txtPuesto.current.value = response[0].vehiculo_puesto;
+          txtUso.current.value = response[0].usoVehiculo_nombre;
+          txtAño.current.value = response[0].vehiculo_año;
+          txtSerMotor.current.value = response[0].vehiculo_serialMotor;
+          txtClase.current.value = response[0].clase_nombre;
+          txtColor.current.value = response[0].color_nombre;
+          txtSerCarroceria.current.value =
+            response[0].vehiculo_serialCarroceria;
+          cmbTipo.current.value = response[0].tipoVehiculo_nombre;
+          txtModelo.current.value = response[0].modelo_nombre;
+          txtMarca.current.value = response[0].marca_nombre;
+          txtPeso.current.value = response[0].vehiculo_peso;
+          txtCapTon.current.value = response[0].vehiculo_capTon;
+          if (response[0].nota_tipoPago == null) {
+            cmbFormaPago.current.value = 0;
+          } else {
+            cmbFormaPago.current.value = response[0].nota_tipoPago;
+          }
+
+          txtReferencia.current.value = response[0].nota_referencia;
+          txtDolar.current.value = response[0].nota_monto;
+          txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
         }
       })
       .catch((error) =>
