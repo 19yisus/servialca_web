@@ -267,6 +267,41 @@ export const ModalRcv = (props) => {
     }
   };
 
+  const tuFuncionEspecifica = async () => {
+    let endpoint = op.conexion + "/poliza/encontrarContrato";
+    let bodyF = new FormData();
+    bodyF.append(
+      "Cedula",
+      cmbNacionalidad.current.value + txtCedula.current.value
+    );
+    bodyF.append("Placa", txtPlaca.current.value);
+    setActivate(true);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 200) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Contrato ya registrado.",
+            texto: response.res,
+            icono: "informacion",
+          });
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   const consultarTitular = async ($cedula) => {
     let endpoint = op.conexion + "/cliente/consultarCedulaTitular";
     let bodyF = new FormData();
@@ -1373,7 +1408,11 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
-                    onChange={validaSoloNumero}
+                    onChange={(e) => {
+                      validaSoloNumero(e);
+                      // Agrega la función que deseas ejecutar
+                      tuFuncionEspecifica();
+                    }}
                   />
                   <button
                     type="button"
@@ -1715,6 +1754,7 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={tuFuncionEspecifica}
                   />
                   <button
                     type="button"
