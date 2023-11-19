@@ -1387,7 +1387,7 @@ export const ModalRcv = (props) => {
           </li>
           <li class="nav-item" role="presentation">
             <a
-              onClick={(e) => selecionarPrecio(e)}
+              onClick={selecionarPrecio}
               class="nav-link rounded bg-warning"
               id="ex1-tab-3"
               data-mdb-toggle="tab"
