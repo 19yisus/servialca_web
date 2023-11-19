@@ -162,6 +162,17 @@ export const ModalRcv = (props) => {
   const [idContrato, setIdContrato] = useState();
   const [operacion, setOperacion] = useState(0);
 
+  const [valorSeleccionado, setValorSeleccionado] = useState({
+    contrato_nombre:'',
+    estado_nombre:'',
+    usuario_nombre:'',
+    sucursal_nombre:'',
+    transporte_nombre:'',
+    usoVehiculo_nombre:'',
+    clase_nombre:'',
+    tipoVehiculo_nombre:''
+  });
+
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
   const salir = () => {
@@ -583,12 +594,15 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
-    if (TxtTipoContrato.current.value === "")
+    if (TxtTipoContrato.current.value === ""){
       alert("No se puede consultar sin el contrato seleccionado");
-    return false;
-    if (cmbTipo.current.value === "")
+      return false;
+    }
+
+    if (cmbTipo.current.value === ""){
       alert("No se puede consultar sin el tipo de contrato seleccionado");
-    return false;
+      return false;
+    }
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();
@@ -604,9 +618,7 @@ export const ModalRcv = (props) => {
         setActivate(false);
         txtDolar.current.value = response[0]["precio_monto"];
         txtBs.current.value = response[0]["precio_monto"] * dolarbcv;
-        console.log("tipo contrato");
         setTipoContrato(response);
-        console.log(response);
         txtDolar.current.value(response.precio_monto);
       })
       .catch((error) => console.log("Precio: Falta uno de los parametros"));
@@ -1109,23 +1121,58 @@ export const ModalRcv = (props) => {
 
 
   const selecionarRegistros = async (id) => {
+    console.group("valor seleccionado 1")
+    console.log(valorSeleccionado)
+    console.groupEnd()
     let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
     setActivate(true);
-    let bodyF = new FormData();
+    // let bodyF = new FormData();
     //    bodyF.append("ID", id)
     await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
+      method: "POST"
     })
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        setContrato( response[0].contrato_nombre)
-        idPoliza.current.value = response[0].poliza_id;
-        idCliente.current.value = response[0].cliente_id;
-        idTitular.current.value = response[0].titular_id;
-        idVehiculo.current.value = response[0].vehiculo_id;
-        idCobertura.current.value = response[0].nota_id;
+        setContrato(response[0].contrato_nombre)
+        setValorSeleccionado({
+          ...valorSeleccionado,
+          contrato_nombre: response[0].contrato_nombre,
+          estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
+          usuario_nombre: response[0].usuario_nombre,
+          sucursal_nombre:response[0].sucursal_nombre,
+          transporte_nombre: response[0].linea_nombre ?  response[0].linea_nombre : '',
+          usoVehiculo_nombre: response[0].usoVehiculo_nombre,
+          clase_nombre:response[0].clase_nombre
+        });
+
+        console.group("valor seleccionado 2")
+        console.log(valorSeleccionado)
+        console.groupEnd()
+        // setValorSeleccionado({
+        //   contrato_nombre:"BASICO",
+        //   estado_nombre:'1',
+        //   usuario_nombre:"MARIANNY DEL CARMEN",
+        //   sucursal_nombre:"GUANARITO",
+        //   transporte_nombre:'hola',
+        //   usoVehiculo_nombre:"PARTICULAR",
+        //   clase_nombre:"AUTOMOVIL",
+        //   tipoVehiculo_nombre:"camion 750"
+        // });
+        // idPoliza.current.value = response[0].poliza_id;
+        // contrato_nombre: response[0].contrato_nombre,
+        // estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
+        // usuario_nombre: response[0].usuario_nombre,
+        // sucursal_nombre:response[0].sucursal_nombre,
+        // transporte_nombre: response[0].linea_nombre ?  response[0].linea_nombre : '',
+        // usoVehiculo_nombre: response[0].usoVehiculo_nombre,
+        // clase_nombre:response[0].clase_nombre,
+        // tipoVehiculo_nombre: response[0].tipoVehiculo_nombre
+
+        // idCliente.current.value = response[0].cliente_id;
+        //idTitular.current.value = response[0].titular_id;
+        //idVehiculo.current.value = response[0].vehiculo_id;
+        //idCobertura.current.value = response[0].nota_id;
         txtDesde.current.value = response[0].poliza_fechaInicio;
         txtHasta.current.value = response[0].poliza_fechaVencimiento;
         var cedula = response[0].cliente_cedula.split("-");
@@ -1139,7 +1186,6 @@ export const ModalRcv = (props) => {
         txtTelefono.current.value = telefono[1];
         txtCorreo.current.value = response[0].cliente_correo;
         txtDirec.current.value = response[0].cliente_direccion;
-      
      
        
         var cedulaTitular = response[0].titular_cedula.split("-");
@@ -1165,48 +1211,31 @@ export const ModalRcv = (props) => {
         } else {
           cmbFormaPago.current.value = response[0].nota_tipoPago;
         }
-        TxtTipoContrato.current.getInstance().setState({
-          selected: response[0].contrato_nombre
-        });
-        setValorSeleccionado({
-          contrato_nombre: response[0].contrato_nombre,
-          estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
-          usuario_nombre: response[0].usuario_nombre,
-          sucursal_nombre:response[0].sucursal_nombre,
-          transporte_nombre: response[0].linea_nombre ?  response[0].linea_nombre : '',
-          usoVehiculo_nombre: response[0].usoVehiculo_nombre,
-          clase_nombre:response[0].clase_nombre,
-          tipoVehiculo_nombre: response[0].tipoVehiculo_nombre
-        });
+        // TxtTipoContrato.current.getInstance().setState({
+        //   selected: response[0].contrato_nombre
+        // });
+        
 
 
         txtReferencia.current.value = response[0].nota_referencia;
         txtDolar.current.value = response[0].nota_monto;
         txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
       })
-      .catch((error) =>
+      .catch((error) =>{
+        console.log(error)
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
           texto: error.res,
           icono: "informacion",
         })
+      }
       );
   };
 
-
-  const [valorSeleccionado, setValorSeleccionado] = useState({
-    contrato_nombre:'',
-    estado_nombre:'',
-    usuario_nombre:'',
-    sucursal_nombre:'',
-    transporte_nombre:'',
-    usoVehiculo_nombre:'',
-    clase_nombre:'',
-    tipoVehiculo_nombre:''
-  });
-
+  console.group("ssssssssssss")
   console.log(valorSeleccionado)
+  console.groupEnd()
 
   return (
     <Modal
@@ -1214,7 +1243,7 @@ export const ModalRcv = (props) => {
       style={{ background: "rgb(28, 27, 23)" }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
-      centered
+      centered  
       backdrop="static"
       keyboard={false}
       onShow={() => {
@@ -1464,9 +1493,9 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={TxtTipoContrato}
                     bsSize="small"
-                    defaultSelected={valorSeleccionado ? [valorSeleccionado.contrato_nombre] : []}
+                    value={[`${valorSeleccionado.contrato_nombre}`]}
+                    selected={[`${valorSeleccionado.contrato_nombre}`]}
                   />
-
 
                 </div>
               </div>
@@ -1709,7 +1738,7 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbEstado}
                       bsSize="small"
-                      defaultSelected={valorSeleccionado ? [valorSeleccionado.estado_nombre] : []}
+                      selected={valorSeleccionado ? [valorSeleccionado.estado_nombre] : []}
                     />
                   </div>
                 </div>
@@ -1757,7 +1786,7 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={txtAcesor}
                       bsSize="small"
-                      defaultSelected={valorSeleccionado ? [valorSeleccionado.usuario_nombre] : []}
+                      selected={valorSeleccionado ? [valorSeleccionado.usuario_nombre] : []}
                     />
                   </div>
                 </div>
@@ -1804,7 +1833,7 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbSucursal}
                       bsSize="small"
-                      defaultSelected={valorSeleccionado ? [valorSeleccionado.sucursal_nombre] : []}
+                      selected={valorSeleccionado ? [valorSeleccionado.sucursal_nombre] : []}
                     />
                   </div>
                 </div>
@@ -1854,7 +1883,7 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={txtLinea}
                       bsSize="small"
-                      defaultSelected={valorSeleccionado ? [valorSeleccionado.transporte_nombre] : []}
+                      selected={valorSeleccionado ? [valorSeleccionado.transporte_nombre] : []}
                     />
                   </div>
                 </div>
@@ -2040,7 +2069,7 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtUso}
                     bsSize="small"
-                    defaultSelected={valorSeleccionado ? [valorSeleccionado.usoVehiculo_nombre] : []}
+                    selected={valorSeleccionado ? [valorSeleccionado.usoVehiculo_nombre] : []}
                   />
                 </div>
               </div>
@@ -2122,7 +2151,7 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtClase}
                     bsSize="small"
-                    defaultSelected={valorSeleccionado ? [valorSeleccionado.clase_nombre] : []}
+                    selected={valorSeleccionado ? [valorSeleccionado.clase_nombre] : []}
                   />
                 </div>
               </div>
@@ -2211,7 +2240,7 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={cmbTipo}
                     bsSize="small"
-                    defaultSelected={valorSeleccionado ? [valorSeleccionado.tipoVehiculo_nombre] : []}
+                    selected={valorSeleccionado ? [valorSeleccionado.tipoVehiculo_nombre] : []}
                   />
                 </div>
               </div>
