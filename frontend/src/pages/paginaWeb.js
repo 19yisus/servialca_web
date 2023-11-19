@@ -175,59 +175,58 @@ function PaginaWeb(props) {
 
   return (
     <div className="col-md-12 px-0 mx-auto ">
-      <nav class="navbar navbar-expand-lg  fixed-top">
-        <div class="container-fluid bg-danger ">
-          <a class="navbar-brand py-2" href="#">
-            <img src={logo} className="logo-navbar" alt="MDN" />
+    
+
+<nav class="navbar navbar-expand-lg navbar-light bg-danger fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand py-2" href="#">
+      <img src={logo} className="logo-navbar" alt="MDN" />
+    </a>
+    <button
+      class="navbar-toggler btn btn-light"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse justify-content-lg-end"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#home">
+            <i class="fas fa-home"></i> Home
           </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div className="row">
-            <div
-              class="col align-self-end collapse navbar-collapse "
-              id="navbarSupportedContent"
-            >
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="#home">
-                    <i class="fas fa-home"></i> Home
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#quienes">
-                    <i class="fas fa-id-card-alt"></i> Quienes Somos
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#contact">
-                    <i class="fas fa-address-book"></i> Contactanos
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/galeria">
-                  <i class="fas fa-camera"></i> Galeria
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                  </a>
-                </li>
-               
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#quienes">
+            <i class="fas fa-id-card-alt"></i> Quienes Somos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">
+            <i class="fas fa-address-book"></i> Contactanos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/galeria">
+            <i class="fas fa-camera"></i> Galeria
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
       {/* <div id="slider">
         <figure>
           {records.slice(0, 3).map((item, index) => (
