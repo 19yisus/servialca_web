@@ -291,70 +291,76 @@ export const ModalRcv = (props) => {
             icono: "informacion",
           });
           setOperacion(3);
-          idPoliza.current.value = response[0].poliza_id;
-          idCliente.current.value = response[0].cliente_id;
-          idTitular.current.value = response[0].titular_id;
-          idVehiculo.current.value = response[0].vehiculo_id;
-          idCobertura.current.value = response[0].nota_id;
-          TxtTipoContrato.current.value = response[0].contrato_nombre;
-          txtDesde.current.value = response[0].poliza_fechaInicio;
-          txtHasta.current.value = response[0].poliza_fechaVencimiento;
-          var cedula = response[0].cliente_cedula.split("-");
+          idPoliza.current.value = response.contrato[0].poliza_id;
+          idCliente.current.value = response.contrato[0].cliente_id;
+          idTitular.current.value = response.contrato[0].titular_id;
+          idVehiculo.current.value = response.contrato[0].vehiculo_id;
+          idCobertura.current.value = response.contrato[0].nota_id;
+          TxtTipoContrato.current.value = response.contrato[0].contrato_nombre;
+
+          txtDesde.current.value = response.contrato[0].poliza_fechaInicio;
+          txtHasta.current.value = response.contrato[0].poliza_fechaVencimiento;
+          var cedula = response.contrato[0].cliente_cedula.split("-");
           cmbNacionalidad.current.value = cedula[0] + "-";
           txtCedula.current.value = cedula[1];
-          txtNombre.current.value = response[0].cliente_nombre;
-          txtApellido.current.value = response[0].cliente_apellido;
-          txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
-          var telefono = response[0].cliente_telefono.split("-");
+          txtNombre.current.value = response.contrato[0].cliente_nombre;
+          txtApellido.current.value = response.contrato[0].cliente_apellido;
+          txtFechaNaci.current.value =
+            response.contrato[0].cliente_fechaNacimiento;
+          var telefono = response.contrato[0].cliente_telefono.split("-");
           cmbTelefono.current.value = telefono[0] + "-";
           txtTelefono.current.value = telefono[1];
-          txtCorreo.current.value = response[0].cliente_correo;
-          txtDirec.current.value = response[0].cliente_direccion;
-          if (!response[0].estado_nombre) {
+          txtCorreo.current.value = response.contrato[0].cliente_correo;
+          txtDirec.current.value = response.contrato[0].cliente_direccion;
+          if (!response.contrato[0].estado_nombre) {
             cmbEstado.current.value = "Portuguesa";
           } else {
-            cmbEstado.current.value = response[0].estado_nombre;
-          }
-         
-          if (response[0].usuario_nombre == null){
-            txtAcesor.current.value = "MFIGUEROA";
-          }else{
-            txtAcesor.current.value = response[0].usuario_nombre;
-          }
-          cmbSucursal.current.value = response[0].sucursal_nombre;
-          if (!response[0].linea_nombre) {
-            txtLinea.current.value = "";
-          } else {
-            txtLinea.current.value = response[0].linea_nombre;
-          }
-          var cedulaTitular = response[0].titular_cedula.split("-");
-          cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
-          txtCedulatTitular.current.value = cedulaTitular[1];
-          txtNombreTitular.current.value = response[0].titular_nombre;
-          txtApellidoTitular.current.value = response[0].titular_apellido;
-          txtPlaca.current.value = response[0].vehiculo_placa;
-          txtPuesto.current.value = response[0].vehiculo_puesto;
-          txtUso.current.value = response[0].usoVehiculo_nombre;
-          txtAño.current.value = response[0].vehiculo_año;
-          txtSerMotor.current.value = response[0].vehiculo_serialMotor;
-          txtClase.current.value = response[0].clase_nombre;
-          txtColor.current.value = response[0].color_nombre;
-          txtSerCarroceria.current.value =
-            response[0].vehiculo_serialCarroceria;
-          cmbTipo.current.value = response[0].tipoVehiculo_nombre;
-          txtModelo.current.value = response[0].modelo_nombre;
-          txtMarca.current.value = response[0].marca_nombre;
-          txtPeso.current.value = response[0].vehiculo_peso;
-          txtCapTon.current.value = response[0].vehiculo_capTon;
-          if (response[0].nota_tipoPago == null) {
-            cmbFormaPago.current.value = 0;
-          } else {
-            cmbFormaPago.current.value = response[0].nota_tipoPago;
+            cmbEstado.current.value = response.contrato[0].estado_nombre;
           }
 
-          txtReferencia.current.value = response[0].nota_referencia;
-          txtDolar.current.value = response[0].nota_monto;
-          txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
+          if (response.contrato[0].usuario_nombre == null) {
+            txtAcesor.current.value = "MFIGUEROA";
+          } else {
+            txtAcesor.current.value = response.contrato[0].usuario_nombre;
+          }
+
+          cmbSucursal.current.value = response.contrato[0].sucursal_nombre;
+          if (!response.contrato[0].linea_nombre) {
+            txtLinea.current.value = "";
+          } else {
+            txtLinea.current.value = response.contrato[0].linea_nombre;
+          }
+          var cedulaTitular = response.contrato[0].titular_cedula.split("-");
+          cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
+          txtCedulatTitular.current.value = cedulaTitular[1];
+          txtNombreTitular.current.value = response.contrato[0].titular_nombre;
+          txtApellidoTitular.current.value =
+            response.contrato[0].titular_apellido;
+          txtPlaca.current.value = response.contrato[0].vehiculo_placa;
+          txtPuesto.current.value = response.contrato[0].vehiculo_puesto;
+          txtUso.current.value = response.contrato[0].usoVehiculo_nombre;
+          txtAño.current.value = response.contrato[0].vehiculo_año;
+          txtSerMotor.current.value = response.contrato[0].vehiculo_serialMotor;
+          txtClase.current.value = response.contrato[0].clase_nombre;
+          txtColor.current.value = response.contrato[0].color_nombre;
+          txtSerCarroceria.current.value =
+            response.contrato[0].vehiculo_serialCarroceria;
+          cmbTipo.current.value = response.contrato[0].tipoVehiculo_nombre;
+          txtModelo.current.value = response.contrato[0].modelo_nombre;
+          txtMarca.current.value = response.contrato[0].marca_nombre;
+          txtPeso.current.value = response.contrato[0].vehiculo_peso;
+          txtCapTon.current.value = response.contrato[0].vehiculo_capTon;
+          if (response.contrato[0].nota_tipoPago == null) {
+            cmbFormaPago.current.value = 0;
+          } else {
+            cmbFormaPago.current.value = response.contrato[0].nota_tipoPago;
+          }
+
+          txtReferencia.current.value = response.contrato[0].nota_referencia;
+          txtDolar.current.value = response.contrato[0].nota_monto;
+          txtBs.current.value = (
+            response.contrato[0].nota_monto * dolarbcv
+          ).toFixed(2);
         }
       })
       .catch((error) =>
@@ -1067,24 +1073,24 @@ export const ModalRcv = (props) => {
     );
   };
 
-  const igualA = async () => {
+  const igualA = async (e) => {
     let contratante = cmbNacionalidad.current.value + txtCedula.current.value;
     let titular =
       cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value;
 
-    // Guardar los valores originales del contratante
-    let nombreContratanteOriginal = txtNombre.current.value;
-    let apellidoContratanteOriginal = txtApellido.current.value;
-
-    if (contratante === titular) {
-      // Asignar los valores del titular al contratante
-      txtNombre.current.value = txtNombreTitular.current.value;
-      txtApellido.current.value = txtApellidoTitular.current.value;
-    } else if (titular === contratante) {
-      // Asignar los valores originales del contratante al titular
-      txtNombreTitular.current.value = nombreContratanteOriginal;
-      txtApellidoTitular.current.value = apellidoContratanteOriginal;
-    }
+      if (e == 1){
+        if (contratante === titular){
+          txtNombre.current.value = txtNombreTitular.current.value
+          txtApellido.current.value = txtApellidoTitular.current.value
+        }
+      }
+      else if(e == 2){
+        if (titular === contratante){
+          txtNombreTitular.current.value = txtNombre.current.value;
+          txtApellidoTitular.current.value = txtApellido.current.value;
+        }
+      }
+   
   };
 
   const selecionarRegistros = async (id) => {
@@ -1469,7 +1475,9 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     disabled={operacion === 3}
                     ref={txtCedula}
-                    onKeyUp={handleChange(9)}
+                    onKeyUp={() => {
+                      handleChange(9);
+                    }}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
@@ -1477,6 +1485,7 @@ export const ModalRcv = (props) => {
                       validaSoloNumero(e);
                       // Agrega la función que deseas ejecutar
                       tuFuncionEspecifica();
+                      igualA(1);
                     }}
                   />
                   <button
@@ -1741,14 +1750,19 @@ export const ModalRcv = (props) => {
                   </select>
                   <input
                     type="text"
-                    class="form-control"
-                    onKeyUp={handleChange(9)}
-                    onKeyPress={validarTitular}
+                    className="form-control"
+                    onKeyUp={() => {
+                      handleChange(9);
+                    }}
                     ref={txtCedulatTitular}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={validaSoloNumero}
+                    onChange={(e) => {
+                      validaSoloNumero(e);
+                      igualA(2);
+                    }}
                   />
+
                   <button
                     type="button"
                     class="btn btn-success"
