@@ -34,23 +34,23 @@ abstract class cls_poliza extends cls_db
 
 	protected function findContrato()
 	{
-		if (empty($this->cedula)) {
-			return [
-				'data' => [
-					'res' => "No se puede consultar sin la cédula del cliente"
-				],
-				'code' => 400
-			];
-		}
+		// if (empty($this->cedula)) {
+		// 	return [
+		// 		'data' => [
+		// 			'res' => "No se puede consultar sin la cédula del cliente"
+		// 		],
+		// 		'code' => 400
+		// 	];
+		// }
 
-		if (empty($this->placa)) {
-			return [
-				'data' => [
-					'res' => "No se puede consultar sin la placa del vehiculo"
-				],
-				'code' => 400
-			];
-		}
+		// if (empty($this->placa)) {
+		// 	return [
+		// 		'data' => [
+		// 			'res' => "No se puede consultar sin la placa del vehiculo"
+		// 		],
+		// 		'code' => 400
+		// 	];
+		// }
 
 		$sql = $this->db->prepare("SELECT * FROM poliza 
         INNER JOIN cliente ON cliente.cliente_id = poliza.cliente_id
@@ -80,6 +80,7 @@ abstract class cls_poliza extends cls_db
 
 	protected function renovar_poliza($dolar, $tipoIngreso, $motivo)
 	{
+		
 		if (empty($this->fechaNacimiento)) {
 			$this->fechaNacimiento = "0000-00-00";
 		}
@@ -90,19 +91,20 @@ abstract class cls_poliza extends cls_db
 			$fechaInicioObj = new DateTime($this->fechaInicio);
 			$fechaInicioObj->modify('+1 year');
 			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
-		} else {
-			$fechaVenicimiento = strtotime($this->fechaVencimiento);
-			$fechaActual = strtotime(date("Y-m-d"));
-			if ($fechaActual > $fechaVenicimiento) {
-				return [
-					'data' => [
-						'res' => "No es posible renovar, aun no se vence el contrato"
-					],
-					'code' => 400
-				];
-			} else {
-			}
-		}
+		} 
+		// else {
+		// 	$fechaVenicimiento = strtotime($this->fechaVencimiento);
+		// 	$fechaActual = strtotime(date("Y-m-d"));
+		// 	if ($fechaActual > $fechaVenicimiento) {
+		// 		return [
+		// 			'data' => [
+		// 				'res' => "No es posible renovar, aun no se vence el contrato"
+		// 			],
+		// 			'code' => 400
+		// 		];
+		// 	}
+		// }
+		$this->Security();
 		$this->SearchByUsuario();
 		$this->SearchBySucursal();
 		$result = $this->precioDolar($dolar);
