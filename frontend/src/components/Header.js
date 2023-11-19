@@ -27,7 +27,7 @@ function Header(props) {
 
   return (
     <nav
-      className="col-md-12 navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
+      className="col-md-12 navbar2 navbar-expand-lg d-flex align-items-center navbar-light bg-light d-flex justify-content-between"
       style={{ height: "70px" }}
     >
       <div className="mx-2 ">
@@ -80,13 +80,6 @@ function Header(props) {
           </ul>
         </div>
 
-        <div>
-          <button class="btn bg-transparent fw-bold btn-sm shadow-0 ">
-            <i className="fas fa-user me-2" />
-
-            {/*usuario*/}
-          </button>
-        </div>
       </div>
 
       <GestionarPreguntas
