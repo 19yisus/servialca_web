@@ -644,7 +644,7 @@ input:focus {
   }
 }
 
-.navbar .nav-link {
+.navbar2 .nav-link {
   color: #fff !important;
 }
 
@@ -1084,13 +1084,24 @@ cursor: default;
 #wrapper.toggled {
   padding-left: 220px;
 }
-.navbar{
+.navbar2{
   background: #0F2027;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   
 }
 
+.danger1{
+  background-color: #dc2637;
+}
+
+.danger2{
+
+}
+
+.danger3{
+
+}
 #sidebar-wrapper {
   z-index: 1000;
   left: 220px;
@@ -1130,7 +1141,7 @@ display: none;
 /*-------------------------------*/
 /*     Sidebar nav styles        */
 /*-------------------------------*/
-.navbar {
+.navbar2 {
 padding: 0;
 }
 
