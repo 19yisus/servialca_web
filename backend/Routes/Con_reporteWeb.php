@@ -33,7 +33,7 @@ $Pdf->Image("./Img/heade.jpg", 0, 0, 210, 40, "JPG");
 $Pdf->Image("./Img/Logotipo.jpg", 20, 290, 22, 16);
 $Pdf->Image("./Img/rubro.jpg", 49, 280, 36, 32);
 $Pdf->Image("./Img/footer.jpg", 0, 335, 216, 22);
-// $Pdf->Image($datos[0]["poliza_qr"], 150, 280, 36, 32);
+$Pdf->Image($datos[0]["poliza_qr"], 150, 280, 36, 32);
 $Pdf->SetTextColor(000);
 $Pdf->SetFillColor(255, 255, 255);
 $Pdf->SetFont("Arial", "B", "10");

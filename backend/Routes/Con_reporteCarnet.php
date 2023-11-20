@@ -26,7 +26,7 @@ $Pdf->SetFont("arial", "", 13); // Aumentar el tamaño de fuente a 13
 $Pdf->Image("./Img/FONDO_CERTIFI.gif", 115, 28, 90, 60, "gif", "");
 $Pdf->Image("./Img/FONDO_CERTIFI_1.gif", 25, 28, 90, 60, "gif", "");
 $Pdf->Image("./Img/FONDO_CERTIFI_2.gif", 30, 32, 25, 8, "gif", "");
-// $Pdf->Image($datos[0]["poliza_qr"], 125, 64, 15, 12);
+$Pdf->Image($datos[0]["poliza_qr"], 125, 64, 15, 12);
 $Pdf->SetTextColor(183, 28, 28); //color rojo en las letras
 $Pdf->SetFillColor(300, 300, 255);
 $Pdf->Ln(1);
