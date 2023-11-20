@@ -18,7 +18,7 @@ import { formatMoneda } from "../../util/varios";
 
 import moment from "moment";
 
-function TablaReportes () {
+function TablaReportes() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -128,7 +128,7 @@ function TablaReportes () {
   const generarReporte = async (e) => {
     e.preventDefault();
     window.open(
-      `${op.conexion}/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
+      `${op.conexion}/reporteGeneral?Sucursal=${cmbDato.current.value}Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
     );
   };
 
@@ -341,6 +341,7 @@ function TablaReportes () {
                     onChange={consulta}
                   >
                     <option value=" ">Selecionar</option>
+                    <option value="4">Sucursal</option>
                     <option value="RCV">RCV</option>
                     <option value="Renovación">Renovaciones</option>
                     <option value="Seguro">Certificados Medicos</option>
@@ -349,21 +350,23 @@ function TablaReportes () {
                     <option value="0">Egresos</option>
                     <option value="2">Ingreso y Egreso</option>
                   </select>
-                  {/* <select
-                    class="form-select"
-                    disabled={desabilitar}
-                    aria-label="Default select example"
-                    ref={cmbDato}
-                  >
-                    <option value="">Seleccionar</option>
-                    {records &&
-                      records.map((item, index) => (
-                        <option key={index} value={item.id}>
-                          {" "}
-                          {item.nombre}{" "}
-                        </option>
-                      ))}
-                  </select> */}
+                  {
+                    <select
+                      class="form-select"
+                      disabled={desabilitar}
+                      aria-label="Default select example"
+                      ref={cmbDato}
+                    >
+                      <option value="">Seleccionar</option>
+                      {records &&
+                        records.map((item, index) => (
+                          <option key={index} value={item.id}>
+                            {" "}
+                            {item.nombre}{" "}
+                          </option>
+                        ))}
+                    </select>
+                  }
                 </div>
 
                 <div class="input-group input-group-sm mb-2 col-md-3">
@@ -429,5 +432,5 @@ function TablaReportes () {
       />
     </div>
   );
-};
+}
 export default TablaReportes;

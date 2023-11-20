@@ -35,6 +35,7 @@ import TablaPrecio from "../components/listaPrecios/tablaPrecios";
 import TablaLicencias from "../components/administracion/tablaLicencia";
 import PageChats from "../components/chat/chats";
 import ReportesSemanal from "../components/reportesPorqueria/resportes";
+import TablaBitacora from "../components/bitacora/tablaBitacora";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -115,7 +116,7 @@ function MenuImpuestoPP(props) {
   };*/
 
   let permisos = JSON.parse(localStorage.getItem("permisos"));
-  console.log(permisos)
+  console.log(permisos);
   // permisos = permisos.map((item) =>
   //   item.replace(" ", "").replace(" ", "").replace("de", "").toLowerCase()
   // );
@@ -508,6 +509,14 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
+                <a
+                  href="/bitacora"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                >
+                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
+
+                  <span>Bitacora</span>
+                </a>
 
                 <a
                   href="/"
@@ -573,7 +582,12 @@ function MenuImpuestoPP(props) {
                 component={TablaTipoVehiculoBocono}
               />
               <AuthRoute exact path="/licencia" component={TablaLicencia} />
-              <AuthRoute exact path="/reportesGeneral" component={TablaReportes} />
+              <AuthRoute
+                exact
+                path="/reportesGeneral"
+                component={TablaReportes}
+              />
+              <AuthRoute exact path="/bitacora" component={TablaBitacora} />
               <AuthRoute exact path="/morosos" component={TablaMorosos} />
               <AuthRoute exact path="/documento" component={TablaDocumento} />
               <AuthRoute exact path="/panel" component={Panel} />

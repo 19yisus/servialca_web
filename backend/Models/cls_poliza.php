@@ -80,7 +80,7 @@ abstract class cls_poliza extends cls_db
 
 	protected function renovar_poliza($dolar, $tipoIngreso, $motivo)
 	{
-		
+
 		if (empty($this->fechaNacimiento)) {
 			$this->fechaNacimiento = "0000-00-00";
 		}
@@ -91,7 +91,7 @@ abstract class cls_poliza extends cls_db
 			$fechaInicioObj = new DateTime($this->fechaInicio);
 			$fechaInicioObj->modify('+1 year');
 			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
-		} 
+		}
 		// else {
 		// 	$fechaVenicimiento = strtotime($this->fechaVencimiento);
 		// 	$fechaActual = strtotime(date("Y-m-d"));
@@ -213,6 +213,16 @@ abstract class cls_poliza extends cls_db
 			if ($result) {
 				return $result;
 			}
+			$resul = $this->SearchByEstado();
+			if (!$resul) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			};
 			$this->db->beginTransaction();
 			$this->SearchByUsuario();
 			$this->SearchBySucursal();
@@ -365,7 +375,7 @@ abstract class cls_poliza extends cls_db
 
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
-			$this->generarQR($this->id);
+			$this->generarQr($this->id);
 			// SI ESTA ULTIMA OPERACIÓN SALIÓ BIEN, SE HACE COMMIT PARA APLICAR LOS CAMBIOS
 			if ($result) {
 				$this->db->commit();
@@ -399,6 +409,16 @@ abstract class cls_poliza extends cls_db
 	{
 		try {
 			$this->db->beginTransaction();
+			$resul = $this->SearchByEstado();
+			if (!$resul) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			};
 			$result = $this->editarCliente($this->cliente);
 			if (!$result) {
 				$this->db->rollback();
@@ -504,6 +524,8 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$result = $this->generarQr($this->id);
+
 			if ($result) {
 				$this->db->commit();
 				return [
@@ -702,7 +724,13 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
-
+	protected function SearchByEstado()
+	{
+		$sql = $this->db->prepare("SELECT * FROM estado WHERE estado_nombre = ?");
+		$sql->execute([$this->estado]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $this->estado = $resultado["estado_id"];
+	}
 
 	protected function RegistrarLicenciaConducir()
 	{
@@ -740,6 +768,7 @@ abstract class cls_poliza extends cls_db
 			return $this->db->lastInsertId();
 		}
 	}
+
 
 	protected function RegistraCobertura()
 	{
@@ -1251,18 +1280,49 @@ abstract class cls_poliza extends cls_db
 		}
 	}
 
-	public function generarQr($id)
+	protected function generarQr()
 	{
 		set_time_limit(30000);
-		// URL de la página a la que deseas redirigir
-		$paginaWeb = "https://servialcarcv.com/Routes/reporteRCVWEB.php?ID=" . $id;
+		$sql = $this->db->prepare("SELECT 
+        poliza.*,
+        cliente.*,
+        vehiculo.*,
+        marca.*,
+        modelo.* 
+        FROM poliza
+        LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+        LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+        LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
+        LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = $this->id");
+		$sql->execute();
+		$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($resultado as $fila) {
+			$contrato = $fila["poliza_id"];
+			if ($fila["poliza_renovacion"] < 10) {
+				$contrato = "00000" . $fila["poliza_id"] . "-0" . $fila["poliza_renovacion"];
+			} else {
+				$contrato = "00000" . $fila["poliza_id"] . "-" . $fila["poliza_renovacion"];
+			}
 
-		$QRcodeImg = "./backend/ImgQr/" . $id . ".png";
-		QRcode::png($paginaWeb, $QRcodeImg);
+			$QR = "N° Contrato: " . $contrato .
+				"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
+				"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
+				"\n" . "Nombre: " . $fila["cliente_nombre"] .
+				"\n" . "Apellido: " . $fila["cliente_apellido"] .
+				"\n" . "Cédula: " . $fila["cliente_cedula"] .
+				"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
+				"\n" . "Marca: " . $fila["marca_nombre"] .
+				"\n" . "Modelo: " . $fila["modelo_nombre"];
+		}
 
-		$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-		$sql2->execute([$QRcodeImg, $id]);
+		if ($fila) { //Verificar si $fila está definida antes de usarla
+			$QRcodeImg = "../ImgQr/" . $contrato . ".png";
+			QRcode::png($QR, $QRcodeImg);
+			$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
+			$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+		}
 	}
+
 	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechaFinal)
 	{
 		// Consulta SQL con marcadores de posición
@@ -1651,31 +1711,36 @@ abstract class cls_poliza extends cls_db
 	}
 
 
-	public function reporteGeneral($motivo, $desde, $hasta)
+	public function reporteGeneral($sucursal, $motivo, $desde, $hasta)
 	{
+		$where = "";
+		$params = [];
+
+		if (isset($sucursal)) {
+			$where .= "debitocredito.sucursal_id = ? AND ";
+			$params[] = $sucursal;
+		}
+
 		if (is_numeric($motivo)) {
 			if ($motivo == 0 || $motivo == 1 || $motivo == 2) {
 				if ($motivo != 2) {
-					$where = "nota_ingresoEgreso = ?  AND nota_fecha BETWEEN ? AND ?";
-				} else {
-					$where = "nota_fecha BETWEEN ? AND ?"; // Cuando $motivo es 2, no necesitas una condición WHERE
+					$where .= "debitocredito.nota_ingresoEgreso = ? AND ";
+					$params[] = $motivo;
 				}
-			} else {
-				$where = ""; // Trata $where como una cadena vacía en este caso
 			}
-		} else {
-			$where = "nota_motivo = ? AND nota_fecha BETWEEN ? AND ?";
 		}
 
-		$sql = $this->db->prepare("SELECT *, usuario.* 
-    FROM debitocredito 
-    INNER JOIN usuario on usuario.usuario_id = debitocredito.usuario_id
-    WHERE $where");
-		if ($motivo == 2) {
-			$a = $sql->execute([$desde, $hasta]);
-		} else {
-			$a = $sql->execute([$motivo, $desde, $hasta]);
-		}
+		$where .= "debitocredito.nota_fecha BETWEEN ? AND ?";
+		$params[] = date('Y-m-d', strtotime($desde));
+		$params[] = date('Y-m-d', strtotime($hasta));
+
+		$sql = $this->db->prepare("SELECT *, usuario.*, sucursal.* 
+        FROM debitocredito 
+        INNER JOIN usuario ON usuario.usuario_id = debitocredito.usuario_id
+        INNER JOIN sucursal ON sucursal.sucursal_id = debitocredito.sucursal_id
+        WHERE $where");
+		$a = $sql->execute($params);
+
 		if ($a) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		} else {
