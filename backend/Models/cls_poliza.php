@@ -375,7 +375,7 @@ abstract class cls_poliza extends cls_db
 
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
-			$this->generarQR($this->id);
+			$this->generarQr($this->id);
 			// SI ESTA ULTIMA OPERACIÓN SALIÓ BIEN, SE HACE COMMIT PARA APLICAR LOS CAMBIOS
 			if ($result) {
 				$this->db->commit();
@@ -524,6 +524,8 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
+			$result = $this->generarQr($this->id);
+
 			if ($result) {
 				$this->db->commit();
 				return [
@@ -1278,18 +1280,49 @@ abstract class cls_poliza extends cls_db
 		}
 	}
 
-	public function generarQr($id)
+	protected function generarQr()
 	{
 		set_time_limit(30000);
-		// URL de la página a la que deseas redirigir
-		$paginaWeb = "https://servialcarcv.com/Routes/reporteRCVWEB.php?ID=" . $id;
+		$sql = $this->db->prepare("SELECT 
+        poliza.*,
+        cliente.*,
+        vehiculo.*,
+        marca.*,
+        modelo.* 
+        FROM poliza
+        LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+        LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+        LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
+        LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = $this->id");
+		$sql->execute();
+		$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($resultado as $fila) {
+			$contrato = $fila["poliza_id"];
+			if ($fila["poliza_renovacion"] < 10) {
+				$contrato = "00000" . $fila["poliza_id"] . "-0" . $fila["poliza_renovacion"];
+			} else {
+				$contrato = "00000" . $fila["poliza_id"] . "-" . $fila["poliza_renovacion"];
+			}
 
-		$QRcodeImg = "./backend/ImgQr/" . $id . ".png";
-		QRcode::png($paginaWeb, $QRcodeImg);
+			$QR = "N° Contrato: " . $contrato .
+				"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
+				"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
+				"\n" . "Nombre: " . $fila["cliente_nombre"] .
+				"\n" . "Apellido: " . $fila["cliente_apellido"] .
+				"\n" . "Cédula: " . $fila["cliente_cedula"] .
+				"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
+				"\n" . "Marca: " . $fila["marca_nombre"] .
+				"\n" . "Modelo: " . $fila["modelo_nombre"];
+		}
 
-		$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-		$sql2->execute([$QRcodeImg, $id]);
+		if ($fila) { //Verificar si $fila está definida antes de usarla
+			$QRcodeImg = "../ImgQr/" . $contrato . ".png";
+			QRcode::png($QR, $QRcodeImg);
+			$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
+			$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+		}
 	}
+
 	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechaFinal)
 	{
 		// Consulta SQL con marcadores de posición

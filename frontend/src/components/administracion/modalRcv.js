@@ -1516,8 +1516,6 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={TxtTipoContrato}
                     bsSize="small"
-                    defaultSelected={( valorSeleccionado ? [`${valorSeleccionado.contrato_nombre}`] : '')}
-                    selected={( valorSeleccionado.contrato_nombre !== "" ? [`${valorSeleccionado.contrato_nombre}`] : '')}
                     defaultSelected={
                       valorSeleccionado
                         ? [`${valorSeleccionado.contrato_nombre}`]
@@ -1776,7 +1774,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbEstado}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.estado_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.estado_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.estado_nombre !== ""
+                          ? [`${valorSeleccionado.estado_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1830,7 +1837,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={txtAcesor}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.usuario_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.usuario_usuario !== ""
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1883,7 +1899,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbSucursal}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.sucursal_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.sucursal_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.sucursal_nombre !== ""
+                          ? [`${valorSeleccionado.sucursal_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1939,7 +1964,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={txtLinea}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.transporte_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.transporte_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.transporte_nombre !== ""
+                          ? [`${valorSeleccionado.transporte_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -2131,7 +2165,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtUso}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.usoVehiculo_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.usoVehiculo_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.usoVehiculo_nombre !== ""
+                        ? [`${valorSeleccionado.usoVehiculo_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -2219,7 +2262,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtClase}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.clase_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.clase_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.clase_nombre !== ""
+                        ? [`${valorSeleccionado.clase_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -2315,7 +2367,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={cmbTipo}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.tipoVehiculo_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.tipoVehiculo_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.tipoVehiculo_nombre !== ""
+                        ? [`${valorSeleccionado.tipoVehiculo_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>
