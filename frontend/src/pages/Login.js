@@ -88,7 +88,7 @@ function Login(props) {
           titulo: "Error",
           texto:
             error.response.data.message ===
-            "llave duplicada viola restricción de unicidad «persona_pkey»"
+              "llave duplicada viola restricción de unicidad «persona_pkey»"
               ? "ya existe una persona con esa cedula"
               : error.response.data.message,
           icono: "error",
@@ -175,149 +175,146 @@ function Login(props) {
       );
   };
   const sinIgn = async () => {
-    let endpoint = op.conexion + "/Auth/login";
-    console.log(endpoint);
-    setActivate(true);
-    var login = values.username;
-    var passwd = values.password;
 
-    // let body = {
-    //   Usuario: login,
-    //   Clave: passwd
-    // }
+   
 
-    setLoading(false);
+      let endpoint = op.conexion + "/Auth/login";
+      console.log(endpoint);
+      setActivate(true);
+      var login = values.username;
+      var passwd = values.password;
 
-    let bodyF = new FormData();
+      // let body = {
+      //   Usuario: login,
+      //   Clave: passwd
+      // }
 
-    bodyF.append("Usuario", login);
-    bodyF.append("Clave", passwd);
+      setLoading(false);
 
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        console.log(response.data.res.code);
-        console.log(response.data.res.text);
-        context.login(response.data.token);
-        // window.location.href = '/inicio'
-        const fecha = new Date();
-        localStorage.setItem("fechasistema", JSON.stringify(fecha));
+      let bodyF = new FormData();
 
-        setActivate(false);
+      bodyF.append("Usuario", login);
+      bodyF.append("Clave", passwd);
 
-        if (response.data.res.code == 200) {
-          localStorage.setItem(
-            "rol",
-            JSON.stringify(response.data.usuario[0].rol)
-          );
-          localStorage.setItem(
-            "user_id",
-            JSON.stringify(response.data.usuario[0].user_id)
-          );
-          localStorage.setItem(
-            "username",
-            JSON.stringify(response.data.usuario[0].username)
-          );
-          localStorage.setItem(
-            "permisos",
-            JSON.stringify(response.data.usuario[0].permisos)
-          );
-          localStorage.setItem(
-            "idsucursal",
-            JSON.stringify(response.data.usuario[1].id)
-          );
-          localStorage.setItem(
-            "sucursal",
-            JSON.stringify(response.data.usuario[1].name)
-          );
-
-          setMensaje({
-            mostrar: true,
-            titulo: "Exito.",
-            texto: response.data.res.text,
-            icono: "exito",
-          });
-
-          window.location.href = "/inicio";
-        }
-        if (response.data.res.code == 400) {
-          setMensaje({
-            mostrar: true,
-            titulo: "Error.",
-            texto: response.data.res.text,
-            icono: "error",
-          });
-        }
+      await fetch(endpoint, {
+        method: "POST",
+        body: bodyF,
       })
-      .catch((error) => {
-        console.error(error);
-        // setMensaje({
-        //   mostrar: true,
-        //   titulo: "Notificación",
-        //   texto: error.res,
-        //   icono: "informacion",
-        // });
-      });
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(response.data.res.code);
+          console.log(response.data.res.text);
+          context.login(response.data.token);
+          // window.location.href = '/inicio'
+          const fecha = new Date();
+          localStorage.setItem("fechasistema", JSON.stringify(fecha));
 
-    // axios
-    //   .post(endpoint, body, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then(function (response) {
-    //     console.log(response)
-    //     if (response.status === 200) {
-    //       console.log(response)
-    //       /*context.login(response.data.token);
-    //      if (response.data.token === null) {
-    //        props.history.push("/");
-    //      } else {
-    //        setToken(response.data.token);
+          setActivate(false);
 
-    //        localStorage.setItem(
-    //          "fechasistema",
-    //          JSON.stringify(response.data.fechasistema)
-    //        );
-    //        localStorage.setItem(
-    //          "anioactu",
-    //          JSON.stringify(response.data.anioactu)
-    //        );
-    //        localStorage.setItem(
-    //          "idusuario",
-    //          JSON.stringify(response.data.idusuario)
-    //        );
-    //
-    //        localStorage.setItem(
-    //          "codigo",
-    //          JSON.stringify(response.data.codigo)
-    //        );
-    //        localStorage.setItem(
-    //          "permiso",
-    //          JSON.stringify(response.data.permiso)
-    //        );
-    //        localStorage.setItem("post", JSON.stringify(response.data));
+          if (response.data.res.code == 200) {
+            localStorage.setItem(
+              "rol",
+              JSON.stringify(response.data.usuario[0].rol)
+            );
+            localStorage.setItem(
+              "user_id",
+              JSON.stringify(response.data.usuario[0].user_id)
+            );
+            localStorage.setItem(
+              "username",
+              JSON.stringify(response.data.usuario[0].username)
+            );
+            localStorage.setItem(
+              "permisos",
+              JSON.stringify(response.data.usuario[0].permisos)
+            );
+            localStorage.setItem(
+              "idsucursal",
+              JSON.stringify(response.data.usuario[1].id)
+            );
+            localStorage.setItem(
+              "sucursal",
+              JSON.stringify(response.data.usuario[1].name)
+            );
 
-    //      }*/
-    //       console.log(response.data);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
-    //   .finally(function () {
-    //     setLoading(false);
-    //   });
+            setMensaje({
+              mostrar: true,
+              titulo: "Exito.",
+              texto: response.data.res.text,
+              icono: "exito",
+            });
+
+            window.location.href = "/inicio";
+          }
+          if (response.data.res.code == 400) {
+            setMensaje({
+              mostrar: true,
+              titulo: "Error.",
+              texto: response.data.res.text,
+              icono: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setMensaje({
+            mostrar: true,
+            titulo: "Notificación",
+            texto: error.res,
+            icono: "informacion",
+          });
+        });
+
+    
+
+
+
+
   };
 
   function loginUserCallback() {
-    setLoading(true);
-    sinIgn();
+    if (userInput.toLowerCase() === captchaText.toLowerCase()) {
+      setLoading(true);
+      sinIgn();
+    } else {
+      //  alert('CAPTCHA incorrecto, intenta de nuevo');
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: 'Error en el CAPTCHA',
+        icono: "informacion",
+      });
+      setLoading(false)
+      generateCaptcha(); // Generar un nuevo CAPTCHA después de un intento fallido
+      setUserInput(''); // Limpiar el campo de entrada
+    }
+   
     console.log("listo");
   }
+
+  const [captchaText, setCaptchaText] = useState('');
+  const [userInput, setUserInput] = useState('');
+
+  // Función para generar un nuevo CAPTCHA
+  const generateCaptcha = () => {
+    // Implementa la lógica para generar un CAPTCHA como se muestra en el ejemplo anterior
+    // Por ejemplo, puedes usar una función para generar texto aleatorio y asignarlo a captchaText
+    // Ejemplo simple:
+    const captcha = Math.random().toString(36).substring(7);
+    setCaptchaText(captcha);
+  };
+
+  // Función para verificar el CAPTCHA ingresado por el usuario
+  const checkCaptcha = () => {
+
+  };
+
+  const [captchaValid, setCaptchaValid] = useState(false);
+
+  useEffect(() => {
+    // Generar un CAPTCHA al cargar el componente
+    generateCaptcha();
+  }, []);
 
   return (
     <div className="contenedor">
@@ -337,163 +334,7 @@ function Login(props) {
         }}
       />
 
-      {/*} <div>
-        <nav
-          className="navbar navbar-expand-lg navbar-dark d-none d-lg-block"
-          style={{ zIndex: 2000 }}
-        >
-          <div className="container-fluid d-flex justify-content-between">
-            
-            <a
-              className="navbar-brand nav-link"
-              target="_blank"
-              href="https://mdbootstrap.com/docs/standard/"
-            >
-              <strong> Servialca Web</strong>
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-mdb-toggle="collapse"
-              data-mdb-target="#navbarExample01"
-              aria-controls="navbarExample01"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <i className="fas fa-bars" />
-            </button>
-            <div
-              className="collapse navbar-collapse d-flex justify-content-end"
-              id="navbarExample01"
-            >
-              <ul className="navbar-nav d-flex flex-row">
-                <li className="nav-item me-3 me-lg-0">
-                  <a
-                    className="nav-link"
-                    href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA"
-                    rel="nofollow"
-                    target="_blank"
-                  >
-                    <i className="fab fa-youtube" />
-                  </a>
-                </li>
-                <li className="nav-item me-3 me-lg-0">
-                  <a
-                    className="nav-link"
-                    href="https://www.facebook.com/mdbootstrap"
-                    rel="nofollow"
-                    target="_blank"
-                  >
-                    <i className="fab fa-facebook-f" />
-                  </a>
-                </li>
-                <li className="nav-item me-3 me-lg-0">
-                  <a
-                    className="nav-link"
-                    href="https://twitter.com/MDBootstrap"
-                    rel="nofollow"
-                    target="_blank"
-                  >
-                    <i className="fab fa-twitter" />
-                  </a>
-                </li>
-                <li className="nav-item me-3 me-lg-0">
-                  <a
-                    className="nav-link"
-                    href="https://github.com/mdbootstrap/mdb-ui-kit"
-                    rel="nofollow"
-                    target="_blank"
-                  >
-                    <i className="fab fa-github" />
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
 
-        <div id="intro" className="bg-image shadow-2-strong">
-          <div
-            className="mask d-flex align-items-center h-100"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
-          >
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-xl-5 col-md-5 px-5">
-                  <form
-                    className="bg-white  rounded-3 shadow-5-strong py-4 px-5 rounded"
-                   
-                  >
-                    <div className="h-100 d-flex justify-content-center m-2">
-                      <div
-                        className=" img-fluid logo-login"
-                        style={{ height: 120, width: 120, margin: "auto" }}
-                      ></div>
-                    </div>
-                   >
-
-
-
-                    <div class="mb-3">
-                      <label class="form-label">Usuario</label>
-                      <input
-                        type="text"
-                        
-                        className="form-control form-control-sm"
-                       
-                      />
-                    </div>
-
-                    <div class="mb-3">
-                      <label class="form-label">Contraseña</label>
-                      <input
-                        ref={txtPassword}
-                        type="password"
-                       
-                        className="form-control form-control-sm"
-                       
-                      />
-
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-block rounded-pill"
-                    >
-                      Iniciar Sesion
-                    </button>
-                    <div className="col-md-12 mx-auto row mt-2">
-                      <a
-                        className="mx-auto col-md-7 text-center"
-                        type="button"
-                        href="#"
-                        onClick={() => {
-                          setMostrar(true);
-                        }}
-                      >
-                        Recuperar Contraseña
-                      </a>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <footer className="bg-light text-lg-start">
-        
-          <div
-            className="text-center p-3"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-          >
-            © 2020 Copyright:
-            <a className="text-dark" href="https://mdbootstrap.com/">
-              Servialca
-            </a>
-          </div>
-        
-        </footer>
-      </div>*/}
       <div class="container-fluid ps-md-0">
         <Dimmer active={loading} inverted>
           <Loader inverted>cargando...</Loader>
@@ -531,7 +372,7 @@ function Login(props) {
                       Sistema de Servial C.A
                     </h3>
 
-                    <form onSubmit={onSubmit}>
+                    <form onSubmit={onSubmit} >
                       <div class="form-floating mb-3">
                         <input
                           type="text"
@@ -557,6 +398,18 @@ function Login(props) {
                         />
                         <label for="floatingPassword">Contraseña</label>
                       </div>
+                      <div className="captcha-container input-group mx-auto mb-3 col-md-7 ">
+                        <label className="captcha-text my-auto d-flex align-items-center rounded-pill">{captchaText}</label>
+                        <input
+                          type="text"
+                          className={`form-control my-auto rounded-pill ${captchaValid ? 'is-valid' : 'is-invalid'}`}
+                          id="captchaInput"
+                          placeholder="Ingresa CAPTCHA"
+                          value={userInput}
+                          onChange={(e) => setUserInput(e.target.value)}
+                        />
+                       
+                      </div>
 
                       <div class="d-grid">
                         <button
@@ -581,6 +434,7 @@ function Login(props) {
                             <h6>Salir al Inicio</h6>
                           </a>
                         </div>
+
                       </div>
                     </form>
                   </div>

@@ -1857,3 +1857,31 @@ margin: 0;
   margin-bottom: 15px !important;
 }
 }
+
+.captcha-container {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-text {
+  font-size: 22px;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  user-select: none;
+  background-color: cadetblue;
+  color: aliceblue;
+  font-weight: bold;
+  text-decoration: line-through red 3px;
+  height: 50px;
+}
+
+.form-control.is-valid {
+  border-color: #28a745;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
