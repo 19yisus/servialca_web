@@ -1,21 +1,17 @@
-import React, { useEffect, useContext, useState, useRef } from "react";
-import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
-
+import React, { useEffect, useRef, useContext, useState } from "react";
 import { Mensaje } from "../mensajes";
 import { Loader, Dimmer } from "semantic-ui-react";
 import moment from "moment";
-
 import axios from "axios";
 import useTable from "../useTable";
 import { TableBody, TableRow, TableCell } from "@material-ui/core";
-import { ModalTipoVehiculo } from "./modalTipoVehiculo";
-import { ModalTipoVehiculoBocono } from "./modalTipoVehiculoBocono";
+import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 
-function TablaTipoVehiculoBocono() {
+function TablaBitacora() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -23,8 +19,6 @@ function TablaTipoVehiculoBocono() {
     texto: "",
     icono: "",
   });
-
-  console.log(user_id);
   const headCells = [
     {
       label: "Codigo",
@@ -33,47 +27,37 @@ function TablaTipoVehiculoBocono() {
       color: "white",
     },
     {
-      label: "Nombre",
+      label: "Descripción",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
     {
-      label: "Precio",
-      textAlign: "center",
-      backgroundColor: "#e70101bf",
-      color: "white",
-    },
-    {
-      label: "Estatus",
+      label: "Tabla",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
 
     {
-      label: "Opciones",
+      label: "Hora y Fecha",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Usuario",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
   ];
-
   const codigo = JSON.parse(localStorage.getItem("codigo"));
   const permiso = JSON.parse(localStorage.getItem("permiso"));
-  const [cuentas, setCuentas] = useState();
-  const [montoCuenta, setMontoCuenta] = useState();
-  const [nCuenta, setNCuenta] = useState();
-  const [total, setTotal] = useState(0.0);
-  const [totalp, setTotalp] = useState(0.0);
+  const [idSucursal, setIdSucursal] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
-  const [totaltipo, setTotaltipo] = useState(0.0);
-  const [presupuesto, setPresupuesto] = useState(0.0);
-  const [totalrc, setTotalrc] = useState(0.0);
-  const [totalavi, setTotalavi] = useState(0.0);
-  const [totalact, setTotalact] = useState(0.0);
-  const [idTipoVehiculo, setIdTipoVehiculo] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -94,34 +78,31 @@ function TablaTipoVehiculoBocono() {
     },
   ]);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Chart.js Bar Chart",
-      },
-    },
-  };
-
-  const BCV = JSON.parse(localStorage.getItem("dolarbcv"));
+  var BCV = JSON.parse(localStorage.getItem("dolarbcv"));
   const txtDolar = useRef();
   const txtBs = useRef();
 
-  const calcular = (e) => {
-    if (e.target.value !== "") {
-      let total = parseFloat(txtDolar.current.value) * parseFloat(BCV);
-      txtBs.current.value = formatMoneda(
-        total.toString().replace(",", "").replace(".", ","),
-        ",",
-        ".",
-        2
-      );
+  const calcular = () => {
+    const cantidadDolares = parseFloat(txtDolar.current.value);
+    const precio = parseFloat(BCV);
+
+    if (!isNaN(cantidadDolares) && !isNaN(precio)) {
+      const total = cantidadDolares * precio;
+      txtBs.current.value = total.toFixed(2).replace(".", ",");
     } else {
       txtBs.current.value = "0,00";
+    }
+  };
+  const calcular2 = () => {
+    const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
+    const cantidadBs = parseFloat(cantidadBsStr);
+    const precioDolar = parseFloat(BCV);
+
+    if (!isNaN(cantidadBs) && !isNaN(precioDolar) && precioDolar !== 0) {
+      const totalDolares = cantidadBs / precioDolar;
+      txtDolar.current.value = totalDolares.toFixed(2).replace(".", ",");
+    } else {
+      txtDolar.current.value = "0,00";
     }
   };
   const handleInputMontoChange = (event) => {
@@ -153,6 +134,19 @@ function TablaTipoVehiculoBocono() {
     } else return false;
   };
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Chart.js Bar Chart",
+      },
+    },
+  };
+
   const labels = [
     "Lunes",
     "Martes",
@@ -176,15 +170,23 @@ function TablaTipoVehiculoBocono() {
   const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
     useTable(records, headCells, filterFn);
 
+  const imprimir = (id, desde, hasta) => (e) => {
+    e.preventDefault();
+    window.open(
+      `${op.conexion}/reporte/reporteIngresoEgreso?Nombre=${id}&Desde=${desde}&Hasta=${hasta}`
+    );
+  };
+
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarTodos?Sucursal=21";
+    let endpoint =
+      op.conexion + "/bitacora/ConsultarTodos";
     console.log(endpoint);
     setActivate(true);
-
-    //setLoading(false);
+    let bodyF = new FormData();
 
     await fetch(endpoint, {
       method: "POST",
+      body: bodyF,
     })
       .then((res) => res.json())
       .then((response) => {
@@ -201,44 +203,7 @@ function TablaTipoVehiculoBocono() {
         })
       );
   };
-  const cambiarEstatus = async (id, estatus) => {
-    var variable;
-    if (estatus == 0) {
-      variable = 1;
-    } else {
-      variable = 0;
-    }
-    let endpoint = op.conexion + "/tipo_vehiculo/eliminar";
-    setActivate(true);
-    let bodyF = new FormData();
-    bodyF.append("ID", id);
-    bodyF.append("Estatus", variable);
-    bodyF.append("token", token);
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        setMensaje({
-          mostrar: true,
-          titulo: "Exito.",
-          texto: "Estatus Modificado",
-          icono: "exito",
-        });
-        console.log(response);
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
-    selecionarRegistros();
-  };
+
   const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
@@ -247,11 +212,16 @@ function TablaTipoVehiculoBocono() {
         else
           return items.filter((x) => {
             if (
-              (x.tipoVehiculo_id !== null
-                ? String(x.tipoVehiculo_id).includes(target.value)
+              (x.id_bit !== null
+                ? String(x.id_bit).includes(target.value)
                 : 0) ||
-              (x.tipoVehiculo_nombre !== null
-                ? x.tipoVehiculo_nombre
+              (x.descripcion !== null
+                ? x.descripcion
+                    .toLowerCase()
+                    .includes(target.value.toLowerCase())
+                : "") ||
+              (x.table_change != null
+                ? x.table_change
                     .toLowerCase()
                     .includes(target.value.toLowerCase())
                 : "")
@@ -274,31 +244,17 @@ function TablaTipoVehiculoBocono() {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
   };
 
-  const gestionarBanco = (op, id, estatus) => (e) => {
+  const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    if (op == 8) {
-      cambiarEstatus(id, estatus);
-    } else {
-      setOperacion(op);
-      setIdTipoVehiculo(id);
-      setMostrar(true);
-    }
+    setMostrar(true);
+    setOperacion(op);
+    setIdSucursal(id);
   };
   return (
     <div className="col-md-12 mx-auto p-2">
-      <ModalTipoVehiculoBocono
-        operacion={operacion}
-        show={mostrar}
-        onHideCancela={() => {
-          setMostrar(false);
-        }}
-        idTipoVehiculo={idTipoVehiculo}
-        render={selecionarRegistros}
-      />
-
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Tipo Vehiculo Bocono</h2>
+          <h2 className=" col-5 text-light">Lista De Precios</h2>
           <div class="input-group input-group-sm col-md-4 my-auto">
             <span
               class="input-group-text bg-transparent border-0 fw-bold text-light"
@@ -309,18 +265,25 @@ function TablaTipoVehiculoBocono() {
             <input
               type="text"
               class="form-control bg-transparent text-light text-right"
-              onKeyUp={handleInputMontoChange}
               onChange={calcular}
               ref={txtDolar}
               aria-label="Sizing example input"
+              placeholder="$"
               aria-describedby="inputGroup-sizing-sm"
             />
+            <span
+              class="input-group-text bg-transparent border-0 fw-bold text-light"
+              id="inputGroup-sizing-sm"
+            >
+              Calcular BS:
+            </span>
             <input
               type="text"
               class="form-control bg-transparent text-light text-right"
               ref={txtBs}
-              disabled
+              onChange={calcular2}
               aria-label="Sizing example input"
+              placeholder="BS"
               aria-describedby="inputGroup-sizing-sm"
             />
           </div>
@@ -337,15 +300,6 @@ function TablaTipoVehiculoBocono() {
             onChange={handleSearch}
             placeholder="Buscar"
           />
-
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              onClick={gestionarBanco(1, "")}
-              className="btn btn-sm btn-primary rounded-circle"
-            >
-              <i className="fas fa-plus"></i>{" "}
-            </button>
-          </div>
         </div>
         <TblContainer>
           <TblHead />
@@ -357,60 +311,31 @@ function TablaTipoVehiculoBocono() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.tipoVehiculo_id}
+                    {item.id_bit}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.tipoVehiculo_nombre}
+                    {item.descripcion}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.precio_monto}
+                    {item.table_change}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {parseInt(item.tipoVehiculo_estatus) === 1
-                      ? "ACTIVO"
-                      : "INACTIVO"}
+                    {item.hora_fecha}
                   </TableCell>
-
                   <TableCell
                     className="align-baseline"
-                    style={{
-                      textAlign: "center",
-                      alignItems: "center",
-                      width: 130,
-                    }}
+                    style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    <button
-                      onClick={gestionarBanco(2, item.tipoVehiculo_id, "")}
-                      className="btn btn-sm mx-1 btn-warning rounded-circle"
-                    >
-                      <i className="fa fa-edit"></i>{" "}
-                    </button>
-                    <button
-                      onClick={gestionarBanco(
-                        8,
-                        item.tipoVehiculo_id,
-                        item.tipoVehiculo_estatus
-                      )}
-                      className="btn btn-sm mx-1 btn-danger rounded-circle"
-                    >
-                      {item.tipoVehiculo_estatus === 1 ? (
-                        <i className="fa fa-times"></i>
-                      ) : (
-                        <i
-                          className="fa fa-check"
-                          style={{ background: "none" }}
-                        ></i>
-                      )}
-                    </button>
+                    {item.usuario_usuario}
                   </TableCell>
                 </TableRow>
               ))}
@@ -435,4 +360,4 @@ function TablaTipoVehiculoBocono() {
   );
 }
 
-export default TablaTipoVehiculoBocono;
+export default TablaBitacora;

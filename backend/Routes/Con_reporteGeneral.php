@@ -6,15 +6,17 @@ class Reporte extends cls_poliza
 }
 
 $rp = new Reporte();
-$datos = $rp->reporteGeneral($_GET["Motivo"], $_GET["Desde"], $_GET["Hasta"]);
+$datos = $rp->reporteGeneral($_GET["Sucursal"], $_GET["Motivo"], $_GET["Desde"], $_GET["Hasta"]);
 $motivo;
-if ($_GET["Motivo"] == 1) {
+if (isset($_GET["Sucursal"])) {
+  $motivo = "Reporte de sucursal";
+} else if ($_GET["Motivo"] == 1) {
   $motivo = "Ingresos";
 } else if ($_GET["Motivo"] == 0) {
   $motivo = "Egresos";
 } else if ($_GET["Motivo"] == 2) {
   $motivo = "Ingreso y Egreso";
-} else {
+}  else {
   $motivo = $_GET["Motivo"];
 }
 $generado = 0;
@@ -66,7 +68,7 @@ $pdf->SetY(90);
 $pageWidth = $pdf->GetPageWidth();
 
 // Número de columnas de la tabla
-$numColumns = 6;
+$numColumns = 7;
 
 // Ancho de cada celda
 $cellWidth = $pageWidth / ($numColumns + 1); // Se suma 1 para dar espacio adicional entre las celdas
@@ -78,7 +80,7 @@ $tableWidth = $cellWidth * $numColumns;
 $tableX = ($pageWidth - $tableWidth) / 2;
 
 // Establecer la posición x de la celda inicial de la tabla
-$pdf->SetX($tableX - 10);
+$pdf->SetX($tableX - 7.4);
 
 // Establecer el color de fondo de las celdas de encabezado
 $pdf->SetFillColor(229, 57, 53); // Rojo más intenso
@@ -86,6 +88,7 @@ $pdf->Cell($cellWidth, 10, utf8_decode('N° de movimiento'), 1, 0, 'C', true);
 $pdf->Cell($cellWidth, 10, 'Fecha', 1, 0, 'C', true);
 $pdf->Cell($cellWidth, 10, utf8_decode('Hora'), 1, 0, 'C', true);
 $pdf->Cell($cellWidth, 10, utf8_decode('Usuario'), 1, 0, 'C', true);
+$pdf->Cell($cellWidth, 10, utf8_decode("Sucursal"), 1, 0, "C", true);
 $pdf->Cell($cellWidth + 15, 10, 'Motivo', 1, 0, 'C', true);
 $pdf->Cell($cellWidth, 10, 'Monto $', 1, 0, 'C', true);
 $pdf->Ln(10);
@@ -106,6 +109,7 @@ foreach ($datos as $fila) {
   $pdf->Cell($cellWidth, 10, date("d-m-Y", strtotime($fila["nota_fecha"])), 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, $fila["nota_hora"], 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, utf8_decode($fila["usuario_usuario"]), 1, 0, "C", true);
+  $pdf->Cell($cellWidth, 10, utf8_decode($fila["sucursal_nombre"]), 1, 0, "C", true);
   $pdf->Cell($cellWidth + 15, 10, utf8_decode($fila["nota_motivo"]), 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, $fila["nota_monto"] . " $", 1, 0, "C", true);
 

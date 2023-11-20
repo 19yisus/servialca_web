@@ -131,7 +131,8 @@ abstract class cls_tipo_vehiculo extends cls_db
   {
     $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre =? AND tipoVehiculo_id != ?");
     $sql->execute([$this->nombre, $this->id]);
-		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
+    if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC);
+    else return [];
   }
 
   protected function Delete()
@@ -167,31 +168,41 @@ abstract class cls_tipo_vehiculo extends cls_db
   {
     $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_id = ?");
     $sql->execute([$id]);
-		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
+    if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC);
+    else return [];
   }
 
   protected function SearchByNombre()
   {
     $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre = ?");
     $sql->execute([$this->nombre]);
-		if ($sql->rowCount() > 0) return true; else return false;
+    if ($sql->rowCount() > 0) return true;
+    else return false;
   }
   protected function SearchBySucursal()
   {
     $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre = ?");
     $sql->execute([$this->sucursal]);
-		if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC); else return [];
+    if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC);
+    else return [];
   }
   protected function GetAll($sucursal)
   {
     $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*, precio.* FROM precio 
-    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
-    INNER JOIN tipocontrato on tipocontrato.contrato_id = precio.tipoContrato_id
-    " . ($sucursal != 21 ? '' : 'WHERE sucursal_id = :sucursal') . "
-    ORDER BY precio.precio_id ASC");
+        INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
+        INNER JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
+        " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
+        ORDER BY precio.precio_id ASC");
+
     $sql->execute();
-		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
+
+    if ($sql->rowCount() > 0) {
+      return $sql->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      return [];
+    }
   }
+
 
   protected function savePrecio()
   {
@@ -245,7 +256,8 @@ abstract class cls_tipo_vehiculo extends cls_db
     INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
     WHERE tipoVehiculo_id = ?");
     $sql->execute([$id]);
-		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
+    if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC);
+    else return [];
   }
 
   protected function SearchByPrecio($contrato, $tipo, $sucursal)
@@ -256,6 +268,7 @@ abstract class cls_tipo_vehiculo extends cls_db
     JOIN sucursal ON sucursal.sucursal_id = precio.sucursal_id 
     WHERE tipocontrato.contrato_nombre = ? AND tipovehiculo.tipoVehiculo_nombre = ? AND sucursal.sucursal_nombre = ?");
     $sql->execute([$contrato, $tipo, $sucursal]);
-		if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC); else return [];
+    if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC);
+    else return [];
   }
 }

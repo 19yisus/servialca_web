@@ -28,10 +28,10 @@ class QRimage
 {
 
     //----------------------------------------------------------------------
-    public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4, $saveandprint = FALSE, $back_color, $fore_color)
+    public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4, $saveandprint = FALSE, $back_color = null, $fore_color = null)
     {
         $image = self::image($frame, $pixelPerPoint, $outerFrame, $back_color, $fore_color);
-
+    
         if ($filename === false) {
             Header("Content-type: image/png");
             ImagePng($image);
@@ -44,9 +44,10 @@ class QRimage
                 ImagePng($image, $filename);
             }
         }
-
+    
         ImageDestroy($image);
     }
+    
 
     //----------------------------------------------------------------------
     public static function jpg($frame, $filename = false, $pixelPerPoint = 8, $outerFrame = 4, $q = 85)

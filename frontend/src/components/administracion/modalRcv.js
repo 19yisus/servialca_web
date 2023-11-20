@@ -11,7 +11,7 @@ import {
   validaEmail,
   validaSoloLetras,
 } from "../../util/varios";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 import axios from "axios";
 import moment from "moment";
@@ -163,28 +163,28 @@ export const ModalRcv = (props) => {
   const [operacion, setOperacion] = useState(0);
 
   const [valorSeleccionado, setValorSeleccionado] = useState({
-    contrato_nombre:'',
-    estado_nombre:'',
-    usuario_nombre:'',
-    sucursal_nombre:'',
-    transporte_nombre:'',
-    usoVehiculo_nombre:'',
-    clase_nombre:'',
-    tipoVehiculo_nombre:''
+    contrato_nombre: "",
+    estado_nombre: "",
+    usuario_usuario: "",
+    sucursal_nombre: "",
+    transporte_nombre: "",
+    usoVehiculo_nombre: "",
+    clase_nombre: "",
+    tipoVehiculo_nombre: "",
   });
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
   const salir = () => {
     setValorSeleccionado({
-      contrato_nombre:'',
-      estado_nombre:'',
-      usuario_nombre:'',
-      sucursal_nombre:'',
-      transporte_nombre:'',
-      usoVehiculo_nombre:'',
-      clase_nombre:'',
-      tipoVehiculo_nombre:''
+      contrato_nombre: "",
+      estado_nombre: "",
+      usuario_usuario: "",
+      sucursal_nombre: "",
+      transporte_nombre: "",
+      usoVehiculo_nombre: "",
+      clase_nombre: "",
+      tipoVehiculo_nombre: "",
     });
     props.onHideCancela();
     setValues({
@@ -319,8 +319,7 @@ export const ModalRcv = (props) => {
           idTitular.current.value = response.contrato[0].titular_id;
           idVehiculo.current.value = response.contrato[0].vehiculo_id;
           idCobertura.current.value = response.contrato[0].nota_id;
-          TxtTipoContrato.current.value = response.contrato[0].contrato_nombre;
-
+          //TxtTipoContrato.current.value = response.contrato[0].contrato_nombre;
           txtDesde.current.value = response.contrato[0].poliza_fechaInicio;
           txtHasta.current.value = response.contrato[0].poliza_fechaVencimiento;
           var cedula = response.contrato[0].cliente_cedula.split("-");
@@ -335,24 +334,23 @@ export const ModalRcv = (props) => {
           txtTelefono.current.value = telefono[1];
           txtCorreo.current.value = response.contrato[0].cliente_correo;
           txtDirec.current.value = response.contrato[0].cliente_direccion;
-          if (!response.contrato[0].estado_nombre) {
-            cmbEstado.current.value = "Portuguesa";
-          } else {
-            cmbEstado.current.value = response.contrato[0].estado_nombre;
-          }
+          // if (!response.contrato[0].estado_nombre) {
+          //   cmbEstado.current.value = "Portuguesa";
+          // } else {
+          //   cmbEstado.current.value = response.contrato[0].estado_nombre;
+          // }
 
-          if (response.contrato[0].usuario_nombre == null) {
-            txtAcesor.current.value = "MFIGUEROA";
-          } else {
-            txtAcesor.current.value = response.contrato[0].usuario_nombre;
-          }
-
-          cmbSucursal.current.value = response.contrato[0].sucursal_nombre;
-          if (!response.contrato[0].linea_nombre) {
-            txtLinea.current.value = "";
-          } else {
-            txtLinea.current.value = response.contrato[0].linea_nombre;
-          }
+          // if (response.contrato[0].usuario_usuario == null) {
+          //   txtAcesor.current.value = "MFIGUEROA";
+          // } else {
+          //   txtAcesor.current.value = response.contrato[0].usuario_usuario;
+          // }
+          // cmbSucursal.current.value = response.contrato[0].sucursal_nombre;
+          // if (!response.contrato[0].linea_nombre) {
+          //   txtLinea.current.value = "";
+          // } else {
+          //   txtLinea.current.value = response.contrato[0].linea_nombre;
+          // }
           var cedulaTitular = response.contrato[0].titular_cedula.split("-");
           cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
           txtCedulatTitular.current.value = cedulaTitular[1];
@@ -361,14 +359,14 @@ export const ModalRcv = (props) => {
             response.contrato[0].titular_apellido;
           txtPlaca.current.value = response.contrato[0].vehiculo_placa;
           txtPuesto.current.value = response.contrato[0].vehiculo_puesto;
-          txtUso.current.value = response.contrato[0].usoVehiculo_nombre;
+          //txtUso.current.value = response.contrato[0].usoVehiculo_nombre;
           txtAño.current.value = response.contrato[0].vehiculo_año;
           txtSerMotor.current.value = response.contrato[0].vehiculo_serialMotor;
-          txtClase.current.value = response.contrato[0].clase_nombre;
+          //txtClase.current.value = response.contrato[0].clase_nombre;
           txtColor.current.value = response.contrato[0].color_nombre;
           txtSerCarroceria.current.value =
             response.contrato[0].vehiculo_serialCarroceria;
-          cmbTipo.current.value = response.contrato[0].tipoVehiculo_nombre;
+          // cmbTipo.current.value = response.contrato[0].tipoVehiculo_nombre;
           txtModelo.current.value = response.contrato[0].modelo_nombre;
           txtMarca.current.value = response.contrato[0].marca_nombre;
           txtPeso.current.value = response.contrato[0].vehiculo_peso;
@@ -378,7 +376,21 @@ export const ModalRcv = (props) => {
           } else {
             cmbFormaPago.current.value = response.contrato[0].nota_tipoPago;
           }
-
+          setValorSeleccionado({
+            ...valorSeleccionado,
+            contrato_nombre: response.contrato[0].contrato_nombre,
+            estado_nombre: response.contrato[0].estado_nombre
+              ? response.contrato[0].estado_nombre
+              : "",
+            usuario_usuario: response.contrato[0].usuario_usuario,
+            sucursal_nombre: response.contrato[0].sucursal_nombre,
+            transporte_nombre: response.contrato[0].linea_nombre
+              ? response.contrato[0].linea_nombre
+              : "",
+            usoVehiculo_nombre: response.contrato[0].usoVehiculo_nombre,
+            clase_nombre: response.contrato[0].clase_nombre,
+            tipoVehiculo_nombre: response.contrato[0].tipoVehiculo_nombre,
+          });
           txtReferencia.current.value = response.contrato[0].nota_referencia;
           txtDolar.current.value = response.contrato[0].nota_monto;
           txtBs.current.value = (
@@ -489,6 +501,7 @@ export const ModalRcv = (props) => {
     //setLoading(false);
 
     let bodyF = new FormData();
+
     //ID
     bodyF.append("ID", idPoliza.current.value);
     bodyF.append("idCliente", idCliente.current.value);
@@ -498,10 +511,11 @@ export const ModalRcv = (props) => {
     //Contrato
     bodyF.append("fechaInicio", txtDesde.current.value);
     bodyF.append("fechaVencimiento", txtHasta.current.value);
-    bodyF.append("tipoContrato", TxtTipoContrato.current.value);
-    bodyF.append("Estado", cmbEstado.current.value);
-    bodyF.append("Usuario", txtAcesor.current.value);
-    bodyF.append("Sucursal", cmbSucursal.current.value);
+
+    bodyF.append("tipoContrato", valorSeleccionado.contrato_nombre);
+    bodyF.append("Estado", valorSeleccionado.estado_nombre);
+    bodyF.append("Usuario", valorSeleccionado.usuario_usuario);
+    bodyF.append("Sucursal", valorSeleccionado.sucursal_nombre);
     //Contratante
     bodyF.append(
       "Cedula",
@@ -531,13 +545,18 @@ export const ModalRcv = (props) => {
     bodyF.append("serialMotor", txtSerMotor.current.value);
     bodyF.append("serialCarroceria", txtSerCarroceria.current.value);
     bodyF.append("Color", txtColor.current.value);
-    bodyF.append("Uso", txtUso.current.value);
-    bodyF.append("Clase", txtClase.current.value);
-    bodyF.append("Tipo", cmbTipo.current.value);
+    bodyF.append("Uso", valorSeleccionado.usoVehiculo_nombre);
+    bodyF.append("Clase", valorSeleccionado.clase_nombre);
+    bodyF.append("Tipo", valorSeleccionado.tipoVehiculo_nombre);
     bodyF.append("Modelo", txtModelo.current.value);
     bodyF.append("Marca", txtMarca.current.value);
-    bodyF.append("Peso", txtPeso.current.value);
-    bodyF.append("Capacidad", txtCapTon.current.value);
+    if (txtPeso.current.value == "" || txtCapTon.current.value == "") {
+      bodyF.append("Peso", "0.00");
+      bodyF.append("Capacidad", "0.00");
+    } else {
+      bodyF.append("Peso", txtPeso.current.value);
+      bodyF.append("Capacidad", txtCapTon.current.value);
+    }
 
     //Cobertura
     var monto = txtDolar.current.value.replace(",", ".");
@@ -594,20 +613,20 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
-    if (TxtTipoContrato.current.value === ""){
+    if (TxtTipoContrato.current.value === "") {
       alert("No se puede consultar sin el contrato seleccionado");
       return false;
     }
 
-    if (cmbTipo.current.value === ""){
+    if (cmbTipo.current.value === "") {
       alert("No se puede consultar sin el tipo de contrato seleccionado");
       return false;
     }
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();
-    bodyF.append("Contrato", TxtTipoContrato.current.value);
-    bodyF.append("Tipo", cmbTipo.current.value);
+    bodyF.append("Contrato", valorSeleccionado.contrato_nombre);
+    bodyF.append("Tipo", valorSeleccionado.tipoVehiculo_nombre);
     bodyF.append("Sucursal", suc);
     await fetch(endpoint, {
       method: "POST",
@@ -1102,57 +1121,59 @@ export const ModalRcv = (props) => {
     let titular =
       cmbNacionalidadTitular.current.value + txtCedulatTitular.current.value;
 
-      if (e == 1){
-        if (contratante === titular){
-          txtNombre.current.value = txtNombreTitular.current.value
-          txtApellido.current.value = txtApellidoTitular.current.value
-        }
+    if (e == 1) {
+      if (contratante === titular) {
+        txtNombre.current.value = txtNombreTitular.current.value;
+        txtApellido.current.value = txtApellidoTitular.current.value;
       }
-      else if(e == 2){
-        if (titular === contratante){
-          txtNombreTitular.current.value = txtNombre.current.value;
-          txtApellidoTitular.current.value = txtApellido.current.value;
-        }
+    } else if (e == 2) {
+      if (titular === contratante) {
+        txtNombreTitular.current.value = txtNombre.current.value;
+        txtApellidoTitular.current.value = txtApellido.current.value;
       }
-   
+    }
   };
 
-  const [contrato, setContrato] = useState([])
-
+  const [contrato, setContrato] = useState([]);
 
   const selecionarRegistros = async (id) => {
-    console.group("valor seleccionado 1")
-    console.log(valorSeleccionado)
-    console.groupEnd()
+    console.group("valor seleccionado 1");
+    console.log(valorSeleccionado);
+    console.groupEnd();
     let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
     setActivate(true);
     // let bodyF = new FormData();
     //    bodyF.append("ID", id)
     await fetch(endpoint, {
-      method: "POST"
+      method: "POST",
     })
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        setContrato(response[0].contrato_nombre)
+        setContrato(response[0].contrato_nombre);
         setValorSeleccionado({
           ...valorSeleccionado,
           contrato_nombre: response[0].contrato_nombre,
-          estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
-          usuario_nombre: response[0].usuario_nombre,
-          sucursal_nombre:response[0].sucursal_nombre,
-          transporte_nombre: response[0].linea_nombre ?  response[0].linea_nombre : '',
+          estado_nombre: response[0].estado_nombre
+            ? response[0].estado_nombre
+            : "",
+          usuario_usuario: response[0].usuario_usuario,
+          sucursal_nombre: response[0].sucursal_nombre,
+          transporte_nombre: response[0].linea_nombre
+            ? response[0].linea_nombre
+            : "",
           usoVehiculo_nombre: response[0].usoVehiculo_nombre,
-          clase_nombre:response[0].clase_nombre
+          clase_nombre: response[0].clase_nombre,
+          tipoVehiculo_nombre: response[0].tipoVehiculo_nombre,
         });
 
-        console.group("valor seleccionado 2")
-        console.log(valorSeleccionado)
-        console.groupEnd()
+        console.group("valor seleccionado 2");
+        console.log(valorSeleccionado);
+        console.groupEnd();
         // setValorSeleccionado({
         //   contrato_nombre:"BASICO",
         //   estado_nombre:'1',
-        //   usuario_nombre:"MARIANNY DEL CARMEN",
+        //   usuario_usuario:"MARIANNY DEL CARMEN",
         //   sucursal_nombre:"GUANARITO",
         //   transporte_nombre:'hola',
         //   usoVehiculo_nombre:"PARTICULAR",
@@ -1162,7 +1183,7 @@ export const ModalRcv = (props) => {
         // idPoliza.current.value = response[0].poliza_id;
         // contrato_nombre: response[0].contrato_nombre,
         // estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
-        // usuario_nombre: response[0].usuario_nombre,
+        // usuario_usuario: response[0].usuario_usuario,
         // sucursal_nombre:response[0].sucursal_nombre,
         // transporte_nombre: response[0].linea_nombre ?  response[0].linea_nombre : '',
         // usoVehiculo_nombre: response[0].usoVehiculo_nombre,
@@ -1186,8 +1207,7 @@ export const ModalRcv = (props) => {
         txtTelefono.current.value = telefono[1];
         txtCorreo.current.value = response[0].cliente_correo;
         txtDirec.current.value = response[0].cliente_direccion;
-     
-       
+
         var cedulaTitular = response[0].titular_cedula.split("-");
         cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
         txtCedulatTitular.current.value = cedulaTitular[1];
@@ -1198,10 +1218,10 @@ export const ModalRcv = (props) => {
 
         txtAño.current.value = response[0].vehiculo_año;
         txtSerMotor.current.value = response[0].vehiculo_serialMotor;
-     
+
         txtColor.current.value = response[0].color_nombre;
         txtSerCarroceria.current.value = response[0].vehiculo_serialCarroceria;
-      
+
         txtModelo.current.value = response[0].modelo_nombre;
         txtMarca.current.value = response[0].marca_nombre;
         txtPeso.current.value = response[0].vehiculo_peso;
@@ -1214,28 +1234,25 @@ export const ModalRcv = (props) => {
         // TxtTipoContrato.current.getInstance().setState({
         //   selected: response[0].contrato_nombre
         // });
-        
-
 
         txtReferencia.current.value = response[0].nota_referencia;
         txtDolar.current.value = response[0].nota_monto;
         txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
       })
-      .catch((error) =>{
-        console.log(error)
+      .catch((error) => {
+        console.log(error);
         setMensaje({
           mostrar: true,
           titulo: "Notificación",
           texto: error.res,
           icono: "informacion",
-        })
-      }
-      );
+        });
+      });
   };
 
-  console.group("ssssssssssss")
-  console.log(valorSeleccionado)
-  console.groupEnd()
+  console.group("ssssssssssss");
+  console.log(valorSeleccionado);
+  console.groupEnd();
 
   return (
     <Modal
@@ -1243,7 +1260,7 @@ export const ModalRcv = (props) => {
       style={{ background: "rgb(28, 27, 23)" }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
-      centered  
+      centered
       backdrop="static"
       keyboard={false}
       onShow={() => {
@@ -1260,7 +1277,6 @@ export const ModalRcv = (props) => {
           selecionarRegistros(props.idCliente);
         }
         setOperacion(props.operacion);
-       
       }}
     >
       <Modal.Header className="bg-danger">
@@ -1269,10 +1285,10 @@ export const ModalRcv = (props) => {
             {operacion === 1
               ? "Registro de RCV"
               : operacion === 2
-                ? "Editar de RCV"
-                : operacion === 3
-                  ? "Renovar de RCV"
-                  : "Registro de RCV"}
+              ? "Editar de RCV"
+              : operacion === 3
+              ? "Renovar de RCV"
+              : "Registro de RCV"}
           </Modal.Title>{" "}
         </Modal.Title>
         <button
@@ -1379,11 +1395,11 @@ export const ModalRcv = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                mostrar: false,
-                titulo: "",
-                texto: "",
-                icono: "",
-              });
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
           }}
         />
 
@@ -1443,18 +1459,19 @@ export const ModalRcv = (props) => {
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Tipo de contrato:{" "}
                   </span>
+
+                  <input type="hidden" ref={idPoliza} />
+                  <input type="hidden" ref={idCliente} />
+                  <input type="hidden" ref={idTitular} />
+                  <input type="hidden" ref={idVehiculo} />
+                  <input type="hidden" ref={idCobertura} />
                   {/*
                   <select class="form-select" ref={} aria-label="Default select example">
 
                     {tipoContrato && tipoContrato.map((item, index) => (
                       <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
                     ))}
-                  </select>
-                  <input type="hidden" ref={idPoliza} />
-                  <input type="hidden" ref={idCliente} />
-                  <input type="hidden" ref={idTitular} />
-                  <input type="hidden" ref={idVehiculo} />
-                  <input type="hidden" ref={idCobertura} />
+                 
                   <input
                     disabled
                     type="text"
@@ -1480,11 +1497,17 @@ export const ModalRcv = (props) => {
                   <Typeahead
                     id="myTypeahead"
                     onChange={(selected) => {
-                      if (selected && selected.length > 0 && selected[0].contrato_nombre) {
-
+                      if (
+                        selected &&
+                        selected.length > 0 &&
+                        selected[0].contrato_nombre
+                      ) {
                         if (selected[0] && selected[0].contrato_nombre) {
-                          console.log(selected[0].contrato_nombre)
-                          setValorSeleccionado({...valorSeleccionado,contrato_nombre:selected[0].contrato_nombre })
+                          console.log(selected[0].contrato_nombre);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            contrato_nombre: selected[0].contrato_nombre,
+                          });
                         }
                       }
                     }}
@@ -1493,10 +1516,17 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={TxtTipoContrato}
                     bsSize="small"
-                    value={[`${valorSeleccionado.contrato_nombre}`]}
-                    selected={[`${valorSeleccionado.contrato_nombre}`]}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.contrato_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.contrato_nombre !== ""
+                        ? [`${valorSeleccionado.contrato_nombre}`]
+                        : ""
+                    }
                   />
-
                 </div>
               </div>
               <div class="col-md-1"></div>
@@ -1707,7 +1737,7 @@ export const ModalRcv = (props) => {
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Estado:{" "}
                     </span>
-                    { /* <select
+                    {/* <select
                       disabled={operacion === 3}
                       class="form-select"
                       ref={cmbEstado}
@@ -1725,11 +1755,17 @@ export const ModalRcv = (props) => {
                     <Typeahead
                       id="myTypeahead"
                       onChange={(selected) => {
-                        if (selected && selected.length > 0 && selected[0].estado_nombre) {
-  
+                        if (
+                          selected &&
+                          selected.length > 0 &&
+                          selected[0].estado_nombre
+                        ) {
                           if (selected[0] && selected[0].estado_nombre) {
-                            console.log(selected[0].estado_nombre)
-                            setValorSeleccionado({...valorSeleccionado,estado_nombre:selected[0].estado_nombre })
+                            console.log(selected[0].estado_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              estado_nombre: selected[0].estado_nombre,
+                            });
                           }
                         }
                       }}
@@ -1738,7 +1774,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbEstado}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.estado_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.estado_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.estado_nombre !== ""
+                          ? [`${valorSeleccionado.estado_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1750,7 +1795,7 @@ export const ModalRcv = (props) => {
                     >
                       Acesor:{" "}
                     </span>
-                    { /*  <input
+                    {/*  <input
                       disabled
                       type="text"
                       className="form-control"
@@ -1773,20 +1818,35 @@ export const ModalRcv = (props) => {
                     <Typeahead
                       id="myTypeahead"
                       onChange={(selected) => {
-                        if (selected && selected.length > 0 && selected[0].usuario_nombre) {
-  
-                          if (selected[0] && selected[0].usuario_nombre) {
-                            console.log(selected[0].usuario_nombre)
-                            setValorSeleccionado({...valorSeleccionado,usuario_nombre:selected[0].usuario_nombre })
+                        if (
+                          selected &&
+                          selected.length > 0 &&
+                          selected[0].usuario_usuario
+                        ) {
+                          if (selected[0] && selected[0].usuario_usuario) {
+                            console.log(selected[0].usuario_usuario);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              usuario_usuario: selected[0].usuario_usuario,
+                            });
                           }
                         }
                       }}
-                      labelKey="usuario_nombre"
+                      labelKey="usuario_usuario"
                       options={acesor}
                       placeholder="Seleccionar"
                       ref={txtAcesor}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.usuario_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.usuario_usuario !== ""
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1796,7 +1856,7 @@ export const ModalRcv = (props) => {
                       Sucursal:{" "}
                     </span>
 
-                    { /* <input
+                    {/* <input
                       disabled
                       defaultValue={operacion === 1 ? suc : ""}
                       type="text"
@@ -1820,11 +1880,17 @@ export const ModalRcv = (props) => {
                     <Typeahead
                       id="myTypeahead"
                       onChange={(selected) => {
-                        if (selected && selected.length > 0 && selected[0].sucursal_nombre) {
-  
+                        if (
+                          selected &&
+                          selected.length > 0 &&
+                          selected[0].sucursal_nombre
+                        ) {
                           if (selected[0] && selected[0].sucursal_nombre) {
-                            console.log(selected[0].sucursal_nombre)
-                            setValorSeleccionado({...valorSeleccionado,sucursal_nombre:selected[0].sucursal_nombre })
+                            console.log(selected[0].sucursal_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              sucursal_nombre: selected[0].sucursal_nombre,
+                            });
                           }
                         }
                       }}
@@ -1833,7 +1899,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={cmbSucursal}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.sucursal_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.sucursal_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.sucursal_nombre !== ""
+                          ? [`${valorSeleccionado.sucursal_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1870,11 +1945,17 @@ export const ModalRcv = (props) => {
                     <Typeahead
                       id="myTypeahead"
                       onChange={(selected) => {
-                        if (selected && selected.length > 0 && selected[0].transporte_nombre) {
-  
+                        if (
+                          selected &&
+                          selected.length > 0 &&
+                          selected[0].transporte_nombre
+                        ) {
                           if (selected[0] && selected[0].transporte_nombre) {
-                            console.log(selected[0].transporte_nombre)
-                            setValorSeleccionado({...valorSeleccionado,transporte_nombre:selected[0].transporte_nombre })
+                            console.log(selected[0].transporte_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              transporte_nombre: selected[0].transporte_nombre,
+                            });
                           }
                         }
                       }}
@@ -1883,7 +1964,16 @@ export const ModalRcv = (props) => {
                       placeholder="Seleccionar"
                       ref={txtLinea}
                       bsSize="small"
-                      selected={valorSeleccionado ? [valorSeleccionado.transporte_nombre] : []}
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.transporte_nombre}`]
+                          : ""
+                      }
+                      selected={
+                        valorSeleccionado.transporte_nombre !== ""
+                          ? [`${valorSeleccionado.transporte_nombre}`]
+                          : ""
+                      }
                     />
                   </div>
                 </div>
@@ -1930,7 +2020,7 @@ export const ModalRcv = (props) => {
                     onClick={() => {
                       consultarTitular(
                         cmbNacionalidadTitular.current.value +
-                        txtCedulatTitular.current.value
+                          txtCedulatTitular.current.value
                       );
                     }}
                   >
@@ -2056,11 +2146,17 @@ export const ModalRcv = (props) => {
                   <Typeahead
                     id="myTypeahead"
                     onChange={(selected) => {
-                      if (selected && selected.length > 0 && selected[0].usoVehiculo_nombre) {
-
+                      if (
+                        selected &&
+                        selected.length > 0 &&
+                        selected[0].usoVehiculo_nombre
+                      ) {
                         if (selected[0] && selected[0].usoVehiculo_nombre) {
-                          console.log(selected[0].usoVehiculo_nombre)
-                          setValorSeleccionado({...valorSeleccionado,usoVehiculo_nombre:selected[0].usoVehiculo_nombre })
+                          console.log(selected[0].usoVehiculo_nombre);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            usoVehiculo_nombre: selected[0].usoVehiculo_nombre,
+                          });
                         }
                       }
                     }}
@@ -2069,7 +2165,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtUso}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.usoVehiculo_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.usoVehiculo_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.usoVehiculo_nombre !== ""
+                        ? [`${valorSeleccionado.usoVehiculo_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -2138,11 +2243,17 @@ export const ModalRcv = (props) => {
                   <Typeahead
                     id="myTypeahead"
                     onChange={(selected) => {
-                      if (selected && selected.length > 0 && selected[0].clase_nombre) {
-
+                      if (
+                        selected &&
+                        selected.length > 0 &&
+                        selected[0].clase_nombre
+                      ) {
                         if (selected[0] && selected[0].clase_nombre) {
-                          console.log(selected[0].clase_nombre)
-                          setValorSeleccionado({...valorSeleccionado,clase_nombre:selected[0].clase_nombre })
+                          console.log(selected[0].clase_nombre);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            clase_nombre: selected[0].clase_nombre,
+                          });
                         }
                       }
                     }}
@@ -2151,7 +2262,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={txtClase}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.clase_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.clase_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.clase_nombre !== ""
+                        ? [`${valorSeleccionado.clase_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -2227,11 +2347,18 @@ export const ModalRcv = (props) => {
                   <Typeahead
                     id="myTypeahead"
                     onChange={(selected) => {
-                      if (selected && selected.length > 0 && selected[0].tipoVehiculo_nombre) {
-
+                      if (
+                        selected &&
+                        selected.length > 0 &&
+                        selected[0].tipoVehiculo_nombre
+                      ) {
                         if (selected[0] && selected[0].tipoVehiculo_nombre) {
-                          console.log(selected[0].tipoVehiculo_nombre)
-                          setValorSeleccionado({...valorSeleccionado,tipoVehiculo_nombre:selected[0].tipoVehiculo_nombre })
+                          console.log(selected[0].tipoVehiculo_nombre);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            tipoVehiculo_nombre:
+                              selected[0].tipoVehiculo_nombre,
+                          });
                         }
                       }
                     }}
@@ -2240,7 +2367,16 @@ export const ModalRcv = (props) => {
                     placeholder="Seleccionar"
                     ref={cmbTipo}
                     bsSize="small"
-                    selected={valorSeleccionado ? [valorSeleccionado.tipoVehiculo_nombre] : []}
+                    defaultSelected={
+                      valorSeleccionado
+                        ? [`${valorSeleccionado.tipoVehiculo_nombre}`]
+                        : ""
+                    }
+                    selected={
+                      valorSeleccionado.tipoVehiculo_nombre !== ""
+                        ? [`${valorSeleccionado.tipoVehiculo_nombre}`]
+                        : ""
+                    }
                   />
                 </div>
               </div>

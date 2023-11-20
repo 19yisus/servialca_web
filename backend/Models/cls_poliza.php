@@ -80,7 +80,7 @@ abstract class cls_poliza extends cls_db
 
 	protected function renovar_poliza($dolar, $tipoIngreso, $motivo)
 	{
-		
+
 		if (empty($this->fechaNacimiento)) {
 			$this->fechaNacimiento = "0000-00-00";
 		}
@@ -91,7 +91,7 @@ abstract class cls_poliza extends cls_db
 			$fechaInicioObj = new DateTime($this->fechaInicio);
 			$fechaInicioObj->modify('+1 year');
 			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
-		} 
+		}
 		// else {
 		// 	$fechaVenicimiento = strtotime($this->fechaVencimiento);
 		// 	$fechaActual = strtotime(date("Y-m-d"));
@@ -213,6 +213,16 @@ abstract class cls_poliza extends cls_db
 			if ($result) {
 				return $result;
 			}
+			$resul = $this->SearchByEstado();
+			if (!$resul) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			};
 			$this->db->beginTransaction();
 			$this->SearchByUsuario();
 			$this->SearchBySucursal();
@@ -399,6 +409,16 @@ abstract class cls_poliza extends cls_db
 	{
 		try {
 			$this->db->beginTransaction();
+			$resul = $this->SearchByEstado();
+			if (!$resul) {
+				$this->db->rollback();
+				return [
+					"data" => [
+						"res" => "Ocurrio un error en la transacción"
+					],
+					"code" => 400
+				];
+			};
 			$result = $this->editarCliente($this->cliente);
 			if (!$result) {
 				$this->db->rollback();
@@ -702,7 +722,13 @@ abstract class cls_poliza extends cls_db
 			];
 		}
 	}
-
+	protected function SearchByEstado()
+	{
+		$sql = $this->db->prepare("SELECT * FROM estado WHERE estado_nombre = ?");
+		$sql->execute([$this->estado]);
+		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
+		return $this->estado = $resultado["estado_id"];
+	}
 
 	protected function RegistrarLicenciaConducir()
 	{
@@ -740,6 +766,7 @@ abstract class cls_poliza extends cls_db
 			return $this->db->lastInsertId();
 		}
 	}
+
 
 	protected function RegistraCobertura()
 	{
@@ -1651,31 +1678,36 @@ abstract class cls_poliza extends cls_db
 	}
 
 
-	public function reporteGeneral($motivo, $desde, $hasta)
+	public function reporteGeneral($sucursal, $motivo, $desde, $hasta)
 	{
+		$where = "";
+		$params = [];
+
+		if (isset($sucursal)) {
+			$where .= "debitocredito.sucursal_id = ? AND ";
+			$params[] = $sucursal;
+		}
+
 		if (is_numeric($motivo)) {
 			if ($motivo == 0 || $motivo == 1 || $motivo == 2) {
 				if ($motivo != 2) {
-					$where = "nota_ingresoEgreso = ?  AND nota_fecha BETWEEN ? AND ?";
-				} else {
-					$where = "nota_fecha BETWEEN ? AND ?"; // Cuando $motivo es 2, no necesitas una condición WHERE
+					$where .= "debitocredito.nota_ingresoEgreso = ? AND ";
+					$params[] = $motivo;
 				}
-			} else {
-				$where = ""; // Trata $where como una cadena vacía en este caso
 			}
-		} else {
-			$where = "nota_motivo = ? AND nota_fecha BETWEEN ? AND ?";
 		}
 
-		$sql = $this->db->prepare("SELECT *, usuario.* 
-    FROM debitocredito 
-    INNER JOIN usuario on usuario.usuario_id = debitocredito.usuario_id
-    WHERE $where");
-		if ($motivo == 2) {
-			$a = $sql->execute([$desde, $hasta]);
-		} else {
-			$a = $sql->execute([$motivo, $desde, $hasta]);
-		}
+		$where .= "debitocredito.nota_fecha BETWEEN ? AND ?";
+		$params[] = date('Y-m-d', strtotime($desde));
+		$params[] = date('Y-m-d', strtotime($hasta));
+
+		$sql = $this->db->prepare("SELECT *, usuario.*, sucursal.* 
+        FROM debitocredito 
+        INNER JOIN usuario ON usuario.usuario_id = debitocredito.usuario_id
+        INNER JOIN sucursal ON sucursal.sucursal_id = debitocredito.sucursal_id
+        WHERE $where");
+		$a = $sql->execute($params);
+
 		if ($a) {
 			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 		} else {
