@@ -1496,6 +1496,12 @@ export const ModalRcv = (props) => {
 
                   <Typeahead
                     id="myTypeahead"
+                    onKeyDown={(a) => {
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        contrato_nombre: a.target.value
+                      })
+                    }}
                     onChange={(selected) => {
                       if (
                         selected &&
@@ -1754,6 +1760,12 @@ export const ModalRcv = (props) => {
 
                     <Typeahead
                       id="myTypeahead"
+                      onKeyDown={(a) => {
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          estado_nombre: a.target.value
+                        })
+                      }}
                       onChange={(selected) => {
                         if (
                           selected &&
@@ -1817,6 +1829,12 @@ export const ModalRcv = (props) => {
                     ) : null*/}
                     <Typeahead
                       id="myTypeahead"
+                      onKeyDown={(a) => {
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          usuario_usuario: a.target.value
+                        })
+                      }}
                       onChange={(selected) => {
                         if (
                           selected &&
@@ -1879,6 +1897,12 @@ export const ModalRcv = (props) => {
 
                     <Typeahead
                       id="myTypeahead"
+                      onKeyDown={(a) => {
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          sucursal_nombre: a.target.value
+                        })
+                      }}
                       onChange={(selected) => {
                         if (
                           selected &&
@@ -1944,6 +1968,12 @@ export const ModalRcv = (props) => {
 
                     <Typeahead
                       id="myTypeahead"
+                      onKeyDown={(a) => {
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          transporte_nombre: a.target.value
+                        })
+                      }}
                       onChange={(selected) => {
                         if (
                           selected &&
@@ -2145,6 +2175,12 @@ export const ModalRcv = (props) => {
 
                   <Typeahead
                     id="myTypeahead"
+                    onKeyDown={(a) => {
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        usoVehiculo_nombre: a.target.value
+                      })
+                    }}
                     onChange={(selected) => {
                       if (
                         selected &&
@@ -2242,6 +2278,12 @@ export const ModalRcv = (props) => {
                   </button>*/}
                   <Typeahead
                     id="myTypeahead"
+                    onKeyDown={(a) => {
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        clase_nombre: a.target.value
+                      })
+                    }}
                     onChange={(selected) => {
                       if (
                         selected &&
@@ -2346,6 +2388,12 @@ export const ModalRcv = (props) => {
                   </button> */}
                   <Typeahead
                     id="myTypeahead"
+                    onKeyDown={(a) => {
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        tipoVehiculo_nombre: a.target.value
+                      })
+                    }}
                     onChange={(selected) => {
                       if (
                         selected &&
