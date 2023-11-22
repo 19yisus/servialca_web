@@ -43,8 +43,8 @@ function Login(props) {
   });
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "mfigueroa",
-    password: "+11078879*",
+    username: "",
+    password: "",
   });
 
   useEffect(() => {
