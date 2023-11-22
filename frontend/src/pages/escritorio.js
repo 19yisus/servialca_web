@@ -492,36 +492,53 @@ function MenuImpuestoPP(props) {
                     </div>
                   ) : null}
                 </div>
-                <a
-                  href="/certificadomedico"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-prescription-bottle-alt fa-fw me-1"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(16, 17) === "1" && (
+                    <a
+                      href="/certificadomedico"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-prescription-bottle-alt fa-fw me-1"></i>
 
-                  <span>Certificado Medico</span>
-                </a>
-                <a
-                  href="/reporteSemanal"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i className="fas fa-fw me-1 fa-print " />
-                  <span>Lista de vendedores semanal</span>
-                </a>
-                <a
-                  href="/reportesGeneral"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i className="fas fa-fw me-1 fa-print " />
-                  <span>Reportes</span>
-                </a>
-                <a
-                  href="/licencia"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-id-card fa-fw me-1"></i>
+                      <span>Certificado Medico</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(17, 18) === "1" && (
+                    <a
+                      href="/reporteSemanal"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-fw me-1 fa-print " />
+                      <span>Lista de vendedores semanal</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(18, 19) === "1" && (
+                    <a
+                      href="/reportesGeneral"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-fw me-1 fa-print " />
+                      <span>Reportes</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(19, 20) === "1" && (
+                    <a
+                      href="/licencia"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-id-card fa-fw me-1"></i>
 
-                  <span>Licencias</span>
-                </a>
+                      <span>Licencias</span>
+                    </a>
+                  )}
+
                 <a
                   href="/cumpleaneros"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
@@ -530,14 +547,19 @@ function MenuImpuestoPP(props) {
 
                   <span>Cumpleañeros</span>
                 </a>
-                <a
-                  href="/panel"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-fw me-1 fa-solar-panel"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(19, 20) === "1" && (
+                    <a
+                      href="/panel"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-fw me-1 fa-solar-panel"></i>
 
-                  <span>Imagen</span>
-                </a>
+                      <span>Imagen</span>
+                    </a>
+                  )}
+
                 <a
                   href="/listaPrecios"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
@@ -546,14 +568,18 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
-                <a
-                  href="/bitacora"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(20, 21) === "1" && (
+                    <a
+                      href="/bitacora"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
 
-                  <span>Bitacora</span>
-                </a>
+                      <span>Bitacora</span>
+                    </a>
+                  )}
 
                 <a
                   href="/"
