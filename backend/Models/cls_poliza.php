@@ -136,26 +136,26 @@ abstract class cls_poliza extends cls_db
 		// Formatear las fechas en el formato deseado
 		$this->fechaInicio = $fechaInicio->format('Y-m-d');
 		$this->fechaVencimiento = $fechaVencimiento->format('Y-m-d');
+
 		$sql = $this->db->prepare("UPDATE poliza SET
-		poliza_fechaInicio = ?,
-		poliza_fechaVencimiento = ?,
-        poliza_renovacion = poliza_renovacion+1,
-        debitoCredito =?
-        WHERE poliza_id = ?");
-		$sql->execute([
+    poliza_fechaInicio = ?,
+    poliza_fechaVencimiento = ?,
+    poliza_renovacion = poliza_renovacion+1,
+    debitoCredito =?
+    WHERE poliza_id = ?");
+		if ($sql->execute([
 			$this->fechaInicio,
 			$this->fechaVencimiento,
 			$this->debitoCredito,
 			$this->id
-		]);
-
-		if ($sql->rowCount() > 0) {
-			
+		])) {
+			$this->generarQr($this->id);
+			// Si la actualización fue exitosa, simplemente retorna el ID
 			return [
 				'data' => [
 					'res' => "Contrato renovado",
 					"code" => 200,
-					'id' => $this->id // Agregar el ID en la respuesta
+					'id' => $this->id
 				],
 				'code' => 200
 			];
@@ -1341,7 +1341,6 @@ abstract class cls_poliza extends cls_db
 					QRcode::png($QR, $QRcodeImg);
 					$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
 					$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
-					return true;
 				}
 			}
 		} else {

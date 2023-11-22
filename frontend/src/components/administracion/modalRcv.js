@@ -1180,7 +1180,7 @@ export const ModalRcv = (props) => {
         //   clase_nombre:"AUTOMOVIL",
         //   tipoVehiculo_nombre:"camion 750"
         // });
-        // idPoliza.current.value = response[0].poliza_id;
+        idPoliza.current.value = response[0].poliza_id;
         // contrato_nombre: response[0].contrato_nombre,
         // estado_nombre: response[0].estado_nombre ?  response[0].estado_nombre : '',
         // usuario_usuario: response[0].usuario_usuario,
@@ -1190,10 +1190,10 @@ export const ModalRcv = (props) => {
         // clase_nombre:response[0].clase_nombre,
         // tipoVehiculo_nombre: response[0].tipoVehiculo_nombre
 
-        // idCliente.current.value = response[0].cliente_id;
-        //idTitular.current.value = response[0].titular_id;
-        //idVehiculo.current.value = response[0].vehiculo_id;
-        //idCobertura.current.value = response[0].nota_id;
+        idCliente.current.value = response[0].cliente_id;
+        idTitular.current.value = response[0].titular_id;
+        idVehiculo.current.value = response[0].vehiculo_id;
+        idCobertura.current.value = response[0].nota_id;
         txtDesde.current.value = response[0].poliza_fechaInicio;
         txtHasta.current.value = response[0].poliza_fechaVencimiento;
         var cedula = response[0].cliente_cedula.split("-");
