@@ -499,21 +499,30 @@ function Inicio2() {
           />
 
           <div className="col-6 d-flex justify-content-end">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(3)}
-            >
-              <i class="fa fa-plus"></i> Licencia
-            </button>
+            {permiso &&
+              permiso.length >= 3 &&
+              permiso.substring(19, 20) === "1" && (
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mx-1"
+                  onClick={gestionarRcv(3)}
+                >
+                  <i class="fa fa-plus"></i> Licencia
+                </button>
+              )}
 
-            <button
-              type="button"
-              class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(2)}
-            >
-              <i class="fa fa-plus"></i> Certificado Medico
-            </button>
+            {permiso &&
+              permiso.length >= 3 &&
+              permiso.substring(16, 17) === "1" && (
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mx-1"
+                  onClick={gestionarRcv(2)}
+                >
+                  <i class="fa fa-plus"></i> Certificado Medico
+                </button>
+              )}
+
             <button
               type="button"
               class="btn btn-primary btn-sm mx-1"

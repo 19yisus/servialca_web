@@ -3,11 +3,16 @@ require_once("../QR/qrlib.php");
 
 class porqueria
 {
-    protected $db;
+    protected $db, $db2;
 
     public function conexion()
     {
         $this->db = new PDO("mysql:host=localhost;dbname=servialc_web", 'root', '');
+    }
+
+    public function conexion2()
+    {
+        $this->db2 = new PDO("mysql:host=localhost;dbname=servialc_db2", 'root', '');
     }
     public function trasferir()
     {
@@ -31,6 +36,59 @@ class porqueria
             }
         }
     }
+    public function ClaseVehiculo()
+    {
+        $sql = $this->db2->prepare("SELECT * FROM clasevehiculo");
+        $sql->execute();
+        $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($resultado as $row) {
+            $sql2 = $this->db->prepare("INSERT INTO clasevehiculo(clase_nombre,clase_estatus) VALUES(?,1)");
+            $sql2->execute([$row["clase_nombre"]]);
+        }
+    }
+
+    public function cliente()
+    {
+        $sql = $this->db2->prepare("SELECT * FROM cliente");
+        $sql->execute();
+        $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resultado as $row) {
+            // Verifica y ajusta la fecha si es '0000-00-00'
+            $fechaNacimiento = ($row["cliente_fechaNacimiento"] === '0000-00-00') ? null : $row["cliente_fechaNacimiento"];
+
+            $sql2 = $this->db->prepare("INSERT INTO cliente (
+            cliente_id,
+            cliente_nombre,
+            cliente_apellido,
+            cliente_cedula,
+            cliente_fechaNacimiento,
+            cliente_telefono,
+            cliente_correo,
+            cliente_direccion
+        ) VALUES (?,?,?,?,?,?,?,?)");
+
+            $sql2->execute([
+                $row["cliente_id"],
+                $row["cliente_nombre"],
+                $row["cliente_apellido"],
+                $row["cliente_cedula"],
+                $fechaNacimiento,
+                $row["cliente_telefono"],
+                $row["cliente_correo"],
+                $row["cliente_direccion"]
+            ]);
+        }
+    }
+
+    public function coberturas()
+    {
+        $sql = $this->db2->prepare("SELECT * FROM cobertura");
+    }
+
+
+
+
 
     public function generarQr()
     {
@@ -77,9 +135,24 @@ class porqueria
             }
         }
     }
+
+
+    public function encriptPasswords()
+    {
+        $datos = $this->db->query("SELECT * FROM usuario WHERE usuario_clave != '' ");
+        $datos = $datos->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($datos as $item) {
+            $id_usuario = $item['usuario_id'];
+            $clave = password_hash($item['usuario_clave'], PASSWORD_BCRYPT, ['cost' => 12]);
+            $this->db->query("UPDATE usuario SET usuario_clave = '$clave' WHERE usuario_id = $id_usuario");
+        }
+        if (isset($datos))
+            return $datos;
+    }
 }
 
 
 $a = new porqueria();
 $a->conexion();
-$a->generarQr();
+$a->conexion2();
+$a->encriptPasswords();
