@@ -559,7 +559,7 @@ export const ModalRcv = (props) => {
     }
 
     //Cobertura
-    var monto = txtDolar.current.value.replace(",", ".");
+    var monto = txtBs.current.value.replace(",", ".");
     bodyF.append("danoCosas", monto * 0.4);
     bodyF.append("danoPersonas", monto * 0.2);
     bodyF.append("fianza", monto * 0.1);
@@ -574,7 +574,7 @@ export const ModalRcv = (props) => {
     //Pago
     bodyF.append("metodoPago", cmbFormaPago.current.value);
     bodyF.append("Referencia", txtReferencia.current.value);
-    bodyF.append("cantidadDolar", monto);
+    bodyF.append("cantidadDolar", txtDolar);
     bodyF.append("precioDolar", dolarbcv.toFixed(2));
     bodyF.append("token", token);
     await fetch(endpoint, {
