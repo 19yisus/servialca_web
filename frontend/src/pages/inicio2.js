@@ -161,7 +161,9 @@ function Inicio2() {
 
   const { user } = useContext(AuthContext);
   const codigo = JSON.parse(localStorage.getItem("codigo"));
-  const permiso = JSON.parse(localStorage.getItem("permiso"));
+  let permisos = JSON.parse(localStorage.getItem("permisos"));
+  console.log(permisos);
+
   const [poliza, setPoliza] = useState();
 
   const [operacion, setOperacion] = useState();
@@ -499,9 +501,9 @@ function Inicio2() {
           />
 
           <div className="col-6 d-flex justify-content-end">
-            {permiso &&
-              permiso.length >= 3 &&
-              permiso.substring(19, 20) === "1" && (
+            {permisos &&
+              permisos.length >= 3 &&
+              permisos.toString().substring(19, 20) === "1" && (
                 <button
                   type="button"
                   class="btn btn-primary btn-sm mx-1"
@@ -511,9 +513,9 @@ function Inicio2() {
                 </button>
               )}
 
-            {permiso &&
-              permiso.length >= 3 &&
-              permiso.substring(16, 17) === "1" && (
+            {permisos &&
+              permisos.length >= 3 &&
+              permisos.toString().substring(16, 17) === "1" && (
                 <button
                   type="button"
                   class="btn btn-primary btn-sm mx-1"
