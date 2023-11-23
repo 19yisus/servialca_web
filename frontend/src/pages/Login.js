@@ -15,6 +15,7 @@ function Login(props) {
   let op = require("../modulos/datos");
   const [bloquear, setBloquear] = useState(0);
   const context = useContext(AuthContext);
+const [showPassword, setShowPassword] = useState(false);
 
   const [activate, setActivate] = useState(false);
   const [records, setRecords] = useState([

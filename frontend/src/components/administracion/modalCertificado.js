@@ -355,7 +355,7 @@ export const ModalCertificadoMedico = (props) => {
     setEdad(edadCalculada);
   }
   const handleChange = (maxValue) => (e) => {
-    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
+    e.target.value = e.target.value.toUpperCase(); 
     const inputValue = e.target.value;
 
     // Verificar si la longitud del valor ingresado supera el valor máximo
