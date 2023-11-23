@@ -1743,7 +1743,7 @@ abstract class cls_poliza extends cls_db
 		$where = "";
 		$params = [];
 
-		if (isset($sucursal)) {
+		if (isset($sucursal) && $sucursal != null || $sucursal != "") {
 			$where .= "debitocredito.sucursal_id = ? AND ";
 			$params[] = $sucursal;
 		}

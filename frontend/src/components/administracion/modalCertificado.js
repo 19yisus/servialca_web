@@ -644,7 +644,9 @@ export const ModalCertificadoMedico = (props) => {
               aria-describedby="inputGroup-sizing-sm"
               placeholder="Bolivares"
               onChange={handleInputMontoChange}
-              value={(10 * dolarbcv).toFixed(2)}
+              value={(10 * parseFloat(dolarbcv)).toFixed(2)}
+
+
             />
           </div>
         </div>

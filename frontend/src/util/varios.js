@@ -156,9 +156,10 @@ export const validaSoloNumero = (event) => {
 
 export const validaSoloLetras = (event) => {
   $(event.target).val(function (index, value) {
-    return value.replace(/^[0-9]+$/i, "", /^[0-9]+$/i).toUpperCase();
+    return value.replace(/[^a-zA-Z]+/g, '');
   });
 };
+
 
 export const validaNumeroTelefono = (inputtxt) => {
   //var tlfno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
