@@ -239,7 +239,17 @@ function MenuImpuestoPP(props) {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body py-0 list-group px-0">
-                        {permisos.substring(0, 1) === "1" ? (
+                        <a
+                          href="/contratosrealizados"
+                          className="list-group-item list-group-item-action py-2 ripple"
+                        >
+                          <i className="fas fas-fw me-1 fa-file-signature"></i>
+                          <span>Contratos Realizados</span>
+                        </a>
+
+                        {permisos &&
+                        permisos.length >= 3 &&
+                        permisos.substring(0, 1) === "1" ? (
                           <a
                             href="/sucursales"
                             className="list-group-item list-group-item-action py-2 ripple"
@@ -248,24 +258,19 @@ function MenuImpuestoPP(props) {
                             <span>Lista de Sucursales</span>
                           </a>
                         ) : null}
-                        {permisos.substring(1, 2) === "1" && (
-                          <a
-                            href="/contratosrealizados"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-file-signature"></i>
-                            <span>Contratos Realizados</span>
-                          </a>
-                        )}
-                        {permisos.substring(2, 3) === "1" && (
-                          <a
-                            href="/tipocontratos"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-clipboard-list"></i>
-                            <span>Tipos de Contratos</span>
-                          </a>
-                        )}
+
+                        {permisos &&
+                          permisos.length >= 3 &&
+                          permisos.substring(2, 3) === "1" && (
+                            <a
+                              href="/tipocontratos"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i className="fas fas-fw me-1 fa-clipboard-list"></i>
+                              <span>Tipos de Contratos</span>
+                            </a>
+                          )}
+
                         {/* {permisos.substring(2, 3) === "1" && (
                           <a
                             href="/morosos"
@@ -275,13 +280,17 @@ function MenuImpuestoPP(props) {
                             <span>Listado de Morosos</span>
                           </a>
                         )} */}
-                        <a
-                          href="/documento"
-                          className="list-group-item list-group-item-action py-2 ripple"
-                        >
-                          <i class="fas fas-fw me-1 fa-file-signature"></i>
-                          <span>Documentos</span>
-                        </a>
+                        {permisos &&
+                          permisos.length >= 3 &&
+                          permisos.substring(3, 4) === "1" && (
+                            <a
+                              href="/documento"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-file-signature"></i>
+                              <span>Documentos</span>
+                            </a>
+                          )}
 
                         {/* <a
                           href="/licencias"
@@ -290,201 +299,246 @@ function MenuImpuestoPP(props) {
                           <i class="fas fas-fw me-1 fa-clipboard-list"></i>
                           <span>Licencias</span>
                         </a> */}
-
-                        <a
-                          href="/chats"
-                          className="list-group-item list-group-item-action py-2 ripple"
-                        >
-                          <i class="fab fa-rocketchat fas-fw me-1"></i>
-                          <span>Chats</span>
-                        </a>
+                        {permisos &&
+                          permisos.length >= 3 &&
+                          permisos.substring(4, 5) === "1" && (
+                            <a
+                              href="/chats"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fab fa-rocketchat fas-fw me-1"></i>
+                              <span>Chats</span>
+                            </a>
+                          )}
                       </div>
                     </div>
                   </div>
                   {/* } */}
-                  <div className="accordion-item  px-0">
-                    <h2 className="accordion-header" id="heading2">
-                      <button
-                        className="accordion-button text-light"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse2"
-                        aria-expanded="false"
-                        aria-controls="collapse2"
-                      >
-                        <i class="fas fa-car fa-fw me-1"></i>
-                        <span>Datos del Vehiculo</span>
-                      </button>
-                    </h2>
-                    <div
-                      id="collapse2"
-                      className="accordion-collapse collapse list-group-item-action"
-                      aria-labelledby="heading2"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body py-0 list-group px-0">
-                        {permisos.substring(3, 4) === "1" && (
-                          <a
-                            href="/usovehiculo"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-file-contract"></i>
-                            <span>Uso del Vehiculo</span>
-                          </a>
-                        )}
-                        {permisos.substring(4, 5) === "1" && (
-                          <a
-                            href="/clasevehiculo"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-taxi"></i>
-                            <span>Clases de Vehiculos</span>
-                          </a>
-                        )}
-                        {permisos.substring(5, 6) === "1" && (
-                          <a
-                            href="/tipovehiculo"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-caravan"></i>
-                            <span>Tipos de Vehiculos</span>
-                          </a>
-                        )}
-                        {permisos.substring(5, 6) === "1" && (
-                          <a
-                            href="/tipovehiculobocono"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-shuttle-van"></i>
-                            <span>Tipos de Vehiculos Bocono</span>
-                          </a>
-                        )}
-                        {permisos.substring(6, 7) === "1" && (
-                          <a
-                            href="/transporte"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fas-fw me-1 fa-bus"></i>
-                            <span>Lineas de Transporte</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="accordion-item  px-0">
-                    <h2 className="accordion-header" id="heading3">
-                      <button
-                        className="accordion-button text-light"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse3"
-                        aria-expanded="false"
-                        aria-controls="collapse3"
-                      >
-                        <i class="fas fa-fw me-1 fa-server"></i>
-
-                        <span>Datos de Usuario</span>
-                      </button>
-                    </h2>
-                    <div
-                      id="collapse3"
-                      className="accordion-collapse collapse list-group-item-action"
-                      aria-labelledby="heading3"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body py-0 list-group px-0">
-                        {permisos.substring(7, 8) === "1" && (
-                          <a
-                            href="/usarios"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fa-users fs-fw me-1"></i>
-                            <span>Usuarios</span>
-                          </a>
-                        )}
-                        {permisos.substring(8, 9) === "1" && (
-                          <a
-                            href="/roles"
-                            className="list-group-item list-group-item-action py-2 ripple"
-                          >
-                            <i class="fas fa-user-tag fs-fw me-1"></i>
-                            <span>Roles</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item  px-0">
-                    <h2 className="accordion-header" id="heading4">
-                      <button
-                        className="accordion-button text-light"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse4"
-                        aria-expanded="false"
-                        aria-controls="collapse4"
-                      >
-                        <i class="far fa-chart-bar fa-fw me-1"></i>
-
-                        <span>Graficas</span>
-                      </button>
-                    </h2>
-                    <div
-                      id="collapse4"
-                      className="accordion-collapse collapse list-group-item-action"
-                      aria-labelledby="heading4"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body py-0 list-group px-0">
-                        <a
-                          href="/graficasingegre"
-                          className="list-group-item list-group-item-action py-2 ripple"
+                  {typeof permisos === "string" &&
+                  permisos.length >= 7 && // Verifica que permisos sea una cadena y tenga al menos longitud 7
+                  (permisos.substring(5, 6) === "1" ||
+                    permisos.substring(6, 7) === "1" ||
+                    permisos.substring(7, 8) === "1" ||
+                    permisos.substring(8, 9) === "1") ? (
+                    <div className="accordion-item px-0">
+                      <h2 className="accordion-header" id="heading2">
+                        <button
+                          className="accordion-button text-light"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapse2"
+                          aria-expanded="false"
+                          aria-controls="collapse2"
                         >
-                          <i class="fas fa-money-check-alt fa-fw me-1"></i>
-                          <span>Grafica</span>
-                        </a>
-                        <a
-                          href="/gastosPersonales"
-                          className="list-group-item list-group-item-action py-2 ripple"
-                        >
-                          <i class="fas fa-money-check-alt fa-fw me-1"></i>
-                          <span>Gastos personales</span>
-                        </a>
+                          <i class="fas fa-car fa-fw me-1"></i>
+                          <span>Datos del Vehiculo</span>
+                        </button>
+                      </h2>
+                      <div
+                        id="collapse2"
+                        className="accordion-collapse collapse list-group-item-action"
+                        aria-labelledby="heading2"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div className="accordion-body py-0 list-group px-0">
+                          {permisos.substring(5, 6) === "1" && (
+                            <a
+                              href="/usovehiculo"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-file-contract"></i>
+                              <span>Uso del Vehiculo</span>
+                            </a>
+                          )}
+
+                          {permisos.substring(6, 7) === "1" && (
+                            <a
+                              href="/clasevehiculo"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-taxi"></i>
+                              <span>Clases de Vehiculos</span>
+                            </a>
+                          )}
+
+                          {permisos.substring(7, 8) === "1" && (
+                            <a
+                              href="/tipovehiculo"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-caravan"></i>
+                              <span>Tipos de Vehiculos</span>
+                            </a>
+                          )}
+
+                          {permisos.substring(8, 9) === "1" && (
+                            <a
+                              href="/tipovehiculobocono"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-shuttle-van"></i>
+                              <span>Tipos de Vehiculos Bocono</span>
+                            </a>
+                          )}
+
+                          {permisos.substring(9, 10) === "1" && (
+                            <a
+                              href="/transporte"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fas-fw me-1 fa-bus"></i>
+                              <span>Lineas de Transporte</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : null}
+
+                  {typeof permisos === "string" &&
+                  permisos.length >= 9 && // Verifica que permisos sea una cadena y tenga al menos longitud 9
+                  (permisos.substring(10, 11) === "1" ||
+                    permisos.substring(11, 12) === "1") ? ( // Verifica si tiene permisos de usuario o roles
+                    <div className="accordion-item px-0">
+                      <h2 className="accordion-header" id="heading3">
+                        <button
+                          className="accordion-button text-light"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapse3"
+                          aria-expanded="false"
+                          aria-controls="collapse3"
+                        >
+                          <i class="fas fa-fw me-1 fa-server"></i>
+                          <span>Datos de Usuario</span>
+                        </button>
+                      </h2>
+                      <div
+                        id="collapse3"
+                        className="accordion-collapse collapse list-group-item-action"
+                        aria-labelledby="heading3"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div className="accordion-body py-0 list-group px-0">
+                          {permisos.substring(10, 11) === "1" && (
+                            <a
+                              href="/usuarios"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fa-users fs-fw me-1"></i>
+                              <span>Usuarios</span>
+                            </a>
+                          )}
+
+                          {permisos.substring(11, 12) === "1" && (
+                            <a
+                              href="/roles"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i class="fas fa-user-tag fs-fw me-1"></i>
+                              <span>Roles</span>
+                            </a>
+                          )}
+
+                          {/* Otro contenido relacionado con datos de usuario, si es necesario */}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                  {typeof permisos === "string" &&
+                  permisos.length >= 7 && // Verifica que permisos sea una cadena y tenga al menos longitud 7
+                  (permisos.substring(12, 13) === "1" ||
+                    permisos.substring(13, 14) === "1" ||
+                    permisos.substring(14, 15) === "1" ||
+                    permisos.substring(15, 16) === "1") ? (
+                    <div className="accordion-item  px-0">
+                      <h2 className="accordion-header" id="heading4">
+                        <button
+                          className="accordion-button text-light"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapse4"
+                          aria-expanded="false"
+                          aria-controls="collapse4"
+                        >
+                          <i class="far fa-chart-bar fa-fw me-1"></i>
+
+                          <span>Graficas</span>
+                        </button>
+                      </h2>
+                      <div
+                        id="collapse4"
+                        className="accordion-collapse collapse list-group-item-action"
+                        aria-labelledby="heading4"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div className="accordion-body py-0 list-group px-0">
+                          <a
+                            href="/graficasingegre"
+                            className="list-group-item list-group-item-action py-2 ripple"
+                          >
+                            <i class="fas fa-money-check-alt fa-fw me-1"></i>
+                            <span>Grafica</span>
+                          </a>
+                          <a
+                            href="/gastosPersonales"
+                            className="list-group-item list-group-item-action py-2 ripple"
+                          >
+                            <i class="fas fa-money-check-alt fa-fw me-1"></i>
+                            <span>Gastos personales</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
-                <a
-                  href="/certificadomedico"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-prescription-bottle-alt fa-fw me-1"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(16, 17) === "1" && (
+                    <a
+                      href="/certificadomedico"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-prescription-bottle-alt fa-fw me-1"></i>
 
-                  <span>Certificado Medico</span>
-                </a>
-                <a
-                  href="/reporteSemanal"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i className="fas fa-fw me-1 fa-print " />
-                  <span>Lista de vendedores semanal</span>
-                </a>
-                <a
-                  href="/reportesGeneral"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i className="fas fa-fw me-1 fa-print " />
-                  <span>Reportes</span>
-                </a>
-                <a
-                  href="/licencia"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-id-card fa-fw me-1"></i>
+                      <span>Certificado Medico</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(17, 18) === "1" && (
+                    <a
+                      href="/reporteSemanal"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-fw me-1 fa-print " />
+                      <span>Lista de vendedores semanal</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(18, 19) === "1" && (
+                    <a
+                      href="/reportesGeneral"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-fw me-1 fa-print " />
+                      <span>Reportes</span>
+                    </a>
+                  )}
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(19, 20) === "1" && (
+                    <a
+                      href="/licencia"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-id-card fa-fw me-1"></i>
 
-                  <span>Licencias</span>
-                </a>
+                      <span>Licencias</span>
+                    </a>
+                  )}
+
                 <a
                   href="/cumpleaneros"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
@@ -493,14 +547,19 @@ function MenuImpuestoPP(props) {
 
                   <span>Cumpleañeros</span>
                 </a>
-                <a
-                  href="/panel"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-fw me-1 fa-solar-panel"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(19, 20) === "1" && (
+                    <a
+                      href="/panel"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-fw me-1 fa-solar-panel"></i>
 
-                  <span>Imagen</span>
-                </a>
+                      <span>Imagen</span>
+                    </a>
+                  )}
+
                 <a
                   href="/listaPrecios"
                   className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
@@ -509,14 +568,18 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
-                <a
-                  href="/bitacora"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(20, 21) === "1" && (
+                    <a
+                      href="/bitacora"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
 
-                  <span>Bitacora</span>
-                </a>
+                      <span>Bitacora</span>
+                    </a>
+                  )}
 
                 <a
                   href="/"
@@ -554,7 +617,7 @@ function MenuImpuestoPP(props) {
                 component={TablaClaseVehiculo}
               />
               <AuthRoute exact path="/transporte" component={TablaTransporte} />
-              <AuthRoute exact path="/usarios" component={TablaUsuarios} />
+              <AuthRoute exact path="/usuarios" component={TablaUsuarios} />
               <AuthRoute exact path="/roles" component={TablaRoles} />
               <AuthRoute
                 exact

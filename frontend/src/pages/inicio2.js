@@ -161,7 +161,9 @@ function Inicio2() {
 
   const { user } = useContext(AuthContext);
   const codigo = JSON.parse(localStorage.getItem("codigo"));
-  const permiso = JSON.parse(localStorage.getItem("permiso"));
+  let permisos = JSON.parse(localStorage.getItem("permisos"));
+  console.log(permisos);
+
   const [poliza, setPoliza] = useState();
 
   const [operacion, setOperacion] = useState();
@@ -499,21 +501,30 @@ function Inicio2() {
           />
 
           <div className="col-6 d-flex justify-content-end">
-            <button
-              type="button"
-              class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(3)}
-            >
-              <i class="fa fa-plus"></i> Licencia
-            </button>
+            {permisos &&
+              permisos.length >= 3 &&
+              permisos.toString().substring(19, 20) === "1" && (
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mx-1"
+                  onClick={gestionarRcv(3)}
+                >
+                  <i class="fa fa-plus"></i> Licencia
+                </button>
+              )}
 
-            <button
-              type="button"
-              class="btn btn-primary btn-sm mx-1"
-              onClick={gestionarRcv(2)}
-            >
-              <i class="fa fa-plus"></i> Certificado Medico
-            </button>
+            {permisos &&
+              permisos.length >= 3 &&
+              permisos.toString().substring(16, 17) === "1" && (
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mx-1"
+                  onClick={gestionarRcv(2)}
+                >
+                  <i class="fa fa-plus"></i> Certificado Medico
+                </button>
+              )}
+
             <button
               type="button"
               class="btn btn-primary btn-sm mx-1"
