@@ -493,7 +493,7 @@ function TablaUsuarios() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.usuario_estatus === 1 ? "ACTIVO" : "INACTIVO"}
+                    {item.usuario_estatus == 1 ? "ACTIVO" : "INACTIVO"}
                   </TableCell>
 
                   <TableCell

@@ -574,7 +574,7 @@ export const ModalRcv = (props) => {
     //Pago
     bodyF.append("metodoPago", cmbFormaPago.current.value);
     bodyF.append("Referencia", txtReferencia.current.value);
-    bodyF.append("cantidadDolar", txtDolar);
+    bodyF.append("cantidadDolar", txtDolar.current.value);
     bodyF.append("precioDolar", dolarbcv.toFixed(2));
     bodyF.append("token", token);
     await fetch(endpoint, {
@@ -636,7 +636,9 @@ export const ModalRcv = (props) => {
       .then((response) => {
         setActivate(false);
         txtDolar.current.value = response[0]["precio_monto"];
-        txtBs.current.value = response[0]["precio_monto"] * dolarbcv;
+        txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
+          2
+        );
         setTipoContrato(response);
         txtDolar.current.value(response.precio_monto);
       })
@@ -1499,8 +1501,8 @@ export const ModalRcv = (props) => {
                     onKeyDown={(a) => {
                       setValorSeleccionado({
                         ...valorSeleccionado,
-                        contrato_nombre: a.target.value
-                      })
+                        contrato_nombre: a.target.value,
+                      });
                     }}
                     onChange={(selected) => {
                       if (
@@ -1760,25 +1762,16 @@ export const ModalRcv = (props) => {
 
                     <Typeahead
                       id="myTypeahead"
-                      onKeyDown={(a) => {
-                        setValorSeleccionado({
-                          ...valorSeleccionado,
-                          estado_nombre: a.target.value
-                        })
-                      }}
                       onChange={(selected) => {
                         if (
                           selected &&
                           selected.length > 0 &&
                           selected[0].estado_nombre
                         ) {
-                          if (selected[0] && selected[0].estado_nombre) {
-                            console.log(selected[0].estado_nombre);
-                            setValorSeleccionado({
-                              ...valorSeleccionado,
-                              estado_nombre: selected[0].estado_nombre,
-                            });
-                          }
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            estado_nombre: selected[0].estado_nombre,
+                          });
                         }
                       }}
                       labelKey="estado_nombre"
@@ -1805,7 +1798,7 @@ export const ModalRcv = (props) => {
                       className="input-group-text"
                       id="inputGroup-sizing-sm"
                     >
-                      Acesor:{" "}
+                      Asesor:{" "}
                     </span>
                     {/*  <input
                       disabled
@@ -1832,8 +1825,8 @@ export const ModalRcv = (props) => {
                       onKeyDown={(a) => {
                         setValorSeleccionado({
                           ...valorSeleccionado,
-                          usuario_usuario: a.target.value
-                        })
+                          usuario_usuario: a.target.value,
+                        });
                       }}
                       onChange={(selected) => {
                         if (
@@ -1900,8 +1893,8 @@ export const ModalRcv = (props) => {
                       onKeyDown={(a) => {
                         setValorSeleccionado({
                           ...valorSeleccionado,
-                          sucursal_nombre: a.target.value
-                        })
+                          sucursal_nombre: a.target.value,
+                        });
                       }}
                       onChange={(selected) => {
                         if (
@@ -1971,8 +1964,8 @@ export const ModalRcv = (props) => {
                       onKeyDown={(a) => {
                         setValorSeleccionado({
                           ...valorSeleccionado,
-                          transporte_nombre: a.target.value
-                        })
+                          transporte_nombre: a.target.value,
+                        });
                       }}
                       onChange={(selected) => {
                         if (
@@ -2178,8 +2171,8 @@ export const ModalRcv = (props) => {
                     onKeyDown={(a) => {
                       setValorSeleccionado({
                         ...valorSeleccionado,
-                        usoVehiculo_nombre: a.target.value
-                      })
+                        usoVehiculo_nombre: a.target.value,
+                      });
                     }}
                     onChange={(selected) => {
                       if (
@@ -2228,7 +2221,26 @@ export const ModalRcv = (props) => {
                     ref={txtAño}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={validaSoloNumero}
+                    onChange={(e) => {
+                      let valor = e.target.value;
+                      const añoActual = new Date().getFullYear();
+                      const añoMinimo = 1950;
+
+                      // Limitar la longitud a 4 dígitos
+                      valor = valor.slice(0, 4);
+
+                      if (valor.length === 4) {
+                        if (añoActual < valor) {
+                          e.target.value = añoActual;
+                        } else if (valor < añoMinimo) {
+                          e.target.value = añoMinimo;
+                        } else {
+                          e.target.value = valor;
+                        }
+                      } else {
+                        e.target.value = valor;
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -2281,8 +2293,8 @@ export const ModalRcv = (props) => {
                     onKeyDown={(a) => {
                       setValorSeleccionado({
                         ...valorSeleccionado,
-                        clase_nombre: a.target.value
-                      })
+                        clase_nombre: a.target.value,
+                      });
                     }}
                     onChange={(selected) => {
                       if (
@@ -2391,8 +2403,8 @@ export const ModalRcv = (props) => {
                     onKeyDown={(a) => {
                       setValorSeleccionado({
                         ...valorSeleccionado,
-                        tipoVehiculo_nombre: a.target.value
-                      })
+                        tipoVehiculo_nombre: a.target.value,
+                      });
                     }}
                     onChange={(selected) => {
                       if (

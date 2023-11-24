@@ -127,9 +127,15 @@ function TablaReportes() {
 
   const generarReporte = async (e) => {
     e.preventDefault();
-    window.open(
-      `${op.conexion}/reporteGeneral?Sucursal=${cmbDato.current.value}Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
-    );
+    if (cmbDato.current.value != "" && cmbDato.current.value != null) {
+      window.open(
+        `${op.conexion}/reporteGeneral?Sucursal=${cmbDato.current.value}Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
+      );
+    } else {
+      window.open(
+        `${op.conexion}/reporteGeneral?Motivo=${cmbTipo.current.value}&Desde=${txtDesde.current.value}&Hasta=${txtHasta.current.value}`
+      );
+    }
   };
 
   const seleccionaOperacion = (id, op) => (e) => {

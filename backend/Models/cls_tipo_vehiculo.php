@@ -264,7 +264,7 @@ abstract class cls_tipo_vehiculo extends cls_db
   {
     $sql = $this->db->prepare("SELECT precio.* FROM precio 
     JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
-    JOIN tipovehiculo ON tipoVehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
+    JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
     JOIN sucursal ON sucursal.sucursal_id = precio.sucursal_id 
     WHERE tipocontrato.contrato_nombre = ? AND tipovehiculo.tipoVehiculo_nombre = ? AND sucursal.sucursal_nombre = ?");
     $sql->execute([$contrato, $tipo, $sucursal]);

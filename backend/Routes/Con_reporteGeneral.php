@@ -8,7 +8,7 @@ class Reporte extends cls_poliza
 $rp = new Reporte();
 $datos = $rp->reporteGeneral($_GET["Sucursal"], $_GET["Motivo"], $_GET["Desde"], $_GET["Hasta"]);
 $motivo;
-if (isset($_GET["Sucursal"])) {
+if (isset($_GET["Sucursal"]) && $_GET["Sucursal"] != null || $_GET["Sucursal"] != "") {
   $motivo = "Reporte de sucursal";
 } else if ($_GET["Motivo"] == 1) {
   $motivo = "Ingresos";
@@ -16,7 +16,7 @@ if (isset($_GET["Sucursal"])) {
   $motivo = "Egresos";
 } else if ($_GET["Motivo"] == 2) {
   $motivo = "Ingreso y Egreso";
-}  else {
+} else {
   $motivo = $_GET["Motivo"];
 }
 $generado = 0;

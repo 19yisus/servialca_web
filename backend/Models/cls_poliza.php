@@ -376,12 +376,13 @@ abstract class cls_poliza extends cls_db
 
 			$result = $this->RegistrarPoliza();
 			$this->id = $this->db->lastInsertId();
-			$result = $this->generarQr($this->db->lastInsertId());
+			$result = $this->generarQr($this->id);
 			if (!$result) {
 				$this->db->rollback();
 				return [
 					'data' => [
-						'res' => "Ocurrión un error en la transacción"
+						'res' => "Ocurrión un error en la transacción",
+						"id" => $this->id
 					],
 					'code' => 400
 				];
@@ -535,7 +536,7 @@ abstract class cls_poliza extends cls_db
 					'code' => 400
 				];
 			}
-			$result = $this->generarQr($this->db->lastInsertId());
+			$result = $this->generarQr($this->id);
 			if (!$result) {
 				$this->db->rollback();
 				return [
@@ -900,7 +901,7 @@ abstract class cls_poliza extends cls_db
 	}
 	protected function SearchByUso()
 	{
-		$sql = $this->db->prepare("SELECT * FROM usoVehiculo 
+		$sql = $this->db->prepare("SELECT * FROM usovehiculo 
 		WHERE usoVehiculo_nombre = ?");
 		$sql->execute([$this->uso]);
 		$resultado = $sql->fetch(PDO::FETCH_ASSOC);
@@ -1341,6 +1342,7 @@ abstract class cls_poliza extends cls_db
 					QRcode::png($QR, $QRcodeImg);
 					$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
 					$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+					return true;
 				}
 			}
 		} else {
@@ -1741,7 +1743,7 @@ abstract class cls_poliza extends cls_db
 		$where = "";
 		$params = [];
 
-		if (isset($sucursal)) {
+		if (isset($sucursal) && $sucursal != null || $sucursal != "") {
 			$where .= "debitocredito.sucursal_id = ? AND ";
 			$params[] = $sucursal;
 		}
