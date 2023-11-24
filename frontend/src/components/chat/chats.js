@@ -404,6 +404,22 @@ function PageChats() {
     setIdResector(item.usuario_id);
     listarConversaciones(item.usuario_id);
   };
+
+  const [searchTerm, setSearchTerm] = useState('');
+  // ... otro código y estados que puedas tener ...
+
+  // Función para manejar cambios en el campo de búsqueda
+  const handleSearch1 = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Filtrar los elementos de 'records' según el término de búsqueda
+  const filteredRecords = records.filter((item) =>
+    (item.usuario_nombre + ' ' + item.usuario_apellido)
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div class="container-fluid h-100">
       <Mensaje
@@ -422,12 +438,14 @@ function PageChats() {
           <div class="card2 mb-sm-3 mb-md-0 contacts_card">
             <div class="card-header">
               <div class="input-group">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  name=""
-                  class="form-control search"
-                />
+              <input
+            type="text"
+            placeholder="Search..."
+            name=""
+            className="form-control search"
+            value={searchTerm}
+            onChange={handleSearch1}
+          />
                 <div class="input-group-prepend">
                   <span class="input-group-text search_btn">
                     <i class="fas fa-search"></i>
@@ -438,8 +456,7 @@ function PageChats() {
             <input type="hidden" />
             <div class="card-body contacts_body">
               <ui class="contacts">
-                {records &&
-                  records.map((item, index) => (
+              {filteredRecords.map((item, index) => (
                     <li
                       class="active"
                       type="button"
@@ -454,11 +471,11 @@ function PageChats() {
                           <span>
                             {item.usuario_nombre + " " + item.usuario_apellido}
                           </span>
-                          <p>Kalid is online</p>
+                          <p>Usuario del Sistema</p>
                         </div>
                       </div>
                     </li>
-                  ))}
+                   ))}
               </ui>
             </div>
             <div class="card-footer"></div>

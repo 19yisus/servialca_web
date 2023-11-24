@@ -357,22 +357,22 @@ function GraficosIngresos() {
         </div>
       </div>
       <div className="col-md-12 bg-light py-2 rounded row py-5">
-        <div className="row col-6 d-flex justify-content-between mb-2">
+        <div className="row col-md-6 d-flex justify-content-between mb-2">
           <Bar options={options} data={data} />
         </div>
-        <div className="row col-6 d-flex justify-content-between mb-2">
+        <div className="row col-md-6 d-flex justify-content-between mb-2">
           <Doughnut data={data2} />
         </div>
-        <div className="row col-12 d-flex justify-content-between mb-4 mt-3">
+        <div className="row col-md-12 d-flex justify-content-between mb-4 mt-3">
           <input
             type="text"
-            className=" col-3 form-control form-control-sm rounded-pill mb-4 "
+            className=" col-md-3 form-control form-control-sm rounded-pill mb-4 "
             onChange={handleSearch}
             placeholder="Buscar"
           />
 
-          <div className="col-5 mb-4">
-            <div class="input-group flex-nowrap">
+          <div className="col-md-5 mx-auto mb-4 row">
+            <div class="input-group input-group-sm  col-md-6 mx-auto mb-1">
               <span class="input-group-text" id="addon-wrapping">
                 Desde:
               </span>
@@ -383,6 +383,11 @@ function GraficosIngresos() {
                 aria-label="Username"
                 aria-describedby="addon-wrapping"
               />
+
+            
+            </div>
+            <div class="input-group input-group-sm  col-md-6 mx-auto mb-1">
+            
 
               <span class="input-group-text" id="addon-wrapping">
                 Hasta:

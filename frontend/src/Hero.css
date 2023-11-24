@@ -1431,9 +1431,16 @@ input[type="radio"]#slide2:checked + .slider .slides { transform: translateX(-10
 input[type="radio"]#slide3:checked + .slider .slides { transform: translateX(-200%); }
 /* Agrega más reglas para slides adicionales si es necesario */
 
+/* Las imágenes no van a salir del margen de la pantalla */
+div#slider { overflow: hidden; } 
 
-div#slider { overflow: hidden; } /* las imágenes no van a salir del márgen de la pantalla*/
-div#slider figure img { width: 20%; float: left; height: 100vh;  max-height: 800px; }
+/* Establece el tamaño de las imágenes */
+div#slider figure img {
+  width: 20%; /* Ancho del 20% del contenedor */
+  float: left;
+  height: 100vh; /* Altura igual al 100% de la altura de la pantalla */
+  max-height: 800px; /* Altura máxima de 800px */
+}
 
 div#slider figure { 
   position: relative;
@@ -1442,22 +1449,25 @@ div#slider figure {
   left: 0;
   text-align: left;
   font-size: 0;
-  animation: 20s slidy infinite; /*el movimiento se va a mantener de forma indefinida -infinito-*/
- 
+  animation: 20s slidy infinite; /* El movimiento se va a mantener de forma indefinida -infinito-*/
 }
 
+/* Cambios para dispositivos móviles */
+@media screen and (max-width: 600px) {
+  div#slider figure img {
+    height: 50vh; /* Reducir la altura al 50% de la altura de la pantalla */
+    max-height: 400px; /* Altura máxima de 400px */
+  }
+}
 
 /*esta parte del código define el movimiento de las imágenes a la izquierda*/
 @keyframes slidy {
 0% { left: 0%; }
 20% { left: 0%; }
-25% { left: -100%; }
-45% { left: -100%; }
-50% { left: -200%; }
-70% { left: -200%; }
-75% { left: -300%; }
-95% { left: -300%; }
-100% { left: -400%; }
+40% { left: -100%; }
+60% { left: -100%; }
+80% { left: -200%; }
+100% { left: -200%; }
 }
 
 .bg-servial{

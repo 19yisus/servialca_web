@@ -344,7 +344,7 @@ function Panel() {
               });
         }}
       />
-      ;
+
       <div className="col-md-12 px-0 mx-auto ">
         <div class="col-md-12 mx-auto row px-2 py-4 mt-5">
           <form

@@ -296,7 +296,7 @@ function TablaUsuarios() {
     let target = e.target;
     setFilterFn({
       fn: (items) => {
-        if (target.value === "") return items;
+        if (target.value == "") return items;
         else
           return items.filter((x) => {
             if (
@@ -305,8 +305,8 @@ function TablaUsuarios() {
                 : 0) ||
               (x.usuario_usuario !== null
                 ? x.usuario_usuario
-                    .toLowerCase()
-                    .includes(target.value.toLowerCase())
+                  .toLowerCase()
+                  .includes(target.value.toLowerCase())
                 : "") ||
               (x.usuario_cedula !== null
                 ? x.usuario_cedula.includes(target.value)
@@ -405,28 +405,30 @@ function TablaUsuarios() {
         className="col-md-12 bg-light py-2 rounded"
         style={{ margin: "auto" }}
       >
-        <div className="row col-12 d-flex justify-content-between mb-2">
+        <div className="row col-md-12 d-flex justify-content-between mb-2">
           <input
             type="text"
-            className=" col-3 form-control form-control-sm rounded-pill"
+            className=" col-md-3 form-control mb-2 form-control-sm rounded-pill"
             onChange={handleSearch}
             placeholder="Buscar"
           />
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              onClick={gestionarBanco(9, "", "")}
-              className="btn btn-sm btn-primary"
-            >
-              <i>Desactivar usuarios</i>{" "}
-            </button>
-          </div>
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              onClick={gestionarBanco(1, "", "")}
-              className="btn btn-sm btn-primary rounded-circle"
-            >
-              <i className="fas fa-plus"></i>{" "}
-            </button>
+          <div className="col-md-9 row">
+            <div className="col d-flex justify-content-end">
+              <button
+                onClick={gestionarBanco(9, "", "")}
+                className="btn btn-sm btn-primary"
+              >
+                <i>Desactivar usuarios</i>{" "}
+              </button>
+            </div>
+            <div className="col d-flex justify-content-end">
+              <button
+                onClick={gestionarBanco(1, "", "")}
+                className="btn btn-sm btn-primary rounded-circle my-auto"
+              >
+                <i className="fas fa-plus"></i>{" "}
+              </button>
+            </div>
           </div>
         </div>
         <TblContainer>
@@ -518,7 +520,7 @@ function TablaUsuarios() {
                       )}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
-                      {item.usuario_estatus === 1 ? (
+                      {item.usuario_estatus == 1 ? (
                         <i className="fa fa-times"></i>
                       ) : (
                         <i
@@ -529,7 +531,7 @@ function TablaUsuarios() {
                     </button>
                     <button
                       onClick={gestionarBanco(5, item.usuario_id)}
-                      className="btn btn-sm mx-1 btn-black rounded-circle"
+                      className="btn btn-sm mx-1 btn-secondary rounded-circle"
                     >
                       <i className="fa fa-trash"></i>{" "}
                     </button>
@@ -546,8 +548,8 @@ function TablaUsuarios() {
       <Mensaje
         mensaje={mensaje}
         onHide={() =>
-          mensaje.texto ===
-          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+          mensaje.texto ==
+            "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }
