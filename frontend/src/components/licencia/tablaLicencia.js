@@ -350,12 +350,12 @@ function TablaLicencia() {
         <div className="row col-12 d-flex justify-content-between mb-2">
           <input
             type="text"
-            className=" col-3 form-control form-control-sm rounded-pill"
+            className=" col-md-3 mb-2 form-control form-control-sm rounded-pill"
             onChange={handleSearch}
             placeholder="Buscar"
           />
 
-          <div className="col-3 d-flex justify-content-end">
+          <div className="col-md-3 d-flex justify-content-end">
             <button
               onClick={gestionarBanco(1, "")}
               className="btn btn-sm btn-primary rounded-circle"

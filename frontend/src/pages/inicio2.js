@@ -278,8 +278,8 @@ function Inicio2() {
                 : 0) ||
               (x.cliente_nombre !== null
                 ? x.cliente_nombre
-                    .toLowerCase()
-                    .includes(target.value.toLowerCase())
+                  .toLowerCase()
+                  .includes(target.value.toLowerCase())
                 : "") ||
               (x.cliente_telefono !== null
                 ? x.cliente_telefono.includes(target.value)
@@ -495,12 +495,12 @@ function Inicio2() {
         <div className="row col-12 d-flex justify-content-between mb-2">
           <input
             type="text"
-            className=" col-3 form-control form-control-sm rounded-pill"
+            className=" col-md-3 mb-2 form-control form-control-sm rounded-pill"
             onChange={handleSearch}
             placeholder="Buscar"
           />
 
-          <div className="col-6 d-flex justify-content-end">
+          <div className="col-md-6 d-flex justify-content-end">
             {permisos &&
               permisos.length >= 3 &&
               permisos.toString().substring(19, 20) === "1" && (
@@ -550,7 +550,7 @@ function Inicio2() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {formatDate(item.poliza_fechaVencimiento)}
+                    {moment(item.poliza_fechaVencimiento).format('DD-MM-YYYY')}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
@@ -627,7 +627,7 @@ function Inicio2() {
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-          "Este Usuario No posee preguntas de seguridad debe registrarlas"
+            "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }
