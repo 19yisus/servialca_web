@@ -56,6 +56,15 @@ export const ModalUsuarios = (props) => {
   const check7 = useRef();
   const check8 = useRef();
   const check9 = useRef();
+  const check10 = useRef();
+  const check11 = useRef();
+  const check12 = useRef();
+  const check13 = useRef();
+  const check14 = useRef();
+  const check15 = useRef();
+  const check16 = useRef();
+  const check17 = useRef();
+  const check18 = useRef();
 
   const [sucursales, setSucursales] = useState();
   const [roles, setRoles] = useState();
@@ -178,8 +187,17 @@ export const ModalUsuarios = (props) => {
     let chk7 = check7.current.checked ? "1" : "0";
     let chk8 = check8.current.checked ? "1" : "0";
     let chk9 = check9.current.checked ? "1" : "0";
+    let chk10 = check10.current.checked ? "1" : "0";
+    let chk11 = check11.current.checked ? "1" : "0";
+    let chk12 = check12.current.checked ? "1" : "0";
+    let chk13 = check13.current.checked ? "1" : "0";
+    let chk14 = check14.current.checked ? "1" : "0";
+    let chk15 = check15.current.checked ? "1" : "0";
+    let chk16 = check16.current.checked ? "1" : "0";
+    let chk17 = check17.current.checked ? "1" : "0";
+    let chk18 = check18.current.checked ? "1" : "0";
     let permiso =
-      chk + chk1 + chk2 + chk3 + chk4 + chk5 + chk6 + chk7 + chk8 + chk9;
+      chk + chk1 + chk2 + chk3 + chk4 + chk5 + chk6 + chk7 + chk8 + chk9 + chk10 + chk11 + chk12 + chk13 + chk14 + chk15 + chk16 + chk17 + chk18;
 
     //setLoading(false);
 
@@ -360,6 +378,51 @@ export const ModalUsuarios = (props) => {
             ? true
             : false
           : false;
+        check10.current.checked = response.permisos
+          ? response.permisos.substring(10, 11) === "1"
+            ? true
+            : false
+          : false;
+          check11.current.checked = response.permisos
+          ? response.permisos.substring(11, 12) === "1"
+            ? true
+            : false
+          : false;
+          check12.current.checked = response.permisos
+          ? response.permisos.substring(12, 13) === "1"
+            ? true
+            : false
+          : false;
+          check13.current.checked = response.permisos
+          ? response.permisos.substring(13, 14) === "1"
+            ? true
+            : false
+          : false;
+          check14.current.checked = response.permisos
+          ? response.permisos.substring(14, 15) === "1"
+            ? true
+            : false
+          : false;
+          check15.current.checked = response.permisos
+          ? response.permisos.substring(15, 16) === "1"
+            ? true
+            : false
+          : false;
+          check16.current.checked = response.permisos
+          ? response.permisos.substring(16, 17) === "1"
+            ? true
+            : false
+          : false;
+          check17.current.checked = response.permisos
+          ? response.permisos.substring(17, 18) === "1"
+            ? true
+            : false
+          : false;
+          check18.current.checked = response.permisos
+          ? response.permisos.substring(18, 19) === "1"
+            ? true
+            : false
+          : false;
       })
       .catch((error) =>
         setMensaje({
@@ -472,8 +535,8 @@ export const ModalUsuarios = (props) => {
           {operacion === 1
             ? "Registrar Usuarios Del Sistema"
             : operacion === 2
-            ? "Editar Usuarios Del Sistema"
-            : "Eliminar Usuarios Del Sistema"}
+              ? "Editar Usuarios Del Sistema"
+              : "Eliminar Usuarios Del Sistema"}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -502,11 +565,11 @@ export const ModalUsuarios = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                  mostrar: false,
-                  titulo: "",
-                  texto: "",
-                  icono: "",
-                });
+                mostrar: false,
+                titulo: "",
+                texto: "",
+                icono: "",
+              });
           }}
         />
 
@@ -735,7 +798,7 @@ export const ModalUsuarios = (props) => {
                 value="Contratos realizados"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Contratos Realizados</label>
+              <label class="form-check-label">Sucursales</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -744,9 +807,10 @@ export const ModalUsuarios = (props) => {
                 type="checkbox"
                 value="Contratos Realizados"
                 id="flexCheckDefault"
-                
+
               />
-              <label class="form-check-label">Lista De Asesores</label>
+              <label class="form-check-label">Tipos de Contratos
+              </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -756,7 +820,7 @@ export const ModalUsuarios = (props) => {
                 value="Lista de sucursales"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Lista De Sucursales</label>
+              <label class="form-check-label">Documentos</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -766,7 +830,7 @@ export const ModalUsuarios = (props) => {
                 value="Tipo de contratos"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Tipo De Contratos</label>
+              <label class="form-check-label">Chats</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -776,7 +840,8 @@ export const ModalUsuarios = (props) => {
                 value="Uso de vehiculo"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Uso De Vehiculo</label>
+              <label class="form-check-label">Uso del Vehiculo
+              </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -806,7 +871,7 @@ export const ModalUsuarios = (props) => {
                 value="Linea de transporte"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Linea De Transporte</label>
+              <label class="form-check-label">Tipos de Vehiculos Bocono</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -816,7 +881,8 @@ export const ModalUsuarios = (props) => {
                 value="Usuarios"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Usuarios</label>
+              <label class="form-check-label">Lineas de Transporte
+              </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -826,7 +892,115 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
+              <label class="form-check-label">Usuarios</label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check10}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
               <label class="form-check-label">Roles</label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check11}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Grafica</label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check12}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Gastos personales
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check13}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Certificado Medico
+
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check14}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Lista de vendedores semanal
+
+
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check15}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Reportes
+
+
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check16}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Licencias
+
+
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check17}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Imagen
+
+
+              </label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check18}
+                type="checkbox"
+                value="Roles"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Bitacora
+
+
+              </label>
             </div>
           </div>
         </div>
