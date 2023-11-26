@@ -380,7 +380,7 @@ function Login(props) {
                       </div>
                       <div className="form-floating mb-3 position-relative">
                         <input
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           className="form-control text-uppercase"
                           required
                           autoComplete="off"
