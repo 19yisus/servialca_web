@@ -99,13 +99,12 @@ function TablaContratosRealizados() {
   const [totalact, setTotalact] = useState(0.0);
   const [totalmenos, setTotalmenos] = useState(0.0);
   const [idCliente, setIdCliente] = useState(0);
-
+  const [operacion, setOperacion] = useState();
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
   const [mostrar3, setMostrar3] = useState(false);
   const [mostrar4, setMostrar4] = useState(false);
   const [mostrar5, setMostrar5] = useState(false);
-
 
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -296,20 +295,20 @@ function TablaContratosRealizados() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-
-    if (op === 2){
-      setMostrar5(true)
-    setIdCliente(id.poliza_id);
-    setPoliza(id)
-
+ setOperacion(op);
+    if (op === 2) {
+      setMostrar5(true);
+      setIdCliente(id.poliza_id);
+      setPoliza(id);
+      setOperacion(op);
     } else {
       setIdCliente(id);
-
     }
-    if (op === 2){
-      setMostrar5(true)
+    if (op === 2) {
+      setMostrar5(true);
     } else if (op === 3) {
-      setMostrar4(true);
+      setMostrar5(true);
+     
     } else if (op === 4) {
       setMostrar2(true);
     } else if (op === 5) {
@@ -326,8 +325,6 @@ function TablaContratosRealizados() {
 
   return (
     <div className="col-md-12 mx-auto p-2">
-
-      
       <ModalImprimir
         show={mostrar2}
         onHideCancela={() => {
@@ -352,18 +349,16 @@ function TablaContratosRealizados() {
         idCliente={idCliente}
       />
 
-<ModalRcv
-operacion={2}
+      <ModalRcv
+        operacion={operacion}
         show={mostrar5}
         onHideCancela={() => {
           setMostrar5(false);
         }}
         idCliente={idCliente}
         poliza={poliza}
-
         onHideCancela2={imprimirCertificado}
       />
-
 
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">

@@ -291,121 +291,129 @@ export const ModalRcv = (props) => {
   };
 
   const tuFuncionEspecifica = async () => {
-    let endpoint = op.conexion + "/poliza/encontrarContrato";
-    let bodyF = new FormData();
-    bodyF.append(
-      "Cedula",
-      cmbNacionalidad.current.value + txtCedula.current.value
-    );
-    bodyF.append("Placa", txtPlaca.current.value);
-    setActivate(true);
-    await fetch(endpoint, {
-      method: "POST",
-      body: bodyF,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        setActivate(false);
-        if (response.code == 200) {
+    if (
+      txtCedula.current.value.length > 5 &&
+      txtPlaca.current.value.length > 4
+    ) {
+      let endpoint = op.conexion + "/poliza/encontrarContrato";
+      let bodyF = new FormData();
+      bodyF.append(
+        "Cedula",
+        cmbNacionalidad.current.value + txtCedula.current.value
+      );
+      bodyF.append("Placa", txtPlaca.current.value);
+      setActivate(true);
+      await fetch(endpoint, {
+        method: "POST",
+        body: bodyF,
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          setActivate(false);
+          if (response.code == 200) {
+            setMensaje({
+              mostrar: true,
+              titulo: "Contrato ya registrado.",
+              texto: response.res,
+              icono: "informacion",
+            });
+            setOperacion(3);
+            idPoliza.current.value = response.contrato[0].poliza_id;
+            idCliente.current.value = response.contrato[0].cliente_id;
+            idTitular.current.value = response.contrato[0].titular_id;
+            idVehiculo.current.value = response.contrato[0].vehiculo_id;
+            idCobertura.current.value = response.contrato[0].nota_id;
+            //TxtTipoContrato.current.value = response.contrato[0].contrato_nombre;
+            txtDesde.current.value = response.contrato[0].poliza_fechaInicio;
+            txtHasta.current.value =
+              response.contrato[0].poliza_fechaVencimiento;
+            var cedula = response.contrato[0].cliente_cedula.split("-");
+            cmbNacionalidad.current.value = cedula[0] + "-";
+            txtCedula.current.value = cedula[1];
+            txtNombre.current.value = response.contrato[0].cliente_nombre;
+            txtApellido.current.value = response.contrato[0].cliente_apellido;
+            txtFechaNaci.current.value =
+              response.contrato[0].cliente_fechaNacimiento;
+            var telefono = response.contrato[0].cliente_telefono.split("-");
+            cmbTelefono.current.value = telefono[0] + "-";
+            txtTelefono.current.value = telefono[1];
+            txtCorreo.current.value = response.contrato[0].cliente_correo;
+            txtDirec.current.value = response.contrato[0].cliente_direccion;
+            // if (!response.contrato[0].estado_nombre) {
+            //   cmbEstado.current.value = "Portuguesa";
+            // } else {
+            //   cmbEstado.current.value = response.contrato[0].estado_nombre;
+            // }
+
+            // if (response.contrato[0].usuario_usuario == null) {
+            //   txtAcesor.current.value = "MFIGUEROA";
+            // } else {
+            //   txtAcesor.current.value = response.contrato[0].usuario_usuario;
+            // }
+            // cmbSucursal.current.value = response.contrato[0].sucursal_nombre;
+            // if (!response.contrato[0].linea_nombre) {
+            //   txtLinea.current.value = "";
+            // } else {
+            //   txtLinea.current.value = response.contrato[0].linea_nombre;
+            // }
+            var cedulaTitular = response.contrato[0].titular_cedula.split("-");
+            cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
+            txtCedulatTitular.current.value = cedulaTitular[1];
+            txtNombreTitular.current.value =
+              response.contrato[0].titular_nombre;
+            txtApellidoTitular.current.value =
+              response.contrato[0].titular_apellido;
+            txtPlaca.current.value = response.contrato[0].vehiculo_placa;
+            txtPuesto.current.value = response.contrato[0].vehiculo_puesto;
+            //txtUso.current.value = response.contrato[0].usoVehiculo_nombre;
+            txtAño.current.value = response.contrato[0].vehiculo_año;
+            txtSerMotor.current.value =
+              response.contrato[0].vehiculo_serialMotor;
+            //txtClase.current.value = response.contrato[0].clase_nombre;
+            txtColor.current.value = response.contrato[0].color_nombre;
+            txtSerCarroceria.current.value =
+              response.contrato[0].vehiculo_serialCarroceria;
+            // cmbTipo.current.value = response.contrato[0].tipoVehiculo_nombre;
+            txtModelo.current.value = response.contrato[0].modelo_nombre;
+            txtMarca.current.value = response.contrato[0].marca_nombre;
+            txtPeso.current.value = response.contrato[0].vehiculo_peso;
+            txtCapTon.current.value = response.contrato[0].vehiculo_capTon;
+            if (response.contrato[0].nota_tipoPago == null) {
+              cmbFormaPago.current.value = 0;
+            } else {
+              cmbFormaPago.current.value = response.contrato[0].nota_tipoPago;
+            }
+            setValorSeleccionado({
+              ...valorSeleccionado,
+              contrato_nombre: response.contrato[0].contrato_nombre,
+              estado_nombre: response.contrato[0].estado_nombre
+                ? response.contrato[0].estado_nombre
+                : "",
+              usuario_usuario: response.contrato[0].usuario_usuario,
+              sucursal_nombre: response.contrato[0].sucursal_nombre,
+              transporte_nombre: response.contrato[0].linea_nombre
+                ? response.contrato[0].linea_nombre
+                : "",
+              usoVehiculo_nombre: response.contrato[0].usoVehiculo_nombre,
+              clase_nombre: response.contrato[0].clase_nombre,
+              tipoVehiculo_nombre: response.contrato[0].tipoVehiculo_nombre,
+            });
+            txtReferencia.current.value = response.contrato[0].nota_referencia;
+            txtDolar.current.value = response.contrato[0].nota_monto;
+            txtBs.current.value = (
+              response.contrato[0].nota_monto * dolarbcv
+            ).toFixed(2);
+          }
+        })
+        .catch((error) =>
           setMensaje({
             mostrar: true,
-            titulo: "Contrato ya registrado.",
-            texto: response.res,
+            titulo: "Notificación",
+            texto: error.res,
             icono: "informacion",
-          });
-          setOperacion(3);
-          idPoliza.current.value = response.contrato[0].poliza_id;
-          idCliente.current.value = response.contrato[0].cliente_id;
-          idTitular.current.value = response.contrato[0].titular_id;
-          idVehiculo.current.value = response.contrato[0].vehiculo_id;
-          idCobertura.current.value = response.contrato[0].nota_id;
-          //TxtTipoContrato.current.value = response.contrato[0].contrato_nombre;
-          txtDesde.current.value = response.contrato[0].poliza_fechaInicio;
-          txtHasta.current.value = response.contrato[0].poliza_fechaVencimiento;
-          var cedula = response.contrato[0].cliente_cedula.split("-");
-          cmbNacionalidad.current.value = cedula[0] + "-";
-          txtCedula.current.value = cedula[1];
-          txtNombre.current.value = response.contrato[0].cliente_nombre;
-          txtApellido.current.value = response.contrato[0].cliente_apellido;
-          txtFechaNaci.current.value =
-            response.contrato[0].cliente_fechaNacimiento;
-          var telefono = response.contrato[0].cliente_telefono.split("-");
-          cmbTelefono.current.value = telefono[0] + "-";
-          txtTelefono.current.value = telefono[1];
-          txtCorreo.current.value = response.contrato[0].cliente_correo;
-          txtDirec.current.value = response.contrato[0].cliente_direccion;
-          // if (!response.contrato[0].estado_nombre) {
-          //   cmbEstado.current.value = "Portuguesa";
-          // } else {
-          //   cmbEstado.current.value = response.contrato[0].estado_nombre;
-          // }
-
-          // if (response.contrato[0].usuario_usuario == null) {
-          //   txtAcesor.current.value = "MFIGUEROA";
-          // } else {
-          //   txtAcesor.current.value = response.contrato[0].usuario_usuario;
-          // }
-          // cmbSucursal.current.value = response.contrato[0].sucursal_nombre;
-          // if (!response.contrato[0].linea_nombre) {
-          //   txtLinea.current.value = "";
-          // } else {
-          //   txtLinea.current.value = response.contrato[0].linea_nombre;
-          // }
-          var cedulaTitular = response.contrato[0].titular_cedula.split("-");
-          cmbNacionalidadTitular.current.value = cedulaTitular[0] + "-";
-          txtCedulatTitular.current.value = cedulaTitular[1];
-          txtNombreTitular.current.value = response.contrato[0].titular_nombre;
-          txtApellidoTitular.current.value =
-            response.contrato[0].titular_apellido;
-          txtPlaca.current.value = response.contrato[0].vehiculo_placa;
-          txtPuesto.current.value = response.contrato[0].vehiculo_puesto;
-          //txtUso.current.value = response.contrato[0].usoVehiculo_nombre;
-          txtAño.current.value = response.contrato[0].vehiculo_año;
-          txtSerMotor.current.value = response.contrato[0].vehiculo_serialMotor;
-          //txtClase.current.value = response.contrato[0].clase_nombre;
-          txtColor.current.value = response.contrato[0].color_nombre;
-          txtSerCarroceria.current.value =
-            response.contrato[0].vehiculo_serialCarroceria;
-          // cmbTipo.current.value = response.contrato[0].tipoVehiculo_nombre;
-          txtModelo.current.value = response.contrato[0].modelo_nombre;
-          txtMarca.current.value = response.contrato[0].marca_nombre;
-          txtPeso.current.value = response.contrato[0].vehiculo_peso;
-          txtCapTon.current.value = response.contrato[0].vehiculo_capTon;
-          if (response.contrato[0].nota_tipoPago == null) {
-            cmbFormaPago.current.value = 0;
-          } else {
-            cmbFormaPago.current.value = response.contrato[0].nota_tipoPago;
-          }
-          setValorSeleccionado({
-            ...valorSeleccionado,
-            contrato_nombre: response.contrato[0].contrato_nombre,
-            estado_nombre: response.contrato[0].estado_nombre
-              ? response.contrato[0].estado_nombre
-              : "",
-            usuario_usuario: response.contrato[0].usuario_usuario,
-            sucursal_nombre: response.contrato[0].sucursal_nombre,
-            transporte_nombre: response.contrato[0].linea_nombre
-              ? response.contrato[0].linea_nombre
-              : "",
-            usoVehiculo_nombre: response.contrato[0].usoVehiculo_nombre,
-            clase_nombre: response.contrato[0].clase_nombre,
-            tipoVehiculo_nombre: response.contrato[0].tipoVehiculo_nombre,
-          });
-          txtReferencia.current.value = response.contrato[0].nota_referencia;
-          txtDolar.current.value = response.contrato[0].nota_monto;
-          txtBs.current.value = (
-            response.contrato[0].nota_monto * dolarbcv
-          ).toFixed(2);
-        }
-      })
-      .catch((error) =>
-        setMensaje({
-          mostrar: true,
-          titulo: "Notificación",
-          texto: error.res,
-          icono: "informacion",
-        })
-      );
+          })
+        );
+    }
   };
 
   const consultarTitular = async ($cedula) => {
@@ -1011,6 +1019,7 @@ export const ModalRcv = (props) => {
     // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
     if (selectedOption === "1" || selectedOption === "3") {
       txtReferencia.current.disabled = true;
+      txtReferencia.current.value = "";
     } else {
       txtReferencia.current.disabled = false;
     }
@@ -1052,26 +1061,6 @@ export const ModalRcv = (props) => {
     } else if (event.which === 8 || event.which === 0 || event.which === 44) {
       return true;
     } else return false;
-  };
-
-  const handleChange = (maxValue) => (e) => {
-    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
-    const inputValue = e.target.value;
-
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
   };
 
   const selectTipoContrato = (nombre) => {
@@ -1599,9 +1588,6 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     disabled={operacion === 3}
                     ref={txtCedula}
-                    onKeyUp={() => {
-                      handleChange(9);
-                    }}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
@@ -1657,7 +1643,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       disabled={operacion === 3}
-                      onKeyUp={handleChange(25)}
+                      maxLength={25}
                       ref={txtNombre}
                       class="form-control "
                       aria-label="Sizing example input"
@@ -1674,12 +1660,14 @@ export const ModalRcv = (props) => {
                     <input
                       disabled={operacion === 3}
                       type="text"
-                      onKeyUp={handleChange(25)}
                       ref={txtApellido}
+                      maxLength={25}
                       class="form-control"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
-                      onChange={validaSoloLetras}
+                      onChange={(e) => {
+                        validaSoloLetras(e);
+                      }}
                     />
                   </div>
                 </div>
@@ -1702,7 +1690,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyUp={handleChange(7)}
+                      maxLength={7}
                       ref={txtTelefono}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
@@ -1718,10 +1706,13 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyUp={handleChange(25)}
+                      maxLength={30}
                       ref={txtCorreo}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
+                      onChange={(e) =>
+                        (e.target.value = e.target.value.toUpperCase())
+                      }
                     />
                   </div>
                 </div>
@@ -1733,10 +1724,13 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      onKeyUp={handleChange(30)}
+                      maxLength={30}
                       ref={txtDirec}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
+                      onChange={(e) =>
+                        (e.target.value = e.target.value.toUpperCase())
+                      }
                     />
                   </div>
                 </div>
@@ -2025,12 +2019,10 @@ export const ModalRcv = (props) => {
                   <input
                     type="text"
                     className="form-control"
-                    onKeyUp={() => {
-                      handleChange(9);
-                    }}
                     ref={txtCedulatTitular}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    maxLength={9}
                     onChange={(e) => {
                       validaSoloNumero(e);
                       igualA(2);
@@ -2058,7 +2050,7 @@ export const ModalRcv = (props) => {
                       Nombre
                     </span>
                     <input
-                      onKeyUp={handleChange(25)}
+                      maxLength={25}
                       type="text"
                       ref={txtNombreTitular}
                       class="form-control"
@@ -2074,7 +2066,7 @@ export const ModalRcv = (props) => {
                       Apellido
                     </span>
                     <input
-                      onKeyUp={handleChange(25)}
+                      maxLength={25}
                       type="text"
                       ref={txtApellidoTitular}
                       class="form-control"
@@ -2103,7 +2095,7 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     ref={txtPlaca}
-                    onKeyUp={handleChange(8)}
+                    maxLength={10}
                     class="form-control"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
@@ -2128,7 +2120,7 @@ export const ModalRcv = (props) => {
                   <input
                     disabled={operacion === 3}
                     type="text"
-                    onKeyUp={handleChange(2)}
+                    maxLength={2}
                     ref={txtPuesto}
                     class="form-control"
                     aria-label="Sizing example input"
@@ -2217,18 +2209,17 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     class="form-control"
-                    onKeyUp={handleChange(4)}
+                    maxLength={4}
                     ref={txtAño}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={(e) => {
+                      validaSoloNumero(e);
                       let valor = e.target.value;
                       const añoActual = new Date().getFullYear();
                       const añoMinimo = 1950;
-
                       // Limitar la longitud a 4 dígitos
                       valor = valor.slice(0, 4);
-
                       if (valor.length === 4) {
                         if (añoActual < valor) {
                           e.target.value = añoActual;
@@ -2253,10 +2244,13 @@ export const ModalRcv = (props) => {
                   <input
                     type="text"
                     class="form-control"
-                    onKeyUp={handleChange(18)}
+                    maxLength={20}
                     ref={txtSerMotor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={(e) =>
+                      (e.target.value = e.target.value.toUpperCase())
+                    }
                   />
                 </div>
               </div>
@@ -2336,13 +2330,16 @@ export const ModalRcv = (props) => {
                     Color
                   </span>
                   <input
-                    onKeyUp={handleChange(20)}
+                    maxLength={20}
                     type="text"
                     class="form-control"
                     ref={txtColor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={validaSoloLetras}
+                    onChange={(e) => {
+                      validaSoloLetras(e);
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
               </div>
@@ -2356,10 +2353,13 @@ export const ModalRcv = (props) => {
                     disabled={operacion === 3}
                     type="text"
                     class="form-control"
-                    onKeyUp={handleChange(18)}
+                    maxLength={20}
                     ref={txtSerCarroceria}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
               </div>
@@ -2448,12 +2448,15 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyUp={handleChange(15)}
+                    maxLength={15}
                     type="text"
                     class="form-control"
                     ref={txtModelo}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
               </div>
@@ -2465,12 +2468,15 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyUp={handleChange(15)}
+                    maxLength={15}
                     type="text"
                     class="form-control"
                     ref={txtMarca}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    }}
                   />
                 </div>
               </div>
@@ -2482,7 +2488,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyUp={handleChange(10)}
+                    maxLength={10}
                     type="text"
                     class="form-control"
                     ref={txtPeso}
@@ -2500,7 +2506,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    onKeyUp={handleChange(10)}
+                    maxLength={10}
                     type="text"
                     class="form-control"
                     ref={txtCapTon}
@@ -2544,7 +2550,7 @@ export const ModalRcv = (props) => {
                     Referencia
                   </span>
                   <input
-                    onKeyUp={handleChange(4)}
+                    maxLength={4}
                     type="text"
                     class="form-control"
                     ref={txtReferencia}

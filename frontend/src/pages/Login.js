@@ -15,7 +15,7 @@ function Login(props) {
   let op = require("../modulos/datos");
   const [bloquear, setBloquear] = useState(0);
   const context = useContext(AuthContext);
-const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [activate, setActivate] = useState(false);
   const [records, setRecords] = useState([
@@ -89,7 +89,7 @@ const [showPassword, setShowPassword] = useState(false);
           titulo: "Error",
           texto:
             error.response.data.message ===
-              "llave duplicada viola restricción de unicidad «persona_pkey»"
+            "llave duplicada viola restricción de unicidad «persona_pkey»"
               ? "ya existe una persona con esa cedula"
               : error.response.data.message,
           icono: "error",
@@ -176,101 +176,96 @@ const [showPassword, setShowPassword] = useState(false);
       );
   };
   const sinIgn = async () => {
+    let endpoint = op.conexion + "/Auth/login";
+    console.log(endpoint);
+    setActivate(true);
+    var login = values.username;
+    var passwd = values.password;
 
-   
+    // let body = {
+    //   Usuario: login,
+    //   Clave: passwd
+    // }
 
-      let endpoint = op.conexion + "/Auth/login";
-      console.log(endpoint);
-      setActivate(true);
-      var login = values.username;
-      var passwd = values.password;
+    setLoading(false);
 
-      // let body = {
-      //   Usuario: login,
-      //   Clave: passwd
-      // }
+    let bodyF = new FormData();
 
-      setLoading(false);
+    bodyF.append("Usuario", login);
+    bodyF.append("Clave", passwd);
 
-      let bodyF = new FormData();
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response.data.res.code);
+        console.log(response.data.res.text);
+        context.login(response.data.token);
+        // window.location.href = '/inicio'
+        const fecha = new Date();
+        localStorage.setItem("fechasistema", JSON.stringify(fecha));
 
-      bodyF.append("Usuario", login);
-      bodyF.append("Clave", passwd);
+        setActivate(false);
 
-      await fetch(endpoint, {
-        method: "POST",
-        body: bodyF,
-      })
-        .then((res) => res.json())
-        .then((response) => {
-          console.log(response.data.res.code);
-          console.log(response.data.res.text);
-          context.login(response.data.token);
-          // window.location.href = '/inicio'
-          const fecha = new Date();
-          localStorage.setItem("fechasistema", JSON.stringify(fecha));
+        if (response.data.res.code == 200) {
+          localStorage.setItem(
+            "rol",
+            JSON.stringify(response.data.usuario[0].rol)
+          );
+          localStorage.setItem(
+            "user_id",
+            JSON.stringify(response.data.usuario[0].user_id)
+          );
+          localStorage.setItem(
+            "username",
+            JSON.stringify(response.data.usuario[0].username)
+          );
+          localStorage.setItem(
+            "permisos",
+            JSON.stringify(response.data.usuario[0].permisos)
+          );
+          localStorage.setItem(
+            "idsucursal",
+            JSON.stringify(response.data.usuario[1].id)
+          );
+          localStorage.setItem(
+            "sucursal",
+            JSON.stringify(response.data.usuario[1].name)
+          );
 
-          setActivate(false);
-
-          if (response.data.res.code == 200) {
-            localStorage.setItem(
-              "rol",
-              JSON.stringify(response.data.usuario[0].rol)
-            );
-            localStorage.setItem(
-              "user_id",
-              JSON.stringify(response.data.usuario[0].user_id)
-            );
-            localStorage.setItem(
-              "username",
-              JSON.stringify(response.data.usuario[0].username)
-            );
-            localStorage.setItem(
-              "permisos",
-              JSON.stringify(response.data.usuario[0].permisos)
-            );
-            localStorage.setItem(
-              "idsucursal",
-              JSON.stringify(response.data.usuario[1].id)
-            );
-            localStorage.setItem(
-              "sucursal",
-              JSON.stringify(response.data.usuario[1].name)
-            );
-
-            setMensaje({
-              mostrar: true,
-              titulo: "Exito.",
-              texto: response.data.res.text,
-              icono: "exito",
-            });
-
-            window.location.href = "/inicio";
-          }
-          if (response.data.res.code == 400) {
-            setMensaje({
-              mostrar: true,
-              titulo: "Error.",
-              texto: response.data.res.text,
-              icono: "error",
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
           setMensaje({
             mostrar: true,
-            titulo: "Notificación",
-            texto: error.res,
-            icono: "informacion",
+            titulo: "Exito.",
+            texto: response.data.res.text,
+            icono: "exito",
           });
+
+          window.location.href = "/inicio";
+        }
+        if (response.data.res.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.data.res.text,
+            icono: "error",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
         });
+      });
+  };
 
-    
-
-
-
-
+  const changeIcon = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   function loginUserCallback() {
@@ -282,19 +277,19 @@ const [showPassword, setShowPassword] = useState(false);
       setMensaje({
         mostrar: true,
         titulo: "Notificación",
-        texto: 'Error en el CAPTCHA',
+        texto: "Error en el CAPTCHA",
         icono: "informacion",
       });
-      setLoading(false)
+      setLoading(false);
       generateCaptcha(); // Generar un nuevo CAPTCHA después de un intento fallido
-      setUserInput(''); // Limpiar el campo de entrada
+      setUserInput(""); // Limpiar el campo de entrada
     }
-   
+
     console.log("listo");
   }
 
-  const [captchaText, setCaptchaText] = useState('');
-  const [userInput, setUserInput] = useState('');
+  const [captchaText, setCaptchaText] = useState("");
+  const [userInput, setUserInput] = useState("");
 
   // Función para generar un nuevo CAPTCHA
   const generateCaptcha = () => {
@@ -306,9 +301,7 @@ const [showPassword, setShowPassword] = useState(false);
   };
 
   // Función para verificar el CAPTCHA ingresado por el usuario
-  const checkCaptcha = () => {
-
-  };
+  const checkCaptcha = () => {};
 
   const [captchaValid, setCaptchaValid] = useState(false);
 
@@ -334,7 +327,6 @@ const [showPassword, setShowPassword] = useState(false);
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
         }}
       />
-
 
       <div class="container-fluid ps-md-0">
         <Dimmer active={loading} inverted>
@@ -373,7 +365,7 @@ const [showPassword, setShowPassword] = useState(false);
                       Sistema de Servial C.A
                     </h3>
 
-                    <form onSubmit={onSubmit} >
+                    <form onSubmit={onSubmit}>
                       <div class="form-floating mb-3">
                         <input
                           type="text"
@@ -386,30 +378,50 @@ const [showPassword, setShowPassword] = useState(false);
                         />
                         <label for="floatingInput">Usuario</label>
                       </div>
-                      <div class="form-floating mb-3">
+                      <div className="form-floating mb-3 position-relative">
                         <input
                           type="password"
-                          class="form-control text-uppercase"
+                          className="form-control text-uppercase"
                           required
                           autoComplete="off"
                           name="password"
                           value={values.password}
                           onChange={onChange}
                           maxLength={10}
+                          style={{ paddingRight: "2.5rem" }} // Ajusta el valor según sea necesario
                         />
-                        <label for="floatingPassword">Contraseña</label>
+                        <span
+                          onClick={changeIcon}
+                          className="position-absolute"
+                          style={{
+                            top: "50%",
+                            right: "1rem",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          <i
+                            className={`fas ${
+                              showPassword ? "fa-eye-slash" : "fa-eye"
+                            }`}
+                          ></i>
+                        </span>
+                        <label htmlFor="floatingPassword">Contraseña</label>
                       </div>
+
                       <div className="captcha-container input-group mx-auto mb-3 col-md-7 ">
-                        <label className="captcha-text my-auto d-flex align-items-center rounded-pill">{captchaText}</label>
+                        <label className="captcha-text my-auto d-flex align-items-center rounded-pill">
+                          {captchaText}
+                        </label>
                         <input
                           type="text"
-                          className={`form-control my-auto rounded-pill ${captchaValid ? 'is-valid' : 'is-invalid'}`}
+                          className={`form-control my-auto rounded-pill ${
+                            captchaValid ? "is-valid" : "is-invalid"
+                          }`}
                           id="captchaInput"
                           placeholder="Ingresa CAPTCHA"
                           value={userInput}
                           onChange={(e) => setUserInput(e.target.value)}
                         />
-                       
                       </div>
 
                       <div class="d-grid">
@@ -435,7 +447,6 @@ const [showPassword, setShowPassword] = useState(false);
                             <h6>Salir al Inicio</h6>
                           </a>
                         </div>
-
                       </div>
                     </form>
                   </div>

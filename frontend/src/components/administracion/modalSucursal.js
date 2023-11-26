@@ -280,23 +280,7 @@ export const ModalSucursal = (props) => {
     )
       event.returnValue = false;
   }
-  const handleChange = (maxValue) => (e) => {
-    const inputValue = e.target.value;
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
-  };
+
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -392,7 +376,7 @@ export const ModalSucursal = (props) => {
               Nombre De La Sucursal:
             </span>
             <textarea
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               type="textarea"
               disabled={operacion === 1 || operacion === 2 ? false : true}
               style={{ height: 40 }}
@@ -400,6 +384,7 @@ export const ModalSucursal = (props) => {
               ref={txtDescripcion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={(e) => e.target.value = e.target.value.toUpperCase()}
             />
           </div>
 
@@ -408,7 +393,7 @@ export const ModalSucursal = (props) => {
               Dirección:
             </span>
             <textarea
-              onKeyDown={handleChange(100)}
+              maxLength={100}
               type="textarea"
               disabled={operacion === 1 || operacion === 2 ? false : true}
               style={{ height: 40 }}
@@ -416,6 +401,7 @@ export const ModalSucursal = (props) => {
               ref={txtDireccion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              
             />
           </div>
         </div>

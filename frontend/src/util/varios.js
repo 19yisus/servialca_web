@@ -153,13 +153,11 @@ export const validaSoloNumero = (event) => {
     return value.replace(/\D/g, "");
   });
 };
-
 export const validaSoloLetras = (event) => {
   $(event.target).val(function (index, value) {
-    return value.replace(/[^a-zA-Z]+/g, '');
+    return value.replace(/[^a-zA-Z\s]+/g, "").toUpperCase(); // Permite letras y espacios en blanco y convierte a mayúsculas
   });
 };
-
 
 export const validaNumeroTelefono = (inputtxt) => {
   //var tlfno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
