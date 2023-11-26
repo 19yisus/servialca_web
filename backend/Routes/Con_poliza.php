@@ -130,7 +130,7 @@ class Con_poliza extends cls_poliza
 
     public function ConsultarTodos()
     {
-        $resultado = $this->GetAll(57);
+        $resultado = $this->GetAll($_POST["ID"]);
         Response($resultado, 200);
     }
 
