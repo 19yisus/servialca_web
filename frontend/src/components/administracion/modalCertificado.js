@@ -262,7 +262,17 @@ export const ModalCertificadoMedico = (props) => {
         })
       );
   };
+  const handleFormaPagoChange = () => {
+    const selectedOption = cmbPago.current.value;
 
+    // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
+    if (selectedOption === "1" || selectedOption === "3") {
+      txtReferencia.current.disabled = true;
+      txtReferencia.current.value = "";
+    } else {
+      txtReferencia.current.disabled = false;
+    }
+  };
   const onChangeValidar = () => {
     let sigue = true;
     let minimo = 0;
@@ -307,14 +317,6 @@ export const ModalCertificadoMedico = (props) => {
       tiposangre: "",
     });
   };
-  const handleTipoSangreChange = (event) => {
-    event.preventDefault();
-    const inputValue = event.target.value;
-    const sanitizedValue = inputValue.replace(/[^a-zA-Z+-]/g, ""); // Mantener solo letras, + y -
-
-    event.target.value = sanitizedValue;
-    // Luego puedes hacer algo con el valor validado, como establecerlo en el estado local.
-  };
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
@@ -354,25 +356,7 @@ export const ModalCertificadoMedico = (props) => {
     // Actualizar el estado de la variable 'edad' con el valor calculado
     setEdad(edadCalculada);
   }
-  const handleChange = (maxValue) => (e) => {
-    e.target.value = e.target.value.toUpperCase(); 
-    const inputValue = e.target.value;
 
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
-  };
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -486,7 +470,7 @@ export const ModalCertificadoMedico = (props) => {
               <option value="G-">G-</option>
             </select>
             <input
-              onKeyDown={handleChange(9)}
+              maxLength={9}
               type="text"
               class="form-control"
               ref={txtCedula}
@@ -513,9 +497,12 @@ export const ModalCertificadoMedico = (props) => {
             </span>
             <input
               type="text"
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               class="form-control"
-              onChange={validaSoloLetras}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
+              onKeyDown={validaSoloLetras}
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -526,11 +513,15 @@ export const ModalCertificadoMedico = (props) => {
               Apellidos:
             </span>
             <input
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               type="text"
               class="form-control"
               ref={txtApellido}
-              onChange={validaSoloLetras}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+               
+              }}
+              onKeyDown={validaSoloLetras}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
@@ -553,7 +544,7 @@ export const ModalCertificadoMedico = (props) => {
               Edad:
             </span>
             <input
-              onKeyDown={handleChange(3)}
+              maxLength={2}
               type="text"
               value={edad}
               class="form-control text-right"
@@ -567,15 +558,20 @@ export const ModalCertificadoMedico = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo de Sangre:
             </span>
-            <input
-              onKeyDown={handleChange(4)}
-              type="text"
-              class="form-control"
+            <select
+              class="form-select col-md-6"
               ref={txtTipoSangre}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={handleTipoSangreChange}
-            />
+              aria-label="Default select example"
+            >
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -598,6 +594,7 @@ export const ModalCertificadoMedico = (props) => {
               class="form-select"
               ref={cmbPago}
               aria-label="Default select example"
+              onChange={handleFormaPagoChange}
             >
               <option value="0">Pago Movil</option>
               <option value="1">Efectivo</option>
@@ -610,7 +607,7 @@ export const ModalCertificadoMedico = (props) => {
               Referencia:
             </span>
             <input
-              onKeyDown={handleChange(4)}
+              maxLength={4}
               type="text"
               class="form-control"
               ref={txtReferencia}
@@ -645,8 +642,6 @@ export const ModalCertificadoMedico = (props) => {
               placeholder="Bolivares"
               onChange={handleInputMontoChange}
               value={(10 * parseFloat(dolarbcv)).toFixed(2)}
-
-
             />
           </div>
         </div>

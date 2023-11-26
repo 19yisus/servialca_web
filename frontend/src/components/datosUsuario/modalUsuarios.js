@@ -197,7 +197,25 @@ export const ModalUsuarios = (props) => {
     let chk17 = check17.current.checked ? "1" : "0";
     let chk18 = check18.current.checked ? "1" : "0";
     let permiso =
-      chk + chk1 + chk2 + chk3 + chk4 + chk5 + chk6 + chk7 + chk8 + chk9 + chk10 + chk11 + chk12 + chk13 + chk14 + chk15 + chk16 + chk17 + chk18;
+      chk +
+      chk1 +
+      chk2 +
+      chk3 +
+      chk4 +
+      chk5 +
+      chk6 +
+      chk7 +
+      chk8 +
+      chk9 +
+      chk10 +
+      chk11 +
+      chk12 +
+      chk13 +
+      chk14 +
+      chk15 +
+      chk16 +
+      chk17 +
+      chk18;
 
     //setLoading(false);
 
@@ -383,42 +401,42 @@ export const ModalUsuarios = (props) => {
             ? true
             : false
           : false;
-          check11.current.checked = response.permisos
+        check11.current.checked = response.permisos
           ? response.permisos.substring(11, 12) === "1"
             ? true
             : false
           : false;
-          check12.current.checked = response.permisos
+        check12.current.checked = response.permisos
           ? response.permisos.substring(12, 13) === "1"
             ? true
             : false
           : false;
-          check13.current.checked = response.permisos
+        check13.current.checked = response.permisos
           ? response.permisos.substring(13, 14) === "1"
             ? true
             : false
           : false;
-          check14.current.checked = response.permisos
+        check14.current.checked = response.permisos
           ? response.permisos.substring(14, 15) === "1"
             ? true
             : false
           : false;
-          check15.current.checked = response.permisos
+        check15.current.checked = response.permisos
           ? response.permisos.substring(15, 16) === "1"
             ? true
             : false
           : false;
-          check16.current.checked = response.permisos
+        check16.current.checked = response.permisos
           ? response.permisos.substring(16, 17) === "1"
             ? true
             : false
           : false;
-          check17.current.checked = response.permisos
+        check17.current.checked = response.permisos
           ? response.permisos.substring(17, 18) === "1"
             ? true
             : false
           : false;
-          check18.current.checked = response.permisos
+        check18.current.checked = response.permisos
           ? response.permisos.substring(18, 19) === "1"
             ? true
             : false
@@ -535,8 +553,8 @@ export const ModalUsuarios = (props) => {
           {operacion === 1
             ? "Registrar Usuarios Del Sistema"
             : operacion === 2
-              ? "Editar Usuarios Del Sistema"
-              : "Eliminar Usuarios Del Sistema"}
+            ? "Editar Usuarios Del Sistema"
+            : "Eliminar Usuarios Del Sistema"}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -565,11 +583,11 @@ export const ModalUsuarios = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                mostrar: false,
-                titulo: "",
-                texto: "",
-                icono: "",
-              });
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
           }}
         />
 
@@ -580,7 +598,7 @@ export const ModalUsuarios = (props) => {
                 Usuario:
               </span>
               <input
-                onKeyDown={handleChange(12)}
+                maxLength={12}
                 type="text"
                 class="form-control"
                 ref={txtUsuario}
@@ -588,6 +606,9 @@ export const ModalUsuarios = (props) => {
                 aria-describedby="inputGroup-sizing-sm"
                 name="user"
                 onBlur={validarInput}
+                onChange={(e) =>
+                  (e.target.value = e.target.value.toUpperCase())
+                }
               />
             </div>
             <div id="user" class="form-text hidden">
@@ -601,15 +622,18 @@ export const ModalUsuarios = (props) => {
                 Nombre:
               </span>
               <input
-                onKeyDown={handleChange(25)}
+                maxLength={25}
                 type="text"
-                class="form-control"
+                className="form-control"
                 ref={txtNombre}
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-sm"
                 name="nom"
                 onBlur={validarInput}
-                onChange={validaSoloLetras}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                  validaSoloLetras();
+                }}
               />
             </div>
             <div id="nom" class="form-text hidden">
@@ -622,7 +646,7 @@ export const ModalUsuarios = (props) => {
                 Apellido:
               </span>
               <input
-                onKeyDown={handleChange(25)}
+                maxLength={25}
                 type="text"
                 class="form-control"
                 ref={txtApellido}
@@ -653,7 +677,7 @@ export const ModalUsuarios = (props) => {
                 <option value="G-">G-</option>
               </select>
               <input
-                onKeyDown={handleChange(9)}
+                maxLength={9}
                 type="text"
                 class="form-control"
                 ref={txtCedula}
@@ -685,7 +709,7 @@ export const ModalUsuarios = (props) => {
                 <option value="0412-">0412-</option>
               </select>
               <input
-                onKeyDown={handleChange(8)}
+                maxLength={8}
                 type="text"
                 class="form-control"
                 ref={txtTelefono}
@@ -706,7 +730,7 @@ export const ModalUsuarios = (props) => {
                 Dirección:
               </span>
               <input
-                onKeyDown={handleChange(30)}
+                maxLength={30}
                 type="text"
                 class="form-control"
                 ref={txtDireccion}
@@ -714,6 +738,9 @@ export const ModalUsuarios = (props) => {
                 aria-describedby="inputGroup-sizing-sm"
                 name="dir"
                 onBlur={validarInput}
+                onChange={(e) =>
+                  (e.target.value = e.target.value.toUpperCase())
+                }
               />
             </div>
             <div id="dir" class="form-text hidden">
@@ -726,7 +753,7 @@ export const ModalUsuarios = (props) => {
                 Correo:
               </span>
               <input
-                onKeyDown={handleChange(25)}
+                maxLength={25}
                 type="text"
                 class="form-control"
                 ref={txtCorreo}
@@ -734,6 +761,9 @@ export const ModalUsuarios = (props) => {
                 aria-describedby="inputGroup-sizing-sm"
                 name="email"
                 onBlur={validarInput}
+                onChange={(e) =>
+                  (e.target.value = e.target.value.toUpperCase())
+                }
               />
             </div>
             <div id="email" class="form-text hidden">
@@ -793,7 +823,6 @@ export const ModalUsuarios = (props) => {
               <input
                 class="form-check-input "
                 ref={check}
-                checked={true}
                 type="checkbox"
                 value="Contratos realizados"
                 id="flexCheckDefault"
@@ -807,10 +836,8 @@ export const ModalUsuarios = (props) => {
                 type="checkbox"
                 value="Contratos Realizados"
                 id="flexCheckDefault"
-
               />
-              <label class="form-check-label">Tipos de Contratos
-              </label>
+              <label class="form-check-label">Tipos de Contratos</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -840,8 +867,7 @@ export const ModalUsuarios = (props) => {
                 value="Uso de vehiculo"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Uso del Vehiculo
-              </label>
+              <label class="form-check-label">Uso del Vehiculo</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -881,8 +907,7 @@ export const ModalUsuarios = (props) => {
                 value="Usuarios"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Lineas de Transporte
-              </label>
+              <label class="form-check-label">Lineas de Transporte</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -922,8 +947,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Gastos personales
-              </label>
+              <label class="form-check-label">Gastos personales</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -933,9 +957,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Certificado Medico
-
-              </label>
+              <label class="form-check-label">Certificado Medico</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -945,9 +967,8 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Lista de vendedores semanal
-
-
+              <label class="form-check-label">
+                Lista de vendedores semanal
               </label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
@@ -958,10 +979,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Reportes
-
-
-              </label>
+              <label class="form-check-label">Reportes</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -971,10 +989,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Licencias
-
-
-              </label>
+              <label class="form-check-label">Licencias</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -984,10 +999,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Imagen
-
-
-              </label>
+              <label class="form-check-label">Imagen</label>
             </div>
             <div class="form-check col-md-4 mx-auto pl-5 mb-1">
               <input
@@ -997,10 +1009,7 @@ export const ModalUsuarios = (props) => {
                 value="Roles"
                 id="flexCheckDefault"
               />
-              <label class="form-check-label">Bitacora
-
-
-              </label>
+              <label class="form-check-label">Bitacora</label>
             </div>
           </div>
         </div>

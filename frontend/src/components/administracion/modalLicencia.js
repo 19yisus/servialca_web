@@ -93,7 +93,17 @@ export const ModalLicencia = (props) => {
     event.target.value = sanitizedValue;
     // Luego puedes hacer algo con el valor validado, como establecerlo en el estado local.
   };
+  const handleFormaPagoChange = () => {
+    const selectedOption = cmbPago.current.value;
 
+    // Si la opción seleccionada es "Efectivo" o "Punto", deshabilita el input de referencia; de lo contrario, habilítalo.
+    if (selectedOption === "1" || selectedOption === "3") {
+      txtReferencia.current.disabled = true;
+      txtReferencia.current.value = "";
+    } else {
+      txtReferencia.current.disabled = false;
+    }
+  };
   const salir = () => {
     props.onHideCancela();
     setValues({
@@ -335,25 +345,6 @@ export const ModalLicencia = (props) => {
       event.returnValue = false;
   }
 
-  const handleChange = (maxValue) => (e) => {
-    e.target.value = e.target.value.toUpperCase(); // Asigna la representación de cadena de vuelta al valor
-    const inputValue = e.target.value;
-
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
-  };
   const consultarCliente = async ($cedula) => {
     let endpoint = op.conexion + "/cliente/consultarCedulaCliente";
     let bodyF = new FormData();
@@ -499,7 +490,7 @@ export const ModalLicencia = (props) => {
               <option value="G-">G-</option>
             </select>
             <input
-              onKeyDown={handleChange(9)}
+              maxLength={9}
               type="text"
               class="form-control"
               ref={txtCedula}
@@ -525,10 +516,13 @@ export const ModalLicencia = (props) => {
               Nombres:
             </span>
             <input
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               type="text"
               class="form-control"
-              onChange={validaSoloLetras}
+              onKeyDown={validaSoloLetras}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
               ref={txtNombre}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -539,11 +533,14 @@ export const ModalLicencia = (props) => {
               Apellidos:
             </span>
             <input
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               type="text"
               class="form-control"
               ref={txtApellido}
-              onChange={validaSoloLetras}
+              onKeyDown={validaSoloLetras}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
             />
@@ -553,12 +550,15 @@ export const ModalLicencia = (props) => {
               Correo:
             </span>
             <input
-              onKeyDown={handleChange(25)}
+              maxLength={30}
               type="text"
               class="form-control"
               ref={txtCorreo}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
             />
           </div>
           <div class="input-group input-group-sm mb-3 col-md-5">
@@ -579,7 +579,7 @@ export const ModalLicencia = (props) => {
             <input
               type="text"
               class="form-control"
-              onKeyDown={handleChange(7)}
+              maxLength={7}
               ref={txtTelefono}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
@@ -590,15 +590,20 @@ export const ModalLicencia = (props) => {
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo de Sangre:
             </span>
-            <input
-              onKeyDown={handleChange(4)}
-              type="text"
-              class="form-control"
+            <select
+              class="form-select col-md-6"
               ref={txtTipoSangre}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={handleTipoSangreChange}
-            />
+              aria-label="Default select example"
+            >
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
           </div>
           <div class="input-group input-group-sm mb-3 col-md-4">
             <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -680,6 +685,7 @@ export const ModalLicencia = (props) => {
               class="form-select"
               ref={cmbPago}
               aria-label="Default select example"
+              onChange={handleFormaPagoChange}
             >
               <option value="0">Pago Movil</option>
               <option value="1">Efectivo</option>
@@ -692,7 +698,7 @@ export const ModalLicencia = (props) => {
               Referencia:
             </span>
             <input
-              onKeyDown={handleChange(4)}
+              maxLength={4}
               type="text"
               class="form-control"
               ref={txtReferencia}

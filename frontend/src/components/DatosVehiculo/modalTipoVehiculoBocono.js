@@ -2,7 +2,12 @@ import React, { useRef, useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 /* import { Mensaje, MensajeSiNo } from "../mensajes"; */
 import { Loader, Dimmer, Label } from "semantic-ui-react";
-import { TableBody, TableRow, TableCell, InputAdornment } from '@material-ui/core';
+import {
+  TableBody,
+  TableRow,
+  TableCell,
+  InputAdornment,
+} from "@material-ui/core";
 
 import {
   validaSoloNumero,
@@ -11,7 +16,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -21,46 +26,58 @@ import CatalogoClientes from "../../catalogos/catalogoClientes";
 import useTable from "../useTable";
 import CatalogoTiposContratos from "../../catalogos/catalogoTiposContratos";
 
-
 export const ModalTipoVehiculoBocono = (props) => {
-
   const headCells = [
-    { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Codigo', textAlign: 'center' },
-    { id: 'ced', color: 'rgba(5, 81, 130, 1)', label: 'Descripción', textAlign: 'center' },
-    { id: 'ape', color: 'rgba(5, 81, 130, 1)', label: 'Opcion', textAlign: 'center' },
+    {
+      id: "ced",
+      color: "rgba(5, 81, 130, 1)",
+      label: "Codigo",
+      textAlign: "center",
+    },
+    {
+      id: "ced",
+      color: "rgba(5, 81, 130, 1)",
+      label: "Descripción",
+      textAlign: "center",
+    },
+    {
+      id: "ape",
+      color: "rgba(5, 81, 130, 1)",
+      label: "Opcion",
+      textAlign: "center",
+    },
+  ];
 
-  ]
-
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     let target = e.target;
     setFilterFn({
-      fn: items => {
-        if (target.value === "")
-          return items;
+      fn: (items) => {
+        if (target.value === "") return items;
         else
-          return items.filter(x => {
-            if ((x.tipoVehiculo_id !== null ? String(x.tipoVehiculo_id).includes(target.value) : 0)
-              || (x.nombre !== null ? x.nombre.toLowerCase().includes(target.value.toLowerCase()) : '')
-              || (x.cuentabancaria !== null ? x.cuentabancaria.includes(target.value) : '')
+          return items.filter((x) => {
+            if (
+              (x.tipoVehiculo_id !== null
+                ? String(x.tipoVehiculo_id).includes(target.value)
+                : 0) ||
+              (x.nombre !== null
+                ? x.nombre.toLowerCase().includes(target.value.toLowerCase())
+                : "") ||
+              (x.cuentabancaria !== null
+                ? x.cuentabancaria.includes(target.value)
+                : "")
             ) {
               return x;
             }
           });
-      }
-    })
-
-  }
-
-
-
-
+      },
+    });
+  };
 
   /*  variables de estados */
 
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
-  const dolarbcv = JSON.parse(localStorage.getItem('dolarbcv'))
-
+  const dolarbcv = JSON.parse(localStorage.getItem("dolarbcv"));
 
   const txtEdad = useRef();
   const txtNombre = useRef();
@@ -71,7 +88,7 @@ export const ModalTipoVehiculoBocono = (props) => {
   const cmbNacionalidad = useRef();
 
   const txtDatosPastor = useRef();
-  const txtReferencia = useRef()
+  const txtReferencia = useRef();
   const txtBs = useRef();
   const txtDolar = useRef();
 
@@ -79,8 +96,11 @@ export const ModalTipoVehiculoBocono = (props) => {
   const txtDescripcion = useRef();
   const [records, setRecords] = useState([]);
 
-
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({
+    fn: (items) => {
+      return items;
+    },
+  });
 
   const [values, setValues] = useState({
     ced: "",
@@ -97,7 +117,6 @@ export const ModalTipoVehiculoBocono = (props) => {
     nacionalidad: "V",
     direccion: "",
     telefono: "",
-
   });
 
   const btnCancela = useRef();
@@ -110,14 +129,10 @@ export const ModalTipoVehiculoBocono = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -136,16 +151,11 @@ export const ModalTipoVehiculoBocono = (props) => {
     } else return false; //alert(e.which);
   };
 
-  const {
-    TblContainer,
-    TblHead,
-    recordsAfterPagingAndSorting,
-    TblPagination
-  } = useTable(records, headCells, filterFn);
-
+  const { TblContainer, TblHead, recordsAfterPagingAndSorting, TblPagination } =
+    useTable(records, headCells, filterFn);
 
   const salir = () => {
-    setRecords([])
+    setRecords([]);
     props.onHideCancela();
     setValues({
       ced: "",
@@ -169,44 +179,38 @@ export const ModalTipoVehiculoBocono = (props) => {
     });
   };
 
-
   const actualizarTiposContratos = async (id) => {
     let endpoint;
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-
-    setActivate(true)
+    setActivate(true);
 
     for (let i = 0; i < records.length; i++) {
-
       if (operacion === 1) {
         endpoint = op.conexion + "/tipo_vehiculo/precio";
-
       }
 
-      bodyF.append("ID", id)
-      bodyF.append("precio", txtDolar.current.value)
-      bodyF.append("idContrato", records[i].contrato_id)
-
+      bodyF.append("ID", id);
+      bodyF.append("precio", txtDolar.current.value);
+      bodyF.append("idContrato", records[i].contrato_id);
 
       await fetch(endpoint, {
         method: "POST",
-        body: bodyF
-      }).then(res => res.json())
-        .then(response => {
-
-
-          setActivate(false)
-          console.log(response)
-
-
-
-
-
+        body: bodyF,
+      })
+        .then((res) => res.json())
+        .then((response) => {
+          setActivate(false);
+          console.log(response);
         })
-        .catch(error =>
-          setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-        )
+        .catch((error) =>
+          setMensaje({
+            mostrar: true,
+            titulo: "Notificación",
+            texto: error.res,
+            icono: "informacion",
+          })
+        );
     }
     setMensaje({
       mostrar: true,
@@ -218,46 +222,35 @@ export const ModalTipoVehiculoBocono = (props) => {
 
   const actualizarCertificado = async () => {
     let endpoint;
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-
-    setActivate(true)
+    setActivate(true);
 
     if (operacion === 1) {
       endpoint = op.conexion + "/tipo_vehiculo/registrar";
-
     }
 
-    bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value)
-
-
+    bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
-        actualizarTiposContratos(response.id)
-
-
-
-
-
-
-
-
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        actualizarTiposContratos(response.id);
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -280,8 +273,6 @@ export const ModalTipoVehiculoBocono = (props) => {
       actualizarCertificado();
     }
   };
-
-
 
   const blanquear = () => {
     setValues({
@@ -306,43 +297,47 @@ export const ModalTipoVehiculoBocono = (props) => {
     });
   };
 
-
-
-
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtDescripcion.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
-
-  }
+    props.onHideCancela();
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
 
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
-      if (event.target.name === 'dolar') {
-        let bs = parseFloat(dolarbcv)
-        let total = parseFloat(event.target.value) * bs
-        txtBs.current.value = formatMoneda(total.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+      if (event.target.name === "dolar") {
+        let bs = parseFloat(dolarbcv);
+        let total = parseFloat(event.target.value) * bs;
+        txtBs.current.value = formatMoneda(
+          total.toString().replace(",", "").replace(".", ","),
+          ",",
+          ".",
+          2
+        );
       }
       if (
         event.target.value === "" ||
@@ -372,110 +367,116 @@ export const ModalTipoVehiculoBocono = (props) => {
 
   const selecionarTipo = async (id) => {
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarUno?ID=" + id;
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     // bodyF.append("Nombre", txtDescripcion.current.value)
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
 
-
-        setActivate(false)
-        console.log(response)
-
-        let $ = response.tipoVehiculo_precio ? parseFloat(response.tipoVehiculo_precio) : 0;
+        let $ = response.tipoVehiculo_precio
+          ? parseFloat(response.tipoVehiculo_precio)
+          : 0;
         let bs = parseFloat(dolarbcv);
         let totalbs = $ * bs;
 
         txtDescripcion.current.value = response.tipoVehiculo_nombre;
-        txtDolar.current.value = response.tipoVehiculo_precio ? formatMoneda(response.tipoVehiculo_precio.toString().replace(',', '').replace('.', ','), ',', '.', 2) : '0,00';
-        txtBs.current.value = formatMoneda(totalbs.toString().replace(',', '').replace('.', ','), ',', '.', 2)
+        txtDolar.current.value = response.tipoVehiculo_precio
+          ? formatMoneda(
+              response.tipoVehiculo_precio
+                .toString()
+                .replace(",", "")
+                .replace(".", ","),
+              ",",
+              ".",
+              2
+            )
+          : "0,00";
+        txtBs.current.value = formatMoneda(
+          totalbs.toString().replace(",", "").replace(".", ","),
+          ",",
+          ".",
+          2
+        );
         setValues(response);
-
-
-
       })
-      .catch(error =>
-
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const agregarTipoContrato = (values) => {
-
-    console.log(values)
+    console.log(values);
 
     let sigue = true;
 
     for (let i = 0; i < records.length; i++) {
-
       if (records.length > 0 && values.contrato_id === records[i].contrato_id) {
-
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: 'El contrato ya esta agregado.', icono: "informacion" })
-        sigue = false
-
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: "El contrato ya esta agregado.",
+          icono: "informacion",
+        });
+        sigue = false;
       }
-
-
-
     }
     if (sigue) {
-      records.push(values)
-
+      records.push(values);
     }
 
-    setMostrar(false)
-    console.log(values)
-
-  }
+    setMostrar(false);
+    console.log(values);
+  };
   const gestinarTipo = () => {
-
-    setMostrar(true)
-  }
+    setMostrar(true);
+  };
   const elimminarrTipo = (id) => (e) => {
+    e.preventDefault();
 
-    e.preventDefault()
-
-    let array = []
+    let array = [];
 
     for (let i = 0; i < records.length; i++) {
-
       if (id !== records[i].contrato_id) {
-
-        array.push(records[i])
-
+        array.push(records[i]);
       }
-
     }
-    setRecords(array)
-
-  }
+    setRecords(array);
+  };
 
   const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
+    console.log(e.target.name);
+    let item = document.getElementById(e.target.name);
+    if (
+      !e.target.value ||
+      (e.target.name === "ced" && e.target.value.length < 8)
+    ) {
+      console.log("1");
+      item.className -= " form-text fw-bold hidden ";
+      item.className += " form-text fw-bold visible ";
     } else {
-      console.log('2')
+      console.log("2");
 
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
+      item.className -= " form-text fw-bold visible ";
+      item.className += " form-text fw-bold hidden ";
     }
-  }
+  };
 
   return (
     <Modal
@@ -490,14 +491,17 @@ export const ModalTipoVehiculoBocono = (props) => {
         setOperacion(props.operacion);
 
         if (props.operacion !== 1) {
-          selecionarTipo(props.idTipoVehiculo)
-
+          selecionarTipo(props.idTipoVehiculo);
         }
       }}
     >
       <Modal.Header className="bg-danger">
         <Modal.Title style={{ color: "#fff" }}>
-          {operacion === 1 ? 'Registrar Tipo de Vehiculo Bocono' : operacion === 2 ? 'Editar Tipo de Vehiculo Bocono' : 'Eliminar Tipo de Vehiculo Bocono'}
+          {operacion === 1
+            ? "Registrar Tipo de Vehiculo Bocono"
+            : operacion === 2
+            ? "Editar Tipo de Vehiculo Bocono"
+            : "Eliminar Tipo de Vehiculo Bocono"}
         </Modal.Title>
         <button
           ref={btnCancela}
@@ -513,72 +517,149 @@ export const ModalTipoVehiculoBocono = (props) => {
           <Loader inverted>cargando...</Loader>
         </Dimmer>
         <CatalogoTiposContratos
-
           show={mostrar}
-          onHideCancela={() => { setMostrar(false) }}
+          onHideCancela={() => {
+            setMostrar(false);
+          }}
           onHideCatalogo={agregarTipoContrato}
-
         />
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
 
         <div className="col-md-12 row mx-auto">
-
-
-        <div class=" mb-1 col-md-12">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Descripción:</span>
-            <input type="text"  name="nom"
-              onBlur={validarInput} disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control" ref={txtDescripcion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" />
-          </div>
-          <div id="nom" class="form-text hidden">Debe ingresar nombre del tipo del vehiculo</div>
-
-</div>
-
-          <div class="input-group input-group-sm mb-1 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Monto en $:</span>
-            <input type="text" disabled={operacion === 1 ? false : operacion === 2 ? false : true} class="form-control text-right" name="dolar" ref={txtDolar} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} onBlur={handleInputMontoChange} />
-          </div>
-          <div class="input-group input-group-sm mb-1 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Monto en Bs:</span>
-            <input type="text" disabled class="form-control text-right" ref={txtBs} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" onKeyUp={handleInputMontoChange} />
-          </div>
-          <div className="row col-12 d-flex justify-content-between mb-2 mt-4">
-            <input type="text" className=" col-3 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
-
-            <div className='col-3 d-flex justify-content-end'>
-              <button onClick={gestinarTipo} className="btn btn-sm btn-primary rounded-circle"><i className="fas fa-plus"></i> </button>
+          <div class=" mb-1 col-md-12">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Nombre:
+              </span>
+              <input
+                onChange={(e) =>
+                  (e.target.value = e.target.value.toUpperCase())
+                }
+                maxLength={25}
+                type="text"
+                name="nom"
+                onBlur={validarInput}
+                disabled={
+                  operacion === 1 ? false : operacion === 2 ? false : true
+                }
+                class="form-control"
+                ref={txtDescripcion}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+              />
+            </div>
+            <div id="nom" class="form-text hidden">
+              Debe ingresar nombre del tipo del vehiculo
             </div>
           </div>
-          <div className="col-md-12" style={{ margin: "auto", }} >
 
-            <TblContainer >
+          <div class="input-group input-group-sm mb-1 col-md-6">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Monto en $:
+            </span>
+            <input
+              maxLength={4}
+              type="text"
+              disabled={
+                operacion === 1 ? false : operacion === 2 ? false : true
+              }
+              class="form-control text-right"
+              name="dolar"
+              ref={txtDolar}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onKeyUp={handleInputMontoChange}
+              onBlur={handleInputMontoChange}
+            />
+          </div>
+          <div class="input-group input-group-sm mb-1 col-md-6">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Monto en Bs:
+            </span>
+            <input
+              type="text"
+              disabled
+              class="form-control text-right"
+              ref={txtBs}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onKeyUp={handleInputMontoChange}
+            />
+          </div>
+          <div className="row col-12 d-flex justify-content-between mb-2 mt-4">
+            <input
+              type="text"
+              className=" col-3 form-control form-control-sm rounded-pill"
+              onChange={handleSearch}
+              placeholder="Buscar"
+            />
+
+            <div className="col-3 d-flex justify-content-end">
+              <button
+                onClick={gestinarTipo}
+                className="btn btn-sm btn-primary rounded-circle"
+              >
+                <i className="fas fa-plus"></i>{" "}
+              </button>
+            </div>
+          </div>
+          <div className="col-md-12" style={{ margin: "auto" }}>
+            <TblContainer>
               <TblHead />
-              <TableBody >
-                {
-                  records && recordsAfterPagingAndSorting().map((item, index) => (
+              <TableBody>
+                {records &&
+                  recordsAfterPagingAndSorting().map((item, index) => (
                     <TableRow key={index} style={{ padding: "0" }}>
-                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>{item.contrato_id}</TableCell>
-                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center', width: '270px' }}>{item.contrato_nombre}</TableCell>
-
-                      <TableCell className='align-baseline' style={{ textAlign: "center", alignItems: 'center' }}>
-                        {// <button  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fas fa-backward"></i> </button>
-                        }  <button className="btn btn-sm mx-1 btn-danger rounded-circle" onClick={elimminarrTipo(item.contrato_id)}><i className="fa fa-trash"></i> </button>
+                      <TableCell
+                        className="align-baseline"
+                        style={{ textAlign: "center", alignItems: "center" }}
+                      >
+                        {item.contrato_id}
+                      </TableCell>
+                      <TableCell
+                        className="align-baseline"
+                        style={{
+                          textAlign: "center",
+                          alignItems: "center",
+                          width: "270px",
+                        }}
+                      >
+                        {item.contrato_nombre}
                       </TableCell>
 
+                      <TableCell
+                        className="align-baseline"
+                        style={{ textAlign: "center", alignItems: "center" }}
+                      >
+                        {
+                          // <button  className="btn btn-sm mx-1 btn-info rounded-circle" ><i className="fas fas fa-backward"></i> </button>
+                        }{" "}
+                        <button
+                          className="btn btn-sm mx-1 btn-danger rounded-circle"
+                          onClick={elimminarrTipo(item.contrato_id)}
+                        >
+                          <i className="fa fa-trash"></i>{" "}
+                        </button>
+                      </TableCell>
                     </TableRow>
-                  ))
-                }
+                  ))}
               </TableBody>
             </TblContainer>
             <TblPagination />
           </div>
-
         </div>
       </Modal.Body>
       <Modal.Footer>

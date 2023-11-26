@@ -322,23 +322,7 @@ export const ModalTipoVehiculo = (props) => {
     )
       event.returnValue = false;
   }
-  const handleChange = (maxValue) => (e) => {
-    const inputValue = e.target.value;
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
-  };
+ 
   const handleInputMontoChange = (event) => {
     validaMonto(event);
     if (event.which === 13 || typeof event.which === "undefined") {
@@ -555,7 +539,7 @@ export const ModalTipoVehiculo = (props) => {
               Nombre:
             </span>
             <input
-              onKeyDown={handleChange(25)}
+             maxLength={50}
               type="text"
               disabled={
                 operacion === 1 ? false : operacion === 2 ? false : true
@@ -566,6 +550,7 @@ export const ModalTipoVehiculo = (props) => {
               aria-describedby="inputGroup-sizing-sm"
               name="nom"
               onBlur={validarInput}
+              onChange={(e) => e.target.value = e.target.value.toUpperCase()}
             />
              </div>
           <div id="nom" class="form-text hidden">Debe ingresar nombre del tipo del vehiculo</div>
@@ -581,6 +566,7 @@ export const ModalTipoVehiculo = (props) => {
               disabled={
                 operacion === 1 ? false : operacion === 2 ? false : true
               }
+              maxLength={4}
               class="form-control text-right"
               name="dolar"
               ref={txtDolar}

@@ -313,23 +313,7 @@ export const ModalTipoContrato = (props) => {
     } else return false;
   };
 
-  const handleChange = (maxValue) => (e) => {
-    const inputValue = e.target.value;
-    // Verificar si la longitud del valor ingresado supera el valor máximo
-    if (isNaN(inputValue)) {
-      if (inputValue.length > maxValue && e.key !== "Backspace") {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    } else {
-      if (
-        inputValue.length >= maxValue &&
-        e.key !== "Backspace" &&
-        e.key !== " "
-      ) {
-        e.preventDefault(); // Evitar que se escriba el valor excedente
-      }
-    }
-  };
+  
   const selecionarTipoContrato = async (id) => {
     let endpoint = op.conexion + "/tipo_contrato/ConsultarUno?ID=" + id;
     console.log(endpoint);
@@ -489,12 +473,13 @@ export const ModalTipoContrato = (props) => {
               disabled={
                 operacion === 1 ? false : operacion === 2 ? false : true
               }
-              onKeyDown={handleChange(25)}
+              maxLength={25}
               type="text"
               class="form-control"
               ref={txtDescripcion}
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
+              onChange={(e) => e.target.value = e.target.value.toUpperCase()}
             />
           </div>
           <div className="col-md-5"></div>
