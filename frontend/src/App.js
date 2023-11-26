@@ -26,10 +26,18 @@ function App(props) {
 
   function resetTimer() {
     clearInterval(timer);
-
     currSeconds = 0;
-
     timer = setInterval(startIdleTimer, 1000);
+  }
+
+  function handleNoClick() {
+    setMensaje({
+      mostrar: false,
+      icono: "",
+      titulo: "",
+      texto: "",
+    });
+    resetTimer();
   }
 
   window.onload = resetTimer;
@@ -41,18 +49,26 @@ function App(props) {
 
   function startIdleTimer() {
     currSeconds++;
-    /*  console.log(currSeconds); */
 
-    if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 10 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
         icono: "error",
         titulo: "Alerta",
-        texto: "La Sesion expirara en 10 segundos ",
+        texto: "La Sesión expirará en 10 segundos ",
       });
     }
 
-    if (currSeconds === 190 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 20 && pathname !== "/login" && pathname !== "/") {
+      setMensaje({
+        mostrar: true,
+        icono: "error",
+        titulo: "Alerta",
+        texto: "La Sesión expirará en 20 segundos ",
+      });
+    }
+
+    if (currSeconds === 30 && pathname !== "/login" && pathname !== "/") {
       window.location.href = "/login";
       setMensaje({
         mostrar: false,
@@ -63,6 +79,10 @@ function App(props) {
     }
   }
 
+  useEffect(() => {
+    resetTimer(); // Reiniciar el temporizador cuando el componente se monta o actualiza
+  }, [pathname]);
+
   return (
     <div>
       <MensajeSiNo
@@ -70,26 +90,19 @@ function App(props) {
         onHideSi={() => {
           window.location.href = "/login";
         }}
-        onHideNo={() => {
-          setMensaje({
-            mostrar: false,
-            icono: "",
-            titulo: "",
-            texto: "",
-          });
-        }}
+        onHideNo={handleNoClick}
       />
       {pathname === "/" || pathname === "/galeria" ? (
         <Router>
-           <Route exact path="/login" component={Login} />
-          <Route exact path="/" component={PaginaWeb} /> 
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={PaginaWeb} />
           <Route exact path="/galeria" component={Galeria} />
         </Router>
       ) : (
         <AuthProvider>
           <Router>
             <Route exact path="/login" component={Login} />
-            <Route exact path="/" component={PaginaWeb} /> 
+            <Route exact path="/" component={PaginaWeb} />
             <Route exact path="/galeria" component={Galeria} />
 
             {pathname !== "/" && pathname !== "/login" && (
@@ -100,9 +113,6 @@ function App(props) {
           </Router>
         </AuthProvider>
       )}
-
-      {/* }
-       */}
     </div>
   );
 }

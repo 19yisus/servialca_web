@@ -1786,34 +1786,14 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div className="col-md-4">
                   <div className="input-group input-group-sm mb-2">
                     <span
                       className="input-group-text"
                       id="inputGroup-sizing-sm"
                     >
-                      Asesor:{" "}
+                      Asesor:
                     </span>
-                    {/*  <input
-                      disabled
-                      type="text"
-                      className="form-control"
-                      ref={txtAcesor}
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-sm"
-                      defaultValue={operacion === 1 ? user : ""}
-                    />
-                   idUser === 57 ? (
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => {
-                          setMostrar2(true);
-                        }}
-                      >
-                        <i className="fa fa-search"></i>
-                      </button>
-                    ) : null*/}
                     <Typeahead
                       id="myTypeahead"
                       onKeyDown={(a) => {
@@ -1843,45 +1823,22 @@ export const ModalRcv = (props) => {
                       ref={txtAcesor}
                       bsSize="small"
                       defaultSelected={
-                        valorSeleccionado
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
+                        user && idUser
+                          ? [{ usuario_usuario: user, id_usuario: idUser }]
+                          : []
                       }
-                      selected={
-                        valorSeleccionado.usuario_usuario !== ""
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
-                      }
+                      disabled={idUser != 57}
                     />
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="input-group input-group-sm mb-2 ">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">
-                      Sucursal:{" "}
+                <div className="col-md-4">
+                  <div className="input-group input-group-sm mb-2">
+                    <span
+                      className="input-group-text"
+                      id="inputGroup-sizing-sm"
+                    >
+                      Sucursal:
                     </span>
-
-                    {/* <input
-                      disabled
-                      defaultValue={operacion === 1 ? suc : ""}
-                      type="text"
-                      class="form-control"
-                      ref={sucursal}
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                    idUser === 57 ? (
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => {
-                          setMostrar3(true);
-                        }}
-                      >
-                        <i className="fa fa-search"></i>
-                      </button>
-                    ) : null*/}
-
                     <Typeahead
                       id="myTypeahead"
                       onKeyDown={(a) => {
@@ -1908,18 +1865,15 @@ export const ModalRcv = (props) => {
                       labelKey="sucursal_nombre"
                       options={sucursal}
                       placeholder="Seleccionar"
-                      ref={cmbSucursal}
                       bsSize="small"
-                      defaultSelected={
-                        valorSeleccionado
-                          ? [`${valorSeleccionado.sucursal_nombre}`]
-                          : ""
-                      }
+                      ref={cmbSucursal}
+                      defaultSelected={suc ? [{ sucursal_nombre: suc }] : ""}
                       selected={
                         valorSeleccionado.sucursal_nombre !== ""
                           ? [`${valorSeleccionado.sucursal_nombre}`]
                           : ""
                       }
+                      disabled={idUser !== 57}
                     />
                   </div>
                 </div>
