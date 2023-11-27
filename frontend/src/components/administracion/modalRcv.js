@@ -914,8 +914,9 @@ export const ModalRcv = (props) => {
     });
   };
   // Para poder la fecha en rcv
-  const fechaSistema = moment();
-  const fechaHasta = fechaSistema.clone().add(1, "year");
+
+  let fechaSistema = moment();
+  let fechaHasta = fechaSistema.clone().add(1, "year");
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
@@ -1587,7 +1588,6 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaSistema.format("YYYY-MM-DD")}
-                    max={fechaSistema.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>
@@ -1604,7 +1604,6 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaHasta.format("YYYY-MM-DD")}
-                    max={fechaHasta.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>

@@ -88,28 +88,26 @@ abstract class cls_poliza extends cls_db
 			$this->fechaInicio = date("Y-m-d");
 		}
 		if (isset($this->fechaInicio) && isset($this->fechaVencimiento)) {
-			// Crear objetos DateTime para las fechas
-			$fechaInicio = new DateTime($this->fechaInicio);
-			$fechaVencimiento = new DateTime($this->fechaVencimiento);
-			// Obtener la fecha actual
-			$hoy = new DateTime();
-			// Comparar las fechas
-			if ($hoy > $fechaVencimiento) {
-				return [
-					'data' => [
-						'res' => "no pasa",
+			$result = $this->GetOne($this->id);
+			$fechaActual = date("Y-m-d H:i:s");
+
+			if (isset($result[0]["poliza_fechaVencimiento"])) {
+				$fechaVencimiento = $result[0]["poliza_fechaVencimiento"];
+
+				// Extraer el año de la fecha actual y la fecha de vencimiento
+				$anioActual = date("Y");
+				$anioVencimiento = date("Y", strtotime($fechaVencimiento));
+
+				// Comparar los años
+				if ($anioVencimiento > $anioActual) {
+					return [
+						"data" => [
+							"res" => "Este contrato aun no esta vencido",
+							"code" => 400
+						],
 						"code" => 400
-					],
-					'code' => 400
-				];
-			} else {
-				return [
-					'data' => [
-						'res' => "si pasa",
-						"code" => 400
-					],
-					'code' => 400
-				];
+					];
+				}
 			}
 		}
 
