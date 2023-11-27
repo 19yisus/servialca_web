@@ -29,7 +29,7 @@ export const ModalUsuarios = (props) => {
   const txtNombre = useRef();
   const txtTipoSangre = useRef();
   const txtCedula = useRef();
-  const cmbLentes = useRef();
+  const txtPass = useRef();
   const cmbPago = useRef();
   const cmbNacionalidad = useRef();
 
@@ -328,7 +328,10 @@ export const ModalUsuarios = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
+        
         txtUsuario.current.value = response.usuario_usuario;
+        txtPass.current.value = response.usuario_clave;
+
         txtNombre.current.value = response.usuario_nombre;
         txtApellido.current.value = response.usuario_apellido;
         cmbNacionalidad.current.value = response.usuario_cedula.substring(0, 2);
@@ -615,7 +618,29 @@ export const ModalUsuarios = (props) => {
               Debe ingresar login de usuario
             </div>
           </div>
-          <div class="input-group input-group-sm mb-1 col-md-6"></div>
+          <div class=" mb-1 col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Contraseña:
+              </span>
+              <input
+                maxLength={12}
+                type="text"
+                class="form-control"
+                ref={txtPass}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="passs"
+                onBlur={validarInput}
+                onChange={(e) =>
+                  (e.target.value = e.target.value.toUpperCase())
+                }
+              />
+            </div>
+            <div id="passs" class="form-text hidden">
+              Debe ingresar contraseña de usuario
+            </div>
+          </div>
           <div class=" mb-1 col-md-6">
             <div class="input-group input-group-sm">
               <span class="input-group-text" id="inputGroup-sizing-sm">
