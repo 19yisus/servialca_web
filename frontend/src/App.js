@@ -50,7 +50,7 @@ function App(props) {
   function startIdleTimer() {
     currSeconds++;
 
-    if (currSeconds === 10 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
         icono: "error",
@@ -59,7 +59,7 @@ function App(props) {
       });
     }
 
-    if (currSeconds === 20 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 1900 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
         icono: "error",
@@ -68,7 +68,7 @@ function App(props) {
       });
     }
 
-    if (currSeconds === 30 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 200 && pathname !== "/login" && pathname !== "/") {
       window.location.href = "/login";
       setMensaje({
         mostrar: false,

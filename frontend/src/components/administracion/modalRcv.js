@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 /* import { Mensaje, MensajeSiNo } from "../mensajes"; */
-import { Loader, Dimmer, Label } from "semantic-ui-react";
+import { Loader, Dimmer } from "semantic-ui-react";
 import {
   validaSoloNumero,
   formatMoneda,
@@ -12,7 +12,8 @@ import {
   validaSoloLetras,
 } from "../../util/varios";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
@@ -26,6 +27,7 @@ import CatalogoClase from "../../catalogos/catalogoClase";
 import CatalogoTipo from "../../catalogos/catalagoTipoVehiculo";
 import CatalogoTitular from "../../catalogos/catalogoTitular";
 import CatalogoVehiculo from "../../catalogos/catalogoVehiculo";
+import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
 import { Typeahead } from "react-bootstrap-typeahead";
 export const ModalRcv = (props) => {
   /*  variables de estados */
@@ -1245,6 +1247,17 @@ export const ModalRcv = (props) => {
   console.log(valorSeleccionado);
   console.groupEnd();
 
+  const [selectedContrato, setSelectedContrato] = useState(null);
+
+  const handleChange = (event, newValue) => {
+    setSelectedContrato(newValue); // newValue contiene el objeto seleccionado
+    console.log(newValue.contrato_nombre)
+    setValorSeleccionado({
+      ...valorSeleccionado,
+      contrato_nombre: newValue.contrato_nombre,
+    });
+  };
+
   return (
     <Modal
       {...props}
@@ -1276,10 +1289,10 @@ export const ModalRcv = (props) => {
             {operacion === 1
               ? "Registro de RCV"
               : operacion === 2
-              ? "Editar de RCV"
-              : operacion === 3
-              ? "Renovar de RCV"
-              : "Registro de RCV"}
+                ? "Editar de RCV"
+                : operacion === 3
+                  ? "Renovar de RCV"
+                  : "Registro de RCV"}
           </Modal.Title>{" "}
         </Modal.Title>
         <button
@@ -1386,11 +1399,11 @@ export const ModalRcv = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                  mostrar: false,
-                  titulo: "",
-                  texto: "",
-                  icono: "",
-                });
+                mostrar: false,
+                titulo: "",
+                texto: "",
+                icono: "",
+              });
           }}
         />
 
@@ -1444,19 +1457,40 @@ export const ModalRcv = (props) => {
             role="tabpanel"
             aria-labelledby="ex1-tab-1"
           >
-            <div class="col-md-12 row mx-auto">
+            <div class="col-md-12 row mx-auto pt-2">
+
               <div class="col-md-5">
                 <div class="input-group input-group-sm mb-2 ">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Tipo de contrato:{" "}
-                  </span>
+
 
                   <input type="hidden" ref={idPoliza} />
                   <input type="hidden" ref={idCliente} />
                   <input type="hidden" ref={idTitular} />
                   <input type="hidden" ref={idVehiculo} />
                   <input type="hidden" ref={idCobertura} />
-                  {/*
+                  <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.contrato_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        contrato_nombre: newValue.contrato_nombre,
+                      });
+                      }
+                    }}
+                    options={tipoContrato}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.contrato_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Tipo de Contrato" variant="outlined" />
+                    )}
+                  />
+                  {/*<span class="input-group-text" id="inputGroup-sizing-sm">
+                    Tipo de contrato:{" "}
+                  </span>
                   <select class="form-select" ref={} aria-label="Default select example">
 
                     {tipoContrato && tipoContrato.map((item, index) => (
@@ -1483,7 +1517,7 @@ export const ModalRcv = (props) => {
                     }}
                   >
                     <i class="fa fa-search"></i>
-                  </button>*/}
+                  </button
 
                   <Typeahead
                     id="myTypeahead"
@@ -1523,7 +1557,7 @@ export const ModalRcv = (props) => {
                         ? [`${valorSeleccionado.contrato_nombre}`]
                         : ""
                     }
-                  />
+                  />>*/}
                 </div>
               </div>
               <div class="col-md-1"></div>
@@ -1716,7 +1750,7 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12">
                   <div class="input-group input-group-sm mb-2">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Direción
@@ -1734,12 +1768,12 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="input-group input-group-sm mb-2 ">
+                <div class="col-md-4 mb-1 mt-1">
+                 {/* <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Estado:{" "}
                     </span>
-                    {/* <select
+                     <select
                       disabled={operacion === 3}
                       class="form-select"
                       ref={cmbEstado}
@@ -1752,7 +1786,7 @@ export const ModalRcv = (props) => {
                             {item.estado_nombre}{" "}
                           </option>
                         ))}
-                    </select>*/}
+                    </select>
 
                     <Typeahead
                       id="myTypeahead"
@@ -1784,16 +1818,57 @@ export const ModalRcv = (props) => {
                           : ""
                       }
                     />
-                  </div>
+                  </div>*/}
+
+                  <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.estado_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        estado_nombre: newValue.estado_nombre,
+                      });
+                      }
+                    }}
+                    options={estados}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.estado_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Estado" variant="outlined" />
+                    )}
+                  />
                 </div>
-                <div className="col-md-4">
-                  <div className="input-group input-group-sm mb-2">
+                <div class="col-md-4 mb-1 mt-1">
+               {/*   <div className="input-group input-group-sm mb-2">
                     <span
                       className="input-group-text"
                       id="inputGroup-sizing-sm"
                     >
-                      Asesor:
+                      Asesor:{" "}
                     </span>
+                      <input
+                      disabled
+                      type="text"
+                      className="form-control"
+                      ref={txtAcesor}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      defaultValue={operacion === 1 ? user : ""}
+                    />
+                   idUser === 57 ? (
+                      <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => {
+                          setMostrar2(true);
+                        }}
+                      >
+                        <i className="fa fa-search"></i>
+                      </button>
+                    ) : null
                     <Typeahead
                       id="myTypeahead"
                       onKeyDown={(a) => {
@@ -1818,27 +1893,72 @@ export const ModalRcv = (props) => {
                         }
                       }}
                       labelKey="usuario_usuario"
-                      options={acesor}
+                      options={}
                       placeholder="Seleccionar"
                       ref={txtAcesor}
                       bsSize="small"
                       defaultSelected={
-                        user && idUser
-                          ? [{ usuario_usuario: user, id_usuario: idUser }]
-                          : []
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
                       }
-                      disabled={idUser != 57}
+                      selected={
+                        valorSeleccionado.usuario_usuario !== ""
+                          ? [`${valorSeleccionado.usuario_usuario}`]
+                          : ""
+                      }
                     />
-                  </div>
+                     </div>*/}
+
+<Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.usuario_usuario)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        usuario_usuario: newValue.usuario_usuario,
+                      });
+                      }
+                    }}
+                    options={acesor}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.usuario_usuario}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Acesor" variant="outlined" />
+                    )}
+                  />
+                 
                 </div>
-                <div className="col-md-4">
-                  <div className="input-group input-group-sm mb-2">
-                    <span
-                      className="input-group-text"
-                      id="inputGroup-sizing-sm"
-                    >
-                      Sucursal:
+                <div class="col-md-4 mb-1 mt-1">
+                   {/*  <div class="input-group input-group-sm mb-2 ">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Sucursal:{" "}
                     </span>
+
+                  <input
+                      disabled
+                      defaultValue={operacion === 1 ? suc : ""}
+                      type="text"
+                      class="form-control"
+                      ref={sucursal}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                    idUser === 57 ? (
+                      <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => {
+                          setMostrar3(true);
+                        }}
+                      >
+                        <i className="fa fa-search"></i>
+                      </button>
+                    ) : null
+
                     <Typeahead
                       id="myTypeahead"
                       onKeyDown={(a) => {
@@ -1865,24 +1985,47 @@ export const ModalRcv = (props) => {
                       labelKey="sucursal_nombre"
                       options={sucursal}
                       placeholder="Seleccionar"
-                      bsSize="small"
                       ref={cmbSucursal}
-                      defaultSelected={suc ? [{ sucursal_nombre: suc }] : ""}
+                      bsSize="small"
+                      defaultSelected={
+                        valorSeleccionado
+                          ? [`${valorSeleccionado.sucursal_nombre}`]
+                          : ""
+                      }
                       selected={
                         valorSeleccionado.sucursal_nombre !== ""
                           ? [`${valorSeleccionado.sucursal_nombre}`]
                           : ""
                       }
-                      disabled={idUser !== 57}
                     />
-                  </div>
+                  </div>*/}
+                  <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.sucursal_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        sucursal_nombre: newValue.sucursal_nombre,
+                      });
+                      }
+                    }}
+                    options={sucursal}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.sucursal_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Sucursal" variant="outlined" />
+                    )}
+                  />
                 </div>
                 <div class="col-md-6">
-                  <div class="input-group input-group-sm mb-2 ">
+                   {/*<div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Linea de Transporte:{" "}
                     </span>
-                    {/*<select class="form-select" ref={txtLinea} aria-label="Default select example">
+                   <select class="form-select" ref={txtLinea} aria-label="Default select example">
 
                       {transporte && transporte.map((item, index) => (
                         <option key={index} value={item.transporte_id} > {item.transporte_nombre} </option>
@@ -1905,8 +2048,7 @@ export const ModalRcv = (props) => {
                       }}
                     >
                       <i class="fa fa-search"></i>
-                    </button>>*/}
-
+                    </button>>
                     <Typeahead
                       id="myTypeahead"
                       onKeyDown={(a) => {
@@ -1946,7 +2088,28 @@ export const ModalRcv = (props) => {
                           : ""
                       }
                     />
-                  </div>
+                  </div>*/}
+
+<Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.transporte_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        transporte_nombre: newValue.transporte_nombre,
+                      });
+                      }
+                    }}
+                    options={transporte}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.transporte_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Linea de Transporte" variant="outlined" />
+                    )}
+                  />
                 </div>
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
@@ -1989,7 +2152,7 @@ export const ModalRcv = (props) => {
                     onClick={() => {
                       consultarTitular(
                         cmbNacionalidadTitular.current.value +
-                          txtCedulatTitular.current.value
+                        txtCedulatTitular.current.value
                       );
                     }}
                   >
@@ -2040,7 +2203,7 @@ export const ModalRcv = (props) => {
             aria-labelledby="ex1-tab-2"
           >
             <div class="col-md-12 row mx-auto">
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Placa
@@ -2066,7 +2229,7 @@ export const ModalRcv = (props) => {
                   </button>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Puesto
@@ -2083,13 +2246,13 @@ export const ModalRcv = (props) => {
                   />
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="input-group input-group-sm mb-2">
+              <div class="col-md-4 mb-1">
+               {/* <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Uso
                   </span>
 
-                  {/*<select class="form-select" ref={txtUso} aria-label="Default select example">
+                  <select class="form-select" ref={txtUso} aria-label="Default select example">
                     {uso && uso.map((item, index) => (
                       <option key={index} value={item.usoVehiculo_id} > {item.usoVehiculo_nombre} </option>
                     ))}
@@ -2110,7 +2273,7 @@ export const ModalRcv = (props) => {
                     }}
                   >
                     <i class="fa fa-search"></i>
-                  </button>*/}
+                  </button>
 
                   <Typeahead
                     id="myTypeahead"
@@ -2151,10 +2314,30 @@ export const ModalRcv = (props) => {
                         : ""
                     }
                   />
-                </div>
+                </div>*/}
+                 <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.usoVehiculo_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        usoVehiculo_nombre: newValue.usoVehiculo_nombre,
+                      });
+                      }
+                    }}
+                    options={uso}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.usoVehiculo_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Uso Vehiculo" variant="outlined" />
+                    )}
+                  />
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Año
@@ -2162,7 +2345,7 @@ export const ModalRcv = (props) => {
                   <input
                     disabled={operacion === 3}
                     type="text"
-                    class="form-control"
+                    class="form-control text-right"
                     maxLength={4}
                     ref={txtAño}
                     aria-label="Sizing example input"
@@ -2190,7 +2373,7 @@ export const ModalRcv = (props) => {
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Ser. Motor
@@ -2208,13 +2391,13 @@ export const ModalRcv = (props) => {
                   />
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="input-group input-group-sm mb-2">
+              <div class="col-md-4 mt-2 mb-1">
+               {/*<div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Clase
                   </span>
 
-                  {/*<select class="form-select" ref={txtClase} aria-label="Default select example">
+                  *<select class="form-select" ref={txtClase} aria-label="Default select example">
                     {clase && clase.map((item, index) => (
                       <option key={index} value={item.claseVehiculo_id} > {item.clase_nombre} </option>
                     ))}
@@ -2235,7 +2418,7 @@ export const ModalRcv = (props) => {
                     }}
                   >
                     <i class="fa fa-search"></i>
-                  </button>*/}
+                  </button>
                   <Typeahead
                     id="myTypeahead"
                     onKeyDown={(a) => {
@@ -2275,10 +2458,30 @@ export const ModalRcv = (props) => {
                         : ""
                     }
                   />
-                </div>
+                </div>*/}
+                <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.clase_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        clase_nombre: newValue.clase_nombre,
+                      });
+                      }
+                    }}
+                    options={clase}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.clase_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Clase Vehiculo" variant="outlined" />
+                    )}
+                  />
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Color
@@ -2298,7 +2501,7 @@ export const ModalRcv = (props) => {
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Ser. Carroceria
@@ -2317,12 +2520,12 @@ export const ModalRcv = (props) => {
                   />
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="input-group input-group-sm mb-2">
+              <div class="col-md-4 mt-2 mb-1">
+                 {/*<div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Tipo
                   </span>
-                  {/* <select
+                 * <select
                     class="form-select"
                     ref={cmbTipo}
                     aria-label="Default select example"
@@ -2351,7 +2554,7 @@ export const ModalRcv = (props) => {
                     }}
                   >
                     <i class="fa fa-search"></i>
-                  </button> */}
+                  </button> 
                   <Typeahead
                     id="myTypeahead"
                     onKeyDown={(a) => {
@@ -2392,7 +2595,27 @@ export const ModalRcv = (props) => {
                         : ""
                     }
                   />
-                </div>
+                </div>*/}
+                 <Autocomplete
+                    value={valorSeleccionado}
+                    onChange={(event, newValue) => {
+                      if (newValue) {
+                       
+                        console.log(newValue.tipoVehiculo_nombre)
+                      setValorSeleccionado({
+                        ...valorSeleccionado,
+                        tipoVehiculo_nombre: newValue.tipoVehiculo_nombre,
+                      });
+                      }
+                    }}
+                    options={tipo}
+                    sx={{ width: '100%' }} 
+                    size="small"
+                    getOptionLabel={(option) => option.tipoVehiculo_nombre}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Tipo Vehiculo" variant="outlined" />
+                    )}
+                  />
               </div>
 
               <div class="col-md-4">
