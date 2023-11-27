@@ -331,27 +331,23 @@ function ReportesAsesor() {
           />
           <input
             type="date"
-            className=" col-3 form-control form-control-sm rounded-pill"
+            className="col-3 form-control form-control-sm rounded-pill"
             ref={desde}
-            defaultValue={moment(desde.current, "YYYY-MM-DD").format(
-              "YYYY-MM-DD"
-            )}
+            defaultValue={moment().format("YYYY-MM-DD")}
             onChange={(e) => (desde.current = e.target.value)}
           />
           <input
             type="date"
-            className=" col-3 form-control form-control-sm rounded-pill"
+            className="col-3 form-control form-control-sm rounded-pill"
             ref={hasta}
-            defaultValue={moment(hasta.current, "YYYY-MM-DD").format(
-              "YYYY-MM-DD"
-            )}
+            defaultValue={moment().format("YYYY-MM-DD")}
             onChange={(e) => (hasta.current = e.target.value)}
           />
           <input
             value={"Buscar"}
             style={{ backgroundColor: "white", color: "black" }}
             type="button"
-            className=" col-2"
+            className="col-2"
             placeholder="Buscar"
             onClick={selecionarRegistros}
           />

@@ -82,7 +82,7 @@ function PaginaWeb(props) {
         let img_banner = "";
         let img_login = "";
         let img_home = "";
-        let img_about = ''
+        let img_about = "";
 
         console.log("aqui");
 
@@ -109,12 +109,12 @@ function PaginaWeb(props) {
             response[i].tag.toString() === "img_login"
           ) {
             img_login = response[i].ruta_img;
-          }  else if (
+          } else if (
             response[i].tag &&
             response[i].tag.toString() === "img_home"
           ) {
             img_home = response[i].ruta_img;
-          }  else if (
+          } else if (
             response[i].tag &&
             response[i].tag.toString() === "img_about"
           ) {
@@ -128,10 +128,10 @@ function PaginaWeb(props) {
           carrusel_1: carrusel_1,
           carrusel_2: carrusel_2,
           carrusel_3: carrusel_3,
-          img_banner:img_banner,
-          img_login:img_login,
-          img_home:img_home,
-          img_about:img_about
+          img_banner: img_banner,
+          img_login: img_login,
+          img_home: img_home,
+          img_about: img_about,
         });
 
         console.log(records);
@@ -146,18 +146,16 @@ function PaginaWeb(props) {
         })
       );
   };
- 
+
   useEffect(() => {
     context.logout();
     selecionarRegistros();
     //selecionarRegistrosWeb();
-     selecionarRegistrosTexts();
+    selecionarRegistrosTexts();
   }, []);
- 
+
   const txtUserName = useRef(null);
   const txtPassword = useRef(null);
-
-  
 
   function loginUserCallback() {
     setLoading(true);
@@ -175,58 +173,56 @@ function PaginaWeb(props) {
 
   return (
     <div className="col-md-12 px-0 mx-auto ">
-    
-
-<nav class="navbar navbar-expand-lg navbar-light bg-danger fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand py-2" href="#">
-      <img src={logo} className="logo-navbar" alt="MDN" />
-    </a>
-    <button
-      class="navbar-toggler btn btn-light"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div
-      class="collapse navbar-collapse justify-content-lg-end"
-      id="navbarSupportedContent"
-    >
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="#home">
-            <i class="fas fa-home"></i> Home
+      <nav class="navbar navbar-expand-lg navbar-light bg-danger fixed-top">
+        <div class="container-fluid">
+          <a class="navbar-brand py-2" href="#">
+            <img src={logo} className="logo-navbar" alt="MDN" />
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#quienes">
-            <i class="fas fa-id-card-alt"></i> Quienes Somos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">
-            <i class="fas fa-address-book"></i> Contactanos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/galeria">
-            <i class="fas fa-camera"></i> Galeria
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/login">
-            <i class="fas fa-sign-in-alt"></i> Login
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+          <button
+            class="navbar-toggler btn btn-light"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse justify-content-lg-end"
+            id="navbarSupportedContent"
+          >
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#home">
+                  <i class="fas fa-home"></i> Home
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#quienes">
+                  <i class="fas fa-id-card-alt"></i> Quienes Somos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact">
+                  <i class="fas fa-address-book"></i> Contactanos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/galeria">
+                  <i class="fas fa-camera"></i> Galeria
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">
+                  <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       {/* <div id="slider">
         <figure>
           {records.slice(0, 3).map((item, index) => (
@@ -262,8 +258,11 @@ function PaginaWeb(props) {
               </div>
 
               <div class="col-md-5 mx-auto">
-          <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_home} alt="" />
-
+                <img
+                  className="img-fluid"
+                  src={op.conexion + "/ImgPanel/" + records.img_home}
+                  alt=""
+                />
               </div>
               <div class="col-md-7 mx-auto text-center">{values.text_home}</div>
             </div>
@@ -271,9 +270,12 @@ function PaginaWeb(props) {
         </Fade>
         <Fade right>
           <div class="col-md-12 mx-auto px-0">
-        
-          <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_banner}  style={{ width: "100%" }} alt="" />
-
+            <img
+              className="img-fluid"
+              src={op.conexion + "/ImgPanel/" + records.img_banner}
+              style={{ width: "100%" }}
+              alt=""
+            />
           </div>
         </Fade>
         <Fade left>
@@ -292,8 +294,11 @@ function PaginaWeb(props) {
                 </div>
 
                 <div class="col-md-6 mx-auto py-4">
-                <img className="img-fluid" src={op.conexion + "/ImgPanel/" + records.img_about} alt="" />
-
+                  <img
+                    className="img-fluid"
+                    src={op.conexion + "/ImgPanel/" + records.img_about}
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
@@ -415,18 +420,20 @@ function PaginaWeb(props) {
         <div class="slider2">
           <div class="slide-track d-flex justify-content-end">
             <div class="slide text-left">
-            <span>{values.text_fax}</span>
+              <span>{values.text_fax}</span>
             </div>
           </div>
         </div>
       </div>
       <a
-        href="https://wa.me/573001112233?text=Hola!%20Estoy%20interesado%20en%20tu%20servicio"
+        href="https://api.whatsapp.com/send/?phone=4126544855&text=Hola!+Estoy+interesado+en+tu+servicio&type=phone_number&app_absent=0"
         class="btn-wsp"
         target="_blank"
+        title="Contactar por WhatsApp"
       >
         <i class="fab fa-whatsapp"></i>
       </a>
+
       <footer class="text-center text-white bg-servial mb-3">
         <div class="container p-4 pb-0">
           <section class="mb-4">
