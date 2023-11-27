@@ -1786,4 +1786,19 @@ abstract class cls_poliza extends cls_db
 
 		return $resultado;
 	}
+	public function GetAllEncargado($id, $desde, $hasta)
+	{
+		$sql = $this->db->prepare("SELECT usuario.usuario_nombre AS nombre_usuario, sucursal.sucursal_nombre AS nombre_sucursal, 
+		SUM(debitocredito.nota_monto) AS total_monto_notas, 
+		COUNT(DISTINCT debitocredito.nota_id) AS cantidad_poliza_id FROM usuario 
+		INNER JOIN poliza ON usuario.usuario_id = poliza.usuario_id 
+		INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id 
+		INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+		WHERE debitocredito.sucursal_id= ? AND  debitocredito.nota_fecha BETWEEN ? AND ? 
+		AND usuario.usuario_id > 56
+		GROUP BY usuario.usuario_id, sucursal.sucursal_nombre, usuario.usuario_nombre");
+		$sql->execute([$id, $desde, $hasta]);
+		$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
+		return $dato;
+	}
 }

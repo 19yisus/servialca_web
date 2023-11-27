@@ -36,6 +36,7 @@ import TablaLicencias from "../components/administracion/tablaLicencia";
 import PageChats from "../components/chat/chats";
 import ReportesSemanal from "../components/reportesPorqueria/resportes";
 import TablaBitacora from "../components/bitacora/tablaBitacora";
+import ReportesAsesor from "../components/reportesPorqueria/reportesAsesor";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -580,7 +581,13 @@ function MenuImpuestoPP(props) {
                       <span>Bitacora</span>
                     </a>
                   )}
-
+                <a
+                  href="/reporteAsesor"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                >
+                  <i className="fas fa-fw me-1 fa-print " />
+                  <span>Reporte asesor</span>
+                </a>
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
@@ -657,6 +664,11 @@ function MenuImpuestoPP(props) {
               <AuthRoute exact path="/listaPrecios" component={TablaPrecio} />
               <AuthRoute exact path="/licencias" component={TablaLicencias} />
               <AuthRoute exact path="/chats" component={PageChats} />
+              <AuthRoute
+                exact
+                path="/reporteAsesor"
+                component={ReportesAsesor}
+              />
               <AuthRoute
                 exact
                 path="/reporteSemanal"
