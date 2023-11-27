@@ -53,6 +53,12 @@ export default function useTable(records, headCells, filterFn) {
         </TableContainer>
     )
 
+     // Esta función se ejecutará cuando filterFn cambie
+  useEffect(() => {
+    setPage(0); // Cambiar la variable page a 0 cuando filterFn cambie de valor
+  }, [filterFn]);
+
+
     const TblHead = props => {
 
 
