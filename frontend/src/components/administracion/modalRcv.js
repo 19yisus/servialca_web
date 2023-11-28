@@ -166,9 +166,9 @@ export const ModalRcv = (props) => {
 
   const [valorSeleccionado, setValorSeleccionado] = useState({
     contrato_nombre: "",
-    estado_nombre: "",
-    usuario_usuario: "",
-    sucursal_nombre: "",
+    estado_nombre: "Portuguesa",
+    usuario_usuario: "MFIGUEROA",
+    sucursal_nombre: suc.toString(),
     transporte_nombre: "",
     usoVehiculo_nombre: "",
     clase_nombre: "",
@@ -180,9 +180,9 @@ export const ModalRcv = (props) => {
   const salir = () => {
     setValorSeleccionado({
       contrato_nombre: "",
-      estado_nombre: "",
-      usuario_usuario: "",
-      sucursal_nombre: "",
+      estado_nombre: "Portuguesa",
+      usuario_usuario: "MFIGUEROA",
+      sucursal_nombre: suc.toString(),
       transporte_nombre: "",
       usoVehiculo_nombre: "",
       clase_nombre: "",
@@ -623,15 +623,28 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
-    if (TxtTipoContrato.current.value === "") {
-      alert("No se puede consultar sin el contrato seleccionado");
+    if (valorSeleccionado.contrato_nombre === "") {
+      
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: "No se puede consultar sin el contrato seleccionado",
+        icono: "informacion",
+      })
       return false;
     }
 
-    if (cmbTipo.current.value === "") {
-      alert("No se puede consultar sin el tipo de contrato seleccionado");
+    if (valorSeleccionado.tipoVehiculo_nombre === "") {
+     
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: "No se puede consultar sin el tipo de vehiculo seleccionado",
+        icono: "informacion",
+      })
       return false;
     }
+
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();
@@ -645,12 +658,23 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        txtDolar.current.value = response[0]["precio_monto"];
-        txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
-          2
-        );
-        setTipoContrato(response);
-        txtDolar.current.value(response.precio_monto);
+        console.log(response[0])
+        if(response[0]){
+          txtDolar.current.value = response[0]["precio_monto"];
+          txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
+            2
+          );
+          setTipoContrato(response);
+        } else{
+          setMensaje({
+            mostrar: true,
+            titulo: "Notificación",
+            texto: "No hay un registro de presio de para este tipo de vehiuvlo y su tipo contrato",
+            icono: "informacion",
+          })
+        }
+       
+      //  txtDolar.current.value(response.precio_monto);
       })
       .catch((error) => console.log("Precio: Falta uno de los parametros"));
   };
@@ -1308,6 +1332,24 @@ export const ModalRcv = (props) => {
       contrato_nombre: newValue.contrato_nombre,
     });
   };
+
+
+
+  const validarInput = (e) => {
+    console.log(e.target.name)
+   let item = document.getElementById(e.target.name);
+    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+  
   return (
     <Modal
       {...props}
@@ -1675,6 +1717,8 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
+              onBlur={validarInput}
+name="cedcon"
                     onChange={(e) => {
                       validaSoloNumero(e);
                       // Agrega la función que deseas ejecutar
@@ -1694,7 +1738,7 @@ export const ModalRcv = (props) => {
                     <i class="fa fa-search"></i>
                   </button>
 
-                  <div id="ced" class="form-text hidden">
+                  <div id="cedcon" class="form-text hidden">
                     Debe ingresar un cedula valida longitud(8-9).
                   </div>
                 </div>
@@ -1711,10 +1755,12 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
-                      name="fecha"
+                      name="fechacon"
+              onBlur={validarInput}
+
                     />
                   </div>
-                  <div id="fecha" class="form-text hidden">
+                  <div id="fechacon" class="form-text hidden">
                     Debe ingresar fecha valida
                   </div>
                 </div>
@@ -1730,11 +1776,15 @@ export const ModalRcv = (props) => {
                       maxLength={25}
                       ref={txtNombre}
                       class="form-control "
+                      name="nomtac"
+                      onBlur={validarInput}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       onChange={validaSoloLetras}
                     />
                   </div>
+          <div id="nomtac" class="form-text hidden">Debe ingresar nombre del contratante</div>
+
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
@@ -1752,8 +1802,13 @@ export const ModalRcv = (props) => {
                       onChange={(e) => {
                         validaSoloLetras(e);
                       }}
+                      onBlur={validarInput}
+                      name="apecon"
+
                     />
                   </div>
+          <div id="apecon" class="form-text hidden">Debe ingresar nombre del contratante</div>
+
                 </div>
                 <div class="col-md-5">
                   <div class="input-group input-group-sm mb-2">
@@ -1776,11 +1831,15 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       maxLength={7}
                       ref={txtTelefono}
+                      name="telfcon"
+                      onBlur={validarInput}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       onChange={validaSoloNumero}
                     />
                   </div>
+          <div id="telfcon" class="form-text hidden">Debe ingresar telefono</div>
+
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2">
@@ -1810,6 +1869,8 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       maxLength={30}
                       ref={txtDirec}
+                      name="direccioncon"
+                      onBlur={validarInput}
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       onChange={(e) =>
@@ -1817,6 +1878,8 @@ export const ModalRcv = (props) => {
                       }
                     />
                   </div>
+          <div id="direccioncon" class="form-text hidden">Debe ingresar la direccion</div>
+
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
                  {/* <div class="input-group input-group-sm mb-2 ">
@@ -2067,11 +2130,14 @@ export const ModalRcv = (props) => {
                     options={sucursal}
                     sx={{ width: '100%' }} 
                     size="small"
+              
                     getOptionLabel={(option) => option.sucursal_nombre}
                     renderInput={(params) => (
                       <TextField {...params} label="Sucursal" variant="outlined" />
                     )}
                   />)}
+          <div id="sucursal" class="form-text hidden">Debe ingresar nombre del uso</div>
+
                 </div>
                 <div class="col-md-6">
                    {/*<div class="input-group input-group-sm mb-2 ">
@@ -2175,7 +2241,8 @@ export const ModalRcv = (props) => {
                 >
                   Titular
                 </legend>
-                <div class="input-group input-group-sm mb-3 col-md-5">
+                <div class=" mb-1 col-md-5">
+                <div class="input-group input-group-sm">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Cedula:
                   </span>
@@ -2196,6 +2263,9 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
+                    name="ced2"
+              onBlur={validarInput}
+
                     onChange={(e) => {
                       validaSoloNumero(e);
                       igualA(2);
@@ -2214,6 +2284,9 @@ export const ModalRcv = (props) => {
                   >
                     <i class="fa fa-search"></i>
                   </button>
+                  </div>
+          <div id="ced2" class="form-text hidden">Debe ingresar la cedula titular</div>
+
                 </div>
                 <div class="col-md-9"></div>
 
@@ -2229,9 +2302,13 @@ export const ModalRcv = (props) => {
                       class="form-control"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
+                      name="nomti"
+              onBlur={validarInput}
                       onChange={validaSoloLetras}
                     />
                   </div>
+          <div id="nomti" class="form-text hidden">Debe ingresar el nombre del titular</div>
+
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
@@ -2246,8 +2323,12 @@ export const ModalRcv = (props) => {
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       onChange={validaSoloLetras}
+                      name="apeti"
+                      onBlur={validarInput}
                     />
                   </div>
+          <div id="apeti" class="form-text hidden">Debe ingresar el apellido del titular</div>
+
                 </div>
               </fieldset>
             </div>
@@ -2272,6 +2353,8 @@ export const ModalRcv = (props) => {
                     class="form-control"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="placa"
+                    onBlur={validarInput}
                     onChange={tuFuncionEspecifica}
                   />
                   <button
@@ -2284,6 +2367,8 @@ export const ModalRcv = (props) => {
                     <i class="fa fa-search"></i>
                   </button>
                 </div>
+          <div id="placa" class="form-text hidden">Debe ingresar la plca del vehiculo</div>
+
               </div>
               <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
@@ -2297,11 +2382,16 @@ export const ModalRcv = (props) => {
                     ref={txtPuesto}
                     class="form-control"
                     aria-label="Sizing example input"
+                    name="puestos"
+                    onBlur={validarInput}
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={validaSoloNumero}
                   />
                 </div>
+
+                <div id="puestos" class="form-text hidden">Debe ingresar los puestos delvehivulo</div>
               </div>
+              
               <div class="col-md-4 mb-1">
                {/* <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -2408,6 +2498,8 @@ export const ModalRcv = (props) => {
                     ref={txtAño}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="anio"
+                    onBlur={validarInput}
                     onChange={(e) => {
                       validaSoloNumero(e);
                       let valor = e.target.value;
@@ -2429,6 +2521,8 @@ export const ModalRcv = (props) => {
                     }}
                   />
                 </div>
+          <div id="anio" class="form-text hidden">Debe ingresar año del vehiculo</div>
+
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2443,12 +2537,16 @@ export const ModalRcv = (props) => {
                     ref={txtSerMotor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="serialM"
+              onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(3); // Asegúrate de que esta línea esté formateada correctamente
                     }}
                   />
                 </div>
+          <div id="serialM" class="form-text hidden">Debe ingresar serial del motor</div>
+
               </div>
               <div class="col-md-4 mt-2 mb-1">
                {/*<div class="input-group input-group-sm mb-2">
@@ -2554,12 +2652,16 @@ export const ModalRcv = (props) => {
                     ref={txtColor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="colors"
+                    onBlur={validarInput}
                     onChange={(e) => {
                       validaSoloLetras(e);
                       e.target.value = e.target.value.toUpperCase();
                     }}
                   />
                 </div>
+          <div id="colors" class="form-text hidden">Debe ingresar color del vehiculo</div>
+
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2575,12 +2677,16 @@ export const ModalRcv = (props) => {
                     ref={txtSerCarroceria}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="carroceria"
+              onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(4);
                     }}
                   />
                 </div>
+          <div id="carroceria" class="form-text hidden">Debe ingresar serial de la carroceria</div>
+
               </div>
               <div class="col-md-4 mt-2 mb-1">
                  {/*<div class="input-group input-group-sm mb-2">
@@ -2695,12 +2801,16 @@ export const ModalRcv = (props) => {
                     ref={txtModelo}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="modelov"
+              onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(1);
                     }}
                   />
                 </div>
+          <div id="modelov" class="form-text hidden">Debe ingresar modelo del vehiculo</div>
+
               </div>
 
               <div class="col-md-4">
@@ -2716,12 +2826,16 @@ export const ModalRcv = (props) => {
                     ref={txtMarca}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
+                    name="marcav"
+                    onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(2);
                     }}
                   />
                 </div>
+          <div id="marcav" class="form-text hidden">Debe ingresar marca del vehiculo</div>
+
               </div>
 
               <div class="col-md-4">
@@ -2735,11 +2849,15 @@ export const ModalRcv = (props) => {
                     type="text"
                     class="form-control"
                     ref={txtPeso}
+                    name="pesov"
+                    onBlur={validarInput}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={handleInputMontoChange}
                   />
                 </div>
+          <div id="pesov" class="form-text hidden">Debe ingresar peso del vehiculo</div>
+
               </div>
 
               <div class="col-md-4">
@@ -2753,11 +2871,15 @@ export const ModalRcv = (props) => {
                     type="text"
                     class="form-control"
                     ref={txtCapTon}
+                    name="toneladas"
+                    onBlur={validarInput}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={handleInputMontoChange}
                   />
                 </div>
+          <div id="toneladas" class="form-text hidden">Debe ingresar capacidad de toneladas</div>
+
               </div>
             </div>
           </div>

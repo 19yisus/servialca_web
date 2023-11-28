@@ -396,6 +396,22 @@ export const ModalCertificadoMedico = (props) => {
     } else return false;
   };
 
+
+  const validarInput = (e) => {
+    console.log(e.target.name)
+    let item = document.getElementById(e.target.name);
+    if (!e.target.value || e.target.name === 'ced' && e.target.value.length < 8) {
+      console.log('1')
+      item.className -= ' form-text fw-bold hidden ';
+      item.className += ' form-text fw-bold visible ';
+    } else {
+      console.log('2')
+
+      item.className -= ' form-text fw-bold visible ';
+      item.className += ' form-text fw-bold hidden ';
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -443,117 +459,148 @@ export const ModalCertificadoMedico = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                  mostrar: false,
-                  titulo: "",
-                  texto: "",
-                  icono: "",
-                });
+                mostrar: false,
+                titulo: "",
+                texto: "",
+                icono: "",
+              });
           }}
         />
 
         <div className="col-md-12 row mx-auto">
-          <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Cedula:
-            </span>
-            <input type="hidden" ref={idCliente} />
-            <input type="hidden" ref={idMedico} />
-            <input type="hidden" ref={idCobertura} />
-            <select
-              class="form-select col-md-3"
-              ref={cmbNacionalidad}
-              aria-label="Default select example"
-            >
-              <option value="V-">V-</option>
-              <option value="E-">E-</option>
-              <option value="J-">J-</option>
-              <option value="G-">G-</option>
-            </select>
-            <input
-              maxLength={9}
-              type="text"
-              class="form-control"
-              ref={txtCedula}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              onChange={validaSoloNumero}
-            />
-            <button
-              type="button"
-              class="btn btn-success"
-              onClick={() =>
-                consultarCliente(
-                  cmbNacionalidad.current.value + txtCedula.current.value
-                )
-              }
-            >
-              <i class="fa fa-search"></i>
-            </button>
+          <div class=" col-md-4">
+            <div class="input-group input-group-sm ">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Cedula:
+              </span>
+              <input type="hidden" ref={idCliente} />
+              <input type="hidden" ref={idMedico} />
+              <input type="hidden" ref={idCobertura} />
+              <select
+                class="form-select col-md-3"
+                ref={cmbNacionalidad}
+                aria-label="Default select example"
+              >
+                <option value="V-">V-</option>
+                <option value="E-">E-</option>
+                <option value="J-">J-</option>
+                <option value="G-">G-</option>
+              </select>
+              <input
+                maxLength={9}
+                type="text"
+                class="form-control"
+                ref={txtCedula}
+                name="ced3"
+                onBlur={validarInput}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                onChange={validaSoloNumero}
+              />
+              <button
+                type="button"
+                class="btn btn-success"
+                onClick={() =>
+                  consultarCliente(
+                    cmbNacionalidad.current.value + txtCedula.current.value
+                  )
+                }
+              >
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <div id="ced3" class="form-text hidden pr-0"> Debe ingresar un cedula valida longitud(8-9).</div>
+
           </div>
           <div class=" col-md-7"></div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Nombres:
-            </span>
-            <input
-              type="text"
-              maxLength={25}
-              class="form-control"
-              onChange={(e) => {
-                e.target.value = e.target.value.toUpperCase();
-              }}
-              onKeyDown={validaSoloLetras}
-              ref={txtNombre}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-            />
+          <div class=" col-md-6">
+            <div class="input-group input-group-sm ">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Nombres:
+              </span>
+              <input
+                type="text"
+                maxLength={25}
+                class="form-control"
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
+                onKeyDown={validaSoloLetras}
+                ref={txtNombre}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="nom3"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="nom3" class="form-text hidden">Debe ingresar nombre </div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-6">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Apellidos:
-            </span>
-            <input
-              maxLength={25}
-              type="text"
-              class="form-control"
-              ref={txtApellido}
-              onChange={(e) => {
-                e.target.value = e.target.value.toUpperCase();
-               
-              }}
-              onKeyDown={validaSoloLetras}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-            />
+          <div class=" col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Apellidos:
+              </span>
+              <input
+                maxLength={25}
+                type="text"
+                class="form-control"
+                ref={txtApellido}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+
+                }}
+                onKeyDown={validaSoloLetras}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="ape3"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="ape3" class="form-text hidden">Debe ingresar apellido</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-4">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Fecha de Nacimiento:
-            </span>
-            <input
-              type="date"
-              class="form-control"
-              onChange={calcularEdad}
-              ref={txtFechaNaci}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-            />
+          <div class="col-md-4">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Fecha de Nacimiento:
+              </span>
+              <input
+                type="date"
+                class="form-control"
+                onChange={calcularEdad}
+                ref={txtFechaNaci}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="fechaNaci"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="fechaNaci" class="form-text hidden">Debe ingresar fecha de nacimiento</div>
+
           </div>
-          <div class="input-group input-group-sm mb-3 col-md-2">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Edad:
-            </span>
-            <input
-              maxLength={2}
-              type="text"
-              value={edad}
-              class="form-control text-right"
-              ref={txtEdad}
-              onChange={validaSoloNumero}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-            />
+          <div class="col-md-2">
+            <div class="input-group input-group-sm ">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Edad:
+              </span>
+              <input
+                maxLength={2}
+                type="text"
+                value={edad}
+                class="form-control text-right"
+                ref={txtEdad}
+                onChange={validaSoloNumero}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="edadC"
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="edadC" class="form-text hidden">Debe ingresar edad</div>
+
           </div>
+          
           <div class="input-group input-group-sm mb-3 col-md-3">
             <span class="input-group-text" id="inputGroup-sizing-sm">
               Tipo de Sangre:
