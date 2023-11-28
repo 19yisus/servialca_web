@@ -623,15 +623,28 @@ export const ModalRcv = (props) => {
   };
 
   const selecionarPrecio = async () => {
-    if (TxtTipoContrato.current.value === "") {
-      alert("No se puede consultar sin el contrato seleccionado");
+    if (valorSeleccionado.contrato_nombre === "") {
+      
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: "No se puede consultar sin el contrato seleccionado",
+        icono: "informacion",
+      })
       return false;
     }
 
-    if (cmbTipo.current.value === "") {
-      alert("No se puede consultar sin el tipo de contrato seleccionado");
+    if (valorSeleccionado.tipoVehiculo_nombre === "") {
+     
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: "No se puede consultar sin el tipo de vehiculo seleccionado",
+        icono: "informacion",
+      })
       return false;
     }
+
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarPrecio";
     setActivate(true);
     let bodyF = new FormData();
@@ -645,12 +658,23 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        txtDolar.current.value = response[0]["precio_monto"];
-        txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
-          2
-        );
-        setTipoContrato(response);
-        txtDolar.current.value(response.precio_monto);
+        console.log(response[0])
+        if(response[0]){
+          txtDolar.current.value = response[0]["precio_monto"];
+          txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
+            2
+          );
+          setTipoContrato(response);
+        } else{
+          setMensaje({
+            mostrar: true,
+            titulo: "Notificación",
+            texto: "No hay un registro de presio de para este tipo de vehiuvlo y su tipo contrato",
+            icono: "informacion",
+          })
+        }
+       
+      //  txtDolar.current.value(response.precio_monto);
       })
       .catch((error) => console.log("Precio: Falta uno de los parametros"));
   };
