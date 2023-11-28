@@ -311,19 +311,22 @@ export const ModalTransporte = (props) => {
   };
 
   const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
+    console.log(e.target.name);
+    let item = document.getElementById(e.target.name);
+    if (
+      !e.target.value ||
+      (e.target.name === "ced" && e.target.value.length < 8)
+    ) {
+      console.log("1");
+      item.className -= " form-text fw-bold hidden ";
+      item.className += " form-text fw-bold visible ";
     } else {
-      console.log('2')
+      console.log("2");
 
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
+      item.className -= " form-text fw-bold visible ";
+      item.className += " form-text fw-bold hidden ";
     }
-  }
+  };
 
   return (
     <Modal
@@ -386,29 +389,33 @@ export const ModalTransporte = (props) => {
         />
 
         <div className="col-md-12 row mx-auto">
-        <div class=" mb-1 col-md-12">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
-              Nombre:
-            </span>
-            <textarea
-              onKeyDown={handleChange(25)}
-              type="textarea"
-              disabled={
-                operacion === 1 ? false : operacion === 2 ? false : true
-              }
-              style={{ height: 40 }}
-              class="form-control"
-              ref={txtDescripcion}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
-              name="nom"
-              onChange={soloLetras}
-              onBlur={validarInput}
-            />
-             </div>
-          <div id="nom" class="form-text hidden">Debe ingresar nombre de la clase del vehiculo</div>
-
+          <div class=" mb-1 col-md-12">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text" id="inputGroup-sizing-sm">
+                Nombre:
+              </span>
+              <textarea
+                onKeyDown={handleChange(25)}
+                type="textarea"
+                disabled={
+                  operacion === 1 ? false : operacion === 2 ? false : true
+                }
+                maxLength={25}
+              
+                style={{ height: 40 }}
+                class="form-control"
+                ref={txtDescripcion}
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-sm"
+                name="nom"
+                onChange={soloLetras}
+                onBlur={validarInput}
+              />
+            </div>
+            <div id="nom" class="form-text hidden">
+              Debe ingresar nombre de la clase del vehiculo con una longitud de
+              (3 a 25 caracteres)
+            </div>
           </div>
         </div>
       </Modal.Body>
