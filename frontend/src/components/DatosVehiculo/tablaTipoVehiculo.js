@@ -37,12 +37,12 @@ function TablaTipoVehiculo() {
       backgroundColor: "#e70101bf",
       color: "white",
     },
-    {
+   /* {
       label: "Precio",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
-    },
+    },*/
     {
       label: "Estatus",
       textAlign: "center",
@@ -223,6 +223,7 @@ function TablaTipoVehiculo() {
     selecionarRegistros();
   };
   const selecionarRegistros = async () => {
+    setMostrar(false)
     let endpoint =
       op.conexion + "/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
     console.log(endpoint);
@@ -382,12 +383,12 @@ function TablaTipoVehiculo() {
                   >
                     {item.tipoVehiculo_nombre}
                   </TableCell>
-                  <TableCell
+                 {/* <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
                     {item.precio_monto}
-                  </TableCell>
+              </TableCell>*/}
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}

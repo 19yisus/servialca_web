@@ -52,7 +52,12 @@ class Con_tipo_vehiculo extends cls_tipo_vehiculo
 
 	public function ConsultarTipoVehiculo()
 	{
-		$resultado = $this->SearchByID($_GET["ID"]);
+		$resultado = $this->SearchByID($_GET["ID"],$_GET["sucursal"]);
+		Response($resultado, 200);
+	}
+
+	public function EliminarPrecio(){
+		$resultado = $this->DeletePrecio($_POST["ID_precio"]);
 		Response($resultado, 200);
 	}
 

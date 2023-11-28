@@ -39,9 +39,9 @@ abstract class cls_tipo_vehiculo extends cls_db
         }
       }
 
-      $sql = $this->db->prepare("INSERT INTO tipovehiculo(tipoVehiculo_nombre, tipoVehiculo_estatus)  VALUES(?,1)");
+      $sql = $this->db->prepare("INSERT INTO tipovehiculo(tipoVehiculo_nombre,tipoVehiculo_precio,sucursal_id,tipoVehiculo_estatus)  VALUES(?,?,?,1)");
 
-      $sql->execute([$this->nombre]);
+      $sql->execute([$this->nombre,$this->precio,$this->sucursal]);
 
       if ($sql->rowCount() > 0) {
         $this->id = $this->db->lastInsertId();
@@ -181,19 +181,17 @@ abstract class cls_tipo_vehiculo extends cls_db
   }
   protected function SearchBySucursal()
   {
-    $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_nombre = ?");
+    $sql = $this->db->prepare("SELECT * FROM tipovehiculo WHERE tipoVehiculo_estatus = 1 AND tipoVehiculo_nombre = ?");
     $sql->execute([$this->sucursal]);
     if ($sql->rowCount() > 0) return $sql->fetch(PDO::FETCH_ASSOC);
     else return [];
   }
   protected function GetAll($sucursal)
   {
-    $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*, precio.* FROM precio 
-        INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
-        INNER JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
-        " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
-        ORDER BY precio.precio_id ASC");
+    $sql = $this->db->prepare("SELECT tipovehiculo.* FROM tipovehiculo 
+        WHERE tipovehiculo.tipoVehiculo_estatus = 1 ORDER BY tipovehiculo.tipoVehiculo_id ASC");
 
+// " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
     $sql->execute();
 
     if ($sql->rowCount() > 0) {
@@ -213,7 +211,7 @@ abstract class cls_tipo_vehiculo extends cls_db
         }
       }
       $this->SearchBySucursal();
-      $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, sucursal_id, precio_monto)VALUES(?,?,?,?)");
+      $sql = $this->db->prepare("INSERT INTO precio(tipoVehiculo_id, tipoContrato_id, sucursal_id, precio_monto,estatus_precio)VALUES(?,?,?,?,1)");
       if ($sql->execute([$this->id, $this->idContrato, $this->sucursal, $this->precio])) {
         $this->id = $this->db->lastInsertId();
       }
@@ -248,16 +246,53 @@ abstract class cls_tipo_vehiculo extends cls_db
     }
   }
 
-  protected function SearchByID($id)
+  protected function SearchByID($id, $sucursal)
   {
-
-    $sql = $this->db->prepare("SELECT tipovehiculo.*, tipocontrato.*  FROM precio 
-    INNER JOIN tipovehiculo on tipovehiculo.tipoVehiculo_id = tipoVehiculo_id
-    INNER JOIN tipocontrato on tipocontrato.contrato_id = tipoContrato_id
-    WHERE tipoVehiculo_id = ?");
-    $sql->execute([$id]);
+    $sql = $this->db->prepare("SELECT 
+    precio.*,
+      sucursal.sucursal_nombre,
+      sucursal.sucursal_id,
+      tipocontrato.contrato_id,
+      tipocontrato.contrato_nombre,
+      tipovehiculo.tipoVehiculo_nombre
+  FROM
+      precio, sucursal, tipocontrato, tipovehiculo
+  WHERE
+      precio.tipoVehiculo_id = ? AND 
+      precio.sucursal_id = ? AND 
+      precio.estatus_precio = 1 AND 
+      sucursal.sucursal_id = precio.sucursal_id AND 
+      tipocontrato.contrato_id = precio.tipoContrato_id AND
+      tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id;");
+    $sql->execute([$id, $sucursal]);
     if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC);
     else return [];
+  }
+
+  protected function DeletePrecio($id)
+  {
+    try {
+      $sql = $this->db->prepare("UPDATE precio SET estatus_precio = $this->estatus WHERE precio_id = ?");
+      if ($sql->execute([$id])) {
+        $this->reg_bitacora([
+          'table_name' => "precio",
+          'des' => "Cambio de estatus de tipo contrato (id: $this->id)"
+        ]);
+        return [
+          "data" => [
+            "res" => "contrato desactivado"
+          ],
+          "code" => 200
+        ];
+      }
+    } catch (PDOException $e) {
+      return [
+        "data" => [
+          "res" => "Error de consulta: " . $e->getMessage()
+        ],
+        "code" => 400
+      ];
+    }
   }
 
   protected function SearchByPrecio($contrato, $tipo, $sucursal)

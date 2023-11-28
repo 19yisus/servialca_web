@@ -199,11 +199,26 @@ export const habilitarcampo = (campo) => {
 };
 
 export function formatoMonto(val) {
-  var valor = "";
-  if (val.length == 1 && val !== "") valor = val + ",00";
-  else valor = val;
-  return valor;
+  if (val === null) {
+    return ''; // Si el valor es null, retorna un string vacío
+  }
+
+  // Verificar si el valor es un número válido
+  const parsedValue = parseFloat(val);
+  if (isNaN(parsedValue)) {
+    return "0,00"; // Si no es un número, devolver valor predeterminado
+  }
+
+  // Formatear el número a un formato de monto con dos decimales y separadores de miles
+  const formattedValue = parsedValue.toLocaleString("es-VE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return formattedValue;
 }
+
+
 
 export function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

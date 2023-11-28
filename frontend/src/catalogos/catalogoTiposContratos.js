@@ -21,6 +21,7 @@ const CatalogoTiposContratos = props => {
 
     let op = require('../modulos/datos');
     let token = localStorage.getItem('jwtToken');
+    const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
 
     const btnCancela = useRef();
     const [mostrar, setMostrar] = useState(false);
@@ -34,11 +35,11 @@ const CatalogoTiposContratos = props => {
         titulo: "",
         texto: "",
         icono: "",
-      });
+    });
     const headCells = [
         { id: 'Cedula', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-code'> Codigo</i>, textAlign: 'center', fontFamily: 'georgia' },
         { id: 'Nombre', label: <i style={{ color: "#1793dd", textAlign: 'center' }} className='fas fa-signature'> Descripción</i>, textAlign: 'center', fontFamily: 'georgia' },
-       
+
     ]
 
     const {
@@ -57,10 +58,10 @@ const CatalogoTiposContratos = props => {
                     return items;
                 } else {
                     return items.filter(x => {
-                         if ( x.contrato_id.includes(target.value)
-                            ||  x.contrato_nombre.toLowerCase().includes(target.value.toLowerCase()) ) {
+                        if (x.contrato_id.includes(target.value)
+                            || x.contrato_nombre.toLowerCase().includes(target.value.toLowerCase())) {
                             return x;
-                        } 
+                        }
                     });
                 }
             }
@@ -73,35 +74,35 @@ const CatalogoTiposContratos = props => {
 
         console.log(endpoint)
         setActivate(true)
-    
-    
-    
+
+
+
         //setLoading(false);
-    
+
         let bodyF = new FormData()
-    
-       // bodyF.append("ID", user_id)
-    
-    
+
+        // bodyF.append("ID", user_id)
+
+
         await fetch(endpoint, {
-          method: "POST",
-         // body: bodyF
+            method: "POST",
+            // body: bodyF
         }).then(res => res.json())
-          .then(response => {
-    
-    
-            setActivate(false)
-            console.log(response)
-            setRecords(response)    
-    
-    
-    
-          })
-          .catch(error =>
-            setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-          )
-    
-      };
+            .then(response => {
+
+
+                setActivate(false)
+                console.log(response)
+                setRecords(response)
+
+
+
+            })
+            .catch(error =>
+                setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
+            )
+
+    };
 
 
     const blanquear = () => {
@@ -124,14 +125,49 @@ const CatalogoTiposContratos = props => {
         blanquear();
         props.onHideCancela();
     }
+    const actualizarTiposContratos = async (value) => {
+        let endpoint = op.conexion + "/tipo_vehiculo/precio";
+        let bodyF = new FormData();
+        setActivate(true);
+
+
+        bodyF.append("ID", props.idTipo.tipoVehiculo_id);
+        bodyF.append("precio", props.idTipo.tipoVehiculo_precio);
+        bodyF.append("idContrato", value.contrato_id);
+        bodyF.append("Sucursal", idsucursal);
+
+        bodyF.append("token", token);
+        await fetch(endpoint, {
+            method: "POST",
+            body: bodyF,
+        })
+            .then((res) => res.json())
+            .then((response) => {
+                setActivate(false);
+                props.render(props.idTipo.tipoVehiculo_id);
+            })
+            .catch((error) =>
+                setMensaje({
+                    mostrar: true,
+                    titulo: "Notificación",
+                    texto: error.res,
+                    icono: "informacion",
+                })
+            );
+
+       
+    };
 
 
     const seleccionarClase = (index) => (event) => {
         var values = records[index];
-        
-      
-        blanquear();
-        props.onHideCatalogo(values);
+        if (props.operacion === 1) {
+            props.onHideCatalogo(values);
+        } else {
+            console.log(values)
+            actualizarTiposContratos(values)
+        }
+
 
 
     };
@@ -153,7 +189,7 @@ const CatalogoTiposContratos = props => {
                 <Modal.Title style={{ color: "#fff" }}>Seleccionar Tipo de Contrato.</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {/*   <Mensaje titulo={titulo} mensaje={msg}
+                {/*   <Mensaje titulo={titulo} mensaje={msg}
                     show={mostrar}
                     onHide={handleCloseMensa} /> */}
                 <Dimmer active={activate} inverted>
@@ -162,8 +198,8 @@ const CatalogoTiposContratos = props => {
                 <div className="col-md-12" style={{ marginBottom: "10px" }}>
                     <div className="row">
                         <div className="col-md-4">
-                        <input type="text" className=" col-md-12 form-control form-control-sm rounded-pill"  onChange={handleSearch} placeholder="Buscar" />
-                            
+                            <input type="text" className=" col-md-12 form-control form-control-sm rounded-pill" onChange={handleSearch} placeholder="Buscar" />
+
                         </div>
                     </div>
                 </div>
@@ -177,7 +213,7 @@ const CatalogoTiposContratos = props => {
                                     <TableRow key={item.idclaseminas} style={{ padding: "0" }} onClick={seleccionarClase(index)}>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.contrato_id}</TableCell>
                                         <TableCell style={{ fontSize: "10px", textAlign: "center", verticalAlign: "middle" }}>{item.contrato_nombre}</TableCell>
-                                        
+
                                     </TableRow>
 
                                 ))

@@ -41,6 +41,12 @@ export const ModalTipoVehiculo = (props) => {
       textAlign: "center",
     },
     {
+      id: "ced",
+      color: "rgba(5, 81, 130, 1)",
+      label: "Sucursal",
+      textAlign: "center",
+    },
+    {
       id: "ape",
       color: "rgba(5, 81, 130, 1)",
       label: "Opcion",
@@ -95,7 +101,7 @@ export const ModalTipoVehiculo = (props) => {
   const txtFechaNaci = useRef();
   const txtDescripcion = useRef();
   const [records, setRecords] = useState([]);
-
+  const [idTipo,setIdTipo] = useState()
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -180,16 +186,16 @@ export const ModalTipoVehiculo = (props) => {
   };
 
   const actualizarTiposContratos = async (id) => {
-    let endpoint;
+    let endpoint = op.conexion + "/tipo_vehiculo/precio";
     let bodyF = new FormData();
     setActivate(true);
     for (let i = 0; i < records.length; i++) {
-      if (operacion === 1) {
-        endpoint = op.conexion + "/tipo_vehiculo/precio";
-      }
+          
       bodyF.append("ID", id);
       bodyF.append("precio", txtDolar.current.value);
       bodyF.append("idContrato", records[i].contrato_id);
+      bodyF.append("Sucursal", idsucursal);
+
       bodyF.append("token", token);
       await fetch(endpoint, {
         method: "POST",
@@ -212,10 +218,11 @@ export const ModalTipoVehiculo = (props) => {
     setMensaje({
       mostrar: true,
       titulo: "Exito.",
-      texto: "peracion Exitosa",
+      texto: "Operacion Exitosa",
       icono: "exito",
     });
   };
+  
 
   const actualizarCertificado = async () => {
     let endpoint;
@@ -227,7 +234,15 @@ export const ModalTipoVehiculo = (props) => {
       endpoint = op.conexion + "/tipo_vehiculo/registrar";
     }
 
+    if(operacion === 2){
+      endpoint = op.conexion + "/tipo_vehiculo/actualizar";
+      bodyF.append("ID", values.tipoVehiculo_id);
+    }
+
     bodyF.append("tipoVehiculo_nombre", txtDescripcion.current.value);
+    bodyF.append("precio", txtDolar.current.value);
+    bodyF.append("Sucursal", idsucursal);
+        
     bodyF.append("token", token);
     await fetch(endpoint, {
       method: "POST",
@@ -237,7 +252,28 @@ export const ModalTipoVehiculo = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        actualizarTiposContratos(response.id);
+        console.log("aqui")
+        if(operacion === 1){
+          if(records.length > 0){
+            actualizarTiposContratos(response.id);
+
+          } else{
+            setMensaje({
+              mostrar: true,
+              titulo: "Exito.",
+              texto: "Operacion Exitosa",
+              icono: "exito",
+            });
+          }
+
+        } else {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: "Operacion Exitosa",
+            icono: "exito",
+          });
+        }
       })
       .catch((error) =>
         setMensaje({
@@ -272,6 +308,7 @@ export const ModalTipoVehiculo = (props) => {
   };
 
   const blanquear = () => {
+    setRecords([])
     setValues({
       ced: "",
       nombre: "",
@@ -311,7 +348,7 @@ export const ModalTipoVehiculo = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela();
+    props.render();
   };
 
   function soloLetras(event) {
@@ -362,6 +399,40 @@ export const ModalTipoVehiculo = (props) => {
     } else return false;
   };
 
+  const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
+  
+  const selecionarRegistros = async (id) => {
+    let endpoint = op.conexion + "/tipo_vehiculo/ConsultarTipoVehiculo?ID=" + id + "&sucursal=" + idsucursal;
+    setMostrar(false)
+    console.log(endpoint);
+    setActivate(true);
+
+    //setLoading(false);
+
+    await fetch(endpoint, {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
+        setRecords(response);
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
+  useEffect(() => {
+   
+  }, []);
+    
+
   const selecionarTipo = async (id) => {
     let endpoint = op.conexion + "/tipo_vehiculo/ConsultarUno?ID=" + id;
     console.log(endpoint);
@@ -387,7 +458,7 @@ export const ModalTipoVehiculo = (props) => {
           : 0;
         let bs = parseFloat(dolarbcv);
         let totalbs = $ * bs;
-
+        setIdTipo(response)
         txtDescripcion.current.value = response.tipoVehiculo_nombre;
         txtDolar.current.value = response.tipoVehiculo_precio
           ? formatMoneda(
@@ -407,6 +478,8 @@ export const ModalTipoVehiculo = (props) => {
           2
         );
         setValues(response);
+        selecionarRegistros(response.tipoVehiculo_id);
+
       })
       .catch((error) =>
         setMensaje({
@@ -444,17 +517,42 @@ export const ModalTipoVehiculo = (props) => {
   const gestinarTipo = () => {
     setMostrar(true);
   };
-  const elimminarrTipo = (id) => (e) => {
+  const elimminarrTipo = (id) => async (e) => {
     e.preventDefault();
-
-    let array = [];
-
-    for (let i = 0; i < records.length; i++) {
-      if (id !== records[i].contrato_id) {
-        array.push(records[i]);
-      }
-    }
-    setRecords(array);
+    
+    let endpoint = op.conexion + "/tipo_vehiculo/EliminarPrecio";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID_precio", id);
+    bodyF.append("Estatus", "0");
+    bodyF.append("token", token);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setMensaje({
+          mostrar: true,
+          titulo: "Notficación.",
+          texto: "Estatus Modificado",
+          icono: "exito",
+        });
+        console.log(response);
+        let id = idTipo.tipoVehiculo_id
+        selecionarRegistros(id)
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+   
+    // setRecords(array);
   };
 
   const validarInput = (e) => {
@@ -487,6 +585,7 @@ export const ModalTipoVehiculo = (props) => {
         if (props.operacion !== 1) {
           selecionarTipo(props.idTipoVehiculo);
         }
+       
       }}
     >
       <Modal.Header className="bg-danger">
@@ -512,6 +611,9 @@ export const ModalTipoVehiculo = (props) => {
         </Dimmer>
         <CatalogoTiposContratos
           show={mostrar}
+          operacion={operacion}
+          render={selecionarRegistros}
+          idTipo={idTipo}
           onHideCancela={() => {
             setMostrar(false);
           }}
@@ -566,7 +668,7 @@ export const ModalTipoVehiculo = (props) => {
               disabled={
                 operacion === 1 ? false : operacion === 2 ? false : true
               }
-              maxLength={4}
+              maxLength={5}
               class="form-control text-right"
               name="dolar"
               ref={txtDolar}
@@ -632,6 +734,17 @@ export const ModalTipoVehiculo = (props) => {
 
                       <TableCell
                         className="align-baseline"
+                        style={{
+                          textAlign: "center",
+                          alignItems: "center",
+                          width: "270px",
+                        }}
+                      >
+                        {item.sucursal_nombre}
+                      </TableCell>                      
+
+                      <TableCell
+                        className="align-baseline"
                         style={{ textAlign: "center", alignItems: "center" }}
                       >
                         {
@@ -639,7 +752,7 @@ export const ModalTipoVehiculo = (props) => {
                         }{" "}
                         <button
                           className="btn btn-sm mx-1 btn-danger rounded-circle"
-                          onClick={elimminarrTipo(item.contrato_id)}
+                          onClick={elimminarrTipo(item.precio_id)}
                         >
                           <i className="fa fa-trash"></i>{" "}
                         </button>
