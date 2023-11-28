@@ -1518,6 +1518,8 @@ export const ModalRcv = (props) => {
                   <input type="hidden" ref={idTitular} />
                   <input type="hidden" ref={idVehiculo} />
                   <input type="hidden" ref={idCobertura} />
+
+                  {tipoContrato && Array.isArray(tipoContrato) && tipoContrato.length > 0 && (
                   <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
@@ -1537,7 +1539,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Tipo de Contrato" variant="outlined" />
                     )}
-                  />
+                  />)}
                   {/*<span class="input-group-text" id="inputGroup-sizing-sm">
                     Tipo de contrato:{" "}
                   </span>
@@ -1868,26 +1870,27 @@ export const ModalRcv = (props) => {
                     />
                   </div>*/}
 
-                  <Autocomplete
-                    value={valorSeleccionado}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                       
-                        console.log(newValue.estado_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        estado_nombre: newValue.estado_nombre,
-                      });
-                      }
-                    }}
-                    options={estados}
-                    sx={{ width: '100%' }} 
-                    size="small"
-                    getOptionLabel={(option) => option.estado_nombre}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Estado" variant="outlined" />
-                    )}
-                  />
+{estados && Array.isArray(estados) && estados.length > 0 && (
+  <Autocomplete
+    value={valorSeleccionado}
+    onChange={(event, newValue) => {
+      if (newValue) {
+        console.log(newValue.estado_nombre);
+        setValorSeleccionado({
+          ...valorSeleccionado,
+          estado_nombre: newValue.estado_nombre,
+        });
+      }
+    }}
+    options={estados}
+    sx={{ width: '100%' }}
+    size="small"
+    getOptionLabel={(option) => option.estado_nombre}
+    renderInput={(params) => (
+      <TextField {...params} label="Estado" variant="outlined" />
+    )}
+  />
+)}
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
                {/*   <div className="input-group input-group-sm mb-2">
@@ -1957,7 +1960,7 @@ export const ModalRcv = (props) => {
                       }
                     />
                      </div>*/}
-
+     {acesor && Array.isArray(acesor) && acesor.length > 0 && (
 <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
@@ -1978,7 +1981,7 @@ export const ModalRcv = (props) => {
                       <TextField {...params} label="Acesor" variant="outlined" />
                     )}
                   />
-                 
+                 )}
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
                    {/*  <div class="input-group input-group-sm mb-2 ">
@@ -2047,6 +2050,8 @@ export const ModalRcv = (props) => {
                       }
                     />
                   </div>*/}
+     {sucursal && Array.isArray(sucursal) && sucursal.length > 0 && (
+
                   <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
@@ -2066,7 +2071,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Sucursal" variant="outlined" />
                     )}
-                  />
+                  />)}
                 </div>
                 <div class="col-md-6">
                    {/*<div class="input-group input-group-sm mb-2 ">
@@ -2138,6 +2143,9 @@ export const ModalRcv = (props) => {
                     />
                   </div>*/}
 
+     {transporte && Array.isArray(transporte) && transporte.length > 0 && (
+
+
 <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
@@ -2157,7 +2165,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Linea de Transporte" variant="outlined" />
                     )}
-                  />
+                  />)}
                 </div>
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
@@ -2363,8 +2371,10 @@ export const ModalRcv = (props) => {
                     }
                   />
                 </div>*/}
+     {uso && Array.isArray(uso) && uso.length > 0 && (
+
                  <Autocomplete
-                    value={valorSeleccionado}
+                   value={valorSeleccionado}
                     onChange={(event, newValue) => {
                       if (newValue) {
                        
@@ -2382,7 +2392,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Uso Vehiculo" variant="outlined" />
                     )}
-                  />
+                  />)}
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2508,8 +2518,10 @@ export const ModalRcv = (props) => {
                     }
                   />
                 </div>*/}
+     {clase && Array.isArray(clase) && clase.length > 0 && (
+
                 <Autocomplete
-                    value={valorSeleccionado}
+                   value={valorSeleccionado}
                     onChange={(event, newValue) => {
                       if (newValue) {
                        
@@ -2527,7 +2539,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Clase Vehiculo" variant="outlined" />
                     )}
-                  />
+                  />)}
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2646,6 +2658,8 @@ export const ModalRcv = (props) => {
                     }
                   />
                 </div>*/}
+     {tipo && Array.isArray(tipo) && tipo.length > 0 && (
+
                  <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
@@ -2665,7 +2679,7 @@ export const ModalRcv = (props) => {
                     renderInput={(params) => (
                       <TextField {...params} label="Tipo Vehiculo" variant="outlined" />
                     )}
-                  />
+                  />)}
               </div>
 
               <div class="col-md-4">
