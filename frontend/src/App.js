@@ -49,7 +49,7 @@ function App(props) {
 
   function startIdleTimer() {
     currSeconds++;
-
+  
     if (currSeconds === 180 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
@@ -58,6 +58,7 @@ function App(props) {
         texto: "La Sesión expirará en 10 segundos ",
       });
     }
+  
     if (currSeconds === 1900 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
@@ -66,19 +67,10 @@ function App(props) {
         texto: "La Sesión expirará en 20 segundos ",
       });
     }
-      window.location.href = "/login";
-      setMensaje({
-        mostrar: false,
-        icono: "",
-        titulo: "",
-        texto: "",
-      });
-    }
-
-    if (currSeconds > 180 && pathname !== "/login" && pathname !== "/") {
-      // Agregar lógica para manejar el tiempo después de 180 segundos
+  
+    if (currSeconds >= 180 && pathname !== "/login" && pathname !== "/") {
       const tiempoDespuesDe180 = currSeconds - 180;
-
+  
       if (tiempoDespuesDe180 % 10 === 0) {
         setMensaje({
           mostrar: true,
@@ -87,6 +79,17 @@ function App(props) {
           texto: `La Sesión expirará en ${tiempoDespuesDe180} segundos `,
         });
       }
+    }
+  
+    // Esta sección debería estar dentro de un bloque condicional
+    if (currSeconds >= 2000 && pathname !== "/login" && pathname !== "/") {
+      window.location.href = "/login";
+      setMensaje({
+        mostrar: false,
+        icono: "",
+        titulo: "",
+        texto: "",
+      });
     }
   }
 
