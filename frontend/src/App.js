@@ -27,7 +27,7 @@ function App(props) {
   function resetTimer() {
     clearInterval(timer);
     currSeconds = 0;
-    timer = setInterval(startIdleTimer, 1000);
+   // timer = setInterval(startIdleTimer, 1000);
   }
 
   function handleNoClick() {
