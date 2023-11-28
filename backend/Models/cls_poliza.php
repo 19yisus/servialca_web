@@ -817,7 +817,7 @@ abstract class cls_poliza extends cls_db
 				$this->invalidez,
 				$this->medico,
 				$this->grua,
-				$this->monto
+				$this->apov
 			])
 		) {
 			$this->cobertura = $this->db->lastInsertId();

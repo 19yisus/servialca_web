@@ -65,6 +65,7 @@ export const ModalUsuarios = (props) => {
   const check16 = useRef();
   const check17 = useRef();
   const check18 = useRef();
+  const check19 = useRef();
 
   const [sucursales, setSucursales] = useState();
   const [roles, setRoles] = useState();
@@ -196,6 +197,7 @@ export const ModalUsuarios = (props) => {
     let chk16 = check16.current.checked ? "1" : "0";
     let chk17 = check17.current.checked ? "1" : "0";
     let chk18 = check18.current.checked ? "1" : "0";
+    let chk19 = check19.current.checked ? "1" : "0";
     let permiso =
       chk +
       chk1 +
@@ -215,7 +217,8 @@ export const ModalUsuarios = (props) => {
       chk15 +
       chk16 +
       chk17 +
-      chk18;
+      chk18 +
+      chk19;
 
     //setLoading(false);
 
@@ -328,7 +331,7 @@ export const ModalUsuarios = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-        
+
         txtUsuario.current.value = response.usuario_usuario;
         txtPass.current.value = response.usuario_clave;
 
@@ -441,6 +444,11 @@ export const ModalUsuarios = (props) => {
           : false;
         check18.current.checked = response.permisos
           ? response.permisos.substring(18, 19) === "1"
+            ? true
+            : false
+          : false;
+        check19.current.checked = response.permisos
+          ? response.permisos.substring(19, 20) === "1"
             ? true
             : false
           : false;
@@ -1035,6 +1043,16 @@ export const ModalUsuarios = (props) => {
                 id="flexCheckDefault"
               />
               <label class="form-check-label">Bitacora</label>
+            </div>
+            <div class="form-check col-md-4 mx-auto pl-5 mb-1">
+              <input
+                class="form-check-input"
+                ref={check19}
+                type="checkbox"
+                value="Asesor"
+                id="flexCheckDefault"
+              />
+              <label class="form-check-label">Asesor</label>
             </div>
           </div>
         </div>

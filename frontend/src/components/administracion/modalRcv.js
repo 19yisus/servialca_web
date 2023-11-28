@@ -1220,8 +1220,14 @@ export const ModalRcv = (props) => {
         txtApellido.current.value = response[0].cliente_apellido;
         txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
         var telefono = response[0].cliente_telefono.split("-");
-        cmbTelefono.current.value = telefono[0] + "-";
-        txtTelefono.current.value = telefono[1];
+        if (telefono[0] != "" && telefono[1] != "") {
+          cmbTelefono.current.value = telefono[0] + "-";
+          txtTelefono.current.value = telefono[1];
+        } else {
+          cmbTelefono.current.value = "0414-";
+          txtTelefono.current.value = "";
+        }
+
         txtCorreo.current.value = response[0].cliente_correo;
         txtDirec.current.value = response[0].cliente_direccion;
 
@@ -1741,7 +1747,7 @@ export const ModalRcv = (props) => {
                   </button>
 
                   <div id="cedcon" class="form-text hidden">
-                    Debe ingresar un cedula valida longitud(8-9).
+                    Debe ingresar caracteres númericos con una longitud(8-9)
                   </div>
                 </div>
                 <div class="col-md-3"></div>
@@ -1785,8 +1791,8 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                   <div id="nomtac" class="form-text hidden">
-                    "Solo puedes ingresar caracteres alfabéticos de 3 a 25
-                    caracteres."
+                    Solo puedes ingresar caracteres alfabéticos con una
+                    longitut(3-25)
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -1810,7 +1816,8 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                   <div id="apecon" class="form-text hidden">
-                    Debe ingresar nombre del contratante
+                    Solo puedes ingresar caracteres alfabéticos con una
+                    longitut(3-25)
                   </div>
                 </div>
                 <div class="col-md-5">
@@ -1842,7 +1849,7 @@ export const ModalRcv = (props) => {
                     />
                   </div>
                   <div id="telfcon" class="form-text hidden">
-                    Debe ingresar telefono
+                    Debe ingresar caracteres númericos con una longitud(8-9).
                   </div>
                 </div>
                 <div class="col-md-4">
