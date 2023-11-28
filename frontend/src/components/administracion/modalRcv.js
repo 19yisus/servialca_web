@@ -916,8 +916,9 @@ export const ModalRcv = (props) => {
     });
   };
   // Para poder la fecha en rcv
-  const fechaSistema = moment();
-  const fechaHasta = fechaSistema.clone().add(1, "year");
+
+  let fechaSistema = moment();
+  let fechaHasta = fechaSistema.clone().add(1, "year");
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
@@ -1246,6 +1247,56 @@ export const ModalRcv = (props) => {
   console.group("ssssssssssss");
   console.log(valorSeleccionado);
   console.groupEnd();
+  
+  function validarIguales(e) {
+    if (e == 1) {
+      if (txtModelo.current.value == txtMarca.current.value) {
+        txtModelo.current.value = "";
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: "El modelo del vehiculo no puede ser igual a la marca",
+          icono: "informacion",
+        });
+      }
+    }
+    if (e == 2) {
+      if (txtMarca.current.value == txtModelo.current.value) {
+        txtMarca.current.value = "";
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: "La marca del vehiculo no puede ser igual al modelo",
+          icono: "informacion",
+        });
+      }
+    }
+    if (e == 3) {
+      if (txtSerMotor.current.value == txtSerCarroceria.current.value) {
+        txtSerMotor.current.value = "";
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto:
+            "El serial del motor no puede ser igual al serial de carroceria",
+          icono: "informacion",
+        });
+      }
+    }
+    if (e == 4) {
+      if (txtSerCarroceria.current.value == txtSerMotor.current.value) {
+        txtSerCarroceria.current.value = "";
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto:
+            "El serial del carroceria no puede ser igual al serial del motor",
+          icono: "informacion",
+        });
+      }
+    }
+  }
+
 
   const [selectedContrato, setSelectedContrato] = useState(null);
 
@@ -1257,7 +1308,6 @@ export const ModalRcv = (props) => {
       contrato_nombre: newValue.contrato_nombre,
     });
   };
-
   return (
     <Modal
       {...props}
@@ -1574,7 +1624,6 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaSistema.format("YYYY-MM-DD")}
-                    max={fechaSistema.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>
@@ -1591,7 +1640,6 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     defaultValue={fechaHasta.format("YYYY-MM-DD")}
-                    max={fechaHasta.format("YYYY-MM-DD")}
                   />
                 </div>
               </div>
@@ -2385,9 +2433,10 @@ export const ModalRcv = (props) => {
                     ref={txtSerMotor}
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
-                    onChange={(e) =>
-                      (e.target.value = e.target.value.toUpperCase())
-                    }
+                    onChange={(e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                      validarIguales(3); // Asegúrate de que esta línea esté formateada correctamente
+                    }}
                   />
                 </div>
               </div>
@@ -2516,6 +2565,7 @@ export const ModalRcv = (props) => {
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
+                      validarIguales(4);
                     }}
                   />
                 </div>
@@ -2633,6 +2683,7 @@ export const ModalRcv = (props) => {
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
+                      validarIguales(1);
                     }}
                   />
                 </div>
@@ -2653,6 +2704,7 @@ export const ModalRcv = (props) => {
                     aria-describedby="inputGroup-sizing-sm"
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
+                      validarIguales(2);
                     }}
                   />
                 </div>

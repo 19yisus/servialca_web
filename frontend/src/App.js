@@ -37,7 +37,7 @@ function App(props) {
       titulo: "",
       texto: "",
     });
-    resetTimer();
+    resetTimer(); // Reiniciar el temporizador cuando se hace clic en "No"
   }
 
   window.onload = resetTimer;
@@ -58,7 +58,6 @@ function App(props) {
         texto: "La Sesión expirará en 10 segundos ",
       });
     }
-
     if (currSeconds === 1900 && pathname !== "/login" && pathname !== "/") {
       setMensaje({
         mostrar: true,
@@ -67,8 +66,6 @@ function App(props) {
         texto: "La Sesión expirará en 20 segundos ",
       });
     }
-
-    if (currSeconds === 200 && pathname !== "/login" && pathname !== "/") {
       window.location.href = "/login";
       setMensaje({
         mostrar: false,
@@ -76,6 +73,20 @@ function App(props) {
         titulo: "",
         texto: "",
       });
+    }
+
+    if (currSeconds > 180 && pathname !== "/login" && pathname !== "/") {
+      // Agregar lógica para manejar el tiempo después de 180 segundos
+      const tiempoDespuesDe180 = currSeconds - 180;
+
+      if (tiempoDespuesDe180 % 10 === 0) {
+        setMensaje({
+          mostrar: true,
+          icono: "error",
+          titulo: "Alerta",
+          texto: `La Sesión expirará en ${tiempoDespuesDe180} segundos `,
+        });
+      }
     }
   }
 

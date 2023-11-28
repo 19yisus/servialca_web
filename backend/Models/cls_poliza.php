@@ -87,23 +87,31 @@ abstract class cls_poliza extends cls_db
 		if (empty($this->fechaInicio)) {
 			$this->fechaInicio = date("Y-m-d");
 		}
-		if (empty($this->fechaVencimiento)) {
-			$fechaInicioObj = new DateTime($this->fechaInicio);
-			$fechaInicioObj->modify('+1 year');
-			$this->fechaVencimiento = $fechaInicioObj->format('Y-m-d');
+		if (isset($this->fechaInicio) && isset($this->fechaVencimiento)) {
+			$result = $this->GetOne($this->id);
+			$fechaActual = date("Y-m-d H:i:s");
+
+			if (isset($result[0]["poliza_fechaVencimiento"])) {
+				$fechaVencimiento = $result[0]["poliza_fechaVencimiento"];
+
+				// Extraer el año de la fecha actual y la fecha de vencimiento
+				$anioActual = date("Y");
+				$anioVencimiento = date("Y", strtotime($fechaVencimiento));
+
+				// Comparar los años
+				if ($anioVencimiento > $anioActual) {
+					return [
+						"data" => [
+							"res" => "Este contrato aun no esta vencido",
+							"code" => 400
+						],
+						"code" => 400
+					];
+				}
+			}
 		}
-		// else {
-		// 	$fechaVenicimiento = strtotime($this->fechaVencimiento);
-		// 	$fechaActual = strtotime(date("Y-m-d"));
-		// 	if ($fechaActual > $fechaVenicimiento) {
-		// 		return [
-		// 			'data' => [
-		// 				'res' => "No es posible renovar, aun no se vence el contrato"
-		// 			],
-		// 			'code' => 400
-		// 		];
-		// 	}
-		// }
+
+
 		$this->Security();
 		$this->SearchByUsuario();
 		$this->SearchBySucursal();
@@ -1775,5 +1783,20 @@ abstract class cls_poliza extends cls_db
 		}
 
 		return $resultado;
+	}
+	public function GetAllEncargado($id, $desde, $hasta)
+	{
+		$sql = $this->db->prepare("SELECT usuario.usuario_nombre AS nombre_usuario, sucursal.sucursal_nombre AS nombre_sucursal, 
+		SUM(debitocredito.nota_monto) AS total_monto_notas, 
+		COUNT(DISTINCT debitocredito.nota_id) AS cantidad_poliza_id FROM usuario 
+		INNER JOIN poliza ON usuario.usuario_id = poliza.usuario_id 
+		INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id 
+		INNER JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
+		WHERE debitocredito.sucursal_id= ? AND  debitocredito.nota_fecha BETWEEN ? AND ? 
+		AND usuario.usuario_id > 56
+		GROUP BY usuario.usuario_id, sucursal.sucursal_nombre, usuario.usuario_nombre");
+		$sql->execute([$id, $desde, $hasta]);
+		$dato = $sql->fetchAll(PDO::FETCH_ASSOC);
+		return $dato;
 	}
 }

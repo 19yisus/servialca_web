@@ -150,4 +150,9 @@ class Con_poliza extends cls_poliza
         $resultado = $this->findContrato();
         Response($resultado, 200);
     }
+
+    public function ConsultarEncargado(){
+        $resultado = $this->GetAllEncargado($_POST["Sucursal"],$_POST["Desde"],$_POST["Hasta"]);
+        Response($resultado,200);
+    }
 }

@@ -9,7 +9,7 @@ import {
   formatoMonto,
   validaNumeroTelefono,
   validaEmail,
-  validaSoloLetras
+  validaSoloLetras,
 } from "../../util/varios";
 
 import axios from "axios";
@@ -23,7 +23,6 @@ export const ModalConsultarPoliza = (props) => {
   let op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
 
-
   const txtNContrato = useRef();
   const txtNombre = useRef();
   const txtTipoContrato = useRef();
@@ -33,7 +32,7 @@ export const ModalConsultarPoliza = (props) => {
   const cmbNacionalidad = useRef();
 
   const cmbTelefono = useRef();
-  const txtTelefono = useRef()
+  const txtTelefono = useRef();
   const txtDireccion = useRef();
   const txtCorreo = useRef();
 
@@ -85,14 +84,10 @@ export const ModalConsultarPoliza = (props) => {
 
   const btnAcepta = useRef();
 
-
   const [activate, setActivate] = useState(false);
   const [mostrar, setMostrar] = useState(false);
 
   const [operacion, setOperacion] = useState(0);
-
-
-
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
 
@@ -111,36 +106,30 @@ export const ModalConsultarPoliza = (props) => {
     } else return false; //alert(e.which);
   };
 
-
   const salir = () => {
     props.onHideCancela();
-   blanquear()
+    blanquear();
   };
-
-
 
   const actualizarCertificado = async () => {
     let endpoint = op.conexion + "/sucursal/registrar";
-    console.log(endpoint)
-    setActivate(true)
-
-
+    console.log(endpoint);
+    setActivate(true);
 
     //setLoading(false);
 
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
-    bodyF.append("Nombre", txtDescripcion.current.value)
+    bodyF.append("Nombre", txtDescripcion.current.value);
 
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
 
         setMensaje({
           mostrar: true,
@@ -148,18 +137,16 @@ export const ModalConsultarPoliza = (props) => {
           texto: "Registro Guardado Exitosamente",
           icono: "exito",
         });
-
-
-
-
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
-
-
 
   const onChangeValidar = () => {
     let sigue = true;
@@ -183,59 +170,56 @@ export const ModalConsultarPoliza = (props) => {
     }
   };
 
-
-
   const blanquear = () => {
-    txtNContrato.current.value = ''
-    txtFechaEmision.current.value = ''
-    txtFechaVencimiento.current.value = ''
-    txtNombre.current.value = ''
-    txtTipoContrato.current.value = ''
-    txtCedula.current.value = ''
-    txtDireccion.current.value =''
-    txtTelefono.current.value = ''
-    txtCorreo.current.value = ''
-    txtFechaNaci.current.value = ''
-    txtPlaca.current.value = ''
-    txtPuestos.current.value = ''
-    txtUso.current.value = ''
-    txtSerMotor.current.value = ''
-    txtClase.current.value = ''
-    txtSerCarroceria.current.value = ''
-    txtTipoVehiculo.current.value = ''
-    txtPeso.current.value = ''
-    txtCapTone.current.value = ''
-    txtModelo.current.value = ''
-    txtMarca.current.value = ''
+    txtNContrato.current.value = "";
+    txtFechaEmision.current.value = "";
+    txtFechaVencimiento.current.value = "";
+    txtNombre.current.value = "";
+    txtTipoContrato.current.value = "";
+    txtCedula.current.value = "";
+    txtDireccion.current.value = "";
+    txtTelefono.current.value = "";
+    txtCorreo.current.value = "";
+    txtFechaNaci.current.value = "";
+    txtPlaca.current.value = "";
+    txtPuestos.current.value = "";
+    txtUso.current.value = "";
+    txtSerMotor.current.value = "";
+    txtClase.current.value = "";
+    txtSerCarroceria.current.value = "";
+    txtTipoVehiculo.current.value = "";
+    txtPeso.current.value = "";
+    txtCapTone.current.value = "";
+    txtModelo.current.value = "";
+    txtMarca.current.value = "";
   };
-
-
-
 
   const check = (e) => {
     var textV = "which" in e ? e.which : e.keyCode,
       char = String.fromCharCode(textV),
-      regex = /[a-z]/ig;
-    if (!regex.test(char)) e.preventDefault(); return false;
-  }
+      regex = /[a-z]/gi;
+    if (!regex.test(char)) e.preventDefault();
+    return false;
+  };
   const seleccionarCliente = (nombre, apellido, cedula) => {
-
-    console.log(nombre, apellido, cedula)
+    console.log(nombre, apellido, cedula);
     txtCedula.current.value = cedula;
     txtDescripcion.current.value = apellido;
     txtNombre.current.value = nombre;
     setMostrar(false);
-
-  }
+  };
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.onHideCancela()
-
-  }
+    props.onHideCancela();
+  };
 
   function soloLetras(event) {
-    if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+    if (
+      (event.keyCode != 32 && event.keyCode < 65) ||
+      (event.keyCode > 90 && event.keyCode < 97) ||
+      event.keyCode > 122
+    )
       event.returnValue = false;
   }
 
@@ -270,77 +254,90 @@ export const ModalConsultarPoliza = (props) => {
 
   const selecionarRegistros = async (id) => {
     let endpoint = op.conexion + "/poliza/ConsultarUno?ID=" + id;
-    console.log(endpoint)
-    setActivate(true)
+    console.log(endpoint);
+    setActivate(true);
 
-
-
-
-
-    let bodyF = new FormData()
+    let bodyF = new FormData();
 
     //    bodyF.append("ID", id)
 
-
     await fetch(endpoint, {
       method: "POST",
-      body: bodyF
-    }).then(res => res.json())
-      .then(response => {
-
-
-        setActivate(false)
-        console.log(response)
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        console.log(response);
         txtNContrato.current.value = response[0].poliza_id;
-        txtFechaEmision.current.value = moment(response[0].poliza_fechaInicio).format('YYYY-MM-DD');
-        txtFechaVencimiento.current.value = moment(response[0].poliza_fechaVencimiento).format('YYYY-MM-DD');
+        txtFechaEmision.current.value = moment(
+          response[0].poliza_fechaInicio
+        ).format("YYYY-MM-DD");
+        txtFechaVencimiento.current.value = moment(
+          response[0].poliza_fechaVencimiento
+        ).format("YYYY-MM-DD");
         txtNombre.current.value = response[0].cliente_nombre;
-        txtTipoContrato.current.value = response[0].contrato_nombre
-        txtCedula.current.value = response[0].cliente_cedula
-        txtDireccion.current.value = response[0].cliente_direccion
+        txtTipoContrato.current.value = response[0].contrato_nombre;
+        txtCedula.current.value = response[0].cliente_cedula;
+        txtDireccion.current.value = response[0].cliente_direccion;
         txtTelefono.current.value = response[0].cliente_telefono;
         txtCorreo.current.value = response[0].cliente_correo;
-        txtFechaNaci.current.value = moment(response[0].cliente_fechaNacimiento).format('YYYY-MM-DD')
+        txtFechaNaci.current.value = moment(
+          response[0].cliente_fechaNacimiento
+        ).format("YYYY-MM-DD");
         txtPlaca.current.value = response[0].vehiculo_placa;
         txtPuestos.current.value = response[0].vehiculo_puesto;
         txtUso.current.value = response[0].usoVehiculo_nombre;
-        txtAnio.current.value= response[0].vehiculo_año;
+        txtAnio.current.value = response[0].vehiculo_año;
         txtSerMotor.current.value = response[0].vehiculo_serialMotor;
         txtClase.current.value = response[0].clase_nombre;
         txtColor.current.value = response[0].color_nombre;
         txtSerCarroceria.current.value = response[0].vehiculo_serialCarroceria;
         txtTipoVehiculo.current.value = response[0].tipoVehiculo_nombre;
-        txtPeso.current.value = formatMoneda(response[0].vehiculo_peso.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-        txtCapTone.current.value = formatMoneda(response[0].vehiculo_capTon.toString().replace(',', '').replace('.', ','), ',', '.', 2)
-        txtModelo.current.value = response[0].modelo_nombre
-        txtMarca.current.value = response[0].marca_nombre
-
-
-
-
-
-
-
-
-
+        txtPeso.current.value = formatMoneda(
+          response[0].vehiculo_peso
+            .toString()
+            .replace(",", "")
+            .replace(".", ","),
+          ",",
+          ".",
+          2
+        );
+        txtCapTone.current.value = formatMoneda(
+          response[0].vehiculo_capTon
+            .toString()
+            .replace(",", "")
+            .replace(".", ","),
+          ",",
+          ".",
+          2
+        );
+        txtModelo.current.value = response[0].modelo_nombre;
+        txtMarca.current.value = response[0].marca_nombre;
       })
-      .catch(error =>
-        setMensaje({ mostrar: true, titulo: "Notificación", texto: error.res, icono: "informacion" })
-      )
-
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
   };
 
   const imprimir = (tipo) => (e) => {
     e.preventDefault();
 
     if (tipo === 1) {
-      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`)
-    } if (tipo === 2) {
-      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`)
-    } if (tipo === 3) {
-      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`)
+      window.open(`${op.conexion}/reporte/reporteRCV?ID=${props.idCliente}`);
     }
-  }
+    if (tipo === 2) {
+      window.open(`${op.conexion}/reporte/reporteWeb?ID=${props.idCliente}`);
+    }
+    if (tipo === 3) {
+      window.open(`${op.conexion}/reporte/reporteCarnet?ID=${props.idCliente}`);
+    }
+  };
 
   return (
     <Modal
@@ -354,15 +351,11 @@ export const ModalConsultarPoliza = (props) => {
       onShow={() => {
         setOperacion(props.operacion);
 
-
-        selecionarRegistros(props.idCliente)
-
-
+        selecionarRegistros(props.idCliente);
       }}
     >
       <Modal.Header className="bg-danger">
-        <Modal.Title style={{ color: "#fff" }}>
-          Consultar Datos     </Modal.Title>
+        <Modal.Title style={{ color: "#fff" }}>Consultar Datos </Modal.Title>
         <button
           ref={btnCancela}
           className="btn"
@@ -378,129 +371,421 @@ export const ModalConsultarPoliza = (props) => {
         </Dimmer>
 
         <fieldset class="border rounded-3 p-3 row mx-auto border rounded mb-2">
-          <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos Del Contrato</legend>
+          <legend
+            class="float-none w-auto px-3 fw-bold"
+            style={{ fontSize: 15 }}
+          >
+            Datos Del Contrato
+          </legend>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">N° De Contrato:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtNContrato} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              N° De Contrato:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtNContrato}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div className="col-md-1"></div>
 
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Tipo De Contrato:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtTipoContrato} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Tipo De Contrato:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtTipoContrato}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Emisión:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaEmision} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Fecha De Emisión:
+            </span>
+            <input
+              type="date"
+              class="form-control bg-transparent border-0"
+              ref={txtFechaEmision}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Vencimiento:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaVencimiento} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Fecha De Vencimiento:
+            </span>
+            <input
+              type="date"
+              class="form-control bg-transparent border-0"
+              ref={txtFechaVencimiento}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
         </fieldset>
         <fieldset class="border rounded-3 p-3 row mx-auto border rounded mb-2">
-          <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos Del Cliente</legend>
+          <legend
+            class="float-none w-auto px-3 fw-bold"
+            style={{ fontSize: 15 }}
+          >
+            Datos Del Cliente
+          </legend>
           <div class="input-group input-group-sm mb-2 col-md-5">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Nombre:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtNombre} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Nombre:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtNombre}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div className="col-md-1"></div>
 
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Cédula:</span>
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Cédula:
+            </span>
 
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtCedula} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtCedula}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Telefono:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtTelefono} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Telefono:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtTelefono}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-6">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Dirección:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtDireccion} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Dirección:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtDireccion}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
 
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Correo:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtCorreo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Correo:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtCorreo}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Fecha De Nacimiento:</span>
-            <input type="date" class="form-control bg-transparent border-0" ref={txtFechaNaci} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled/>
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Fecha De Nacimiento:
+            </span>
+            <input
+              type="date"
+              class="form-control bg-transparent border-0"
+              ref={txtFechaNaci}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
-
         </fieldset>
         <fieldset class="border rounded-3 p-3 row mx-auto border rounded mb-2">
-          <legend class="float-none w-auto px-3 fw-bold" style={{ fontSize: 15 }} >Datos Del Vehiculo</legend>
+          <legend
+            class="float-none w-auto px-3 fw-bold"
+            style={{ fontSize: 15 }}
+          >
+            Datos Del Vehiculo
+          </legend>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Placa:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtPlaca} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Placa:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtPlaca}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Puestos:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtPuestos} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Puestos:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtPuestos}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Uso Del Vehiculo:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtUso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Uso Del Vehiculo:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtUso}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
 
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Año:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtAnio} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Año:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtAnio}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
 
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Ser. Motor:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtSerMotor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Ser. Motor:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtSerMotor}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Clase Del Vehiculo:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtClase} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Clase Del Vehiculo:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtClase}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Color:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtColor} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Color:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtColor}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Ser. Carroceria:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtSerCarroceria} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Ser. Carroceria:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtSerCarroceria}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Tipo De Vehiculo:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtTipoVehiculo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Tipo De Vehiculo:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtTipoVehiculo}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Modelo:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtModelo} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Modelo:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtModelo}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-3">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Marca:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtMarca} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Marca:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtMarca}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Peso:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtPeso} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Peso:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtPeso}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
           <div class="input-group input-group-sm mb-2 col-md-2">
-            <span class="input-group-text bg-transparent border-0" id="inputGroup-sizing-sm">Cap. Ton:</span>
-            <input type="text" class="form-control bg-transparent border-0 " ref={txtCapTone} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled />
+            <span
+              class="input-group-text bg-transparent border-0"
+              id="inputGroup-sizing-sm"
+            >
+              Cap. Ton:
+            </span>
+            <input
+              type="text"
+              class="form-control bg-transparent border-0 "
+              ref={txtCapTone}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              disabled
+            />
           </div>
-
-
         </fieldset>
 
         <Mensaje
           mensaje={mensaje}
           onHide={() => {
-            mensaje.titulo === 'Exito.' ? cerrarModal() :
-              setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-          }} />
-
-
+            mensaje.titulo === "Exito."
+              ? cerrarModal()
+              : setMensaje({
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
+          }}
+        />
       </Modal.Body>
       <Modal.Footer>
-
         <button
           ref={btnCancela}
           onClick={salir}
