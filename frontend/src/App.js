@@ -58,8 +58,14 @@ function App(props) {
         texto: "La Sesión expirará en 10 segundos ",
       });
     }
-
-    if (currSeconds === 190 && pathname !== "/login" && pathname !== "/") {
+    if (currSeconds === 1900 && pathname !== "/login" && pathname !== "/") {
+      setMensaje({
+        mostrar: true,
+        icono: "error",
+        titulo: "Alerta",
+        texto: "La Sesión expirará en 20 segundos ",
+      });
+    }
       window.location.href = "/login";
       setMensaje({
         mostrar: false,
