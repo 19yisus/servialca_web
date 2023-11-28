@@ -12,8 +12,8 @@ import {
   validaSoloLetras,
 } from "../../util/varios";
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import moment from "moment";
 import { Mensaje } from "../mensajes";
@@ -27,7 +27,7 @@ import CatalogoClase from "../../catalogos/catalogoClase";
 import CatalogoTipo from "../../catalogos/catalagoTipoVehiculo";
 import CatalogoTitular from "../../catalogos/catalogoTitular";
 import CatalogoVehiculo from "../../catalogos/catalogoVehiculo";
-import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
+import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 import { Typeahead } from "react-bootstrap-typeahead";
 export const ModalRcv = (props) => {
   /*  variables de estados */
@@ -624,24 +624,22 @@ export const ModalRcv = (props) => {
 
   const selecionarPrecio = async () => {
     if (valorSeleccionado.contrato_nombre === "") {
-      
       setMensaje({
         mostrar: true,
         titulo: "Notificación",
         texto: "No se puede consultar sin el contrato seleccionado",
         icono: "informacion",
-      })
+      });
       return false;
     }
 
     if (valorSeleccionado.tipoVehiculo_nombre === "") {
-     
       setMensaje({
         mostrar: true,
         titulo: "Notificación",
         texto: "No se puede consultar sin el tipo de vehiculo seleccionado",
         icono: "informacion",
-      })
+      });
       return false;
     }
 
@@ -658,23 +656,24 @@ export const ModalRcv = (props) => {
       .then((res) => res.json())
       .then((response) => {
         setActivate(false);
-        console.log(response[0])
-        if(response[0]){
+        console.log(response[0]);
+        if (response[0]) {
           txtDolar.current.value = response[0]["precio_monto"];
-          txtBs.current.value = (response[0]["precio_monto"] * dolarbcv).toFixed(
-            2
-          );
+          txtBs.current.value = (
+            response[0]["precio_monto"] * dolarbcv
+          ).toFixed(2);
           setTipoContrato(response);
-        } else{
+        } else {
           setMensaje({
             mostrar: true,
             titulo: "Notificación",
-            texto: "No hay un registro de presio de para este tipo de vehiuvlo y su tipo contrato",
+            texto:
+              "No hay un registro de presio de para este tipo de vehiuvlo y su tipo contrato",
             icono: "informacion",
-          })
+          });
         }
-       
-      //  txtDolar.current.value(response.precio_monto);
+
+        //  txtDolar.current.value(response.precio_monto);
       })
       .catch((error) => console.log("Precio: Falta uno de los parametros"));
   };
@@ -1221,8 +1220,14 @@ export const ModalRcv = (props) => {
         txtApellido.current.value = response[0].cliente_apellido;
         txtFechaNaci.current.value = response[0].cliente_fechaNacimiento;
         var telefono = response[0].cliente_telefono.split("-");
-        cmbTelefono.current.value = telefono[0] + "-";
-        txtTelefono.current.value = telefono[1];
+        if (telefono[0] != "" && telefono[1] != "") {
+          cmbTelefono.current.value = telefono[0] + "-";
+          txtTelefono.current.value = telefono[1];
+        } else {
+          cmbTelefono.current.value = "0414-";
+          txtTelefono.current.value = "";
+        }
+
         txtCorreo.current.value = response[0].cliente_correo;
         txtDirec.current.value = response[0].cliente_direccion;
 
@@ -1271,7 +1276,7 @@ export const ModalRcv = (props) => {
   console.group("ssssssssssss");
   console.log(valorSeleccionado);
   console.groupEnd();
-  
+
   function validarIguales(e) {
     if (e == 1) {
       if (txtModelo.current.value == txtMarca.current.value) {
@@ -1321,35 +1326,35 @@ export const ModalRcv = (props) => {
     }
   }
 
-
   const [selectedContrato, setSelectedContrato] = useState(null);
 
   const handleChange = (event, newValue) => {
     setSelectedContrato(newValue); // newValue contiene el objeto seleccionado
-    console.log(newValue.contrato_nombre)
+    console.log(newValue.contrato_nombre);
     setValorSeleccionado({
       ...valorSeleccionado,
       contrato_nombre: newValue.contrato_nombre,
     });
   };
 
-
-
   const validarInput = (e) => {
-    console.log(e.target.name)
-   let item = document.getElementById(e.target.name);
-    if(!e.target.value || e.target.name === 'ced' && e.target.value.length < 8){
-      console.log('1')
-      item.className -= ' form-text fw-bold hidden ';
-      item.className += ' form-text fw-bold visible ';
+    console.log(e.target.name);
+    let item = document.getElementById(e.target.name);
+    if (
+      !e.target.value ||
+      (e.target.name === "ced" && e.target.value.length < 8)
+    ) {
+      console.log("1");
+      item.className -= " form-text fw-bold hidden ";
+      item.className += " form-text fw-bold visible ";
     } else {
-      console.log('2')
+      console.log("2");
 
-      item.className -= ' form-text fw-bold visible ';
-      item.className += ' form-text fw-bold hidden ';
+      item.className -= " form-text fw-bold visible ";
+      item.className += " form-text fw-bold hidden ";
     }
-  }
-  
+  };
+
   return (
     <Modal
       {...props}
@@ -1381,10 +1386,10 @@ export const ModalRcv = (props) => {
             {operacion === 1
               ? "Registro de RCV"
               : operacion === 2
-                ? "Editar de RCV"
-                : operacion === 3
-                  ? "Renovar de RCV"
-                  : "Registro de RCV"}
+              ? "Editar de RCV"
+              : operacion === 3
+              ? "Renovar de RCV"
+              : "Registro de RCV"}
           </Modal.Title>{" "}
         </Modal.Title>
         <button
@@ -1491,11 +1496,11 @@ export const ModalRcv = (props) => {
             mensaje.titulo === "Exito."
               ? cerrarModal()
               : setMensaje({
-                mostrar: false,
-                titulo: "",
-                texto: "",
-                icono: "",
-              });
+                  mostrar: false,
+                  titulo: "",
+                  texto: "",
+                  icono: "",
+                });
           }}
         />
 
@@ -1550,38 +1555,41 @@ export const ModalRcv = (props) => {
             aria-labelledby="ex1-tab-1"
           >
             <div class="col-md-12 row mx-auto pt-2">
-
               <div class="col-md-5">
                 <div class="input-group input-group-sm mb-2 ">
-
-
                   <input type="hidden" ref={idPoliza} />
                   <input type="hidden" ref={idCliente} />
                   <input type="hidden" ref={idTitular} />
                   <input type="hidden" ref={idVehiculo} />
                   <input type="hidden" ref={idCobertura} />
 
-                  {tipoContrato && Array.isArray(tipoContrato) && tipoContrato.length > 0 && (
-                  <Autocomplete
-                    value={valorSeleccionado}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                       
-                        console.log(newValue.contrato_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        contrato_nombre: newValue.contrato_nombre,
-                      });
-                      }
-                    }}
-                    options={tipoContrato}
-                    sx={{ width: '100%' }} 
-                    size="small"
-                    getOptionLabel={(option) => option.contrato_nombre}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Tipo de Contrato" variant="outlined" />
+                  {tipoContrato &&
+                    Array.isArray(tipoContrato) &&
+                    tipoContrato.length > 0 && (
+                      <Autocomplete
+                        value={valorSeleccionado}
+                        onChange={(event, newValue) => {
+                          if (newValue) {
+                            console.log(newValue.contrato_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              contrato_nombre: newValue.contrato_nombre,
+                            });
+                          }
+                        }}
+                        options={tipoContrato}
+                        sx={{ width: "100%" }}
+                        size="small"
+                        getOptionLabel={(option) => option.contrato_nombre}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Tipo de Contrato"
+                            variant="outlined"
+                          />
+                        )}
+                      />
                     )}
-                  />)}
                   {/*<span class="input-group-text" id="inputGroup-sizing-sm">
                     Tipo de contrato:{" "}
                   </span>
@@ -1717,8 +1725,8 @@ export const ModalRcv = (props) => {
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     maxLength={9}
-              onBlur={validarInput}
-name="cedcon"
+                    onBlur={validarInput}
+                    name="cedcon"
                     onChange={(e) => {
                       validaSoloNumero(e);
                       // Agrega la función que deseas ejecutar
@@ -1739,7 +1747,7 @@ name="cedcon"
                   </button>
 
                   <div id="cedcon" class="form-text hidden">
-                    Debe ingresar un cedula valida longitud(8-9).
+                    Debe ingresar caracteres númericos con una longitud(8-9)
                   </div>
                 </div>
                 <div class="col-md-3"></div>
@@ -1756,8 +1764,7 @@ name="cedcon"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       name="fechacon"
-              onBlur={validarInput}
-
+                      onBlur={validarInput}
                     />
                   </div>
                   <div id="fechacon" class="form-text hidden">
@@ -1783,8 +1790,10 @@ name="cedcon"
                       onChange={validaSoloLetras}
                     />
                   </div>
-          <div id="nomtac" class="form-text hidden">Debe ingresar nombre del contratante</div>
-
+                  <div id="nomtac" class="form-text hidden">
+                    Solo puedes ingresar caracteres alfabéticos con una
+                    longitut(3-25)
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
@@ -1804,11 +1813,12 @@ name="cedcon"
                       }}
                       onBlur={validarInput}
                       name="apecon"
-
                     />
                   </div>
-          <div id="apecon" class="form-text hidden">Debe ingresar nombre del contratante</div>
-
+                  <div id="apecon" class="form-text hidden">
+                    Solo puedes ingresar caracteres alfabéticos con una
+                    longitut(3-25)
+                  </div>
                 </div>
                 <div class="col-md-5">
                   <div class="input-group input-group-sm mb-2">
@@ -1838,8 +1848,9 @@ name="cedcon"
                       onChange={validaSoloNumero}
                     />
                   </div>
-          <div id="telfcon" class="form-text hidden">Debe ingresar telefono</div>
-
+                  <div id="telfcon" class="form-text hidden">
+                    Debe ingresar caracteres númericos con una longitud(8-9).
+                  </div>
                 </div>
                 <div class="col-md-4">
                   <div class="input-group input-group-sm mb-2">
@@ -1878,11 +1889,12 @@ name="cedcon"
                       }
                     />
                   </div>
-          <div id="direccioncon" class="form-text hidden">Debe ingresar la direccion</div>
-
+                  <div id="direccioncon" class="form-text hidden">
+                    Debe ingresar la direccion
+                  </div>
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
-                 {/* <div class="input-group input-group-sm mb-2 ">
+                  {/* <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Estado:{" "}
                     </span>
@@ -1933,30 +1945,34 @@ name="cedcon"
                     />
                   </div>*/}
 
-{estados && Array.isArray(estados) && estados.length > 0 && (
-  <Autocomplete
-    value={valorSeleccionado}
-    onChange={(event, newValue) => {
-      if (newValue) {
-        console.log(newValue.estado_nombre);
-        setValorSeleccionado({
-          ...valorSeleccionado,
-          estado_nombre: newValue.estado_nombre,
-        });
-      }
-    }}
-    options={estados}
-    sx={{ width: '100%' }}
-    size="small"
-    getOptionLabel={(option) => option.estado_nombre}
-    renderInput={(params) => (
-      <TextField {...params} label="Estado" variant="outlined" />
-    )}
-  />
-)}
+                  {estados && Array.isArray(estados) && estados.length > 0 && (
+                    <Autocomplete
+                      value={valorSeleccionado}
+                      onChange={(event, newValue) => {
+                        if (newValue) {
+                          console.log(newValue.estado_nombre);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            estado_nombre: newValue.estado_nombre,
+                          });
+                        }
+                      }}
+                      options={estados}
+                      sx={{ width: "100%" }}
+                      size="small"
+                      getOptionLabel={(option) => option.estado_nombre}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Estado"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                  )}
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
-               {/*   <div className="input-group input-group-sm mb-2">
+                  {/*   <div className="input-group input-group-sm mb-2">
                     <span
                       className="input-group-text"
                       id="inputGroup-sizing-sm"
@@ -2023,31 +2039,34 @@ name="cedcon"
                       }
                     />
                      </div>*/}
-     {acesor && Array.isArray(acesor) && acesor.length > 0 && (
-<Autocomplete
-                    value={valorSeleccionado}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                       
-                        console.log(newValue.usuario_usuario)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        usuario_usuario: newValue.usuario_usuario,
-                      });
-                      }
-                    }}
-                    options={acesor}
-                    sx={{ width: '100%' }} 
-                    size="small"
-                    getOptionLabel={(option) => option.usuario_usuario}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Acesor" variant="outlined" />
-                    )}
-                  />
-                 )}
+                  {acesor && Array.isArray(acesor) && acesor.length > 0 && (
+                    <Autocomplete
+                      value={valorSeleccionado}
+                      onChange={(event, newValue) => {
+                        if (newValue) {
+                          console.log(newValue.usuario_usuario);
+                          setValorSeleccionado({
+                            ...valorSeleccionado,
+                            usuario_usuario: newValue.usuario_usuario,
+                          });
+                        }
+                      }}
+                      options={acesor}
+                      sx={{ width: "100%" }}
+                      size="small"
+                      getOptionLabel={(option) => option.usuario_usuario}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Acesor"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                  )}
                 </div>
                 <div class="col-md-4 mb-1 mt-1">
-                   {/*  <div class="input-group input-group-sm mb-2 ">
+                  {/*  <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Sucursal:{" "}
                     </span>
@@ -2113,34 +2132,39 @@ name="cedcon"
                       }
                     />
                   </div>*/}
-     {sucursal && Array.isArray(sucursal) && sucursal.length > 0 && (
-
-                  <Autocomplete
-                    value={valorSeleccionado}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                       
-                        console.log(newValue.sucursal_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        sucursal_nombre: newValue.sucursal_nombre,
-                      });
-                      }
-                    }}
-                    options={sucursal}
-                    sx={{ width: '100%' }} 
-                    size="small"
-              
-                    getOptionLabel={(option) => option.sucursal_nombre}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Sucursal" variant="outlined" />
+                  {sucursal &&
+                    Array.isArray(sucursal) &&
+                    sucursal.length > 0 && (
+                      <Autocomplete
+                        value={valorSeleccionado}
+                        onChange={(event, newValue) => {
+                          if (newValue) {
+                            console.log(newValue.sucursal_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              sucursal_nombre: newValue.sucursal_nombre,
+                            });
+                          }
+                        }}
+                        options={sucursal}
+                        sx={{ width: "100%" }}
+                        size="small"
+                        getOptionLabel={(option) => option.sucursal_nombre}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Sucursal"
+                            variant="outlined"
+                          />
+                        )}
+                      />
                     )}
-                  />)}
-          <div id="sucursal" class="form-text hidden">Debe ingresar nombre del uso</div>
-
+                  <div id="sucursal" class="form-text hidden">
+                    Debe ingresar nombre del uso
+                  </div>
                 </div>
                 <div class="col-md-6">
-                   {/*<div class="input-group input-group-sm mb-2 ">
+                  {/*<div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
                       Linea de Transporte:{" "}
                     </span>
@@ -2209,29 +2233,33 @@ name="cedcon"
                     />
                   </div>*/}
 
-     {transporte && Array.isArray(transporte) && transporte.length > 0 && (
-
-
-<Autocomplete
-                    value={valorSeleccionado}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                       
-                        console.log(newValue.transporte_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        transporte_nombre: newValue.transporte_nombre,
-                      });
-                      }
-                    }}
-                    options={transporte}
-                    sx={{ width: '100%' }} 
-                    size="small"
-                    getOptionLabel={(option) => option.transporte_nombre}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Linea de Transporte" variant="outlined" />
+                  {transporte &&
+                    Array.isArray(transporte) &&
+                    transporte.length > 0 && (
+                      <Autocomplete
+                        value={valorSeleccionado}
+                        onChange={(event, newValue) => {
+                          if (newValue) {
+                            console.log(newValue.transporte_nombre);
+                            setValorSeleccionado({
+                              ...valorSeleccionado,
+                              transporte_nombre: newValue.transporte_nombre,
+                            });
+                          }
+                        }}
+                        options={transporte}
+                        sx={{ width: "100%" }}
+                        size="small"
+                        getOptionLabel={(option) => option.transporte_nombre}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Linea de Transporte"
+                            variant="outlined"
+                          />
+                        )}
+                      />
                     )}
-                  />)}
                 </div>
               </fieldset>
               <fieldset class="border rounded-3 p-3 row mx-auto">
@@ -2242,51 +2270,51 @@ name="cedcon"
                   Titular
                 </legend>
                 <div class=" mb-1 col-md-5">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Cedula:
-                  </span>
-                  <select
-                    class="form-select col-md-3"
-                    ref={cmbNacionalidadTitular}
-                    aria-label="Default select example"
-                  >
-                    <option value="V-">V-</option>
-                    <option value="E-">E-</option>
-                    <option value="J-">J-</option>
-                    <option value="G-">G-</option>
-                  </select>
-                  <input
-                    type="text"
-                    className="form-control"
-                    ref={txtCedulatTitular}
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-sm"
-                    maxLength={9}
-                    name="ced2"
-              onBlur={validarInput}
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                      Cedula:
+                    </span>
+                    <select
+                      class="form-select col-md-3"
+                      ref={cmbNacionalidadTitular}
+                      aria-label="Default select example"
+                    >
+                      <option value="V-">V-</option>
+                      <option value="E-">E-</option>
+                      <option value="J-">J-</option>
+                      <option value="G-">G-</option>
+                    </select>
+                    <input
+                      type="text"
+                      className="form-control"
+                      ref={txtCedulatTitular}
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-sm"
+                      maxLength={9}
+                      name="ced2"
+                      onBlur={validarInput}
+                      onChange={(e) => {
+                        validaSoloNumero(e);
+                        igualA(2);
+                      }}
+                    />
 
-                    onChange={(e) => {
-                      validaSoloNumero(e);
-                      igualA(2);
-                    }}
-                  />
-
-                  <button
-                    type="button"
-                    class="btn btn-success"
-                    onClick={() => {
-                      consultarTitular(
-                        cmbNacionalidadTitular.current.value +
-                        txtCedulatTitular.current.value
-                      );
-                    }}
-                  >
-                    <i class="fa fa-search"></i>
-                  </button>
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      onClick={() => {
+                        consultarTitular(
+                          cmbNacionalidadTitular.current.value +
+                            txtCedulatTitular.current.value
+                        );
+                      }}
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
                   </div>
-          <div id="ced2" class="form-text hidden">Debe ingresar la cedula titular</div>
-
+                  <div id="ced2" class="form-text hidden">
+                    Debe ingresar la cedula titular
+                  </div>
                 </div>
                 <div class="col-md-9"></div>
 
@@ -2303,12 +2331,13 @@ name="cedcon"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-sm"
                       name="nomti"
-              onBlur={validarInput}
+                      onBlur={validarInput}
                       onChange={validaSoloLetras}
                     />
                   </div>
-          <div id="nomti" class="form-text hidden">Debe ingresar el nombre del titular</div>
-
+                  <div id="nomti" class="form-text hidden">
+                    Debe ingresar el nombre del titular
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="input-group input-group-sm mb-2">
@@ -2327,8 +2356,9 @@ name="cedcon"
                       onBlur={validarInput}
                     />
                   </div>
-          <div id="apeti" class="form-text hidden">Debe ingresar el apellido del titular</div>
-
+                  <div id="apeti" class="form-text hidden">
+                    Debe ingresar el apellido del titular
+                  </div>
                 </div>
               </fieldset>
             </div>
@@ -2367,8 +2397,9 @@ name="cedcon"
                     <i class="fa fa-search"></i>
                   </button>
                 </div>
-          <div id="placa" class="form-text hidden">Debe ingresar la plca del vehiculo</div>
-
+                <div id="placa" class="form-text hidden">
+                  Debe ingresar la plca del vehiculo
+                </div>
               </div>
               <div class="col-md-4 my-auto">
                 <div class="input-group input-group-sm mb-2">
@@ -2389,11 +2420,13 @@ name="cedcon"
                   />
                 </div>
 
-                <div id="puestos" class="form-text hidden">Debe ingresar los puestos delvehivulo</div>
+                <div id="puestos" class="form-text hidden">
+                  Debe ingresar los puestos delvehivulo
+                </div>
               </div>
-              
+
               <div class="col-md-4 mb-1">
-               {/* <div class="input-group input-group-sm mb-2">
+                {/* <div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Uso
                   </span>
@@ -2461,28 +2494,31 @@ name="cedcon"
                     }
                   />
                 </div>*/}
-     {uso && Array.isArray(uso) && uso.length > 0 && (
-
-                 <Autocomplete
-                   value={valorSeleccionado}
+                {uso && Array.isArray(uso) && uso.length > 0 && (
+                  <Autocomplete
+                    value={valorSeleccionado}
                     onChange={(event, newValue) => {
                       if (newValue) {
-                       
-                        console.log(newValue.usoVehiculo_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        usoVehiculo_nombre: newValue.usoVehiculo_nombre,
-                      });
+                        console.log(newValue.usoVehiculo_nombre);
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          usoVehiculo_nombre: newValue.usoVehiculo_nombre,
+                        });
                       }
                     }}
                     options={uso}
-                    sx={{ width: '100%' }} 
+                    sx={{ width: "100%" }}
                     size="small"
                     getOptionLabel={(option) => option.usoVehiculo_nombre}
                     renderInput={(params) => (
-                      <TextField {...params} label="Uso Vehiculo" variant="outlined" />
+                      <TextField
+                        {...params}
+                        label="Uso Vehiculo"
+                        variant="outlined"
+                      />
                     )}
-                  />)}
+                  />
+                )}
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2521,8 +2557,9 @@ name="cedcon"
                     }}
                   />
                 </div>
-          <div id="anio" class="form-text hidden">Debe ingresar año del vehiculo</div>
-
+                <div id="anio" class="form-text hidden">
+                  Debe ingresar año del vehiculo
+                </div>
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2538,18 +2575,19 @@ name="cedcon"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     name="serialM"
-              onBlur={validarInput}
+                    onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(3); // Asegúrate de que esta línea esté formateada correctamente
                     }}
                   />
                 </div>
-          <div id="serialM" class="form-text hidden">Debe ingresar serial del motor</div>
-
+                <div id="serialM" class="form-text hidden">
+                  Debe ingresar serial del motor
+                </div>
               </div>
               <div class="col-md-4 mt-2 mb-1">
-               {/*<div class="input-group input-group-sm mb-2">
+                {/*<div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Clase
                   </span>
@@ -2616,28 +2654,31 @@ name="cedcon"
                     }
                   />
                 </div>*/}
-     {clase && Array.isArray(clase) && clase.length > 0 && (
-
-                <Autocomplete
-                   value={valorSeleccionado}
+                {clase && Array.isArray(clase) && clase.length > 0 && (
+                  <Autocomplete
+                    value={valorSeleccionado}
                     onChange={(event, newValue) => {
                       if (newValue) {
-                       
-                        console.log(newValue.clase_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        clase_nombre: newValue.clase_nombre,
-                      });
+                        console.log(newValue.clase_nombre);
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          clase_nombre: newValue.clase_nombre,
+                        });
                       }
                     }}
                     options={clase}
-                    sx={{ width: '100%' }} 
+                    sx={{ width: "100%" }}
                     size="small"
                     getOptionLabel={(option) => option.clase_nombre}
                     renderInput={(params) => (
-                      <TextField {...params} label="Clase Vehiculo" variant="outlined" />
+                      <TextField
+                        {...params}
+                        label="Clase Vehiculo"
+                        variant="outlined"
+                      />
                     )}
-                  />)}
+                  />
+                )}
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2660,8 +2701,9 @@ name="cedcon"
                     }}
                   />
                 </div>
-          <div id="colors" class="form-text hidden">Debe ingresar color del vehiculo</div>
-
+                <div id="colors" class="form-text hidden">
+                  Debe ingresar color del vehiculo
+                </div>
               </div>
 
               <div class="col-md-4 my-auto">
@@ -2678,18 +2720,19 @@ name="cedcon"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     name="carroceria"
-              onBlur={validarInput}
+                    onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(4);
                     }}
                   />
                 </div>
-          <div id="carroceria" class="form-text hidden">Debe ingresar serial de la carroceria</div>
-
+                <div id="carroceria" class="form-text hidden">
+                  Debe ingresar serial de la carroceria
+                </div>
               </div>
               <div class="col-md-4 mt-2 mb-1">
-                 {/*<div class="input-group input-group-sm mb-2">
+                {/*<div class="input-group input-group-sm mb-2">
                   <span class="input-group-text" id="inputGroup-sizing-sm">
                     Tipo
                   </span>
@@ -2764,28 +2807,31 @@ name="cedcon"
                     }
                   />
                 </div>*/}
-     {tipo && Array.isArray(tipo) && tipo.length > 0 && (
-
-                 <Autocomplete
+                {tipo && Array.isArray(tipo) && tipo.length > 0 && (
+                  <Autocomplete
                     value={valorSeleccionado}
                     onChange={(event, newValue) => {
                       if (newValue) {
-                       
-                        console.log(newValue.tipoVehiculo_nombre)
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        tipoVehiculo_nombre: newValue.tipoVehiculo_nombre,
-                      });
+                        console.log(newValue.tipoVehiculo_nombre);
+                        setValorSeleccionado({
+                          ...valorSeleccionado,
+                          tipoVehiculo_nombre: newValue.tipoVehiculo_nombre,
+                        });
                       }
                     }}
                     options={tipo}
-                    sx={{ width: '100%' }} 
+                    sx={{ width: "100%" }}
                     size="small"
                     getOptionLabel={(option) => option.tipoVehiculo_nombre}
                     renderInput={(params) => (
-                      <TextField {...params} label="Tipo Vehiculo" variant="outlined" />
+                      <TextField
+                        {...params}
+                        label="Tipo Vehiculo"
+                        variant="outlined"
+                      />
                     )}
-                  />)}
+                  />
+                )}
               </div>
 
               <div class="col-md-4">
@@ -2802,15 +2848,16 @@ name="cedcon"
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-sm"
                     name="modelov"
-              onBlur={validarInput}
+                    onBlur={validarInput}
                     onChange={(e) => {
                       e.target.value = e.target.value.toUpperCase();
                       validarIguales(1);
                     }}
                   />
                 </div>
-          <div id="modelov" class="form-text hidden">Debe ingresar modelo del vehiculo</div>
-
+                <div id="modelov" class="form-text hidden">
+                  Debe ingresar modelo del vehiculo
+                </div>
               </div>
 
               <div class="col-md-4">
@@ -2834,8 +2881,9 @@ name="cedcon"
                     }}
                   />
                 </div>
-          <div id="marcav" class="form-text hidden">Debe ingresar marca del vehiculo</div>
-
+                <div id="marcav" class="form-text hidden">
+                  Debe ingresar marca del vehiculo
+                </div>
               </div>
 
               <div class="col-md-4">
@@ -2856,8 +2904,9 @@ name="cedcon"
                     onChange={handleInputMontoChange}
                   />
                 </div>
-          <div id="pesov" class="form-text hidden">Debe ingresar peso del vehiculo</div>
-
+                <div id="pesov" class="form-text hidden">
+                  Debe ingresar peso del vehiculo
+                </div>
               </div>
 
               <div class="col-md-4">
@@ -2878,8 +2927,9 @@ name="cedcon"
                     onChange={handleInputMontoChange}
                   />
                 </div>
-          <div id="toneladas" class="form-text hidden">Debe ingresar capacidad de toneladas</div>
-
+                <div id="toneladas" class="form-text hidden">
+                  Debe ingresar capacidad de toneladas
+                </div>
               </div>
             </div>
           </div>

@@ -254,33 +254,62 @@ class cls_Auth extends cls_db
           'code' => 400
         ];
       }
-      $sql = $this->db->prepare("UPDATE usuario SET 
-      usuario_usuario = ?,
-      usuario_nombre = ?,
-      usuario_apellido = ?,
-      usuario_cedula = ?,
-      usuario_telefono = ?,
-      usuario_direccion = ?,
-      usuario_correo = ?,
-      usuario_clave = ?,
-      roles_id =?,
-      sucursal_id =?,
-      permisos = ?
-      WHERE usuario_id = ?");
-      $sql->execute([
-        $this->usuario,
-        $this->nombre,
-        $this->apellido,
-        $this->cedula,
-        $this->telefono,
-        $this->direccion,
-        $this->correo,
-        $this->clave,
-        $this->rol,
-        $this->sucursal,
-        $this->permiso,
-        $this->id,
-      ]);
+      if ($this->clave != null && $this->clave != "") {
+        $sql = $this->db->prepare("UPDATE usuario SET 
+        usuario_usuario = ?,
+        usuario_nombre = ?,
+        usuario_apellido = ?,
+        usuario_cedula = ?,
+        usuario_telefono = ?,
+        usuario_direccion = ?,
+        usuario_correo = ?,
+        usuario_clave = ?,
+        roles_id =?,
+        sucursal_id =?,
+        permisos = ?
+        WHERE usuario_id = ?");
+        $sql->execute([
+          $this->usuario,
+          $this->nombre,
+          $this->apellido,
+          $this->cedula,
+          $this->telefono,
+          $this->direccion,
+          $this->correo,
+          $this->clave,
+          $this->rol,
+          $this->sucursal,
+          $this->permiso,
+          $this->id,
+        ]);
+      } else {
+        $sql = $this->db->prepare("UPDATE usuario SET 
+        usuario_usuario = ?,
+        usuario_nombre = ?,
+        usuario_apellido = ?,
+        usuario_cedula = ?,
+        usuario_telefono = ?,
+        usuario_direccion = ?,
+        usuario_correo = ?,
+        roles_id =?,
+        sucursal_id =?,
+        permisos = ?
+        WHERE usuario_id = ?");
+        $sql->execute([
+          $this->usuario,
+          $this->nombre,
+          $this->apellido,
+          $this->cedula,
+          $this->telefono,
+          $this->direccion,
+          $this->correo,
+          $this->rol,
+          $this->sucursal,
+          $this->permiso,
+          $this->id,
+        ]);
+      }
+
 
 
       if ($sql->rowCount() > 0) {
@@ -583,8 +612,22 @@ class cls_Auth extends cls_db
 
   protected function ChangePassword()
   {
+    // Asegúrate de que $this->clave tenga un valor antes de cifrarla
+    if (empty($this->clave)) {
+      return [
+        "data" => [
+          "res" => "La contraseña está vacía",
+          "code" => 400
+        ],
+        "code" => 400
+      ];
+    }
+
+    // Cifra la nueva contraseña
+    $hashedPassword = password_hash($this->clave, PASSWORD_BCRYPT, ['cost' => 12]);
+
     $sql = $this->db->prepare("UPDATE usuario SET usuario_clave = ?, intentos = 0 WHERE usuario_id = ?");
-    if ($sql->execute([$this->clave, $this->id])) {
+    if ($sql->execute([$hashedPassword, $this->id])) {
       return [
         "data" => [
           "res" => "Contraseña modificada",
@@ -595,12 +638,12 @@ class cls_Auth extends cls_db
     } else {
       return [
         "data" => [
-          "res" => "No se pudo modiciar la contraseña",
+          "res" => "No se pudo modificar la contraseña",
           "code" => 400
         ],
         "code" => 400
       ];
-    };
+    }
   }
 
   // public function Make_code_recovery($id_user)
@@ -691,5 +734,3 @@ class cls_Auth extends cls_db
     ];
   }
 }
-
-

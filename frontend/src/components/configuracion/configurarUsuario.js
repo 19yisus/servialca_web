@@ -280,7 +280,6 @@ export const ModalConfigurarUsuarios = (props) => {
         txtCorreo.current.value = response.usuario_correo;
         txtRol.current.value = response.roles_id;
         txtSucursal.current.value = response.sucursal_id;
-        txtClave.current.value = response.usuario_clave;
         setValues(response);
         console.log(response);
       })

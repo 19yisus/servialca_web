@@ -25,7 +25,7 @@ abstract class cls_claseVehiculo extends cls_db
 
 			$result = $this->SearchByNombre($this->nombre);
 
-			if (isset($result)) {
+			if ($result) {
 				return [
 					"data" => [
 						"res" => "Este nombre de clase vehículo ($this->nombre) ya existe",

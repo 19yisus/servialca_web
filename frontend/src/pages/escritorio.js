@@ -581,13 +581,18 @@ function MenuImpuestoPP(props) {
                       <span>Bitacora</span>
                     </a>
                   )}
-                <a
-                  href="/reporteAsesor"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i className="fas fa-fw me-1 fa-print " />
-                  <span>Reporte asesor</span>
-                </a>
+                {permisos &&
+                  permisos.length >= 3 &&
+                  permisos.substring(21, 22) === "1" && (
+                    <a
+                      href="/reporteAsesor"
+                      className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-fw me-1 fa-print " />
+                      <span>Reporte asesor</span>
+                    </a>
+                  )}
+
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
