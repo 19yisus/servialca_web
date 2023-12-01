@@ -1,7 +1,6 @@
 <?php
 include("./FPDF/fpdf.php");
 include("./Models/cls_Licencia.php");
-
 class Licencia extends cls_Licencia
 {
 }
@@ -12,8 +11,8 @@ $Pdf = new FPDF("P", "mm", "legal");
 $Pdf->AddPage();
 
 // Agregar un logotipo a la izquierda
-$Pdf->Image("./img//logo2.png", 10, 10, 50, 20);
-$Pdf->Image("./img//rubro2.jpg", 165, 70, 30, 30);
+$Pdf->Image("./Img//logo2.png", 10, 10, 50, 20);
+$Pdf->Image("./Img//rubro2.jpg", 165, 70, 30, 30);
 
 // Establecer la fuente para el título
 $Pdf->SetFont('Arial', 'B', 16);
