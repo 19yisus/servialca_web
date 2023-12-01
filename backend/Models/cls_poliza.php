@@ -774,12 +774,13 @@ abstract class cls_poliza extends cls_db
 			licencia_sangre,
 			licencia_lente,
 			licencia_licencia,
+			licencia_licenciaRestante,
 			licencia_montoTotal,
 			licencia_abonado,
 			licencia_restante,
 			sucursal_id,
 			usuario_id
-		)values(?,?,?,?,?,?,?,?,?,?)");
+		)values(?,?,?,?,?,?,?,?,?,?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
@@ -787,6 +788,7 @@ abstract class cls_poliza extends cls_db
 				$this->sangre,
 				$this->lente,
 				$this->licencia,
+				$this->licenciaRestante,
 				$this->montoTotal,
 				$abonado,
 				$this->restante,
@@ -1412,7 +1414,7 @@ abstract class cls_poliza extends cls_db
             INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
             INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
             INNER JOIN usovehiculo ON usovehiculo.usoVehiculo_id = vehiculo.uso_id
-            INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
+            INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
             INNER JOIN color ON color.color_id = vehiculo.color_id
             INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
             INNER JOIN marca ON marca.marca_id = vehiculo.marca_id

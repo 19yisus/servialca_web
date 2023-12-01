@@ -99,6 +99,7 @@ abstract class cls_Licencia extends cls_db
       licencia_sangre = ?,
       licencia_lente = ?,
       licencia_licencia = ?,
+      -- licencia_licenciaRestante = ?,
       licencia_montoTotal = ?,
       licencia_abonado = ?,
       licencia_restante =?
@@ -108,6 +109,7 @@ abstract class cls_Licencia extends cls_db
       $this->sangre,
       $this->lente,
       $this->licencia,
+      // $this->otrasLicencias,
       $this->montoTotal,
       $this->abonado,
       $this->restante,
@@ -161,11 +163,10 @@ abstract class cls_Licencia extends cls_db
     return $resultado;
   }
 
-  protected function GetOne($id)
+  public function GetOne($id)
   {
-    $sql = $this->db->prepare("SELECT cliente.*, licencia.*, debitocredito.* FROM licencia
+    $sql = $this->db->prepare("SELECT cliente.*, licencia.* FROM licencia
       INNER JOIN cliente on cliente.cliente_id = licencia.cliente_id
-      INNER JOIN debitocredito on debitocredito.nota_id = licencia.debitoCredito_id
       WHERE licencia_id = ?");
     if ($sql->execute([$id]))
       $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);

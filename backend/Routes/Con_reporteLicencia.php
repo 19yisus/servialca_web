@@ -6,7 +6,7 @@ class Licencia extends cls_Licencia
 {
 }
 $a = new Licencia();
-$datos = $a->consultarUno($_GET["ID"]);
+$datos = $a->GetOne($_GET["ID"]);
 // Crear una nueva instancia de FPDF
 $Pdf = new FPDF("P", "mm", "legal");
 $Pdf->AddPage();
@@ -112,4 +112,3 @@ $Pdf->SetX(0);
 $Pdf->Cell(0, 0, "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------", 0);
 
 $Pdf->Output();
-?>

@@ -250,6 +250,24 @@ function TablaLicencia() {
         })
       );
   };
+  function obtenerNombrePosicion(numero) {
+    const numeroStr = String(numero).padStart(4, "0");
+
+    // Definimos las posiciones y sus nombres
+    const posiciones = ["2da", "3ra", "4ta", "5ta"];
+
+    // Filtramos las posiciones relevantes basadas en el número
+    const posicionesRelevantes = numeroStr
+      .split("")
+      .map((digito, index) => (digito === "1" ? posiciones[index] : null))
+      .filter(Boolean);
+
+    // Unimos las posiciones relevantes en un string
+    const nombreCompleto = posicionesRelevantes.join(", ");
+
+    return nombreCompleto;
+  }
+
   const imprimir = (id) => (e) => {
     e.preventDefault();
 
@@ -355,14 +373,14 @@ function TablaLicencia() {
             placeholder="Buscar"
           />
 
-          <div className="col-md-3 d-flex justify-content-end">
+          {/* <div className="col-md-3 d-flex justify-content-end">
             <button
               onClick={gestionarBanco(1, "")}
               className="btn btn-sm btn-primary rounded-circle"
             >
               <i className="fas fa-plus"></i>{" "}
             </button>
-          </div>
+          </div> */}
         </div>
         <TblContainer>
           <TblHead />
@@ -428,9 +446,9 @@ function TablaLicencia() {
                   </TableCell>
                   <TableCell
                     className="align-baseline"
-                    style={{ textAlign: "center", alignItems: "center" }}
+                    style={{ textAlign: "center", verticalAlign: "middle" }}
                   >
-                    {item.licencia_licenciaRestante}
+                    {obtenerNombrePosicion(item.licencia_licenciaRestante)}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
