@@ -324,13 +324,13 @@ function TablaPrecio() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.precio_monto + " $"}
+                    {item.tipoVehiculo_precio + " $"}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                   {(item.precio_monto * BCV).toFixed(2)}
+                   {(item.tipoVehiculo_precio * BCV).toFixed(2)}
                   </TableCell>
                 </TableRow>
               ))}

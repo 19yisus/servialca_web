@@ -41,7 +41,7 @@ abstract class cls_tipo_vehiculo extends cls_db
 
       $sql = $this->db->prepare("INSERT INTO tipovehiculo(tipoVehiculo_nombre,tipoVehiculo_precio,sucursal_id,tipoVehiculo_estatus)  VALUES(?,?,?,1)");
 
-      $sql->execute([$this->nombre,$this->precio,$this->sucursal]);
+      $sql->execute([$this->nombre, $this->precio, $this->sucursal]);
 
       if ($sql->rowCount() > 0) {
         $this->id = $this->db->lastInsertId();
@@ -191,7 +191,7 @@ abstract class cls_tipo_vehiculo extends cls_db
     $sql = $this->db->prepare("SELECT tipovehiculo.* FROM tipovehiculo 
         WHERE tipovehiculo.tipoVehiculo_estatus = 1 ORDER BY tipovehiculo.tipoVehiculo_id ASC");
 
-// " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
+    // " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
     $sql->execute();
 
     if ($sql->rowCount() > 0) {
@@ -297,13 +297,28 @@ abstract class cls_tipo_vehiculo extends cls_db
 
   protected function SearchByPrecio($contrato, $tipo, $sucursal)
   {
+    if (!isset($sucursal)) {
+      return false;
+    }
+
+    if ($sucursal != 21) {
+      $where = "sucursal.sucursal_id != 21";
+    } else {
+      $where = "sucursal.sucursal_id = 21";
+    }
+
     $sql = $this->db->prepare("SELECT precio.* FROM precio 
-    JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
-    JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
-    JOIN sucursal ON sucursal.sucursal_id = precio.sucursal_id 
-    WHERE tipocontrato.contrato_nombre = ? AND tipovehiculo.tipoVehiculo_nombre = ? AND sucursal.sucursal_nombre = ?");
-    $sql->execute([$contrato, $tipo, $sucursal]);
-    if ($sql->rowCount() > 0) return $sql->fetchAll(PDO::FETCH_ASSOC);
-    else return [];
+        JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id
+        JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id
+        JOIN sucursal ON sucursal.sucursal_id = precio.sucursal_id 
+        WHERE tipocontrato.contrato_nombre = ? AND tipovehiculo.tipoVehiculo_nombre = ? AND $where");
+
+    $sql->execute([$contrato, $tipo]);
+
+    if ($sql->rowCount() > 0) {
+      return $sql->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      return [];
+    }
   }
 }

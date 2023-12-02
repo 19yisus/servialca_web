@@ -167,7 +167,7 @@ export const ModalRcv = (props) => {
   const [valorSeleccionado, setValorSeleccionado] = useState({
     contrato_nombre: "",
     estado_nombre: "Portuguesa",
-    usuario_usuario: "MFIGUEROA",
+    usuario_usuario: user.toString(),
     sucursal_nombre: suc.toString(),
     transporte_nombre: "",
     usoVehiculo_nombre: "",
@@ -181,7 +181,7 @@ export const ModalRcv = (props) => {
     setValorSeleccionado({
       contrato_nombre: "",
       estado_nombre: "Portuguesa",
-      usuario_usuario: "MFIGUEROA",
+      usuario_usuario: user.toString(),
       sucursal_nombre: suc.toString(),
       transporte_nombre: "",
       usoVehiculo_nombre: "",
@@ -648,7 +648,7 @@ export const ModalRcv = (props) => {
     let bodyF = new FormData();
     bodyF.append("Contrato", valorSeleccionado.contrato_nombre);
     bodyF.append("Tipo", valorSeleccionado.tipoVehiculo_nombre);
-    bodyF.append("Sucursal", suc);
+    bodyF.append("Sucursal", idsucursal);
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -1971,74 +1971,7 @@ export const ModalRcv = (props) => {
                     />
                   )}
                 </div>
-                <div class="col-md-4 mb-1 mt-1">
-                  {/*   <div className="input-group input-group-sm mb-2">
-                    <span
-                      className="input-group-text"
-                      id="inputGroup-sizing-sm"
-                    >
-                      Asesor:{" "}
-                    </span>
-                      <input
-                      disabled
-                      type="text"
-                      className="form-control"
-                      ref={txtAcesor}
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-sm"
-                      defaultValue={operacion === 1 ? user : ""}
-                    />
-                   idUser === 57 ? (
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => {
-                          setMostrar2(true);
-                        }}
-                      >
-                        <i className="fa fa-search"></i>
-                      </button>
-                    ) : null
-                    <Typeahead
-                      id="myTypeahead"
-                      onKeyDown={(a) => {
-                        setValorSeleccionado({
-                          ...valorSeleccionado,
-                          usuario_usuario: a.target.value,
-                        });
-                      }}
-                      onChange={(selected) => {
-                        if (
-                          selected &&
-                          selected.length > 0 &&
-                          selected[0].usuario_usuario
-                        ) {
-                          if (selected[0] && selected[0].usuario_usuario) {
-                            console.log(selected[0].usuario_usuario);
-                            setValorSeleccionado({
-                              ...valorSeleccionado,
-                              usuario_usuario: selected[0].usuario_usuario,
-                            });
-                          }
-                        }
-                      }}
-                      labelKey="usuario_usuario"
-                      options={}
-                      placeholder="Seleccionar"
-                      ref={txtAcesor}
-                      bsSize="small"
-                      defaultSelected={
-                        valorSeleccionado
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
-                      }
-                      selected={
-                        valorSeleccionado.usuario_usuario !== ""
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
-                      }
-                    />
-                     </div>*/}
+                <div className="col-md-4 mb-1 mt-1">
                   {acesor && Array.isArray(acesor) && acesor.length > 0 && (
                     <Autocomplete
                       value={valorSeleccionado}
@@ -2062,9 +1995,11 @@ export const ModalRcv = (props) => {
                           variant="outlined"
                         />
                       )}
+                      disabled={idUser !== 57}
                     />
                   )}
                 </div>
+
                 <div class="col-md-4 mb-1 mt-1">
                   {/*  <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -2157,6 +2092,7 @@ export const ModalRcv = (props) => {
                             variant="outlined"
                           />
                         )}
+                        disabled={idUser !== 57}
                       />
                     )}
                   <div id="sucursal" class="form-text hidden">

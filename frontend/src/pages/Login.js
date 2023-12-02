@@ -345,6 +345,7 @@ function Login(props) {
                   records.img_login +
                   "')",
                 backgroundSize: "cover",
+                backgroundPosition: "center center",
               }}
               ref={img_login}
               name="img_login"
