@@ -1995,7 +1995,7 @@ export const ModalRcv = (props) => {
                           variant="outlined"
                         />
                       )}
-                      disabled={idUser !== 57}
+                      disabled={idUser != 57}
                     />
                   )}
                 </div>
@@ -2092,7 +2092,7 @@ export const ModalRcv = (props) => {
                             variant="outlined"
                           />
                         )}
-                        disabled={idUser !== 57}
+                        disabled={idUser != 57}
                       />
                     )}
                   <div id="sucursal" class="form-text hidden">
