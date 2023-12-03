@@ -188,10 +188,12 @@ abstract class cls_tipo_vehiculo extends cls_db
   }
   protected function GetAll($sucursal)
   {
-    $sql = $this->db->prepare("SELECT tipovehiculo.* FROM tipovehiculo 
-        WHERE tipovehiculo.tipoVehiculo_estatus = 1 ORDER BY tipovehiculo.tipoVehiculo_id ASC");
+    // Verificar si la sucursal es 21
+    $whereClause = ($sucursal == 21) ? 'WHERE tipovehiculo.tipoVehiculo_estatus = 1 AND tipovehiculo.sucursal_id = 21' : 'WHERE tipovehiculo.tipoVehiculo_estatus = 1 AND tipovehiculo.sucursal_id != 21';
 
-    // " . ($sucursal != 21 ? 'WHERE precio.sucursal_id != 21' : 'WHERE precio.sucursal_id = 21') . "
+    $sql = $this->db->prepare("SELECT tipovehiculo.* FROM tipovehiculo 
+        $whereClause ORDER BY tipovehiculo.tipoVehiculo_id ASC");
+
     $sql->execute();
 
     if ($sql->rowCount() > 0) {
@@ -200,6 +202,7 @@ abstract class cls_tipo_vehiculo extends cls_db
       return [];
     }
   }
+
 
 
   protected function savePrecio()
