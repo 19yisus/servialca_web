@@ -1808,7 +1808,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      maxLength={30}
+                      maxLength={100}
                       ref={txtDirec}
                       name="direccioncon"
                       onBlur={validarInput}

@@ -278,8 +278,8 @@ function Inicio2() {
                 : 0) ||
               (x.cliente_nombre !== null
                 ? x.cliente_nombre
-                  .toLowerCase()
-                  .includes(target.value.toLowerCase())
+                    .toLowerCase()
+                    .includes(target.value.toLowerCase())
                 : "") ||
               (x.cliente_telefono !== null
                 ? x.cliente_telefono.includes(target.value)
@@ -550,7 +550,7 @@ function Inicio2() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {moment(item.poliza_fechaVencimiento).format('DD-MM-YYYY')}
+                    {moment(item.poliza_fechaVencimiento).format("DD-MM-YYYY")}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
@@ -599,12 +599,15 @@ function Inicio2() {
                     >
                       <i className="fas fa-eye"></i>{" "}
                     </button>
-                    <button
-                      onClick={gestionarBanco(2, item.poliza_id)}
-                      className="btn btn-sm mx-1 btn-warning rounded-circle"
-                    >
-                      <i className="fa fa-edit"></i>{" "}
-                    </button>
+                    {user_id == 57 && (
+                      <button
+                        onClick={gestionarBanco(2, item.poliza_id)}
+                        className="btn btn-sm mx-1 btn-warning rounded-circle"
+                      >
+                        <i className="fa fa-edit"></i>{" "}
+                      </button>
+                    )}
+
                     <button
                       onClick={gestionarBanco(3, item.poliza_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
@@ -627,7 +630,7 @@ function Inicio2() {
         mensaje={mensaje}
         onHide={() =>
           mensaje.texto ===
-            "Este Usuario No posee preguntas de seguridad debe registrarlas"
+          "Este Usuario No posee preguntas de seguridad debe registrarlas"
             ? regPre()
             : setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" })
         }

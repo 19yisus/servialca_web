@@ -17,7 +17,7 @@ function TablaContratosRealizados() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  console.log(user_id);
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -295,7 +295,7 @@ function TablaContratosRealizados() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
- setOperacion(op);
+    setOperacion(op);
     if (op === 2) {
       setMostrar5(true);
       setIdCliente(id.poliza_id);
@@ -308,7 +308,6 @@ function TablaContratosRealizados() {
       setMostrar5(true);
     } else if (op === 3) {
       setMostrar5(true);
-     
     } else if (op === 4) {
       setMostrar2(true);
     } else if (op === 5) {
@@ -482,12 +481,15 @@ function TablaContratosRealizados() {
                     >
                       <i className="fas fa-print"></i>{" "}
                     </button>
-                    <button
-                      onClick={gestionarBanco(2, item)}
-                      className="btn btn-sm mx-1 btn-warning rounded-circle"
-                    >
-                      <i className="fa fa-edit"></i>{" "}
-                    </button>
+                    {user_id == 57 && (
+                      <button
+                        onClick={() => gestionarBanco(2, item)}
+                        className="btn btn-sm mx-1 btn-warning rounded-circle"
+                      >
+                        <i className="fa fa-edit"></i>{" "}
+                      </button>
+                    )}
+
                     <button
                       onClick={gestionarBanco(3, item.poliza_id)}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"

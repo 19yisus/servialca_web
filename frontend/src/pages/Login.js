@@ -270,8 +270,8 @@ function Login(props) {
 
   function loginUserCallback() {
     // if (userInput.toLowerCase() != captchaText.toLowerCase()) {
-      setLoading(true);
-      sinIgn();
+    setLoading(true);
+    sinIgn();
     //  else {
     //   //  alert('CAPTCHA incorrecto, intenta de nuevo');
     //   setMensaje({
@@ -381,14 +381,14 @@ function Login(props) {
                       <div className="form-floating mb-3 position-relative">
                         <input
                           type={showPassword ? "text" : "password"}
-                          className="form-control text-uppercase"
+                          className="form-control"
                           required
                           autoComplete="off"
                           name="password"
                           value={values.password}
                           onChange={onChange}
-                          maxLength={10}
-                          style={{ paddingRight: "2.5rem" }} // Ajusta el valor según sea necesario
+                          maxLength={12}
+                          style={{ padingRight: "2.5rem" }} 
                         />
                         <span
                           onClick={changeIcon}
