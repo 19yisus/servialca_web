@@ -40,18 +40,18 @@ class cls_Auth extends cls_db
         return false;
       }
 
-      if ($resultado["intentos"] == 3) {
-        return [
-          "data" => [
-            "res" => [
-              'text' => "El usuario se encuenta bloqueado",
-              "code" => 400
-            ],
-          ],
-          "code" => 400
-        ];
-        return false;
-      }
+      // if ($resultado["intentos"] == 3) {
+      //   return [
+      //     "data" => [
+      //       "res" => [
+      //         'text' => "El usuario se encuenta bloqueado",
+      //         "code" => 400
+      //       ],
+      //     ],
+      //     "code" => 400
+      //   ];
+      //   return false;
+      // }
 
       if (!password_verify($this->clave, $resultado['usuario_clave'])) {
         // if (!password_verify($this->clave, $resultado['usuario_clave'])) {

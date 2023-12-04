@@ -43,7 +43,7 @@ function Login(props) {
     icono: "",
   });
 
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+  const { onChange, onSubmit, values } = useForm(() => loginUserCallback(), {
     username: "",
     password: "",
   });
@@ -269,22 +269,21 @@ function Login(props) {
   };
 
   function loginUserCallback() {
-    if (userInput.toLowerCase() === captchaText.toLowerCase()) {
+    // if (userInput.toLowerCase() != captchaText.toLowerCase()) {
       setLoading(true);
       sinIgn();
-    } else {
-      //  alert('CAPTCHA incorrecto, intenta de nuevo');
-      setMensaje({
-        mostrar: true,
-        titulo: "Notificación",
-        texto: "Error en el CAPTCHA",
-        icono: "informacion",
-      });
-      setLoading(false);
-      generateCaptcha(); // Generar un nuevo CAPTCHA después de un intento fallido
-      setUserInput(""); // Limpiar el campo de entrada
-    }
-
+    //  else {
+    //   //  alert('CAPTCHA incorrecto, intenta de nuevo');
+    //   setMensaje({
+    //     mostrar: true,
+    //     titulo: "Notificación",
+    //     texto: "Error en el CAPTCHA",
+    //     icono: "informacion",
+    //   });
+    //   setLoading(false);
+    //   generateCaptcha(); // Generar un nuevo CAPTCHA después de un intento fallido
+    //   setUserInput(""); // Limpiar el campo de entrada
+    // }
     console.log("listo");
   }
 
@@ -292,23 +291,23 @@ function Login(props) {
   const [userInput, setUserInput] = useState("");
 
   // Función para generar un nuevo CAPTCHA
-  const generateCaptcha = () => {
-    // Implementa la lógica para generar un CAPTCHA como se muestra en el ejemplo anterior
-    // Por ejemplo, puedes usar una función para generar texto aleatorio y asignarlo a captchaText
-    // Ejemplo simple:
-    const captcha = Math.random().toString(36).substring(7);
-    setCaptchaText(captcha);
-  };
+  // const generateCaptcha = () => {
+  //   // Implementa la lógica para generar un CAPTCHA como se muestra en el ejemplo anterior
+  //   // Por ejemplo, puedes usar una función para generar texto aleatorio y asignarlo a captchaText
+  //   // Ejemplo simple:
+  //   const captcha = Math.random().toString(36).substring(7);
+  //   setCaptchaText(captcha);
+  // };
 
-  // Función para verificar el CAPTCHA ingresado por el usuario
-  const checkCaptcha = () => {};
+  // // Función para verificar el CAPTCHA ingresado por el usuario
+  // const checkCaptcha = () => {};
 
-  const [captchaValid, setCaptchaValid] = useState(false);
+  // const [captchaValid, setCaptchaValid] = useState(false);
 
-  useEffect(() => {
-    // Generar un CAPTCHA al cargar el componente
-    generateCaptcha();
-  }, []);
+  // useEffect(() => {
+  //   // Generar un CAPTCHA al cargar el componente
+  //   generateCaptcha();
+  // }, []);
 
   return (
     <div className="contenedor">
@@ -409,7 +408,7 @@ function Login(props) {
                         <label htmlFor="floatingPassword">Contraseña</label>
                       </div>
 
-                      <div className="captcha-container input-group mx-auto mb-3 col-md-7 ">
+                      {/* <div className="captcha-container input-group mx-auto mb-3 col-md-7 ">
                         <label className="captcha-text my-auto d-flex align-items-center rounded-pill">
                           {captchaText}
                         </label>
@@ -423,7 +422,7 @@ function Login(props) {
                           value={userInput}
                           onChange={(e) => setUserInput(e.target.value)}
                         />
-                      </div>
+                      </div> */}
 
                       <div class="d-grid">
                         <button
