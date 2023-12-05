@@ -41,4 +41,10 @@ class Con_sucursal extends cls_sucursal
 		$resultado = $this->GetAll();
 		Response($resultado, 200);
 	}
+
+	public function buscarSucursal()
+	{
+		$resultado = $this->GetSucursal($_POST["Nombre"]);
+		Response($resultado, 200);
+	}
 }

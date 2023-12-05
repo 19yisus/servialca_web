@@ -3,13 +3,11 @@ var host;
 
 switch (municipio) {
   case "sarep":
-
     //host = "http://192.168.0.118/servialca_web/backend";
 
     //host = "http://localhost:80/servialca_web/backend";
     host = "https://servialcarcv.com/servialca_web/backend";
 
-    
     module.exports = {
       url: host,
       conexion: host,

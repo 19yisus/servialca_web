@@ -1031,6 +1031,34 @@ export const ModalRcv = (props) => {
     }
   };
 
+  const buscarSucursal = async ($a) => {
+    let endpoint = op.conexion + "/sucursal/buscarSucursal";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("Nombre", $a);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setValorSeleccionado({
+          ...valorSeleccionado,
+          sucursal_nombre: response[0]["sucursal_nombre"],
+          usuario_usuario: $a,
+        });
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   function soloLetras(event) {
     if (
       (event.keyCode != 32 && event.keyCode < 65) ||
@@ -1912,6 +1940,7 @@ export const ModalRcv = (props) => {
                             ...valorSeleccionado,
                             usuario_usuario: newValue.usuario_usuario,
                           });
+                          buscarSucursal(newValue.usuario_usuario);
                         }
                       }}
                       options={acesor}
