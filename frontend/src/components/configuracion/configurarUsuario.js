@@ -427,7 +427,7 @@ export const ModalConfigurarUsuarios = (props) => {
               Contraseña:
             </span>
             <input
-              onKeyDown={handleChange(12)}
+              onKeyDown={handleChange(20)}
               type="text"
               class="form-control"
               ref={txtClave}

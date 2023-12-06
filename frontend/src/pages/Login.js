@@ -387,7 +387,7 @@ function Login(props) {
                           name="password"
                           value={values.password}
                           onChange={onChange}
-                          maxLength={12}
+                          maxLength={20}
                           style={{ padingRight: "2.5rem" }} 
                         />
                         <span
