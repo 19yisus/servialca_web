@@ -2439,8 +2439,9 @@ export const ModalRcv = (props) => {
                       // Limitar la longitud a 4 dígitos
                       valor = valor.slice(0, 4);
                       if (valor.length === 4) {
-                        if (añoActual < valor) {
-                          e.target.value = añoActual;
+                        const añoLimite = añoActual + 1; // Permitir solo el año actual y el siguiente
+                        if (valor > añoLimite) {
+                          e.target.value = añoLimite;
                         } else if (valor < añoMinimo) {
                           e.target.value = añoMinimo;
                         } else {
@@ -2736,7 +2737,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    maxLength={15}
+                    maxLength={50}
                     type="text"
                     class="form-control"
                     ref={txtModelo}
@@ -2762,7 +2763,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    maxLength={15}
+                    maxLength={50}
                     type="text"
                     class="form-control"
                     ref={txtMarca}

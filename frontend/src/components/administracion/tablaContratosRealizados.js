@@ -483,7 +483,7 @@ function TablaContratosRealizados() {
                     </button>
                     {user_id == 57 && (
                       <button
-                        onClick={() => gestionarBanco(2, item)}
+                        onClick={() => gestionarBanco(2, item.poliza_id)}
                         className="btn btn-sm mx-1 btn-warning rounded-circle"
                       >
                         <i className="fa fa-edit"></i>{" "}
