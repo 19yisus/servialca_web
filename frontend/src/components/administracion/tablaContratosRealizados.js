@@ -298,7 +298,7 @@ function TablaContratosRealizados() {
     setOperacion(op);
     if (op == 2) {
       setMostrar5(true);
-      setIdCliente(id.poliza_id);
+      setIdCliente(id);
       setPoliza(id);
       setOperacion(op);
     } else {
@@ -306,6 +306,9 @@ function TablaContratosRealizados() {
     }
     if (op == 2) {
       setMostrar5(true);
+      setIdCliente(id);
+      setPoliza(id);
+      setOperacion(op);
     } else if (op === 3) {
       setMostrar5(true);
     } else if (op === 4) {
@@ -483,7 +486,7 @@ function TablaContratosRealizados() {
                     </button>
                     {user_id == 57 && (
                       <button
-                        onClick={() => gestionarBanco(2, item.poliza_id)}
+                        onClick={gestionarBanco(2, item.poliza_id)}
                         className="btn btn-sm mx-1 btn-warning rounded-circle"
                       >
                         <i className="fa fa-edit"></i>{" "}

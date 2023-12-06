@@ -428,6 +428,10 @@ abstract class cls_poliza extends cls_db
 	protected function Edit()
 	{
 		try {
+			$result = $this->Security();
+			if ($result) {
+				return $result;
+			}
 			$this->db->beginTransaction();
 			$resul = $this->SearchByEstado();
 			if (!$resul) {
