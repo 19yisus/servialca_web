@@ -296,7 +296,7 @@ function TablaContratosRealizados() {
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
     setOperacion(op);
-    if (op === 2) {
+    if (op == 2) {
       setMostrar5(true);
       setIdCliente(id.poliza_id);
       setPoliza(id);
@@ -304,7 +304,7 @@ function TablaContratosRealizados() {
     } else {
       setIdCliente(id);
     }
-    if (op === 2) {
+    if (op == 2) {
       setMostrar5(true);
     } else if (op === 3) {
       setMostrar5(true);
