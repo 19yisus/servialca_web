@@ -569,7 +569,7 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
-                {permisos &&
+                {/* {permisos &&
                   permisos.length >= 3 &&
                   permisos.substring(20, 21) === "1" && (
                     <a
@@ -580,8 +580,8 @@ function MenuImpuestoPP(props) {
 
                       <span>Bitacora</span>
                     </a>
-                  )}
-                {permisos &&
+                  )} */}
+                {/* {permisos &&
                   permisos.length >= 3 &&
                   permisos.substring(21, 22) === "1" && (
                     <a
@@ -591,7 +591,7 @@ function MenuImpuestoPP(props) {
                       <i className="fas fa-fw me-1 fa-print " />
                       <span>Reporte asesor</span>
                     </a>
-                  )}
+                  )} */}
 
                 <a
                   href="/"
