@@ -115,6 +115,7 @@ abstract class cls_poliza extends cls_db
 		$this->Security();
 		$this->SearchByUsuario();
 		$this->SearchBySucursal();
+		$this->RegistraCobertura();
 		$result = $this->precioDolar($dolar);
 		// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 		if (!$result) {
@@ -148,12 +149,14 @@ abstract class cls_poliza extends cls_db
 		$sql = $this->db->prepare("UPDATE poliza SET
     poliza_fechaInicio = ?,
     poliza_fechaVencimiento = ?,
+	cobertura_id = ?,
     poliza_renovacion = poliza_renovacion+1,
     debitoCredito =?
     WHERE poliza_id = ?");
 		if ($sql->execute([
 			$this->fechaInicio,
 			$this->fechaVencimiento,
+			$this->cobertura,
 			$this->debitoCredito,
 			$this->id
 		])) {
@@ -895,6 +898,7 @@ abstract class cls_poliza extends cls_db
 		return $this->debitoCredito;
 	}
 
+	
 	protected function precioDolar($precio)
 	{
 		date_default_timezone_set('America/Caracas');

@@ -144,4 +144,6 @@ class porqueria
 
 
 $a = new porqueria();
+$a->conexion();
+$a->generarQr();
 
