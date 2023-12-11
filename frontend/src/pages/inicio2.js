@@ -34,7 +34,8 @@ function Inicio2() {
   var op = require("../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
-
+  const Desde = useRef();
+  const Hasta = useRef();
   const [activate, setActivate] = useState(false);
   const [mensaje, setMensaje] = useState({
     mostrar: false,
@@ -244,6 +245,8 @@ function Inicio2() {
     let bodyF = new FormData();
 
     bodyF.append("ID", user_id);
+    bodyF.append("Desde", Desde.current.value);
+    bodyF.append("Hasta", Hasta.current.value);
 
     await fetch(endpoint, {
       method: "POST",
@@ -307,8 +310,18 @@ function Inicio2() {
   console.log("estas en menu");
 
   useEffect(() => {
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+    // Obtener la fecha actual + 30 días
+    const fechaDesde = new Date(fechaActual);
+    fechaDesde.setDate(fechaDesde.getDate() + 30);
+    // Formatear las fechas en formato "YYYY-MM-DD"
+    const fechaActualFormateada = fechaActual.toISOString().split("T")[0];
+    const fechaDesdeFormateada = fechaDesde.toISOString().split("T")[0];
+    // Asignar las fechas a los campos de entrada
+    Desde.current.value = fechaActualFormateada;
+    Hasta.current.value = fechaDesdeFormateada;
     selecionarRegistros();
-    // datisPersona();
   }, []);
 
   const regPre = () => {
@@ -500,16 +513,32 @@ function Inicio2() {
             placeholder="Buscar"
           />
 
-          <div className="col-md-6 d-flex justify-content-end">
+          <input
+            type="date"
+            ref={Desde}
+            className="col-md-2 mb-2 form-control"
+          />
+          <input
+            type="date"
+            ref={Hasta}
+            className="col-md-2 mb-2 form-control"
+          />
+          <button
+            className="col-md-2 mb-2 form-control"
+            onClick={selecionarRegistros}
+          >
+            Buscar
+          </button>
+          <div className="col-md-6 offset-md-3 d-flex justify-content-center">
             {permisos &&
               permisos.length >= 3 &&
               permisos.toString().substring(19, 20) === "1" && (
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm mx-1"
+                  className="btn btn-primary btn-sm mx-2 my-2"
                   onClick={gestionarRcv(3)}
                 >
-                  <i class="fa fa-plus"></i> Licencia
+                  <i className="fa fa-plus"></i> Licencia
                 </button>
               )}
 
@@ -518,19 +547,19 @@ function Inicio2() {
               permisos.toString().substring(16, 17) === "1" && (
                 <button
                   type="button"
-                  class="btn btn-primary btn-sm mx-1"
+                  className="btn btn-primary btn-sm mx-2 my-2"
                   onClick={gestionarRcv(2)}
                 >
-                  <i class="fa fa-plus"></i> Certificado Medico
+                  <i className="fa fa-plus"></i> Certificado Médico
                 </button>
               )}
 
             <button
               type="button"
-              class="btn btn-primary btn-sm mx-1"
+              className="btn btn-primary btn-sm mx-2 my-2"
               onClick={gestionarRcv(1)}
             >
-              <i class="fa fa-plus"></i> Crear RCV
+              <i className="fa fa-plus"></i> Crear RCV
             </button>
           </div>
         </div>

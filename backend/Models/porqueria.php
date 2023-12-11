@@ -90,7 +90,7 @@ class porqueria
 
 
 
-    public function generarQr()
+    public function generarQr($data)
     {
         set_time_limit(300000);
         $sql = $this->db->prepare("SELECT 
@@ -103,9 +103,9 @@ class porqueria
             LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
             LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
             LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
-            LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id");
+            LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
 
-        if ($sql->execute()) {
+        if ($sql->execute([$data])) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($resultado as $fila) {
@@ -144,6 +144,5 @@ class porqueria
 
 
 $a = new porqueria();
-$a->conexion();
-$a->generarQr();
+
 

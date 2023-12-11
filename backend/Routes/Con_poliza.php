@@ -136,7 +136,7 @@ class Con_poliza extends cls_poliza
 
     public function ConsultarVencer()
     {
-        $resultado = $this->Vencer($_POST['ID']);
+        $resultado = $this->Vencer($_POST['ID'],$_POST["Desde"],$_POST["Hasta"]);
         Response($resultado, 200);
     }
 

@@ -180,11 +180,11 @@ abstract class cls_poliza extends cls_db
 		}
 	}
 
-	protected function Vencer($id)
+	protected function Vencer($id, $desde, $hasta)
 	{
 		date_default_timezone_set('America/Caracas');
-		$diaActual = date('Y-m-d'); // Obtener el día actual
-		$diaCinco = date('Y-m-d', strtotime('+30 day')); // Obtener el quinto día 
+		$diaActual = $desde; // Obtener el día actual
+		$diaCinco = $hasta; // Obtener el quinto día 
 		if ($id == 57) {
 			$sql = $this->db->prepare("SELECT poliza.*, cliente.*, vehiculo.*, usuario.*, sucursal.*
             FROM poliza 
@@ -192,7 +192,7 @@ abstract class cls_poliza extends cls_db
             INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
             INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
             INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-            WHERE poliza.poliza_fechaVencimiento > :diaActual AND 
+            WHERE poliza.poliza_fechaVencimiento >= :diaActual AND 
             poliza.poliza_fechaVencimiento <= :diaCinco
             ORDER BY poliza.poliza_fechaVencimiento ASC");
 		} else {
@@ -898,7 +898,7 @@ abstract class cls_poliza extends cls_db
 		return $this->debitoCredito;
 	}
 
-	
+
 	protected function precioDolar($precio)
 	{
 		date_default_timezone_set('America/Caracas');

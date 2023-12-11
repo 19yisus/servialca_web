@@ -105,7 +105,7 @@ foreach ($datos as $fila) {
     $pdf->SetFillColor(255, 255, 255); // Restaurar el color de fondo a blanco
   }
 
-  $pdf->Cell($cellWidth, 10, utf8_decode($fila["nota_id"]), 1, 0, "C", true);
+  $pdf->Cell($cellWidth, 10, utf8_decode($fila["poliza_id"]), 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, date("d-m-Y", strtotime($fila["nota_fecha"])), 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, $fila["nota_hora"], 1, 0, "C", true);
   $pdf->Cell($cellWidth, 10, utf8_decode($fila["usuario_usuario"]), 1, 0, "C", true);
