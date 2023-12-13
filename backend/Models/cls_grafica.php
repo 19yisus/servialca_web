@@ -17,9 +17,11 @@ abstract class cls_grafica extends cls_db
         if (!$hasta) {
             $hasta = date("Y-m-d");
         }
-        $sql = $this->db->prepare("SELECT debitocredito.*, usuario.*, sucursal.* FROM debitocredito
+        $sql = $this->db->prepare("SELECT debitocredito.*, usuario.*, sucursal.*, poliza.* FROM poliza
+         LEFT JOIN debitocredito ON debitocredito.nota_id = poliza.debitoCredito
         LEFT JOIN usuario ON usuario.usuario_id = debitocredito.usuario_id
         LEFT JOIN sucursal ON sucursal.sucursal_id = debitocredito.sucursal_id
+       
         WHERE DATE(nota_fecha) BETWEEN ? AND ?");
         $sql->bindValue(1, $desde, PDO::PARAM_STR);
         $sql->bindValue(2, $hasta, PDO::PARAM_STR);

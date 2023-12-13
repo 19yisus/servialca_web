@@ -90,7 +90,7 @@ class porqueria
 
 
 
-    public function generarQr($data)
+    public function generarQr()
     {
         set_time_limit(300000);
         $sql = $this->db->prepare("SELECT 
@@ -103,9 +103,8 @@ class porqueria
             LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
             LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
             LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
-            LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
-
-        if ($sql->execute([$data])) {
+            LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id");
+        if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($resultado as $fila) {
@@ -117,11 +116,12 @@ class porqueria
 
                     // Generar el código QR dentro del bucle
                     $QRcodeImg = "../ImgQr/" . $contrato . ".png";
+                $url = $contrato . ".png";
                 QRcode::png($QR, $QRcodeImg);
 
                 // Actualizar la base de datos con la ruta del código QR
                 $sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-                $sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+                $sql2->execute([$url, $contrato]);
             }
         }
     }
@@ -144,5 +144,5 @@ class porqueria
 
 
 $a = new porqueria();
-
-
+$a->conexion();
+$a->generarQr();

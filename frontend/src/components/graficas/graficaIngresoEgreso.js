@@ -36,6 +36,12 @@ function GraficosIngresos() {
   console.log(user_id);
   const headCells = [
     {
+      label: "N° de contrato",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Fecha",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -416,6 +422,12 @@ function GraficosIngresos() {
               {records &&
                 recordsAfterPagingAndSorting().map((item, index) => (
                   <TableRow key={index} style={{ padding: "0" }}>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.poliza_id}
+                    </TableCell>
                     <TableCell
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}

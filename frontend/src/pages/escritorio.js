@@ -37,6 +37,7 @@ import PageChats from "../components/chat/chats";
 import ReportesSemanal from "../components/reportesPorqueria/resportes";
 import TablaBitacora from "../components/bitacora/tablaBitacora";
 import ReportesAsesor from "../components/reportesPorqueria/reportesAsesor";
+import TablaHotel from "../components/hotel/tablaHotel";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -592,7 +593,13 @@ function MenuImpuestoPP(props) {
                       <span>Reporte asesor</span>
                     </a>
                   )} */}
-
+                <a
+                  href="/hotel"
+                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                >
+                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
+                  <span>Hotel</span>
+                </a>
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
@@ -606,6 +613,11 @@ function MenuImpuestoPP(props) {
               <section>
                 <Header onCambiar={cambiar} />
               </section>
+              <AuthRoute
+                exact
+                path="/hotel"
+                component={TablaHotel}
+              />
               <AuthRoute exact path="/inicio" component={Inicio2} />
               <AuthRoute
                 exact
