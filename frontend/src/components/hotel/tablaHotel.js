@@ -302,7 +302,7 @@ function TablaHotel() {
       />
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Hotel</h2>
+          <h2 className=" col-5 text-light">Sistema de Hotel</h2>
           <div class="input-group input-group-sm col-md-4 my-auto">
             <span
               class="input-group-text bg-transparent border-0 fw-bold text-light"
@@ -378,7 +378,7 @@ function TablaHotel() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.licencia_id}
+                    {"N°" + item.num_habicacion_hospedaje}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
@@ -402,19 +402,19 @@ function TablaHotel() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.cliente_cedula}
+                    {item.vehiculo_placa}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.cliente_cedula}
+                    {item.hora_llegada_hospedaje}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.cliente_cedula}
+                    {item.hora_salida_hospedaje}
                   </TableCell>
                   <TableCell
                     className="align-baseline"

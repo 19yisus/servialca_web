@@ -3,8 +3,11 @@ require_once("cls_db.php");
 
 abstract class cls_hotel extends cls_db
 {
-    protected $id, $id_cliente, $id_vehiculo, $nombre_hotel, $nombre_cliente,
-        $apellido_cliente, $cedula, $placa, $habitacion, $horaLlegada, $horaSalida, $fecha;
+    protected $id, $id_cliente, $id_vehiculo,
+        $nombre_hotel,
+        $nombre_cliente, $apellido_cliente, $cedula, $fechaNacimiento, $telefono, $direccion,
+        $placa, $modelo, $color,
+        $habitacion, $horaLlegada, $horaSalida, $fecha;
 
 
     public function __construct()
@@ -70,10 +73,22 @@ abstract class cls_hotel extends cls_db
 
     protected function SaveHotel()
     {
-        $sql = $this->db->prepare("INSERT INTO 
-        hospedaje_clientes(cliente_id_hospedaje,vehiculo_id_hospedaje,num_habicacion_hospedaje) 
-        VALUES(?,?,?)");
-        if ($sql->execute([$this->id_cliente, $this->id_vehiculo, $this->habitacion])) {
+        // Obtener la hora actual en formato HH:mm:ss
+        $this->horaLlegada = date("H:i:s");
+
+        // Supongamos que $this->horaSalida es un valor numérico que representa las horas
+        $horasSalida = $this->horaSalida;
+
+        // Sumar las horas de $horasSalida a la hora actual
+        $horaActual = new DateTime($this->horaLlegada);
+        $horaActual->add(new DateInterval("PT{$horasSalida}H"));
+
+        // Obtener la hora resultante en formato HH:mm:ss
+        $desde = $horaActual->format("H:i:s");
+
+        $sql = $this->db->prepare("INSERT INTO hospedaje_clientes(cliente_id_hospedaje, vehiculo_id_hospedaje, num_habicacion_hospedaje, hora_llegada_hospedaje, hora_salida_hospedaje) VALUES(?,?,?,?,?)");
+
+        if ($sql->execute([$this->id_cliente, $this->id_vehiculo, $this->habitacion, $this->horaLlegada, $desde])) {
             $resultado = true;
         } else {
             $resultado = false;
@@ -81,6 +96,7 @@ abstract class cls_hotel extends cls_db
 
         return $resultado;
     }
+
 
 
     protected function SearchByCliente()
@@ -91,6 +107,12 @@ abstract class cls_hotel extends cls_db
         if ($rowCount > 0) {
             $resultado = $sql->fetch(PDO::FETCH_ASSOC);
             $this->id_cliente = $resultado["cliente_id"];
+        } else {
+            $sql = $this->db->prepare("INSERT INTO cliente(cliente_nombre, cliente_apellido, cliente_cedula)
+            VALUES(?,?,?)");
+            if ($sql->execute([$this->nombre_cliente, $this->apellido_cliente, $this->cedula])) {
+                $this->id_cliente = $this->db->lastInsertId();
+            }
         }
 
         return $this->id_cliente;
@@ -105,6 +127,11 @@ abstract class cls_hotel extends cls_db
         if ($rowCount > 0) {
             $resultado = $sql->fetch(PDO::FETCH_ASSOC);
             $this->id_vehiculo = $resultado["vehiculo_id"];
+        } else {
+            $sql = $this->db->prepare("INSERT INTO vehiculo(vehiculo_placa,color_id,modelo_id) VALUES(?,?,?)");
+            if ($sql->execute([$this->placa, $this->color, $this->modelo])) {
+                $this->id_vehiculo = $this->db->lastInsertId();
+            }
         }
 
         return $this->id_vehiculo;

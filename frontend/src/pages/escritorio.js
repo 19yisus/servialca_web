@@ -116,7 +116,7 @@ function MenuImpuestoPP(props) {
       setMensaje({mostrar: true, titulo:'Error', texto: error.response.data.message, icono: 'error'});
     })
   };*/
-
+  const idUser = JSON.parse(localStorage.getItem("user_id"));
   let permisos = JSON.parse(localStorage.getItem("permisos"));
   console.log(permisos);
   // permisos = permisos.map((item) =>
@@ -593,13 +593,17 @@ function MenuImpuestoPP(props) {
                       <span>Reporte asesor</span>
                     </a>
                   )} */}
-                <a
-                  href="/hotel"
-                  className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
-                >
-                  <i class="fas fa-file-invoice-dollar fa-fw me-1"></i>
-                  <span>Hotel</span>
-                </a>
+                {idUser === 57 && (
+                  <>
+                    <a
+                      href="/hotel"
+                      className="list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                    >
+                      <i className="fas fa-file-invoice-dollar fa-fw me-1"></i>
+                      <span>Hotel</span>
+                    </a>
+                  </>
+                )}
                 <a
                   href="/"
                   className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
@@ -613,11 +617,7 @@ function MenuImpuestoPP(props) {
               <section>
                 <Header onCambiar={cambiar} />
               </section>
-              <AuthRoute
-                exact
-                path="/hotel"
-                component={TablaHotel}
-              />
+              <AuthRoute exact path="/hotel" component={TablaHotel} />
               <AuthRoute exact path="/inicio" component={Inicio2} />
               <AuthRoute
                 exact
