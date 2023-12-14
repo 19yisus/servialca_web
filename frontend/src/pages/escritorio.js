@@ -593,7 +593,7 @@ function MenuImpuestoPP(props) {
                       <span>Reporte asesor</span>
                     </a>
                   )} */}
-                {idUser === 57 && (
+                {idUser == 57 && (
                   <>
                     <a
                       href="/hotel"
