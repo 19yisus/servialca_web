@@ -7,7 +7,7 @@ abstract class cls_hotel extends cls_db
         $nombre_hotel,
         $nombre_cliente, $apellido_cliente, $cedula, $fechaNacimiento, $telefono, $direccion,
         $placa, $modelo, $color,
-        $habitacion, $horaLlegada, $horaSalida, $fecha;
+        $habitacion, $horaLlegada, $horaSalida, $fecha, $observacion, $foto;
 
 
     public function __construct()
@@ -98,6 +98,27 @@ abstract class cls_hotel extends cls_db
     }
 
 
+    protected function SaveObs()
+    {
+        $sql = $this->db->prepare("UPDATE hospedaje_clientes SET observacion_hospedaje = ?, foto_hospedaje = ? WHERE id_hospedaje  = ?");
+        if ($sql->execute([$this->observacion, $this->foto, $this->id])) {
+            return [
+                "data" => [
+                    "res" => "Observación registrada"
+                ],
+                "code" => 200
+            ];
+        } else {
+            return [
+                "data" => [
+                    "res" => "Observación no registrada"
+                ],
+                "code" => 400
+            ];
+        }
+    }
+
+
 
     protected function SearchByCliente()
     {
@@ -137,6 +158,21 @@ abstract class cls_hotel extends cls_db
         return $this->id_vehiculo;
     }
 
+    protected function GetOcup()
+    {
+        $sql = $this->db->prepare("SELECT *, cliente.*, vehiculo.* FROM hospedaje_clientes 
+        INNER JOIN cliente on cliente.cliente_id = hospedaje_clientes.cliente_id_hospedaje
+        INNER JOIN vehiculo on vehiculo.vehiculo_id = hospedaje_clientes.vehiculo_id_hospedaje
+        WHERE estatus_hospedaje = 1");
+        if ($sql->execute()) {
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $resultado = [];
+        }
+
+        return $resultado;
+    }
+
     protected function GetAll()
     {
         $sql = $this->db->prepare("SELECT *, cliente.*, vehiculo.* FROM hospedaje_clientes 
@@ -149,5 +185,37 @@ abstract class cls_hotel extends cls_db
         }
 
         return $resultado;
+    }
+
+    protected function GetRooms()
+    {
+        $sql = $this->db->prepare("SELECT * FROM hospedaje_clientes WHERE estatus_hospedaje = 1");
+        if ($sql->execute()) {
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $resultado = [];
+        }
+
+        return $resultado;
+    }
+
+    protected function HabiLib()
+    {
+        $sql = $this->db->prepare("UPDATE hospedaje_clientes SET estatus_hospedaje = 0 WHERE id_hospedaje = ?");
+        if ($sql->execute([$this->id])) {
+            return [
+                "data" => [
+                    "res" => "Habitación liberada"
+                ],
+                "code" => 200
+            ];
+        } else {
+            return [
+                "data" => [
+                    "res" => "Error al liberar la habitación"
+                ],
+                "code" => 400
+            ];
+        }
     }
 }

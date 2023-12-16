@@ -240,7 +240,6 @@ function TablaCertificado() {
     if (op === 2) {
       setIdLicencia(id);
       setMostrar4(true);
-      console.log(id);
     } else {
       setMostrar5(true);
       setIdLicencia(id);

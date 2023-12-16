@@ -1356,7 +1356,7 @@ abstract class cls_poliza extends cls_db
 				}
 
 				if ($fila) { //Verificar si $fila está definida antes de usarla
-					$QRcodeImg = "./ImgQr/" . $contrato . ".png";
+					$QRcodeImg = $contrato . ".png";
 					QRcode::png($QR, $QRcodeImg);
 					$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
 					$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);

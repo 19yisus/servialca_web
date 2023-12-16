@@ -103,6 +103,58 @@ export const ModalHotel = (props) => {
     });
   };
 
+  const consultarHabitacio = async () => {
+    let endpoint;
+    setActivate(true);
+    let bodyF = new FormData();
+    endpoint = op.conexion + "/hotel/ConsultarHabitaciones";
+    bodyF.append("Token", token);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: bodyF,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Obtén la lista de habitaciones reservadas
+      const habitacionesReservadas = data.map(
+        (reserva) => reserva.num_habicacion_hospedaje
+      );
+
+      // Obtén todas las opciones del select
+      const opcionesSelect = Array.from(cmbHabitacion.current.options);
+
+      // Filtra las opciones del select para excluir las habitaciones reservadas
+      const opcionesFiltradas = opcionesSelect.filter((opcion) => {
+        const numHabitacion = parseInt(opcion.value, 10);
+        return !habitacionesReservadas.includes(numHabitacion);
+      });
+
+      // Establece las opciones filtradas en el select
+      cmbHabitacion.current.options.length = 0;
+      opcionesFiltradas.forEach((opcion) => {
+        cmbHabitacion.current.add(opcion);
+      });
+
+      setActivate(false);
+    } catch (error) {
+      setMensaje({
+        mostrar: true,
+        titulo: "Notificación",
+        texto: error.message,
+        icono: "informacion",
+      });
+
+      setActivate(false);
+    }
+  };
+
   const actualizarCertificado = async () => {
     let endpoint;
     console.log(endpoint);
@@ -261,7 +313,7 @@ export const ModalHotel = (props) => {
   };
   const monto = () => {
     txtTotalDolar.current.value =
-      txtCantidadHoras.current.value * txtPrecioHora.current.value;
+      (txtCantidadHoras.current.value * txtPrecioHora.current.value).toFixed();
 
     txtTotalBs.current.value = (
       txtTotalDolar.current.value * dolarbcv
@@ -270,7 +322,6 @@ export const ModalHotel = (props) => {
 
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
-    props.render();
     props.onHideCancela();
   };
 
@@ -351,6 +402,7 @@ export const ModalHotel = (props) => {
                     <option value="G-">G-</option>
                   </select>
                   <input
+                    onChange={consultarHabitacio}
                     type="text"
                     ref={txtCedula}
                     maxLength={15}
@@ -491,6 +543,7 @@ export const ModalHotel = (props) => {
                     Precio por hora $:
                   </span>
                   <input
+                    value={1.6}
                     type="text"
                     class="form-control"
                     ref={txtPrecioHora}
@@ -564,20 +617,6 @@ export const ModalHotel = (props) => {
                     <option value="9">Habitación N° 9</option>
                     <option value="10">Habitación N° 10</option>
                   </select>
-                </div>
-              </div>
-              <div class="col-md-6 my-auto">
-                <div class="input-group input-group-sm mb-2">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Foto del cliente
-                  </span>
-                  <input
-                    type="file"
-                    maxLength={10}
-                    class="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-sm"
-                  />
                 </div>
               </div>
             </fieldset>

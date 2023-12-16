@@ -10,6 +10,7 @@ import { TableBody, TableRow, TableCell } from "@material-ui/core";
 
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 import { ModalHotel } from "./modalHotel";
+import { ModalNota } from "./modalNota";
 function TablaHotel() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
@@ -25,6 +26,12 @@ function TablaHotel() {
 
   console.log(user_id);
   const headCells = [
+    {
+      label: "Codigo",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
     {
       label: "N° de habitación",
       textAlign: "center",
@@ -56,13 +63,13 @@ function TablaHotel() {
       color: "white",
     },
     {
-      label: "Fecha de entrada",
+      label: "Hora de entrada",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
     {
-      label: "Fecha de salida",
+      label: "Hora de salida",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -89,6 +96,7 @@ function TablaHotel() {
   const [totalavi, setTotalavi] = useState(0.0);
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
+  const [mostrar2, setMostrar2] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -123,6 +131,44 @@ function TablaHotel() {
     } else {
       txtBs.current.value = "0,00";
     }
+  };
+  const habilitar = async ($id) => {
+    let endpoint = op.conexion + "/hotel/HabilitarHabit";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("ID", $id);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: response.res,
+            icono: "exito",
+          });
+        }
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+    selecionarRegistros();
   };
   const calcular2 = () => {
     const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
@@ -202,7 +248,7 @@ function TablaHotel() {
     useTable(records, headCells, filterFn);
 
   const selecionarRegistros = async () => {
-    let endpoint = op.conexion + "/hotel/ConsultarTodos";
+    let endpoint = op.conexion + "/hotel/consultarOcupados";
     console.log(endpoint);
     setActivate(true);
 
@@ -226,52 +272,6 @@ function TablaHotel() {
         })
       );
   };
-  function obtenerNombrePosicion(numero) {
-    const numeroStr = String(numero).padStart(4, "0");
-
-    // Definimos las posiciones y sus nombres
-    const posiciones = ["2da", "3ra", "4ta", "5ta"];
-
-    // Filtramos las posiciones relevantes basadas en el número
-    const posicionesRelevantes = numeroStr
-      .split("")
-      .map((digito, index) => (digito === "1" ? posiciones[index] : null))
-      .filter(Boolean);
-
-    // Unimos las posiciones relevantes en un string
-    const nombreCompleto = posicionesRelevantes.join(", ");
-
-    return nombreCompleto;
-  }
-
-  const imprimir = (id) => (e) => {
-    e.preventDefault();
-
-    window.open(`${op.conexion}/reporte/reporteLicencia?ID=${id}`);
-  };
-  const handleSearch = (e) => {
-    let target = e.target;
-    setFilterFn({
-      fn: (items) => {
-        if (target.value === "") return items;
-        else
-          return items.filter((x) => {
-            if (
-              (x.licencia_id !== null
-                ? String(x.licencia_id).includes(target.value)
-                : 0) ||
-              (x.cliente_nombre !== null
-                ? x.cliente_nombre
-                    .toLowerCase()
-                    .includes(target.value.toLowerCase())
-                : "")
-            ) {
-              return x;
-            }
-          });
-      },
-    });
-  };
 
   console.log("estas en menu");
 
@@ -286,7 +286,16 @@ function TablaHotel() {
 
   const gestionarBanco = (op, id) => (e) => {
     e.preventDefault();
-    setMostrar(true);
+    if (op == 1) {
+      setMostrar(true);
+    }
+    if (op == 2) {
+      setMostrar2(true);
+    }
+
+    if (op == 3) {
+      habilitar(id);
+    }
     setOperacion(op);
     setIdLicencia(id);
   };
@@ -300,9 +309,17 @@ function TablaHotel() {
           setMostrar(false);
         }}
       />
+      <ModalNota
+        operacion={operacion}
+        show={mostrar2}
+        idLicencia={idLicencia}
+        onHideCancela={() => {
+          setMostrar2(false);
+        }}
+      />
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
-          <h2 className=" col-5 text-light">Sistema de Hotel</h2>
+          <h2 className=" col-5 text-light">Habitaciones ocupadas</h2>
           <div class="input-group input-group-sm col-md-4 my-auto">
             <span
               class="input-group-text bg-transparent border-0 fw-bold text-light"
@@ -346,7 +363,7 @@ function TablaHotel() {
             <input
               type="text"
               className=" col-3 form-control form-control-sm rounded-pill"
-              onChange={handleSearch}
+              // onChange={handleSearch}
               placeholder="Buscar"
             />
 
@@ -374,6 +391,12 @@ function TablaHotel() {
             {records &&
               recordsAfterPagingAndSorting().map((item, index) => (
                 <TableRow key={index} style={{ padding: "0" }}>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.id_hospedaje}
+                  </TableCell>
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
@@ -421,20 +444,26 @@ function TablaHotel() {
                     style={{
                       textAlign: "center",
                       alignItems: "center",
-                      width: 130,
                     }}
                   >
                     <button
-                      onClick={gestionarBanco(2, item.licencia_id)}
+                      onClick={gestionarBanco(0, item.id_hospedaje)}
                       className="btn btn-sm mx-1 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
-                      onClick={imprimir(item.licencia_id)}
+                      onClick={gestionarBanco(2, item.id_hospedaje)}
                       className="btn btn-sm mx-3 btn-info rounded-circle"
                     >
-                      <i className="fas fa-print"></i>
+                      <i className="fas fa-file-alt"></i>{" "}
+                      {/* Cambiado a un ícono de documento */}
+                    </button>
+                    <button
+                      onClick={gestionarBanco(3, item.id_hospedaje)}
+                      className="btn btn-sm mx-1 btn-warning rounded-circle"
+                    >
+                      <i className="fas fa-check"></i> {/* Ícono de check */}
                     </button>
                   </TableCell>
                 </TableRow>
