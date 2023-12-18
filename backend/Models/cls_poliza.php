@@ -1322,51 +1322,63 @@ abstract class cls_poliza extends cls_db
 	protected function generarQr($id)
 	{
 		set_time_limit(30000);
-		$sql = $this->db->prepare("SELECT 
-        poliza.*,
-        cliente.*,
-        vehiculo.*,
-        marca.*,
-        modelo.* 
-        FROM poliza
-        LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-        LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-        LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
-        LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
-		if ($sql->execute([$id])) {
-			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-			if ($resultado != "" || $resultado != null) {
-				foreach ($resultado as $fila) {
-					$contrato = $fila["poliza_id"];
-					if ($fila["poliza_renovacion"] < 10) {
-						$contrato = "00000" . $fila["poliza_id"] . "-0" . $fila["poliza_renovacion"];
-					} else {
-						$contrato = "00000" . $fila["poliza_id"] . "-" . $fila["poliza_renovacion"];
+
+		try {
+			// Consulta SQL para obtener los datos de la póliza y clientes relacionados
+			$sql = $this->db->prepare("SELECT 
+                poliza.*,
+                cliente.*,
+                vehiculo.*,
+                marca.*,
+                modelo.* 
+                FROM poliza
+                LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+                LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+                LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
+                LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
+
+			if ($sql->execute([$id])) {
+				$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+				if ($resultado) {
+					foreach ($resultado as $fila) {
+						// Formato del número de contrato
+						$contrato = sprintf("%06d-%02d", $fila["poliza_id"], $fila["poliza_renovacion"]);
+
+						// Contenido del código QR
+						$QR = "N° Contrato: " . $contrato .
+							"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
+							"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
+							"\n" . "Nombre: " . $fila["cliente_nombre"] .
+							"\n" . "Apellido: " . $fila["cliente_apellido"] .
+							"\n" . "Cédula: " . $fila["cliente_cedula"] .
+							"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
+							"\n" . "Marca: " . $fila["marca_nombre"] .
+							"\n" . "Modelo: " . $fila["modelo_nombre"];
 					}
 
-					$QR = "N° Contrato: " . $contrato .
-						"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
-						"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
-						"\n" . "Nombre: " . $fila["cliente_nombre"] .
-						"\n" . "Apellido: " . $fila["cliente_apellido"] .
-						"\n" . "Cédula: " . $fila["cliente_cedula"] .
-						"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
-						"\n" . "Marca: " . $fila["marca_nombre"] .
-						"\n" . "Modelo: " . $fila["modelo_nombre"];
-				}
+					// Ruta y nombre del archivo del código QR
+					$QRcodeImg = "./ImgQr/" . $contrato . ".png";
+					$url = $contrato . ".png";
 
-				if ($fila) { //Verificar si $fila está definida antes de usarla
-					$QRcodeImg = $contrato . ".png";
+					// Generar y guardar el código QR
 					QRcode::png($QR, $QRcodeImg);
+
+					// Actualizar la base de datos con la ruta del código QR
 					$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-					$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+					$sql2->execute([$url, $id]);
+
 					return true;
 				}
 			}
-		} else {
-			return false;
+		} catch (PDOException $e) {
+			// Manejar excepciones de PDO
+			echo "Error: " . $e->getMessage();
 		}
+
+		return false;
 	}
+
 
 	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechaFinal)
 	{

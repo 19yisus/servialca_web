@@ -41,6 +41,7 @@ export const ModalRcv = (props) => {
   const suc = JSON.parse(localStorage.getItem("sucursal"));
   const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const [value, setValue] = useState("");
+  const [variable, setVariable] = useState(false);
   //ID
   const idPoliza = useRef();
   const idCliente = useRef();
@@ -649,6 +650,7 @@ export const ModalRcv = (props) => {
     bodyF.append("Contrato", valorSeleccionado.contrato_nombre);
     bodyF.append("Tipo", valorSeleccionado.tipoVehiculo_nombre);
     bodyF.append("Sucursal", idsucursal);
+
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -657,11 +659,14 @@ export const ModalRcv = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response[0]);
+
         if (response[0]) {
           txtDolar.current.value = response[0]["precio_monto"];
+
           txtBs.current.value = (
             response[0]["precio_monto"] * dolarbcv
           ).toFixed(2);
+
           setTipoContrato(response);
         } else {
           setMensaje({
@@ -1277,18 +1282,6 @@ export const ModalRcv = (props) => {
         txtMarca.current.value = response[0].marca_nombre;
         txtPeso.current.value = response[0].vehiculo_peso;
         txtCapTon.current.value = response[0].vehiculo_capTon;
-        if (response[0].nota_tipoPago == null) {
-          cmbFormaPago.current.value = 0;
-        } else {
-          cmbFormaPago.current.value = response[0].nota_tipoPago;
-        }
-        // TxtTipoContrato.current.getInstance().setState({
-        //   selected: response[0].contrato_nombre
-        // });
-
-        txtReferencia.current.value = response[0].nota_referencia;
-        txtDolar.current.value = response[0].nota_monto;
-        txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
       })
       .catch((error) => {
         console.log(error);
@@ -1561,7 +1554,10 @@ export const ModalRcv = (props) => {
           </li>
           <li class="nav-item" role="presentation">
             <a
-              onClick={selecionarPrecio}
+              onClick={() => {
+                selecionarPrecio();
+                setVariable(true);
+              }}
               class="nav-link rounded bg-warning"
               id="ex1-tab-3"
               data-mdb-toggle="tab"
@@ -2908,22 +2904,24 @@ export const ModalRcv = (props) => {
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <button
-          className="btn btn-sm btn-success rounded-pill col-md-2"
-          disabled={props.operacion === 4 ? true : false}
-          onClick={onChangeValidar}
-        >
-          <i className="fas fa-check-circle"> Aceptar</i>
-        </button>
-        <button
-          ref={btnCancela}
-          onClick={salir}
-          className="btn btn-sm btn-danger rounded-pill col-md-2"
-        >
-          <i className="fas fa-window-close"> Salir</i>
-        </button>
-      </Modal.Footer>
+      {variable == true && (
+        <Modal.Footer>
+          <button
+            className="btn btn-sm btn-success rounded-pill col-md-2"
+            disabled={props.operacion === 4 ? true : false}
+            onClick={onChangeValidar}
+          >
+            <i className="fas fa-check-circle"> Aceptar</i>
+          </button>
+          <button
+            ref={btnCancela}
+            onClick={salir}
+            className="btn btn-sm btn-danger rounded-pill col-md-2"
+          >
+            <i className="fas fa-window-close"> Salir</i>
+          </button>
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };
