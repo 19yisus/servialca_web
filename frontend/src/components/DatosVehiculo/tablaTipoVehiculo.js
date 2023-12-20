@@ -37,12 +37,18 @@ function TablaTipoVehiculo() {
       backgroundColor: "#e70101bf",
       color: "white",
     },
-   /* {
+    {
+      label: "Tipo de contrato",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Precio",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
-    },*/
+    },
     {
       label: "Estatus",
       textAlign: "center",
@@ -223,7 +229,7 @@ function TablaTipoVehiculo() {
     selecionarRegistros();
   };
   const selecionarRegistros = async () => {
-    setMostrar(false)
+    setMostrar(false);
     let endpoint =
       op.conexion + "/tipo_vehiculo/ConsultarTodos?Sucursal=" + idsucursal;
     console.log(endpoint);
@@ -383,12 +389,20 @@ function TablaTipoVehiculo() {
                   >
                     {item.tipoVehiculo_nombre}
                   </TableCell>
-                 {/* <TableCell
+                  <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.precio_monto}
-              </TableCell>*/}
+                    {item.contrato_nombre}
+                  </TableCell>
+                  {
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.precio_monto + "$"}
+                    </TableCell>
+                  }
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
@@ -420,7 +434,7 @@ function TablaTipoVehiculo() {
                       )}
                       className="btn btn-sm mx-1 btn-danger rounded-circle"
                     >
-                     {item.tipoVehiculo_estatus === 1 ? (
+                      {item.tipoVehiculo_estatus === 1 ? (
                         <i className="fa fa-times"></i>
                       ) : (
                         <i

@@ -20,13 +20,13 @@ class porqueria
         $sql = $this->db->prepare("SELECT tipoVehiculo_id, sucursal_id, tipoVehiculo_precio FROM tipoVehiculo");
 
         // Reemplaza 1 con el ID del tipo de vehículo que deseas insertar
-        $tipoVehiculoID = 1;
+        $tipoVehiculoID = 2;
 
         if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
             foreach ($resultado as $row) {
                 // Reemplazar 1 con el ID del tipo de contrato adecuado
-                $tipoContratoID = 1;
+                $tipoContratoID = 2;
 
                 $sqlInsert = $this->db->prepare("INSERT INTO precio (tipoVehiculo_id, tipoContrato_id, sucursal_id, precio_monto) VALUES(?, ?, ?, ?)");
 
@@ -145,4 +145,4 @@ class porqueria
 
 $a = new porqueria();
 $a->conexion();
-$a->generarQr();
+$a->trasferir();
