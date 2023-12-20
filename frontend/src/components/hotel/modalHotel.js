@@ -78,7 +78,7 @@ export const ModalHotel = (props) => {
   const [operacion, setOperacion] = useState(0);
 
   /*********************************************** FUNCINES DE VALIDACION***********************************************************/
-
+ 
   const salir = () => {
     props.onHideCancela();
     setValues({
@@ -312,8 +312,9 @@ export const ModalHotel = (props) => {
       );
   };
   const monto = () => {
-    txtTotalDolar.current.value =
-      (txtCantidadHoras.current.value * txtPrecioHora.current.value).toFixed();
+    txtTotalDolar.current.value = (
+      txtCantidadHoras.current.value * txtPrecioHora.current.value
+    ).toFixed();
 
     txtTotalBs.current.value = (
       txtTotalDolar.current.value * dolarbcv
@@ -323,6 +324,7 @@ export const ModalHotel = (props) => {
   const cerrarModal = () => {
     setMensaje({ mostrar: false, titulo: "", texto: "", icono: "" });
     props.onHideCancela();
+    props.render();
   };
 
   return (
@@ -429,6 +431,7 @@ export const ModalHotel = (props) => {
                     Nombre
                   </span>
                   <input
+                    
                     type="text"
                     ref={txtNombre}
                     maxLength={25}

@@ -11,7 +11,8 @@ import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 import { ModalHotel } from "./modalHotel";
 import { ModalNota } from "./modalNota";
-function TablaHotelGeneral() {
+import { ModalConsultaHotel } from "./modalConsultaHotel";
+function TablaHotelGeneral(props) {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
   const user_id = JSON.parse(localStorage.getItem("user_id"));
@@ -63,6 +64,12 @@ function TablaHotelGeneral() {
       color: "white",
     },
     {
+      label: "Fecha",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Hora de entrada",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -97,6 +104,7 @@ function TablaHotelGeneral() {
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
+  const [mostrar3, setMostrar3] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -132,7 +140,7 @@ function TablaHotelGeneral() {
       txtBs.current.value = "0,00";
     }
   };
- 
+
   const calcular2 = () => {
     const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
     const cantidadBs = parseFloat(cantidadBsStr);
@@ -256,7 +264,11 @@ function TablaHotelGeneral() {
       setMostrar2(true);
     }
 
-   
+    if (op == 3) {
+      setIdLicencia(id);
+      setMostrar3(true);
+    }
+
     setOperacion(op);
     setIdLicencia(id);
   };
@@ -276,6 +288,14 @@ function TablaHotelGeneral() {
         idLicencia={idLicencia}
         onHideCancela={() => {
           setMostrar2(false);
+        }}
+      />
+      <ModalConsultaHotel
+        operacion={operacion}
+        show={mostrar3}
+        idLicencia={idLicencia}
+        onHideCancela={() => {
+          setMostrar3(false);
         }}
       />
       <div className="col-12 py-2">
@@ -327,8 +347,6 @@ function TablaHotelGeneral() {
               // onChange={handleSearch}
               placeholder="Buscar"
             />
-
-            
           </div>
           {/* <div className="col-md-3 d-flex justify-content-end">
             <button
@@ -385,6 +403,12 @@ function TablaHotelGeneral() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
+                    {item.fecha_llegada_hospedaje}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
                     {item.hora_llegada_hospedaje}
                   </TableCell>
                   <TableCell
@@ -402,18 +426,24 @@ function TablaHotelGeneral() {
                   >
                     <button
                       onClick={gestionarBanco(0, item.id_hospedaje)}
-                      className="btn btn-sm mx-1 btn-warning rounded-circle"
+                      className="btn btn-sm mx-2 btn-warning rounded-circle"
                     >
                       <i className="fa fa-edit"></i>{" "}
                     </button>
                     <button
                       onClick={gestionarBanco(2, item.id_hospedaje)}
-                      className="btn btn-sm mx-3 btn-info rounded-circle"
+                      className="btn btn-sm mx-2 btn-info rounded-circle"
                     >
                       <i className="fas fa-file-alt"></i>{" "}
                       {/* Cambiado a un ícono de documento */}
                     </button>
-                    
+                    <button
+                      onClick={gestionarBanco(3, item.id_hospedaje)}
+                      className="btn btn-sm mx-2 btn-info rounded-circle"
+                    >
+                      <i className="fas fa-eye"></i>{" "}
+                      {/* Cambiado a un ícono de un ojo */}
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}

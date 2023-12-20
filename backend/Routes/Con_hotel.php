@@ -63,4 +63,10 @@ class Con_hotel extends cls_hotel
         $resultado = $this->HabiLib();
         Response($resultado, 200);
     }
+
+    public function ConsultarUno()
+    {
+        $resultado = $this->GetOne($_POST["ID"]);
+        Response($resultado, 200);
+    }
 }

@@ -1,9 +1,10 @@
 <?php
+date_default_timezone_set('America/Caracas');
 require_once("cls_db.php");
 
 abstract class cls_hotel extends cls_db
 {
-    protected $id, $id_cliente, $id_vehiculo,
+    protected $id, $id_cliente, $id_vehiculo, $id_color, $id_modelo,
         $nombre_hotel,
         $nombre_cliente, $apellido_cliente, $cedula, $fechaNacimiento, $telefono, $direccion,
         $placa, $modelo, $color,
@@ -25,6 +26,27 @@ abstract class cls_hotel extends cls_db
                 return [
                     "data" => [
                         "res" => "Error de transacción cliente"
+                    ],
+                    "code" => 400
+                ];
+            }
+            $resul = $this->GetModelo();
+            if (!$resul) {
+                $this->db->rollback();
+                return [
+                    "data" => [
+                        "res" => "Error de transacción vehiculo"
+                    ],
+                    "code" => 400
+                ];
+            }
+
+            $resul = $this->GetColor();
+            if (!$resul) {
+                $this->db->rollback();
+                return [
+                    "data" => [
+                        "res" => "Error de transacción vehiculo"
                     ],
                     "code" => 400
                 ];
@@ -85,10 +107,11 @@ abstract class cls_hotel extends cls_db
 
         // Obtener la hora resultante en formato HH:mm:ss
         $desde = $horaActual->format("H:i:s");
+        $fecha_actual = date('Y-m-d');
+        $sql = $this->db->prepare("INSERT INTO hospedaje_clientes(cliente_id_hospedaje, vehiculo_id_hospedaje, num_habicacion_hospedaje,fecha_llegada_hospedaje, hora_llegada_hospedaje, hora_salida_hospedaje) VALUES(?,?,?,?,?,?)");
 
-        $sql = $this->db->prepare("INSERT INTO hospedaje_clientes(cliente_id_hospedaje, vehiculo_id_hospedaje, num_habicacion_hospedaje, hora_llegada_hospedaje, hora_salida_hospedaje) VALUES(?,?,?,?,?)");
 
-        if ($sql->execute([$this->id_cliente, $this->id_vehiculo, $this->habitacion, $this->horaLlegada, $desde])) {
+        if ($sql->execute([$this->id_cliente, $this->id_vehiculo, $this->habitacion, $fecha_actual, $this->horaLlegada, $desde])) {
             $resultado = true;
         } else {
             $resultado = false;
@@ -139,6 +162,41 @@ abstract class cls_hotel extends cls_db
         return $this->id_cliente;
     }
 
+    protected function GetModelo()
+    {
+        $sql = $this->db->prepare("SELECT * FROM modelo WHERE modelo_nombre = ?");
+        $sql->execute([$this->modelo]);
+        $rowCount = $sql->rowCount();
+        if ($rowCount > 0) {
+            $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+            $this->id_modelo = $resultado["modelo_id"];
+        } else {
+            $sql = $this->db->prepare("INSERT INTO modelo(modelo_nombre, modelo_estatus) VALUES(?,1)");
+            if ($sql->execute([$this->modelo])) {
+                $this->id_modelo = $this->db->lastInsertId();
+            }
+        }
+
+        return $this->id_modelo;
+    }
+
+    protected function GetColor()
+    {
+        $sql = $this->db->prepare("SELECT * FROM color WHERE color_nombre = ?");
+        $sql->execute([$this->color]);
+        $rowCount = $sql->rowCount();
+        if ($rowCount > 0) {
+            $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+            $this->id_color = $resultado["color_id"];
+        } else {
+            $sql = $this->db->prepare("INSERT INTO color(color_nombre,color_estatus) VALUES(?,1)");
+            if ($sql->execute([$this->color])) {
+                $this->id_color = $this->db->lastInsertId();
+            }
+        }
+
+        return $this->id_color;
+    }
 
     protected function GetVehiculo()
     {
@@ -150,7 +208,7 @@ abstract class cls_hotel extends cls_db
             $this->id_vehiculo = $resultado["vehiculo_id"];
         } else {
             $sql = $this->db->prepare("INSERT INTO vehiculo(vehiculo_placa,color_id,modelo_id) VALUES(?,?,?)");
-            if ($sql->execute([$this->placa, $this->color, $this->modelo])) {
+            if ($sql->execute([$this->placa, $this->id_color, $this->id_modelo])) {
                 $this->id_vehiculo = $this->db->lastInsertId();
             }
         }
@@ -163,7 +221,7 @@ abstract class cls_hotel extends cls_db
         $sql = $this->db->prepare("SELECT *, cliente.*, vehiculo.* FROM hospedaje_clientes 
         INNER JOIN cliente on cliente.cliente_id = hospedaje_clientes.cliente_id_hospedaje
         INNER JOIN vehiculo on vehiculo.vehiculo_id = hospedaje_clientes.vehiculo_id_hospedaje
-        WHERE estatus_hospedaje = 1");
+        WHERE estatus_hospedaje = 1 ORDER BY id_hospedaje DESC");
         if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -177,7 +235,9 @@ abstract class cls_hotel extends cls_db
     {
         $sql = $this->db->prepare("SELECT *, cliente.*, vehiculo.* FROM hospedaje_clientes 
         INNER JOIN cliente on cliente.cliente_id = hospedaje_clientes.cliente_id_hospedaje
-        INNER JOIN vehiculo on vehiculo.vehiculo_id = hospedaje_clientes.vehiculo_id_hospedaje");
+        INNER JOIN vehiculo on vehiculo.vehiculo_id = hospedaje_clientes.vehiculo_id_hospedaje
+        WHERE estatus_hospedaje = 0
+        ORDER BY id_hospedaje DESC");
         if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -217,5 +277,21 @@ abstract class cls_hotel extends cls_db
                 "code" => 400
             ];
         }
+    }
+
+    protected function GetOne($id)
+    {
+        $sql = $this->db->prepare("SELECT *, cliente.* , vehiculo.*, color.*, modelo.* FROM hospedaje_clientes 
+        INNER JOIN vehiculo ON vehiculo.vehiculo_id = hospedaje_clientes.vehiculo_id_hospedaje
+        INNER JOIN cliente ON cliente.cliente_id = hospedaje_clientes.cliente_id_hospedaje 
+        INNER JOIN color ON color.color_id = vehiculo.color_id
+        INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
+        WHERE id_hospedaje  = ?");
+        if ($sql->execute([$id])) {
+            $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $resultado = [];
+        }
+        return $resultado;
     }
 }

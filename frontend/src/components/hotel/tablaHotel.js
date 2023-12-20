@@ -11,6 +11,7 @@ import { TableBody, TableRow, TableCell } from "@material-ui/core";
 import { formatMoneda, validaMonto, formatoMonto } from "../../util/varios";
 import { ModalHotel } from "./modalHotel";
 import { ModalNota } from "./modalNota";
+
 function TablaHotel() {
   var op = require("../../modulos/datos");
   let token = localStorage.getItem("jwtToken");
@@ -57,6 +58,12 @@ function TablaHotel() {
       color: "white",
     },
     {
+      label: "Fecha",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Placa",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -97,6 +104,7 @@ function TablaHotel() {
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
+ 
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -308,6 +316,7 @@ function TablaHotel() {
         onHideCancela={() => {
           setMostrar(false);
         }}
+        render={selecionarRegistros}
       />
       <ModalNota
         operacion={operacion}
@@ -317,6 +326,7 @@ function TablaHotel() {
           setMostrar2(false);
         }}
       />
+     
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
           <h2 className=" col-5 text-light">Habitaciones ocupadas</h2>
@@ -426,6 +436,12 @@ function TablaHotel() {
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
                     {item.vehiculo_placa}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {item.fecha_llegada_hospedaje}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
