@@ -194,7 +194,7 @@ abstract class cls_tipo_vehiculo extends cls_db
     $sql = $this->db->prepare("SELECT precio.*, tipovehiculo.*, tipocontrato.* FROM precio 
           INNER JOIN tipovehiculo ON tipovehiculo.tipoVehiculo_id = precio.tipoVehiculo_id 
           INNER JOIN tipocontrato ON tipocontrato.contrato_id = precio.tipoContrato_id 
-          $whereClause ORDER BY tipovehiculo.tipoVehiculo_id ASC");
+          $whereClause ORDER BY precio_id ASC");
 
     $sql->execute();
 
