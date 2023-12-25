@@ -155,7 +155,7 @@ export const validaSoloNumero = (event) => {
 };
 export const validaSoloLetras = (event) => {
   $(event.target).val(function (index, value) {
-    return value.replace(/[^a-zA-Z\s]+/g, "").toUpperCase(); // Permite letras y espacios en blanco y convierte a mayúsculas
+    return value.replace(/[^a-zA-ZñÑ\s]+/g, "").toUpperCase(); // Permite letras y espacios en blanco y convierte a mayúsculas
   });
 };
 

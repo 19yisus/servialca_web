@@ -349,7 +349,7 @@ function TablaReportes() {
                     <option value=" ">Selecionar</option>
                     <option value="4">Sucursal</option>
                     <option value="RCV">RCV</option>
-                    <option value="Renovación">Renovaciones</option>
+                    <option value="Renovación">Renovacione s</option>
                     <option value="Seguro">Certificados Medicos</option>
                     <option value="Licencia">Licencias</option>
                     <option value="1">Ingresos</option>

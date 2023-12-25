@@ -34,12 +34,6 @@ function TablaHotel() {
       color: "white",
     },
     {
-      label: "N° de habitación",
-      textAlign: "center",
-      backgroundColor: "#e70101bf",
-      color: "white",
-    },
-    {
       label: "Nombre",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -58,13 +52,13 @@ function TablaHotel() {
       color: "white",
     },
     {
-      label: "Fecha",
+      label: "Placa",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
     },
     {
-      label: "Placa",
+      label: "Fecha",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -77,6 +71,12 @@ function TablaHotel() {
     },
     {
       label: "Hora de salida",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "N° de habitación",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -104,7 +104,7 @@ function TablaHotel() {
   const [operacion, setOperacion] = useState(0.0);
   const [mostrar, setMostrar] = useState(false);
   const [mostrar2, setMostrar2] = useState(false);
- 
+
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
@@ -177,6 +177,13 @@ function TablaHotel() {
         })
       );
     selecionarRegistros();
+  };
+  const formatearFecha = (fecha) => {
+    const fechaObj = new Date(fecha);
+    const dia = fechaObj.getDate();
+    const mes = fechaObj.getMonth() + 1;
+    const año = fechaObj.getFullYear();
+    return `${dia}-${mes}-${año}`;
   };
   const calcular2 = () => {
     const cantidadBsStr = txtBs.current.value.replace(",", "."); // Reemplaza la coma por punto
@@ -326,7 +333,7 @@ function TablaHotel() {
           setMostrar2(false);
         }}
       />
-     
+
       <div className="col-12 py-2">
         <div className="col-12 row d-flex justify-content-between py-2 mt-5 mb-3">
           <h2 className=" col-5 text-light">Habitaciones ocupadas</h2>
@@ -407,12 +414,7 @@ function TablaHotel() {
                   >
                     {item.id_hospedaje}
                   </TableCell>
-                  <TableCell
-                    className="align-baseline"
-                    style={{ textAlign: "center", alignItems: "center" }}
-                  >
-                    {"N°" + item.num_habicacion_hospedaje}
-                  </TableCell>
+
                   <TableCell
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
@@ -441,7 +443,7 @@ function TablaHotel() {
                     className="align-baseline"
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
-                    {item.fecha_llegada_hospedaje}
+                    {formatearFecha(item.fecha_llegada_hospedaje)}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
@@ -454,6 +456,12 @@ function TablaHotel() {
                     style={{ textAlign: "center", alignItems: "center" }}
                   >
                     {item.hora_salida_hospedaje}
+                  </TableCell>
+                  <TableCell
+                    className="align-baseline"
+                    style={{ textAlign: "center", alignItems: "center" }}
+                  >
+                    {"N°" + item.num_habicacion_hospedaje}
                   </TableCell>
                   <TableCell
                     className="align-baseline"
