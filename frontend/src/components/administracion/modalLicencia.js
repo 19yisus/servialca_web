@@ -48,7 +48,6 @@ export const ModalLicencia = (props) => {
   const check2 = useRef();
   const check3 = useRef();
   const check4 = useRef();
-
   const [values, setValues] = useState({
     ced: "",
     nombre: "",
@@ -104,6 +103,7 @@ export const ModalLicencia = (props) => {
       txtReferencia.current.disabled = false;
     }
   };
+
   const salir = () => {
     props.onHideCancela();
     setValues({
@@ -150,10 +150,36 @@ export const ModalLicencia = (props) => {
         txtApellido.current.value = response[0].cliente_apellido;
         txtCorreo.current.value = response[0].licencia_correo;
         var telefono = response[0].cliente_telefono.split("-");
-        cmbTelefono.current.value = telefono[0] + "-";
-        txtTelefono.current.value = telefono[1];
+        if (telefono[0] != "" && telefono[1] != "") {
+          cmbTelefono.current.value = telefono[0] + "-";
+          txtTelefono.current.value = telefono[1];
+        } else {
+          cmbTelefono.current.value = "0414-";
+          txtTelefono.current.value = "";
+        }
+
         txtTipoSangre.current.value = response[0].licencia_sangre;
         cmbTipoLicencia.current.value = response[0].licencia_licencia;
+        check1.current.checked = response[0].licencia_licenciaRestante
+          ? response[0].licencia_licenciaRestante.substring(0, 1) == "1"
+            ? true
+            : false
+          : false;
+        check2.current.checked = response[0].licencia_licenciaRestante
+          ? response[0].licencia_licenciaRestante.substring(1, 2) == "1"
+            ? true
+            : false
+          : false;
+        check3.current.checked = response[0].licencia_licenciaRestante
+          ? response[0].licencia_licenciaRestante.substring(2, 3) == "1"
+            ? true
+            : false
+          : false;
+        check4.current.checked = response[0].licencia_licenciaRestante
+          ? response[0].licencia_licenciaRestante.substring(3, 4) == "1"
+            ? true
+            : false
+          : false;
         cmbLentes.current.value = response[0].licencia_lente;
         cmbPago.current.value = response[0].nota_tipoPago;
         txtReferencia.current.value = response[0].nota_referencia;
@@ -180,6 +206,12 @@ export const ModalLicencia = (props) => {
     console.log(endpoint);
     setActivate(true);
     let bodyF = new FormData();
+
+    let chk1 = check1.current.checked ? "1" : "0";
+    let chk2 = check2.current.checked ? "1" : "0";
+    let chk3 = check3.current.checked ? "1" : "0";
+    let chk4 = check4.current.checked ? "1" : "0";
+    let permiso = chk1 + chk2 + chk3 + chk4;
     bodyF.append("ID", ID.current.value);
     bodyF.append("idCliente", idCliente.current.value);
     bodyF.append("Cobertura", idCobertura.current.value);
@@ -198,7 +230,7 @@ export const ModalLicencia = (props) => {
     bodyF.append("Correo", txtCorreo.current.value);
     bodyF.append("correoLicencia", txtCorreo.current.value);
     bodyF.append("Licencia", cmbTipoLicencia.current.value);
-    bodyF.append("licenciaRestante", "");
+    bodyF.append("licenciaRestante", permiso);
     bodyF.append("montoTotal", txtTotal.current.value);
     bodyF.append("Abonado", txtAbono.current.value);
     bodyF.append("Restante", txtRestante.current.value);
@@ -217,13 +249,21 @@ export const ModalLicencia = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response);
-
-        setMensaje({
-          mostrar: true,
-          titulo: "Exito.",
-          texto: "Registro Guardado Exitosamente",
-          icono: "exito",
-        });
+        if (response.code == 400) {
+          setMensaje({
+            mostrar: true,
+            titulo: "Error.",
+            texto: response.res,
+            icono: "error",
+          });
+        } else {
+          setMensaje({
+            mostrar: true,
+            titulo: "Exito.",
+            texto: "Registro Guardado Exitosamente",
+            icono: "exito",
+          });
+        }
       })
       .catch((error) =>
         setMensaje({
@@ -595,6 +635,7 @@ export const ModalLicencia = (props) => {
               ref={txtTipoSangre}
               aria-label="Default select example"
             >
+               <option value="N/S">N/S</option>
               <option value="A+">A+</option>
               <option value="A-">A-</option>
               <option value="B+">B+</option>
@@ -628,7 +669,7 @@ export const ModalLicencia = (props) => {
                 class="form-check-input my-auto"
                 ref={check1}
                 type="checkbox"
-                value=""
+                value="0"
                 id="flexCheckDefault"
               />
               <label class="form-check-label my-auto">2da</label>
@@ -638,7 +679,7 @@ export const ModalLicencia = (props) => {
                 class="form-check-input my-auto"
                 ref={check2}
                 type="checkbox"
-                value=""
+                value="1"
                 id="flexCheckDefault"
               />
               <label class="form-check-label my-auto">3ra</label>
@@ -648,7 +689,7 @@ export const ModalLicencia = (props) => {
                 class="form-check-input my-auto"
                 ref={check3}
                 type="checkbox"
-                value=""
+                value="2"
                 id="flexCheckDefault"
               />
               <label class="form-check-label my-auto">4ta</label>
@@ -658,7 +699,7 @@ export const ModalLicencia = (props) => {
                 class="form-check-input my-auto"
                 ref={check4}
                 type="checkbox"
-                value=""
+                value="3"
                 id="flexCheckDefault"
               />
               <label class="form-check-label my-auto">5ta</label>

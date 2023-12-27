@@ -30,7 +30,7 @@ if ($datos && count($datos) > 0) {
 $Pdf = new FPDF("L", "mm", "legal");
 $Pdf->AddPage("P");
 $Pdf->Image("./Img/rubro2.jpg", 49, 224, 36, 32);
-$Pdf->Image($datos[0]["poliza_qr"], 100, 232, 23, 23);
+$Pdf->Image("./ImgQr/" . $datos[0]["poliza_qr"], 120, 240, 36, 32);
 $Pdf->SetFont("Arial", "", 12);
 $Pdf->SetTextColor(000);
 $Pdf->SetFillColor(255, 255, 255);

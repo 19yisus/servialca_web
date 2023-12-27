@@ -201,14 +201,14 @@ function TablaCertificado() {
         else
           return items.filter((x) => {
             if (
-              (x.idcuentabancaria !== null
-                ? String(x.idcuentabancaria).includes(target.value)
+              (x.medico_id !== null
+                ? String(x.medico_id).includes(target.value)
                 : 0) ||
-              (x.nombre !== null
-                ? x.nombre.toLowerCase().includes(target.value.toLowerCase())
+              (x.cliente_nombre !== null
+                ? x.cliente_nombre.toLowerCase().includes(target.value.toLowerCase())
                 : "") ||
-              (x.cuentabancaria !== null
-                ? x.cuentabancaria.includes(target.value)
+              (x.cliente_cedula !== null
+                ? x.cliente_cedula.includes(target.value)
                 : "")
             ) {
               return x;
@@ -240,7 +240,6 @@ function TablaCertificado() {
     if (op === 2) {
       setIdLicencia(id);
       setMostrar4(true);
-      console.log(id);
     } else {
       setMostrar5(true);
       setIdLicencia(id);

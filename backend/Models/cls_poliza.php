@@ -115,6 +115,7 @@ abstract class cls_poliza extends cls_db
 		$this->Security();
 		$this->SearchByUsuario();
 		$this->SearchBySucursal();
+		$this->RegistraCobertura();
 		$result = $this->precioDolar($dolar);
 		// SI ESTA OPERACIÓN FALLA, SE HACE UN ROLLBACK PARA REVERTIR LOS CAMBIOS Y FINALIZAR LA OPERACIÓN
 		if (!$result) {
@@ -148,12 +149,14 @@ abstract class cls_poliza extends cls_db
 		$sql = $this->db->prepare("UPDATE poliza SET
     poliza_fechaInicio = ?,
     poliza_fechaVencimiento = ?,
+	cobertura_id = ?,
     poliza_renovacion = poliza_renovacion+1,
     debitoCredito =?
     WHERE poliza_id = ?");
 		if ($sql->execute([
 			$this->fechaInicio,
 			$this->fechaVencimiento,
+			$this->cobertura,
 			$this->debitoCredito,
 			$this->id
 		])) {
@@ -177,11 +180,11 @@ abstract class cls_poliza extends cls_db
 		}
 	}
 
-	protected function Vencer($id)
+	protected function Vencer($id, $desde, $hasta)
 	{
 		date_default_timezone_set('America/Caracas');
-		$diaActual = date('Y-m-d'); // Obtener el día actual
-		$diaCinco = date('Y-m-d', strtotime('+30 day')); // Obtener el quinto día 
+		$diaActual = $desde; // Obtener el día actual
+		$diaCinco = $hasta; // Obtener el quinto día 
 		if ($id == 57) {
 			$sql = $this->db->prepare("SELECT poliza.*, cliente.*, vehiculo.*, usuario.*, sucursal.*
             FROM poliza 
@@ -189,7 +192,7 @@ abstract class cls_poliza extends cls_db
             INNER JOIN sucursal ON sucursal.sucursal_id = poliza.sucursal_id
             INNER JOIN usuario ON usuario.usuario_id = poliza.usuario_id
             INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-            WHERE poliza.poliza_fechaVencimiento > :diaActual AND 
+            WHERE poliza.poliza_fechaVencimiento >= :diaActual AND 
             poliza.poliza_fechaVencimiento <= :diaCinco
             ORDER BY poliza.poliza_fechaVencimiento ASC");
 		} else {
@@ -428,6 +431,10 @@ abstract class cls_poliza extends cls_db
 	protected function Edit()
 	{
 		try {
+			$result = $this->Security();
+			if ($result) {
+				return $result;
+			}
 			$this->db->beginTransaction();
 			$resul = $this->SearchByEstado();
 			if (!$resul) {
@@ -774,12 +781,13 @@ abstract class cls_poliza extends cls_db
 			licencia_sangre,
 			licencia_lente,
 			licencia_licencia,
+			licencia_licenciaRestante,
 			licencia_montoTotal,
 			licencia_abonado,
 			licencia_restante,
 			sucursal_id,
 			usuario_id
-		)values(?,?,?,?,?,?,?,?,?,?)");
+		)values(?,?,?,?,?,?,?,?,?,?,?)");
 		if (
 			$sql->execute([
 				$this->cliente,
@@ -787,6 +795,7 @@ abstract class cls_poliza extends cls_db
 				$this->sangre,
 				$this->lente,
 				$this->licencia,
+				$this->licenciaRestante,
 				$this->montoTotal,
 				$abonado,
 				$this->restante,
@@ -888,6 +897,7 @@ abstract class cls_poliza extends cls_db
 		}
 		return $this->debitoCredito;
 	}
+
 
 	protected function precioDolar($precio)
 	{
@@ -1312,51 +1322,63 @@ abstract class cls_poliza extends cls_db
 	protected function generarQr($id)
 	{
 		set_time_limit(30000);
-		$sql = $this->db->prepare("SELECT 
-        poliza.*,
-        cliente.*,
-        vehiculo.*,
-        marca.*,
-        modelo.* 
-        FROM poliza
-        LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
-        LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
-        LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
-        LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
-		if ($sql->execute([$id])) {
-			$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
-			if ($resultado != "" || $resultado != null) {
-				foreach ($resultado as $fila) {
-					$contrato = $fila["poliza_id"];
-					if ($fila["poliza_renovacion"] < 10) {
-						$contrato = "00000" . $fila["poliza_id"] . "-0" . $fila["poliza_renovacion"];
-					} else {
-						$contrato = "00000" . $fila["poliza_id"] . "-" . $fila["poliza_renovacion"];
+
+		try {
+			// Consulta SQL para obtener los datos de la póliza y clientes relacionados
+			$sql = $this->db->prepare("SELECT 
+                poliza.*,
+                cliente.*,
+                vehiculo.*,
+                marca.*,
+                modelo.* 
+                FROM poliza
+                LEFT JOIN cliente ON cliente.cliente_id = poliza.cliente_id
+                LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
+                LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
+                LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id WHERE poliza_id = ?");
+
+			if ($sql->execute([$id])) {
+				$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+				if ($resultado) {
+					foreach ($resultado as $fila) {
+						// Formato del número de contrato
+						$contrato = sprintf("%06d-%02d", $fila["poliza_id"], $fila["poliza_renovacion"]);
+
+						// Contenido del código QR
+						$QR = "N° Contrato: " . $contrato .
+							"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
+							"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
+							"\n" . "Nombre: " . $fila["cliente_nombre"] .
+							"\n" . "Apellido: " . $fila["cliente_apellido"] .
+							"\n" . "Cédula: " . $fila["cliente_cedula"] .
+							"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
+							"\n" . "Marca: " . $fila["marca_nombre"] .
+							"\n" . "Modelo: " . $fila["modelo_nombre"];
 					}
 
-					$QR = "N° Contrato: " . $contrato .
-						"\n" . "Vigente desde: " . $fila["poliza_fechaInicio"] .
-						"\n" . "Vigente hasta: " . $fila["poliza_fechaVencimiento"] .
-						"\n" . "Nombre: " . $fila["cliente_nombre"] .
-						"\n" . "Apellido: " . $fila["cliente_apellido"] .
-						"\n" . "Cédula: " . $fila["cliente_cedula"] .
-						"\n" . "Placa del vehiculo" . $fila["vehiculo_placa"] .
-						"\n" . "Marca: " . $fila["marca_nombre"] .
-						"\n" . "Modelo: " . $fila["modelo_nombre"];
-				}
-
-				if ($fila) { //Verificar si $fila está definida antes de usarla
+					// Ruta y nombre del archivo del código QR
 					$QRcodeImg = "./ImgQr/" . $contrato . ".png";
+					$url = $contrato . ".png";
+
+					// Generar y guardar el código QR
 					QRcode::png($QR, $QRcodeImg);
+
+					// Actualizar la base de datos con la ruta del código QR
 					$sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-					$sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+					$sql2->execute([$url, $id]);
+
 					return true;
 				}
 			}
-		} else {
-			return false;
+		} catch (PDOException $e) {
+			// Manejar excepciones de PDO
+			echo "Error: " . $e->getMessage();
 		}
+
+		return false;
 	}
+
 
 	public function reporteIngresoEgreso($notaIE, $idSu, $idU, $fechaInicio, $fechaFinal)
 	{
@@ -1412,7 +1434,7 @@ abstract class cls_poliza extends cls_db
             INNER JOIN tipocontrato ON tipocontrato.contrato_id = poliza.tipoContrato_id
             INNER JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
             INNER JOIN usovehiculo ON usovehiculo.usoVehiculo_id = vehiculo.uso_id
-            INNER JOIN clasevehiculo ON clasevehiculo.clase_id = vehiculo.clase_id
+            INNER JOIN clasevehiculo ON clasevehiculo.claseVehiculo_id = vehiculo.clase_id
             INNER JOIN color ON color.color_id = vehiculo.color_id
             INNER JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id
             INNER JOIN marca ON marca.marca_id = vehiculo.marca_id

@@ -610,6 +610,7 @@ export const ModalCertificadoMedico = (props) => {
               ref={txtTipoSangre}
               aria-label="Default select example"
             >
+              <option value="N/S">N/S</option>
               <option value="A+">A+</option>
               <option value="A-">A-</option>
               <option value="B+">B+</option>

@@ -41,6 +41,7 @@ export const ModalRcv = (props) => {
   const suc = JSON.parse(localStorage.getItem("sucursal"));
   const idsucursal = JSON.parse(localStorage.getItem("idsucursal"));
   const [value, setValue] = useState("");
+  const [variable, setVariable] = useState(false);
   //ID
   const idPoliza = useRef();
   const idCliente = useRef();
@@ -167,7 +168,7 @@ export const ModalRcv = (props) => {
   const [valorSeleccionado, setValorSeleccionado] = useState({
     contrato_nombre: "",
     estado_nombre: "Portuguesa",
-    usuario_usuario: "MFIGUEROA",
+    usuario_usuario: user.toString(),
     sucursal_nombre: suc.toString(),
     transporte_nombre: "",
     usoVehiculo_nombre: "",
@@ -181,7 +182,7 @@ export const ModalRcv = (props) => {
     setValorSeleccionado({
       contrato_nombre: "",
       estado_nombre: "Portuguesa",
-      usuario_usuario: "MFIGUEROA",
+      usuario_usuario: user.toString(),
       sucursal_nombre: suc.toString(),
       transporte_nombre: "",
       usoVehiculo_nombre: "",
@@ -648,7 +649,8 @@ export const ModalRcv = (props) => {
     let bodyF = new FormData();
     bodyF.append("Contrato", valorSeleccionado.contrato_nombre);
     bodyF.append("Tipo", valorSeleccionado.tipoVehiculo_nombre);
-    bodyF.append("Sucursal", suc);
+    bodyF.append("Sucursal", idsucursal);
+
     await fetch(endpoint, {
       method: "POST",
       body: bodyF,
@@ -657,11 +659,14 @@ export const ModalRcv = (props) => {
       .then((response) => {
         setActivate(false);
         console.log(response[0]);
+
         if (response[0]) {
           txtDolar.current.value = response[0]["precio_monto"];
+
           txtBs.current.value = (
             response[0]["precio_monto"] * dolarbcv
           ).toFixed(2);
+
           setTipoContrato(response);
         } else {
           setMensaje({
@@ -1031,6 +1036,34 @@ export const ModalRcv = (props) => {
     }
   };
 
+  const buscarSucursal = async ($a) => {
+    let endpoint = op.conexion + "/sucursal/buscarSucursal";
+    setActivate(true);
+    let bodyF = new FormData();
+    bodyF.append("Nombre", $a);
+    await fetch(endpoint, {
+      method: "POST",
+      body: bodyF,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        setActivate(false);
+        setValorSeleccionado({
+          ...valorSeleccionado,
+          sucursal_nombre: response[0]["sucursal_nombre"],
+          usuario_usuario: $a,
+        });
+      })
+      .catch((error) =>
+        setMensaje({
+          mostrar: true,
+          titulo: "Notificación",
+          texto: error.res,
+          icono: "informacion",
+        })
+      );
+  };
+
   function soloLetras(event) {
     if (
       (event.keyCode != 32 && event.keyCode < 65) ||
@@ -1249,18 +1282,6 @@ export const ModalRcv = (props) => {
         txtMarca.current.value = response[0].marca_nombre;
         txtPeso.current.value = response[0].vehiculo_peso;
         txtCapTon.current.value = response[0].vehiculo_capTon;
-        if (response[0].nota_tipoPago == null) {
-          cmbFormaPago.current.value = 0;
-        } else {
-          cmbFormaPago.current.value = response[0].nota_tipoPago;
-        }
-        // TxtTipoContrato.current.getInstance().setState({
-        //   selected: response[0].contrato_nombre
-        // });
-
-        txtReferencia.current.value = response[0].nota_referencia;
-        txtDolar.current.value = response[0].nota_monto;
-        txtBs.current.value = (response[0].nota_monto * dolarbcv).toFixed(2);
       })
       .catch((error) => {
         console.log(error);
@@ -1533,7 +1554,10 @@ export const ModalRcv = (props) => {
           </li>
           <li class="nav-item" role="presentation">
             <a
-              onClick={selecionarPrecio}
+              onClick={() => {
+                selecionarPrecio();
+                setVariable(true);
+              }}
               class="nav-link rounded bg-warning"
               id="ex1-tab-3"
               data-mdb-toggle="tab"
@@ -1590,76 +1614,6 @@ export const ModalRcv = (props) => {
                         )}
                       />
                     )}
-                  {/*<span class="input-group-text" id="inputGroup-sizing-sm">
-                    Tipo de contrato:{" "}
-                  </span>
-                  <select class="form-select" ref={} aria-label="Default select example">
-
-                    {tipoContrato && tipoContrato.map((item, index) => (
-                      <option key={index} value={item.contrato_id} > {item.contrato_nombre} </option>
-                    ))}
-                 
-                  <input
-                    disabled
-                    type="text"
-                    class="form-control"
-                    ref={TxtTipoContrato}
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-sm"
-                  />
-                  <button
-                    type="button"
-                    class="btn btn-success"
-                    onClick={() => {
-                      if (operacion === 3) {
-                        setMostrar1(false);
-                      } else {
-                        setMostrar1(true);
-                      }
-                    }}
-                  >
-                    <i class="fa fa-search"></i>
-                  </button
-
-                  <Typeahead
-                    id="myTypeahead"
-                    onKeyDown={(a) => {
-                      setValorSeleccionado({
-                        ...valorSeleccionado,
-                        contrato_nombre: a.target.value,
-                      });
-                    }}
-                    onChange={(selected) => {
-                      if (
-                        selected &&
-                        selected.length > 0 &&
-                        selected[0].contrato_nombre
-                      ) {
-                        if (selected[0] && selected[0].contrato_nombre) {
-                          console.log(selected[0].contrato_nombre);
-                          setValorSeleccionado({
-                            ...valorSeleccionado,
-                            contrato_nombre: selected[0].contrato_nombre,
-                          });
-                        }
-                      }
-                    }}
-                    labelKey="contrato_nombre"
-                    options={tipoContrato}
-                    placeholder="Seleccionar"
-                    ref={TxtTipoContrato}
-                    bsSize="small"
-                    defaultSelected={
-                      valorSeleccionado
-                        ? [`${valorSeleccionado.contrato_nombre}`]
-                        : ""
-                    }
-                    selected={
-                      valorSeleccionado.contrato_nombre !== ""
-                        ? [`${valorSeleccionado.contrato_nombre}`]
-                        : ""
-                    }
-                  />>*/}
                 </div>
               </div>
               <div class="col-md-1"></div>
@@ -1878,7 +1832,7 @@ export const ModalRcv = (props) => {
                     <input
                       type="text"
                       class="form-control"
-                      maxLength={30}
+                      maxLength={100}
                       ref={txtDirec}
                       name="direccioncon"
                       onBlur={validarInput}
@@ -1971,74 +1925,7 @@ export const ModalRcv = (props) => {
                     />
                   )}
                 </div>
-                <div class="col-md-4 mb-1 mt-1">
-                  {/*   <div className="input-group input-group-sm mb-2">
-                    <span
-                      className="input-group-text"
-                      id="inputGroup-sizing-sm"
-                    >
-                      Asesor:{" "}
-                    </span>
-                      <input
-                      disabled
-                      type="text"
-                      className="form-control"
-                      ref={txtAcesor}
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-sm"
-                      defaultValue={operacion === 1 ? user : ""}
-                    />
-                   idUser === 57 ? (
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => {
-                          setMostrar2(true);
-                        }}
-                      >
-                        <i className="fa fa-search"></i>
-                      </button>
-                    ) : null
-                    <Typeahead
-                      id="myTypeahead"
-                      onKeyDown={(a) => {
-                        setValorSeleccionado({
-                          ...valorSeleccionado,
-                          usuario_usuario: a.target.value,
-                        });
-                      }}
-                      onChange={(selected) => {
-                        if (
-                          selected &&
-                          selected.length > 0 &&
-                          selected[0].usuario_usuario
-                        ) {
-                          if (selected[0] && selected[0].usuario_usuario) {
-                            console.log(selected[0].usuario_usuario);
-                            setValorSeleccionado({
-                              ...valorSeleccionado,
-                              usuario_usuario: selected[0].usuario_usuario,
-                            });
-                          }
-                        }
-                      }}
-                      labelKey="usuario_usuario"
-                      options={}
-                      placeholder="Seleccionar"
-                      ref={txtAcesor}
-                      bsSize="small"
-                      defaultSelected={
-                        valorSeleccionado
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
-                      }
-                      selected={
-                        valorSeleccionado.usuario_usuario !== ""
-                          ? [`${valorSeleccionado.usuario_usuario}`]
-                          : ""
-                      }
-                    />
-                     </div>*/}
+                <div className="col-md-4 mb-1 mt-1">
                   {acesor && Array.isArray(acesor) && acesor.length > 0 && (
                     <Autocomplete
                       value={valorSeleccionado}
@@ -2049,6 +1936,7 @@ export const ModalRcv = (props) => {
                             ...valorSeleccionado,
                             usuario_usuario: newValue.usuario_usuario,
                           });
+                          buscarSucursal(newValue.usuario_usuario);
                         }
                       }}
                       options={acesor}
@@ -2062,9 +1950,11 @@ export const ModalRcv = (props) => {
                           variant="outlined"
                         />
                       )}
+                      disabled={idUser != 57}
                     />
                   )}
                 </div>
+
                 <div class="col-md-4 mb-1 mt-1">
                   {/*  <div class="input-group input-group-sm mb-2 ">
                     <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -2157,6 +2047,7 @@ export const ModalRcv = (props) => {
                             variant="outlined"
                           />
                         )}
+                        disabled={idUser != 57}
                       />
                     )}
                   <div id="sucursal" class="form-text hidden">
@@ -2544,8 +2435,9 @@ export const ModalRcv = (props) => {
                       // Limitar la longitud a 4 dígitos
                       valor = valor.slice(0, 4);
                       if (valor.length === 4) {
-                        if (añoActual < valor) {
-                          e.target.value = añoActual;
+                        const añoLimite = añoActual + 1; // Permitir solo el año actual y el siguiente
+                        if (valor > añoLimite) {
+                          e.target.value = añoLimite;
                         } else if (valor < añoMinimo) {
                           e.target.value = añoMinimo;
                         } else {
@@ -2841,7 +2733,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    maxLength={15}
+                    maxLength={50}
                     type="text"
                     class="form-control"
                     ref={txtModelo}
@@ -2867,7 +2759,7 @@ export const ModalRcv = (props) => {
                   </span>
                   <input
                     disabled={operacion === 3}
-                    maxLength={15}
+                    maxLength={50}
                     type="text"
                     class="form-control"
                     ref={txtMarca}
@@ -3012,22 +2904,24 @@ export const ModalRcv = (props) => {
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <button
-          className="btn btn-sm btn-success rounded-pill col-md-2"
-          disabled={props.operacion === 4 ? true : false}
-          onClick={onChangeValidar}
-        >
-          <i className="fas fa-check-circle"> Aceptar</i>
-        </button>
-        <button
-          ref={btnCancela}
-          onClick={salir}
-          className="btn btn-sm btn-danger rounded-pill col-md-2"
-        >
-          <i className="fas fa-window-close"> Salir</i>
-        </button>
-      </Modal.Footer>
+      {variable == true && (
+        <Modal.Footer>
+          <button
+            className="btn btn-sm btn-success rounded-pill col-md-2"
+            disabled={props.operacion === 4 ? true : false}
+            onClick={onChangeValidar}
+          >
+            <i className="fas fa-check-circle"> Aceptar</i>
+          </button>
+          <button
+            ref={btnCancela}
+            onClick={salir}
+            className="btn btn-sm btn-danger rounded-pill col-md-2"
+          >
+            <i className="fas fa-window-close"> Salir</i>
+          </button>
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };

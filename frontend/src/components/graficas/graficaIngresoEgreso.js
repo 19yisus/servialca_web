@@ -36,6 +36,12 @@ function GraficosIngresos() {
   console.log(user_id);
   const headCells = [
     {
+      label: "N° de contrato",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
       label: "Fecha",
       textAlign: "center",
       backgroundColor: "#e70101bf",
@@ -49,6 +55,12 @@ function GraficosIngresos() {
     },
     {
       label: "Asesor",
+      textAlign: "center",
+      backgroundColor: "#e70101bf",
+      color: "white",
+    },
+    {
+      label: "Sucursal",
       textAlign: "center",
       backgroundColor: "#e70101bf",
       color: "white",
@@ -383,12 +395,8 @@ function GraficosIngresos() {
                 aria-label="Username"
                 aria-describedby="addon-wrapping"
               />
-
-            
             </div>
             <div class="input-group input-group-sm  col-md-6 mx-auto mb-1">
-            
-
               <span class="input-group-text" id="addon-wrapping">
                 Hasta:
               </span>
@@ -418,8 +426,21 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_fecha}
+                      {item.poliza_id}
                     </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {new Date(
+                        item.nota_fecha + "T00:00:00-04:00"
+                      ).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </TableCell>
+
                     <TableCell
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
@@ -430,13 +451,19 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.usuario_usuario}
+                      {item.usuario_nombre}
                     </TableCell>
                     <TableCell
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_IngresoEgreso}
+                      {item.sucursal_nombre}
+                    </TableCell>
+                    <TableCell
+                      className="align-baseline"
+                      style={{ textAlign: "center", alignItems: "center" }}
+                    >
+                      {item.nota_IngresoEgreso == 0 ? "Egreso" : "Ingreso"}
                     </TableCell>
                     <TableCell
                       className="align-baseline"
@@ -448,11 +475,11 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_tipoPago === 1
+                      {item.nota_tipoPago == 1
                         ? "Efectivo"
-                        : item.nota_tipoPago === 2
+                        : item.nota_tipoPago == 2
                         ? "Transferencia"
-                        : item.nota_tipoPago === 3
+                        : item.nota_tipoPago == 3
                         ? "Punto"
                         : "Pago Móvil"}
                     </TableCell>
@@ -467,7 +494,7 @@ function GraficosIngresos() {
                       className="align-baseline"
                       style={{ textAlign: "center", alignItems: "center" }}
                     >
-                      {item.nota_monto}
+                      {item.nota_monto + " $"}
                     </TableCell>
                   </TableRow>
                 ))}

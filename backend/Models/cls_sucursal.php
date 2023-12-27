@@ -174,4 +174,14 @@ abstract class cls_sucursal extends cls_db
 		else $resultado = [];
 		return $resultado;
 	}
+
+	protected function GetSucursal($nombre)
+	{
+		$sql = $this->db->prepare("SELECT *, sucursal.* FROM usuario 
+		INNER JOIN sucursal on sucursal.sucursal_id = usuario.sucursal_id
+		WHERE usuario_usuario = ?");
+		if ($sql->execute([$nombre])) $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
+		else $resultado = [];
+		return $resultado;
+	}
 }

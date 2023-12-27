@@ -20,13 +20,13 @@ class porqueria
         $sql = $this->db->prepare("SELECT tipoVehiculo_id, sucursal_id, tipoVehiculo_precio FROM tipoVehiculo");
 
         // Reemplaza 1 con el ID del tipo de vehículo que deseas insertar
-        $tipoVehiculoID = 1;
+        $tipoVehiculoID = 2;
 
         if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
             foreach ($resultado as $row) {
                 // Reemplazar 1 con el ID del tipo de contrato adecuado
-                $tipoContratoID = 1;
+                $tipoContratoID = 2;
 
                 $sqlInsert = $this->db->prepare("INSERT INTO precio (tipoVehiculo_id, tipoContrato_id, sucursal_id, precio_monto) VALUES(?, ?, ?, ?)");
 
@@ -104,7 +104,6 @@ class porqueria
             LEFT JOIN vehiculo ON vehiculo.vehiculo_id = poliza.vehiculo_id
             LEFT JOIN marca ON marca.marca_id = vehiculo.marca_id
             LEFT JOIN modelo ON modelo.modelo_id = vehiculo.modelo_id");
-
         if ($sql->execute()) {
             $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -117,11 +116,12 @@ class porqueria
 
                     // Generar el código QR dentro del bucle
                     $QRcodeImg = "../ImgQr/" . $contrato . ".png";
+                $url = $contrato . ".png";
                 QRcode::png($QR, $QRcodeImg);
 
                 // Actualizar la base de datos con la ruta del código QR
                 $sql2 = $this->db->prepare("UPDATE poliza SET poliza_qr = ? WHERE poliza_id = ?");
-                $sql2->execute([$QRcodeImg, $fila["poliza_id"]]);
+                $sql2->execute([$url, $contrato]);
             }
         }
     }
@@ -145,5 +145,4 @@ class porqueria
 
 $a = new porqueria();
 $a->conexion();
-$a->conexion2();
-$a->generarQr();
+$a->trasferir();

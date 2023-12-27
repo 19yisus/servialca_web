@@ -407,13 +407,13 @@ function PaginaWeb(props) {
           </div>
         </Fade>
         <div class="col-md-12 mx-auto px-0 fixed-bottom">
-          <div class="slider2">
+          {/* <div class="slider2">
             <div class="slide-track d-flex justify-content-end">
               <div class="slide text-left">
                 <span>La pagina Servialca rcv se enceuntra en desarrollo</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div class="col-md-12 mx-auto px-0 fixed-bottom">

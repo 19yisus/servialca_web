@@ -37,6 +37,9 @@ import PageChats from "../components/chat/chats";
 import ReportesSemanal from "../components/reportesPorqueria/resportes";
 import TablaBitacora from "../components/bitacora/tablaBitacora";
 import ReportesAsesor from "../components/reportesPorqueria/reportesAsesor";
+import TablaHotel from "../components/hotel/tablaHotel";
+import TablaHotelGeneral from "../components/hotel/tablaHotelGeneral";
+import Reporte from "../components/reportesPorqueria/resportes";
 function MenuImpuestoPP(props) {
   //let token = localStorage.getItem("jwtToken");
   //let op = require("../modulos/datos");
@@ -69,21 +72,6 @@ function MenuImpuestoPP(props) {
     setTitulo(c);
   };
 
-  const hola = [
-    {
-      nombre: "pepe",
-      apellido: "gonzales",
-    },
-    {
-      nombre: "pepe",
-      apellido: "gonzales",
-    },
-    {
-      nombre: "pepe",
-      apellido: "gonzales",
-    },
-  ];
-
   /*const seleccionaRegistrosIglesias = () => {
   
   
@@ -115,7 +103,7 @@ function MenuImpuestoPP(props) {
       setMensaje({mostrar: true, titulo:'Error', texto: error.response.data.message, icono: 'error'});
     })
   };*/
-
+  const idUser = JSON.parse(localStorage.getItem("user_id"));
   let permisos = JSON.parse(localStorage.getItem("permisos"));
   console.log(permisos);
   // permisos = permisos.map((item) =>
@@ -217,6 +205,50 @@ function MenuImpuestoPP(props) {
                   <span>Inicio</span>
                 </a>
                 <div className="accordion  px-0 border-0" id="accordionExample">
+                  {idUser == 57 && (
+                    <>
+                      <div className="accordion-item px-0">
+                        <h2 className="accordion-header" id="heading3">
+                          <button
+                            className="accordion-button text-light"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse9"
+                            aria-expanded="false"
+                            aria-controls="collapse9"
+                          >
+                            <i className="fas fa-hotel fa-fw me-1"></i>
+                            <span>Hotel</span>
+                          </button>
+                        </h2>
+                        <div
+                          id="collapse9"
+                          className="accordion-collapse collapse list-group-item-action"
+                          aria-labelledby="heading9"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body py-0 list-group px-0">
+                            <a
+                              href="/hotel"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i className="fas fa-bed fa-fw me-1"></i>
+                              <span>Habitaciones ocupadas</span>
+                            </a>
+                          </div>
+                          <div className="accordion-body py-0 list-group px-0">
+                            <a
+                              href="/hotelGeneral"
+                              className="list-group-item list-group-item-action py-2 ripple"
+                            >
+                              <i className="fas fa-bed fa-fw me-1"></i>
+                              <span>Lista de ocupantes</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   {/* {permisos.includes("contratosrealizados") || permisos.includes("listasucursales") || permisos.includes("tipocontratos") && */}
                   <div className="accordion-item  px-0">
                     <h2 className="accordion-header" id="headingOne">
@@ -569,7 +601,7 @@ function MenuImpuestoPP(props) {
 
                   <span>Lista de precios</span>
                 </a>
-                {permisos &&
+                {/* {permisos &&
                   permisos.length >= 3 &&
                   permisos.substring(20, 21) === "1" && (
                     <a
@@ -580,8 +612,8 @@ function MenuImpuestoPP(props) {
 
                       <span>Bitacora</span>
                     </a>
-                  )}
-                {permisos &&
+                  )} */}
+                {/* {permisos &&
                   permisos.length >= 3 &&
                   permisos.substring(21, 22) === "1" && (
                     <a
@@ -591,11 +623,19 @@ function MenuImpuestoPP(props) {
                       <i className="fas fa-fw me-1 fa-print " />
                       <span>Reporte asesor</span>
                     </a>
-                  )}
-
+                  )} */}
+                {idUser != 57 && (
+                  <a
+                    href="/reporte"
+                    className=" list-group-item list-group-item-action text-light bg-transparent py-2 px-3"
+                  >
+                    <i className="fas fa-fw me-1 fa-print " />
+                    <span>Reportes</span>
+                  </a>
+                )}
                 <a
                   href="/"
-                  className="text-danger fw-bold list-group-item list-group-item-action py-2 ripple rounded"
+                  className="list-group-item list-group-item-action py-2 ripple"
                 >
                   <i className="fas fa-power-off fa-fw me-1" />
                   <span>Salir</span>
@@ -606,6 +646,13 @@ function MenuImpuestoPP(props) {
               <section>
                 <Header onCambiar={cambiar} />
               </section>
+              <AuthRoute exact path="/reporte" component={Reporte}/>
+              <AuthRoute exact path="/hotel" component={TablaHotel} />
+              <AuthRoute
+                exact
+                path="/hotelGeneral"
+                component={TablaHotelGeneral}
+              />
               <AuthRoute exact path="/inicio" component={Inicio2} />
               <AuthRoute
                 exact

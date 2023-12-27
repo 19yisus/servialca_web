@@ -3,7 +3,6 @@ include("./FPDF/fpdf.php");
 include("./Models/cls_poliza.php");
 class MiCliente extends cls_poliza
 {
-
 }
 $a = new MiCliente();
 $datos = $a->GetOne($_GET["ID"]);
@@ -32,8 +31,8 @@ $Pdf->SetFont("Arial", "", 12);
 $Pdf->Image("./Img/heade.jpg", 0, 0, 210, 40, "JPG");
 $Pdf->Image("./Img/Logotipo.jpg", 20, 250, 22, 16);
 $Pdf->Image("./Img/rubro.jpg", 49, 245, 36, 32);
-$Pdf->Image("./Img/footer.jpg", 0,275, 216, 22);
-$Pdf->Image($datos[0]["poliza_qr"], 120, 240, 36, 32);
+$Pdf->Image("./Img/footer.jpg", 0, 275, 216, 22);
+$Pdf->Image("./ImgQr/" . $datos[0]["poliza_qr"], 120, 240, 36, 32);
 $Pdf->SetTextColor(000);
 $Pdf->SetFillColor(255, 255, 255);
 $Pdf->SetFont("Arial", "B", "10");

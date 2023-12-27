@@ -1514,7 +1514,7 @@ div#slider figure {
   box-shadow: 0px 1px 10px rgba(0,0,0,0.3);
   z-index:100;
   transition: all 300ms ease;
-  bottom:50px;
+  bottom:100px;
 }
 .btn-wsp:hover{
   background: #20ba5a;
@@ -1549,7 +1549,7 @@ div#slider figure {
 .slider2 {
   background:#ce1f2e;
   /*box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);*/
-  height: 30px;
+  height: 50px;
   margin: auto;
   overflow: hidden;
   position: relative;
@@ -1570,6 +1570,7 @@ div#slider figure {
   height: 30px;
   width: 700px;
   color: #d4edda;
+  margin-top: 10px;
   margin-right:-600px ;
   font-weight: bold;
 }
